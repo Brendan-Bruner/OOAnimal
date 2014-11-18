@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include "State.h"
+#include "StandBy.h"
+
+int main(int argc, char *argv[])
+{
+  struct StandBy standByPoly;
+  struct State *standBy;
+
+  standBy_new(&standBy);
+  standBy = (State *) &standByPoly;
+
+
+
+
+  return 0;
+}
