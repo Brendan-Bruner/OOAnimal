@@ -1,2 +1,2 @@
-satellite-reaper
+Satellite Reaper
 ================
