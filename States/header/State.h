@@ -1,28 +1,36 @@
+#include "Satellite.h"
+
+#ifndef STATE_H_
+#define STATE_H_
+
+/*
+ * ---------------------------------- 
+ * DATA STRUCTURES
+ * ----------------------------------
+ */
+
 /**
  * Virtual function pointer table for the 'abstract' class State.
  * These functions must be implemented by classes inheriting from
  * State.
- *@param start should run initialization routines.
- *@param standBy should do nothing but wait.
- *@param detumble should correct spatial orientation.
- *@param doScience should collect science data.
+ *@param pursueMissionObjective 
+ * A function which will take actions to accomplish the satellites
+ * mission objectives. This function takes different actions 
+ * depending on the state this funciton is called from. Calling
+ * this function in a PowerSafe state will perform no action,
+ * but calling this fuction from a Detumble state will
+ * take actions to correct the satellites spatial orientation.
  */
 struct State_vtable
 {
-  void (* start)(struct Satellite *);
-  void (* standBy)(struct Satellite *);
-  void (* detumble)(struct Satellite *);
-  void (* doScience)(struct Satellite *);
+  void (* pursueMissionObjective)(struct State *,
+				  struct Satellite *);
 };
 
 /**
- * Class State
- * This class provides an abstract interface for classes to inherit from.
- * The functions implemented by the child class determine what is done
- * by the functions in that State. For example, if a PowerSave class
- * inherited from State then the PowerSave's doScience and detumble
- * method would probably do nothing because the state would be trying
- * to save power.
+ * Class
+ * This class follows the state design pattern. This is the abstract 
+ * super class of all states.
  */
 struct State
 {
@@ -30,3 +38,26 @@ struct State
 };
 
 
+
+/*
+ * ---------------------------------- 
+ * FUNCTIONS
+ * ----------------------------------
+ */
+
+/**
+ * Takes actions to accomplish the satellites
+ * mission objectives. This function takes different actions 
+ * depending on the state this funciton is called from. Calling
+ * this function in a PowerSafe state will perform no action,
+ * but calling this fuction from a Detumble state will
+ * take actions to correct the satellites spatial orientation.
+ *@param State
+ * A pointer to the object calling the method.
+ *@param Satellite
+ * A pointer to the Satellite invoking the method.
+ */
+void state_pursueMissionObjective(struct State *,
+				  struct Satellite *);
+
+#endif /* STATE_H_ */
