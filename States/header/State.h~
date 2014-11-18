@@ -1,0 +1,16 @@
+/**
+ * Virtual function pointer table for the 'abstract' class State.
+ * These functions must be implemented by classes inheriting from
+ * State.
+ *@param start should run initialization routines.
+ *@param standBy should do nothing but wait.
+ *@param detumble should correct spatial orientation.
+ *@param doScience should collect science data.
+ */
+struct State_vtable
+{
+  void (* start)(struct Satellite *);
+  void (* standBy)(struct Satellite *);
+  void (* detumble)(struct Satellite *);
+  void (* doScience)(struct Satellite *);
+};
