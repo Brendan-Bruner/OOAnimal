@@ -25,7 +25,9 @@
  */
 struct StandBy
 {
-  struct State super;
+	int x;
+	int y;
+	struct State super;
 };
 
 

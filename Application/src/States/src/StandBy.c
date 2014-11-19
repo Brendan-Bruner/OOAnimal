@@ -31,6 +31,8 @@ static struct State_vtable standBy_vtable =
 void standBy_new(struct StandBy *this)
 {
   this->super.vtable = &standBy_vtable;
+  this->x=0;
+  this->y=0;
 }
 
 void standBy_pursueMissionObjective(struct StandBy *this,

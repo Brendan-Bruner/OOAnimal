@@ -14,15 +14,6 @@
  * DATA STRUCTURES
  * ----------------------------------
  */
-/**
- * Class
- * This class follows the state design pattern. This is the abstract
- * super class of all states.
- */
-struct State
-{
-  struct State_vtable *vtable;
-};
 
 /**
  * Virtual function pointer table for the 'abstract' class State.
@@ -40,6 +31,16 @@ struct State_vtable
 {
   void (* pursueMissionObjective)(struct State *,
 				  struct Satellite *);
+};
+
+/**
+ * Class
+ * This class follows the state design pattern. This is the abstract
+ * super class of all states.
+ */
+struct State
+{
+  struct State_vtable *vtable;
 };
 
 
