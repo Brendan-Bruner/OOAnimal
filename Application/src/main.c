@@ -10,14 +10,13 @@
 
 int main(int argc, char *argv[])
 {
-  struct StandBy standByPoly;
-  struct State *standBy;
+  State state;
 
-  standBy_new(&standByPoly);
-  standBy = (struct State *) &standByPoly;
+  state = (State) newStandBy();
+
 
   printf("Before pursueMissionObject in StandBy state\n");
-  standBy_pursueMissionObjective(standBy, 0);
+  standBy_pursueMissionObjective(state, 0);
   printf("After pursueMissionObject in StandBy state\n");
 
   return 0;

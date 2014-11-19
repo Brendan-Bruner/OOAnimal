@@ -6,37 +6,102 @@
  */
 
 #include <unistd.h>
+#include <stdlib.h>
 
 #include "State.h"
 #include "StandBy.h"
 #include "Satellite.h"
 
-/*
- * ----------------------------------
- * VARIABLES
- * ----------------------------------
- */
-static struct State_vtable standBy_vtable =
+void static standByConcrete_pursueMissionObjective(StandByConcrete *this,
+				    							   Satellite satellite);
+
+static struct StandBy_vtable standBy_vtable =
 {
-  &standBy_pursueMissionObjective
+	&standByConcrete_pursueMissionObjective
+};
+static struct State_vtable state_vtable =
+{
+	&standByConcrete_pursueMissionObjective
 };
 
+/*
+ * ----------------------------------
+ * PUBLIC FUNCTIONS
+ * ----------------------------------
+ */
 
+StandBy newStandBy(void)
+{
+	/*
+	 * Allocate space for a StandBy object.
+	 */
+	StandByConcrete *this = (StandByConcrete *) malloc(sizeof(StandByConcrete));
+
+	/*
+	 * Create the super class.
+	 */
+	this->super = newState();
+
+	/*
+	 * Assign the Standby vtable.
+	 */
+	this->vtable = &standBy_vtable;
+
+	/*
+	 * Assign the super classes vtable to override selected super classes
+	 * functions.
+	 */
+	this->super->vtable = &state_vtable;
+
+	/*
+	 * Cast the concrete data representation to obscure data and return the
+	 * object.
+	 */
+	return (StandBy) this;
+}
+
+void destroyStandBy(StandBy thisStandBy)
+{
+	/*
+	 * Cast the object given as input to a concrete representation
+	 * of the object.
+	 */
+	StandByConcrete *this = (StandByConcrete *) thisStandBy;
+
+	/*
+	 * Destroy the super class.
+	 */
+	destroyState(this->super);
+
+	/*
+	 * Free memory for the class.
+	 */
+	free(this);
+}
+
+void standBy_pursueMissionObjective(StandBy thisStandBy,
+				    				Satellite satellite)
+{
+	/*
+	 * Cast the object given as input to a concrete representation
+	 * of the object.
+	 */
+	StandByConcrete *this = (StandByConcrete *) thisStandBy;
+
+	/*
+	 * Call the State objects pursueMissionObjective function.
+	 */
+	this->vtable->pursueMissionObjective(this, satellite);
+}
 
 /*
  * ----------------------------------
- * FUNCTIONS
+ * IMPLEMENTATIN OF CLASSES FUNCTIONS
  * ----------------------------------
  */
-void standBy_new(struct StandBy *this)
-{
-  this->super.vtable = &standBy_vtable;
-  this->x=0;
-  this->y=0;
-}
 
-void standBy_pursueMissionObjective(struct StandBy *this,
-				    struct Satellite *satellite)
+void static standByConcrete_pursueMissionObjective(StandByConcrete *this,
+				    							   Satellite satellite)
 {
   /*
    * Delay for 4 seconds.

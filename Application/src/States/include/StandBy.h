@@ -11,26 +11,31 @@
 #define STANDBY_H_
 
 /*
- * ----------------------------------
- * DATA STRUCTURES
- * ----------------------------------
+ * StandBy class.
+ * This class inherits from State. Therefore, it is a state. The StandBy
+ * state is used used to block the calling thread.
  */
+typedef void* StandBy;
 
 /**
- * Class
- * This class implement the StandBy state. Delegating state specific
- * work to this class will result in the calling thread being blocked
- * for a predfined time increment.
- *
+ * Virtual function pointer table for StandBy class.
  */
-struct StandBy
+typedef struct StandByConcrete StandByConcrete;
+struct StandBy_vtable
 {
-	int x;
-	int y;
-	struct State super;
+	void (* pursueMissionObjective)(StandByConcrete *,
+									Satellite);
 };
 
-
+/**
+ * Concrete data structure representing the StandBy class.
+ */
+struct StandByConcrete
+{
+	struct StateConcrete *super;
+	struct StandBy_vtable *vtable;
+};
+typedef struct StandByConcrete StandByConcrete;
 
 /*
  * ----------------------------------
@@ -39,15 +44,24 @@ struct StandBy
  */
 
 /**
- * Initialize a StandBy object. Call this before invoking any of
- * the objects methods.
- *@param StandBy
- * The StandBy object to initialize.
+ * StandBy constructor.
+ * Creates a pointer to a new StandBy object. The new object is dynamically
+ * allocated with malloc. Therefore, when finished with the object
+ * the programmer MUST call the objects destructor. destroyStandBy().
+ * @return A new StandBy object.
  */
-void standBy_new(struct StandBy *);
+StandBy newStandBy(void);
 
 /**
- * Blocks the calling thread for a predined amount of time. The
+ * StandBy destructor.
+ * Frees the memory allocated for the StandBy object. This must be called when
+ * finished with the object.
+ * @param thisStandBy The StandBy object to destroy.
+ */
+void destroyState(StandBy thisStandBy);
+
+/**
+ * Blocks the calling thread for a predefined amount of time. The
  * amount of time blocked for is stored in ROM and is updated
  * as time elapses. Therefore, this method will only block
  * so long as ROM says there is time remaining to block. For example,
@@ -55,14 +69,14 @@ void standBy_new(struct StandBy *);
  * the calling thread has been blocked for 27 minutes then a
  * power reset happens. The next time this method is called it
  * will only block the calling thread for 3 minutes.
- *@param StandBy
- * A pointer to the StandBy object.
+ *@param thisStandBy
+ * The StandBy object this method is being called from
  *@param Satellite
- * A pointer to the Satellite object invoking this method. The
+ * The Satellite object invoking this method. The
  * Satellite object is used to get and update the blocking time
  * in ROM.
  */
-void standBy_pursueMissionObjective(struct StandBy *,
-				    struct Satellite *);
+void standBy_pursueMissionObjective(StandBy thisStandBy,
+				    				Satellite satellite);
 
 #endif /* STANDBY_H_ */
