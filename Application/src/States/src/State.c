@@ -32,7 +32,7 @@ static struct State_vtable state_vtable =
 void new_State(State *this)
 {
 	/* Assign the vtable and child */
-	this->vtable = &state_vtable;
+	this->vtable.pursueMissionObjective = &stateConcrete_pursueMissionObjective;
 }
 
 void destroy_State(State *this)
@@ -44,7 +44,7 @@ void pursueMissionObjective_State(State *this,
 				  	  	  	  	  Satellite *satellite)
 {
 	/* Call the State objects pursueMissionObjective function. */
-	this->vtable->pursueMissionObjective(this, satellite);
+	this->vtable.pursueMissionObjective(this, satellite);
 }
 
 
@@ -55,6 +55,7 @@ void pursueMissionObjective_State(State *this,
 void static stateConcrete_pursueMissionObjective(State *this,
 	  	  	  	  	  	  	  	  	  	  	  	 Satellite *satellite)
 {
+	printf("Unimplemented\n");
 	return;
 }
 

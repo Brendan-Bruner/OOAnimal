@@ -10,7 +10,7 @@
 #include "Satellite.h"
 
 /******************************************************************************
- * Class typedef
+ * Class State
  *****************************************************************************/
 /**
  * State class.
@@ -22,9 +22,6 @@ typedef struct State State;
 /******************************************************************************
  * vtable prototype
  *****************************************************************************/
-/**
- * Virtual function pointer table for State class.
- */
 struct State_vtable
 {
 	void (* pursueMissionObjective)(State *,
@@ -36,17 +33,11 @@ struct State_vtable
  *****************************************************************************/
 /**
  * Data structure representing the State class.
- * @param State_vtable
- * Virtual function pointer table for the State class.
- * @param child
- * Pointer to child object. This is used to implement polymorphism. When
- * morphing a child class to its super class this keeps a reference to
- * the child class. This is important when calling the child class
- * methods when all you have is its super class
+ * @param State_vtable Virtual function pointer table for the State class.
  */
 struct State
 {
-  struct State_vtable *vtable;
+  struct State_vtable vtable;
 };
 
 /******************************************************************************
@@ -54,18 +45,14 @@ struct State
  *****************************************************************************/
 /**
  * State constructor.
- * Creates a pointer to a new State object. The new state is dynamically
- * allocated with malloc. Therefore, when finished with the State object
- * the programmer MUST call the objects destructor. destroyState().
- * @param this A new State object.
+ * Initializes a State object
+ * @param this The state object to initialize.
  */
 void new_State(State *this);
 
 /**
  * State destructor.
- * Frees the memory allocated for the State object. This must be called when
- * finished with the State object.
- * @param thisState The State object to destroy.
+ * @param this The State object to destroy.
  */
 void destroy_State(State *this);
 

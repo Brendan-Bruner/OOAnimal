@@ -10,25 +10,23 @@
 
 int main(int argc, char *argv[])
 {
-	/* Pointer to state object and a standBy object */
-  State *state;
+	/* State object and a standBy object */
+  State state;
+  State *standByP;
   StandBy standBy;
 
-  /* Initialize standBy object then polymorph it to a State object */
+  /* Initialize standBy and state object */
   new_StandBy(&standBy);
-  state = (State *) &standBy;
+  new_State(&state);
+  standByP = (State *)&standBy;
 
-  pursueMissionObjective_StandBy(&standBy, 0);
-  pursueMissionObjective_StandBy(&standBy, 0);
-  pursueMissionObjective_StandBy(state, 0);
-  pursueMissionObjective_StandBy(state, 0);
-  pursueMissionObjective_State(state, 0);
-  pursueMissionObjective_State(state, 0);
   pursueMissionObjective_State(&standBy, 0);
-  pursueMissionObjective_State(&standBy, 0);
-
   test_StandBy(&standBy);
-  test_StandBy(state);
+
+  pursueMissionObjective_State(standByP, 0);
+  test_StandBy(standByP);
+
+  pursueMissionObjective_State(&state, 0);
 
   return 0;
 }
