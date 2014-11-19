@@ -11,8 +11,10 @@
 int main(int argc, char *argv[])
 {
   State state;
+  StandBy standBy;
 
-  state = STANDBY_TO_STATE(newStandBy());
+  standBy = newStandBy();
+  state = STANDBY_TO_STATE(standBy);
 
   printf("Before pursueMissionObject in StandBy state\n");
   state_pursueMissionObjective(state, 0);

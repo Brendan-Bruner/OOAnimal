@@ -8,7 +8,6 @@
 #ifndef SATELLITE_H_
 #define SATELLITE_H_
 
-struct Satellite{};
 typedef void* Satellite;
 
 #endif /* SATELLITE_H_ */

@@ -13,42 +13,37 @@
 #include "StandBy.h"
 #include "Satellite.h"
 
+/******************************************************************************
+ * Concrete method prototypes
+ *****************************************************************************/
 void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite);
 void static standByConcrete_test(StandBy this);
 
+/******************************************************************************
+ * vtable
+ *****************************************************************************/
 static struct StandBy_vtable standBy_vtable =
 {
 	&standByConcrete_pursueMissionObjective,
 	&standByConcrete_test
 };
 
-/*
- * ----------------------------------
- * PUBLIC FUNCTIONS
- * ----------------------------------
- */
-
+/******************************************************************************
+ * Class functions
+ *****************************************************************************/
 StandBy newStandBy(void)
 {
-	/*
-	 * Allocate space for a StandBy object.
-	 */
+	/* Allocate space for a StandBy object. */
 	StandBy this = (StandBy) malloc(sizeof(struct StandBy));
 
-	/*
-	 * Assign the Standby vtable.
-	 */
+	/* Assign the Standby vtable. */
 	this->vtable = &standBy_vtable;
 
-	/*
-	 * Create the super class.
-	 */
+	/* Create the super class. */
 	this->super = newState();
 
-	/*
-	 * Override selected super class functions and tell it about its child.
-	 */
+	/* Override selected super class functions and tell it about its child. */
 	this->super->vtable->pursueMissionObjective = (void(*)(State,Satellite))&standByConcrete_pursueMissionObjective;
 	this->super->child = (void *) this;
 
@@ -57,14 +52,10 @@ StandBy newStandBy(void)
 
 void destroyStandBy(StandBy this)
 {
-	/*
-	 * Destroy the super class.
-	 */
+	/* Destroy the super class. */
 	destroyState(this->super);
 
-	/*
-	 * Free memory for the class.
-	 */
+	/* Free memory for the class. */
 	free(this);
 }
 
@@ -77,25 +68,16 @@ void standBy_test(StandBy this)
 void standBy_pursueMissionObjective(StandBy this,
 				    				Satellite satellite)
 {
-	/*
-	 * Call the State objects pursueMissionObjective function.
-	 */
+	/* Call the State objects pursueMissionObjective function. */
 	this->vtable->pursueMissionObjective(this, satellite);
 }
 
-/*
- * ----------------------------------
- * IMPLEMENTATIN OF CLASSES FUNCTIONS
- * ----------------------------------
- */
-
+/******************************************************************************
+ * Concrete methods
+ *****************************************************************************/
 void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite)
 {
-  /*
-   * Delay for 4 seconds.
-   */
-	printf("sleep\n");
   usleep(4000000);
 }
 
