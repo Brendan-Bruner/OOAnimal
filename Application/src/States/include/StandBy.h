@@ -15,27 +15,25 @@
  * This class inherits from State. Therefore, it is a state. The StandBy
  * state is used used to block the calling thread.
  */
-typedef void* StandBy;
+typedef struct StandBy * StandBy;
 
 /**
  * Virtual function pointer table for StandBy class.
  */
-typedef struct StandByConcrete StandByConcrete;
 struct StandBy_vtable
 {
-	void (* pursueMissionObjective)(StandByConcrete *,
+	void (* pursueMissionObjective)(StandBy,
 									Satellite);
 };
 
 /**
- * Concrete data structure representing the StandBy class.
+ * Data structure representing the StandBy class.
  */
-struct StandByConcrete
+struct StandBy
 {
-	struct StateConcrete *super;
+	State super;
 	struct StandBy_vtable *vtable;
 };
-typedef struct StandByConcrete StandByConcrete;
 
 /*
  * ----------------------------------
@@ -58,7 +56,7 @@ StandBy newStandBy(void);
  * finished with the object.
  * @param thisStandBy The StandBy object to destroy.
  */
-void destroyState(StandBy thisStandBy);
+void destroyStandBy(StandBy this);
 
 /**
  * Blocks the calling thread for a predefined amount of time. The
@@ -76,7 +74,7 @@ void destroyState(StandBy thisStandBy);
  * Satellite object is used to get and update the blocking time
  * in ROM.
  */
-void standBy_pursueMissionObjective(StandBy thisStandBy,
+void standBy_pursueMissionObjective(StandBy this,
 				    				Satellite satellite);
 
 #endif /* STANDBY_H_ */

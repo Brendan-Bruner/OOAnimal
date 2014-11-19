@@ -14,24 +14,23 @@
  * This  class implements the state design pattern. It is the super class
  * to all state classes.
  */
-typedef void* State;
+typedef struct State* State;
 
 /**
  * Virtual function pointer table for State class.
  */
-typedef struct StateConcrete StateConcrete;
 struct State_vtable
 {
-	void (* pursueMissionObjective)(StateConcrete *,
+	void (* pursueMissionObjective)(State,
 									Satellite);
 };
 
 /**
- * Concrete data structure representing the State class.
+ * Data structure representing the State class.
  * @param State_vtable
  * Virtual function pointer table for the State class.
  */
-struct StateConcrete
+struct State
 {
   struct State_vtable *vtable;
 };
@@ -57,7 +56,7 @@ State newState(void);
  * finished with the State object.
  * @param thisState The State object to destroy.
  */
-void destroyState(State thisState);
+void destroyState(State this);
 
 /**
  * Takes actions to accomplish the satellite's mission. This function
@@ -68,7 +67,7 @@ void destroyState(State thisState);
  *@param satellite
  * The Satellite object invoking the method.
  */
-void state_pursueMissionObjective(State thisState,
+void state_pursueMissionObjective(State this,
 								  Satellite satellite);
 
 #endif /* STATE_H_ */

@@ -7,19 +7,16 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "State.h"
 #include "StandBy.h"
 #include "Satellite.h"
 
-void static standByConcrete_pursueMissionObjective(StandByConcrete *this,
+void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite);
 
 static struct StandBy_vtable standBy_vtable =
-{
-	&standByConcrete_pursueMissionObjective
-};
-static struct State_vtable state_vtable =
 {
 	&standByConcrete_pursueMissionObjective
 };
@@ -35,12 +32,12 @@ StandBy newStandBy(void)
 	/*
 	 * Allocate space for a StandBy object.
 	 */
-	StandByConcrete *this = (StandByConcrete *) malloc(sizeof(StandByConcrete));
+	StandBy this = (StandBy) malloc(sizeof(struct StandBy));
 
-	/*
-	 * Create the super class.
-	 */
-	this->super = newState();
+	printf("start adr: %p\n"
+			"first, State adr: %p\n"
+		   "second, vtable adr: %p\n",
+		   this, &this->super, &this->vtable);
 
 	/*
 	 * Assign the Standby vtable.
@@ -48,26 +45,20 @@ StandBy newStandBy(void)
 	this->vtable = &standBy_vtable;
 
 	/*
-	 * Assign the super classes vtable to override selected super classes
-	 * functions.
+	 * Create the super class.
 	 */
-	this->super->vtable = &state_vtable;
+	this->super = newState();
 
 	/*
-	 * Cast the concrete data representation to obscure data and return the
-	 * object.
+	 * Override selected super class functions.
 	 */
-	return (StandBy) this;
+	this->super->vtable->pursueMissionObjective = (void(*)(State,Satellite))&standByConcrete_pursueMissionObjective;
+
+	return this;
 }
 
-void destroyStandBy(StandBy thisStandBy)
+void destroyStandBy(StandBy this)
 {
-	/*
-	 * Cast the object given as input to a concrete representation
-	 * of the object.
-	 */
-	StandByConcrete *this = (StandByConcrete *) thisStandBy;
-
 	/*
 	 * Destroy the super class.
 	 */
@@ -79,15 +70,9 @@ void destroyStandBy(StandBy thisStandBy)
 	free(this);
 }
 
-void standBy_pursueMissionObjective(StandBy thisStandBy,
+void standBy_pursueMissionObjective(StandBy this,
 				    				Satellite satellite)
 {
-	/*
-	 * Cast the object given as input to a concrete representation
-	 * of the object.
-	 */
-	StandByConcrete *this = (StandByConcrete *) thisStandBy;
-
 	/*
 	 * Call the State objects pursueMissionObjective function.
 	 */
@@ -100,7 +85,7 @@ void standBy_pursueMissionObjective(StandBy thisStandBy,
  * ----------------------------------
  */
 
-void static standByConcrete_pursueMissionObjective(StandByConcrete *this,
+void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite)
 {
   /*

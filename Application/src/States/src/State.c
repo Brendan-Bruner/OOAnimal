@@ -5,11 +5,12 @@
  *      Author: brendan
  */
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "State.h"
 #include "Satellite.h"
 
-void static stateConcrete_pursueMissionObjective(StateConcrete *this,
+void static stateConcrete_pursueMissionObjective(State this,
 	  	  	  	  	  	  	  	  	  	  	  	 Satellite satellite);
 
 /*
@@ -33,43 +34,27 @@ State newState(void)
 	/*
 	 * Allocate space for a State object
 	 */
-	StateConcrete *this = (StateConcrete *) malloc(sizeof(StateConcrete));
+	State this = (State) malloc(sizeof(struct State));
 
 	/*
 	 * Assign the vtable
 	 */
 	this->vtable = &state_vtable;
 
-	/*
-	 * Cast the concrete data representation to obscure data and return the
-	 * object.
-	 */
-	return (State) this;
+	return this;
 }
 
-void destroyState(State thisState)
+void destroyState(State this)
 {
-	/*
-	 * Cast the State object given as input to a concrete representation
-	 * of the object.
-	 */
-	StateConcrete *this = (StateConcrete *) thisState;
-
 	/*
 	 * Free the memory.
 	 */
 	free(this);
 }
 
-void state_pursueMissionObjective(State thisState,
+void state_pursueMissionObjective(State this,
 				  	  	  	  	  Satellite satellite)
 {
-	/*
-	 * Cast the State object given as input to a concrete representation
-	 * of the object.
-	 */
-	StateConcrete *this = (StateConcrete *) thisState;
-
 	/*
 	 * Call the State objects pursueMissionObjective function.
 	 */
@@ -86,7 +71,7 @@ void state_pursueMissionObjective(State thisState,
 /**
  * Does nothing. It is up to the child class to implement this function.
  */
-void static stateConcrete_pursueMissionObjective(StateConcrete *this,
+void static stateConcrete_pursueMissionObjective(State this,
 	  	  	  	  	  	  	  	  	  	  	  	 Satellite satellite)
 {
 	return;
