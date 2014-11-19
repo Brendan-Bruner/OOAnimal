@@ -13,16 +13,15 @@ int main(int argc, char *argv[])
   State state;
   StandBy standBy;
 
-  standBy = newStandBy();
+  standBy = new_StandBy();
   state = STANDBY_TO_STATE(standBy);
 
-  printf("Before pursueMissionObject in StandBy state\n");
-  state_pursueMissionObjective(state, 0);
-  printf("After pursueMissionObject in StandBy state\n");
+  pursueMissionObjective_StandBy(standBy, 0);
+  pursueMissionObjective_StandBy(standBy, 0);
+  pursueMissionObjective_State(state, 0);
+  pursueMissionObjective_State(state, 0);
 
-  printf("Test func\n");
-  standBy_test(STATE_TO_STANDBY(state));
-  printf("done test func\n");
+  test_StandBy(standBy);
 
   return 0;
 }

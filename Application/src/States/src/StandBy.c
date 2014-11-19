@@ -13,6 +13,8 @@
 #include "StandBy.h"
 #include "Satellite.h"
 
+#define NO_CHILD 0
+
 /******************************************************************************
  * Concrete method prototypes
  *****************************************************************************/
@@ -32,16 +34,17 @@ static struct StandBy_vtable standBy_vtable =
 /******************************************************************************
  * Class functions
  *****************************************************************************/
-StandBy newStandBy(void)
+StandBy new_StandBy(void)
 {
 	/* Allocate space for a StandBy object. */
 	StandBy this = (StandBy) malloc(sizeof(struct StandBy));
+	this->standByCount = 0;
 
 	/* Assign the Standby vtable. */
 	this->vtable = &standBy_vtable;
 
 	/* Create the super class. */
-	this->super = newState();
+	this->super = new_State();
 
 	/* Override selected super class functions and tell it about its child. */
 	this->super->vtable->pursueMissionObjective = (void(*)(State,Satellite))&standByConcrete_pursueMissionObjective;
@@ -50,26 +53,40 @@ StandBy newStandBy(void)
 	return this;
 }
 
-void destroyStandBy(StandBy this)
+void destroy_StandBy(StandBy this)
 {
 	/* Destroy the super class. */
-	destroyState(this->super);
+	destroy_State(this->super);
 
 	/* Free memory for the class. */
 	free(this);
 }
 
 
-void standBy_test(StandBy this)
+void test_StandBy(StandBy this)
 {
-	this->vtable->test(this);
+	if(this->child == NO_CHILD)
+	{
+		this->vtable->test(this);
+	}
+	else
+	{
+		this->vtable->test(this->child);
+	}
 }
 
-void standBy_pursueMissionObjective(StandBy this,
+void pursueMissionObjective_StandBy(StandBy this,
 				    				Satellite satellite)
 {
 	/* Call the State objects pursueMissionObjective function. */
-	this->vtable->pursueMissionObjective(this, satellite);
+	if(this->child == NO_CHILD)
+	{
+		this->vtable->pursueMissionObjective(this, satellite);
+	}
+	else
+	{
+		this->vtable->pursueMissionObjective(this->child, satellite);
+	}
 }
 
 /******************************************************************************
@@ -78,7 +95,8 @@ void standBy_pursueMissionObjective(StandBy this,
 void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite)
 {
-  usleep(4000000);
+  printf("stand by pursue mission objective count: %x\n", this->standByCount);
+  ++(this->standByCount);
 }
 
 void static standByConcrete_test(StandBy standBy)

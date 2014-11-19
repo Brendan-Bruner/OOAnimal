@@ -29,7 +29,7 @@ static struct State_vtable state_vtable =
 /******************************************************************************
  * Class functions
  *****************************************************************************/
-State newState(void)
+State new_State(void)
 {
 	/* Allocate space for a State object */
 	State this = (State) malloc(sizeof(struct State));
@@ -41,17 +41,24 @@ State newState(void)
 	return this;
 }
 
-void destroyState(State this)
+void destroy_State(State this)
 {
 	/* Free the memory. */
 	free(this);
 }
 
-void state_pursueMissionObjective(State this,
+void pursueMissionObjective_State(State this,
 				  	  	  	  	  Satellite satellite)
 {
 	/* Call the State objects pursueMissionObjective function. */
-	this->vtable->pursueMissionObjective(this, satellite);
+	if(this->child == NO_CHILD)
+	{
+		this->vtable->pursueMissionObjective(this, satellite);
+	}
+	else
+	{
+		this->vtable->pursueMissionObjective(this->child, satellite);
+	}
 }
 
 

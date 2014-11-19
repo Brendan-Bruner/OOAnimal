@@ -60,7 +60,7 @@ struct State
  * the programmer MUST call the objects destructor. destroyState().
  * @return A new State object.
  */
-State newState(void);
+State new_State(void);
 
 /**
  * State destructor.
@@ -68,7 +68,7 @@ State newState(void);
  * finished with the State object.
  * @param thisState The State object to destroy.
  */
-void destroyState(State this);
+void destroy_State(State this);
 
 /**
  * Takes actions to accomplish the satellite's mission. This function
@@ -79,7 +79,7 @@ void destroyState(State this);
  *@param satellite
  * The Satellite object invoking the method.
  */
-void state_pursueMissionObjective(State this,
+void pursueMissionObjective_State(State this,
 								  Satellite satellite);
 
 #endif /* STATE_H_ */

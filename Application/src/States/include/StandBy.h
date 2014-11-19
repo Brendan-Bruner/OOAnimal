@@ -47,6 +47,7 @@ struct StandBy
 	State super;
 	struct StandBy_vtable *vtable;
 	void *child;
+	int standByCount;
 };
 
 /******************************************************************************
@@ -59,7 +60,7 @@ struct StandBy
  * the programmer MUST call the objects destructor. destroyStandBy().
  * @return A new StandBy object.
  */
-StandBy newStandBy(void);
+StandBy new_StandBy(void);
 
 /**
  * StandBy destructor.
@@ -67,7 +68,7 @@ StandBy newStandBy(void);
  * finished with the object.
  * @param thisStandBy The StandBy object to destroy.
  */
-void destroyStandBy(StandBy this);
+void destroy_StandBy(StandBy this);
 
 /**
  * Blocks the calling thread for a predefined amount of time. The
@@ -85,7 +86,7 @@ void destroyStandBy(StandBy this);
  * Satellite object is used to get and update the blocking time
  * in ROM.
  */
-void standBy_pursueMissionObjective(StandBy this,
+void pursueMissionObjective_StandBy(StandBy this,
 				    				Satellite satellite);
 
 /**
@@ -93,6 +94,6 @@ void standBy_pursueMissionObjective(StandBy this,
  * @param this
  * The object calling.
  */
-void standBy_test(StandBy this);
+void test_StandBy(StandBy this);
 
 #endif /* STANDBY_H_ */
