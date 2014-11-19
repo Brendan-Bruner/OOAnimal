@@ -18,9 +18,9 @@
 /******************************************************************************
  * Concrete method prototypes
  *****************************************************************************/
-void static standByConcrete_pursueMissionObjective(StandBy this,
-				    							   Satellite satellite);
-void static standByConcrete_test(StandBy this);
+void static standByConcrete_pursueMissionObjective(StandBy *this,
+				    							   Satellite *satellite);
+void static standByConcrete_test(StandBy *this);
 
 /******************************************************************************
  * vtable
@@ -34,72 +34,50 @@ static struct StandBy_vtable standBy_vtable =
 /******************************************************************************
  * Class functions
  *****************************************************************************/
-StandBy new_StandBy(void)
+void new_StandBy(StandBy *this)
 {
-	/* Allocate space for a StandBy object. */
-	StandBy this = (StandBy) malloc(sizeof(struct StandBy));
+	/* Create the super class. */
+	new_State(&(this->super));
+
 	this->standByCount = 0;
 
 	/* Assign the Standby vtable. */
 	this->vtable = &standBy_vtable;
 
-	/* Create the super class. */
-	this->super = new_State();
-
 	/* Override selected super class functions and tell it about its child. */
-	this->super->vtable->pursueMissionObjective = (void(*)(State,Satellite))&standByConcrete_pursueMissionObjective;
-	this->super->child = (void *) this;
-
-	return this;
+	this->super.vtable->pursueMissionObjective = (void(*)(State *,Satellite *))&standByConcrete_pursueMissionObjective;
 }
 
-void destroy_StandBy(StandBy this)
+void destroy_StandBy(StandBy *this)
 {
-	/* Destroy the super class. */
-	destroy_State(this->super);
-
-	/* Free memory for the class. */
-	free(this);
+	return;
 }
 
 
-void test_StandBy(StandBy this)
+void test_StandBy(StandBy *this)
 {
-	if(this->child == NO_CHILD)
-	{
-		this->vtable->test(this);
-	}
-	else
-	{
-		this->vtable->test(this->child);
-	}
+	this->vtable->test(this);
 }
 
-void pursueMissionObjective_StandBy(StandBy this,
-				    				Satellite satellite)
+void pursueMissionObjective_StandBy(StandBy *this,
+				    				Satellite *satellite)
 {
 	/* Call the State objects pursueMissionObjective function. */
-	if(this->child == NO_CHILD)
-	{
-		this->vtable->pursueMissionObjective(this, satellite);
-	}
-	else
-	{
-		this->vtable->pursueMissionObjective(this->child, satellite);
-	}
+	this->vtable->pursueMissionObjective(this, satellite);
+
 }
 
 /******************************************************************************
  * Concrete methods
  *****************************************************************************/
-void static standByConcrete_pursueMissionObjective(StandBy this,
-				    							   Satellite satellite)
+void static standByConcrete_pursueMissionObjective(StandBy *this,
+				    							   Satellite *satellite)
 {
   printf("stand by pursue mission objective count: %x\n", this->standByCount);
   ++(this->standByCount);
 }
 
-void static standByConcrete_test(StandBy standBy)
+void static standByConcrete_test(StandBy *standBy)
 {
 	printf("stand by test\n");
 }

@@ -21,7 +21,7 @@
  * This class inherits from State. Therefore, it is a state. The StandBy
  * state is used used to block the calling thread.
  */
-typedef struct StandBy * StandBy;
+typedef struct StandBy StandBy;
 
 /******************************************************************************
  * vtable prototype
@@ -31,9 +31,9 @@ typedef struct StandBy * StandBy;
  */
 struct StandBy_vtable
 {
-	void (* pursueMissionObjective)(StandBy,
-									Satellite);
-	void (* test)(StandBy);
+	void (* pursueMissionObjective)(StandBy *,
+									Satellite *);
+	void (* test)(StandBy *);
 };
 
 /******************************************************************************
@@ -46,7 +46,6 @@ struct StandBy
 {
 	State super;
 	struct StandBy_vtable *vtable;
-	void *child;
 	int standByCount;
 };
 
@@ -58,9 +57,9 @@ struct StandBy
  * Creates a pointer to a new StandBy object. The new object is dynamically
  * allocated with malloc. Therefore, when finished with the object
  * the programmer MUST call the objects destructor. destroyStandBy().
- * @return A new StandBy object.
+ * @param this A new StandBy object.
  */
-StandBy new_StandBy(void);
+void new_StandBy(StandBy *this);
 
 /**
  * StandBy destructor.
@@ -68,7 +67,7 @@ StandBy new_StandBy(void);
  * finished with the object.
  * @param thisStandBy The StandBy object to destroy.
  */
-void destroy_StandBy(StandBy this);
+void destroy_StandBy(StandBy *this);
 
 /**
  * Blocks the calling thread for a predefined amount of time. The
@@ -86,14 +85,14 @@ void destroy_StandBy(StandBy this);
  * Satellite object is used to get and update the blocking time
  * in ROM.
  */
-void pursueMissionObjective_StandBy(StandBy this,
-				    				Satellite satellite);
+void pursueMissionObjective_StandBy(StandBy *this,
+				    				Satellite *satellite);
 
 /**
  * A test function which prints a string to the console.
  * @param this
  * The object calling.
  */
-void test_StandBy(StandBy this);
+void test_StandBy(StandBy *this);
 
 #endif /* STANDBY_H_ */

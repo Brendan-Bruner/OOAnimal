@@ -17,7 +17,7 @@
  * This  class implements the state design pattern. It is the super class
  * to all state classes.
  */
-typedef struct State* State;
+typedef struct State State;
 
 /******************************************************************************
  * vtable prototype
@@ -27,8 +27,8 @@ typedef struct State* State;
  */
 struct State_vtable
 {
-	void (* pursueMissionObjective)(State,
-									Satellite);
+	void (* pursueMissionObjective)(State *,
+									Satellite *);
 };
 
 /******************************************************************************
@@ -47,7 +47,6 @@ struct State_vtable
 struct State
 {
   struct State_vtable *vtable;
-  void * child;
 };
 
 /******************************************************************************
@@ -58,9 +57,9 @@ struct State
  * Creates a pointer to a new State object. The new state is dynamically
  * allocated with malloc. Therefore, when finished with the State object
  * the programmer MUST call the objects destructor. destroyState().
- * @return A new State object.
+ * @param this A new State object.
  */
-State new_State(void);
+void new_State(State *this);
 
 /**
  * State destructor.
@@ -68,7 +67,7 @@ State new_State(void);
  * finished with the State object.
  * @param thisState The State object to destroy.
  */
-void destroy_State(State this);
+void destroy_State(State *this);
 
 /**
  * Takes actions to accomplish the satellite's mission. This function
@@ -79,7 +78,7 @@ void destroy_State(State this);
  *@param satellite
  * The Satellite object invoking the method.
  */
-void pursueMissionObjective_State(State this,
-								  Satellite satellite);
+void pursueMissionObjective_State(State *this,
+								  Satellite *satellite);
 
 #endif /* STATE_H_ */
