@@ -4,11 +4,14 @@
  *  Created on: 2014-11-18
  *      Author: brendan
  */
+#ifndef STANDBY_H_
+#define STANDBY_H_
+
 #include "State.h"
 #include "Satellite.h"
 
-#ifndef STANDBY_H_
-#define STANDBY_H_
+#define STATE_TO_STANDBY(a) (StandBy)(a)->child
+#define STANDBY_TO_STATE(a) (a)->super
 
 /*
  * StandBy class.
@@ -24,6 +27,7 @@ struct StandBy_vtable
 {
 	void (* pursueMissionObjective)(StandBy,
 									Satellite);
+	void (* test)(StandBy);
 };
 
 /**
@@ -33,6 +37,7 @@ struct StandBy
 {
 	State super;
 	struct StandBy_vtable *vtable;
+	void *child;
 };
 
 /*
@@ -76,5 +81,7 @@ void destroyStandBy(StandBy this);
  */
 void standBy_pursueMissionObjective(StandBy this,
 				    				Satellite satellite);
+
+void standBy_test(StandBy this);
 
 #endif /* STANDBY_H_ */

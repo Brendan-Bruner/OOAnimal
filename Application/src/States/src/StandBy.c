@@ -15,10 +15,12 @@
 
 void static standByConcrete_pursueMissionObjective(StandBy this,
 				    							   Satellite satellite);
+void static standByConcrete_test(StandBy this);
 
 static struct StandBy_vtable standBy_vtable =
 {
-	&standByConcrete_pursueMissionObjective
+	&standByConcrete_pursueMissionObjective,
+	&standByConcrete_test
 };
 
 /*
@@ -34,11 +36,6 @@ StandBy newStandBy(void)
 	 */
 	StandBy this = (StandBy) malloc(sizeof(struct StandBy));
 
-	printf("start adr: %p\n"
-			"first, State adr: %p\n"
-		   "second, vtable adr: %p\n",
-		   this, &this->super, &this->vtable);
-
 	/*
 	 * Assign the Standby vtable.
 	 */
@@ -50,9 +47,10 @@ StandBy newStandBy(void)
 	this->super = newState();
 
 	/*
-	 * Override selected super class functions.
+	 * Override selected super class functions and tell it about its child.
 	 */
 	this->super->vtable->pursueMissionObjective = (void(*)(State,Satellite))&standByConcrete_pursueMissionObjective;
+	this->super->child = (void *) this;
 
 	return this;
 }
@@ -68,6 +66,12 @@ void destroyStandBy(StandBy this)
 	 * Free memory for the class.
 	 */
 	free(this);
+}
+
+
+void standBy_test(StandBy this)
+{
+	this->vtable->test(this);
 }
 
 void standBy_pursueMissionObjective(StandBy this,
@@ -91,6 +95,12 @@ void static standByConcrete_pursueMissionObjective(StandBy this,
   /*
    * Delay for 4 seconds.
    */
+	printf("sleep\n");
   usleep(4000000);
+}
+
+void static standByConcrete_test(StandBy standBy)
+{
+	printf("stand by test\n");
 }
 

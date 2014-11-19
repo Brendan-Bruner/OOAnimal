@@ -10,7 +10,7 @@
 #include "State.h"
 #include "Satellite.h"
 
-void static stateConcrete_pursueMissionObjective(State this,
+void static stateConcrete_pursueMissionObjective(State state,
 	  	  	  	  	  	  	  	  	  	  	  	 Satellite satellite);
 
 /*
@@ -37,9 +37,10 @@ State newState(void)
 	State this = (State) malloc(sizeof(struct State));
 
 	/*
-	 * Assign the vtable
+	 * Assign the vtable and child
 	 */
 	this->vtable = &state_vtable;
+	this->child = 0;
 
 	return this;
 }

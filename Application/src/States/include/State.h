@@ -29,10 +29,13 @@ struct State_vtable
  * Data structure representing the State class.
  * @param State_vtable
  * Virtual function pointer table for the State class.
+ * @param child
+ * Pointer to child object (class which inherits from state).
  */
 struct State
 {
   struct State_vtable *vtable;
+  void * child;
 };
 
 /*
