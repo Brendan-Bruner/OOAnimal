@@ -18,7 +18,7 @@
  */
 static int getHeight(Bird * this)
 {
-	return this->height;
+	return this->data.height;
 }
 
 /**
@@ -38,7 +38,7 @@ static void talk(Bird *this)
  */
 static void fly(Bird *this, int height)
 {
-	this->height = height;
+	this->data.height = height;
 }
 
 /**
@@ -51,10 +51,10 @@ static void fly(Bird *this, int height)
  */
 static int dive(Bird * this)
 {
-	if(this->height >= 300)
+	if(this->data.height >= 300)
 	{
-		int height = this->height;
-		this->height = 0;
+		int height = this->data.height;
+		this->vtable.fly(this,0);
 		return height*2;
 	}
 	return 0;
@@ -72,6 +72,9 @@ void new_Bird(Bird *this, char const *name)
 	this->vtable.dive = &dive;
 	this->vtable.fly = &fly;
 	this->vtable.getHeight = &getHeight;
+
+	/* Set Bird's initial height */
+	this->vtable.fly(this, 2);
 
 	/* Override super class function talk */
 	this->super.vtable.talk = (void(*)(Animal *)) &talk;

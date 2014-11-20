@@ -30,17 +30,23 @@ struct vtable_Bird
 };
 
 /******************************************************************************
- * Class data structure
+ * Class data members
  *****************************************************************************/
 /**
- * @param super Super class to Bird.
  * @param height how high the bird is above ground.
- * @param vtable_Bird Function pointer table.
  */
+struct data_Bird
+{
+	int height;
+};
+
+/******************************************************************************
+ * Class data structure
+ *****************************************************************************/
 struct Bird
 {
 	Animal super;
-	int height;
+	struct data_Bird data;
 	struct vtable_Bird vtable;
 };
 

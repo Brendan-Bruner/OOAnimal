@@ -18,7 +18,7 @@
  */
 static char * getName(Animal *this)
 {
-	return this->name;
+	return this->data.name;
 }
 
 /**
@@ -37,7 +37,7 @@ static void talk(Animal * this)
  */
 static void setLegs(Animal *this, int numLegs)
 {
-	this->numLegs = numLegs;
+	this->data.numLegs = numLegs;
 }
 
 /**
@@ -47,7 +47,7 @@ static void setLegs(Animal *this, int numLegs)
  */
 static int getLegs(Animal *this)
 {
-	return this->numLegs;
+	return this->data.numLegs;
 }
 
 /**
@@ -71,8 +71,8 @@ void new_Animal(Animal *this, char const *name)
 	this->vtable.getLegs = &getLegs;
 	this->vtable.location = &location;
 
-	this->vtable.setLegs(this, 0);
-	this->name = name;
+	this->data.numLegs = 0;
+	this->data.name = name;
 }
 
 void destroy_Animal(Animal *this)

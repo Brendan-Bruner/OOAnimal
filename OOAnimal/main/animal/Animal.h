@@ -30,20 +30,27 @@ struct vtable_Animal
 };
 
 /******************************************************************************
- * Class data structure
+ * Class data members
  *****************************************************************************/
 /**
  * @param numLegs How many legs the animal has.
- * @param vtable virtual function pointer table.
  * @param name A pointer the Animal's name (ie, a string). This means when the
  * Animal's name is set, the string used to set it is not copied. So.. be
  * careful the string being referenced does not dissapear off the stack or
  * something.
  */
+struct data_Animal
+{
+	int numLegs;
+	char *name;
+};
+
+/******************************************************************************
+ * Class data structure
+ *****************************************************************************/
 struct Animal
 {
-	char *name;
-	int numLegs;
+	struct data_Animal data;
 	struct vtable_Animal vtable;
 };
 
