@@ -43,7 +43,6 @@ void new_Animal(Animal *this)
 	this->numLegs = 0;
 }
 
-/* TODO: Implement destructor. */
 void destroy_Animal(Animal *this)
 {
 	return;

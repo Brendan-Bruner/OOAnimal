@@ -4,17 +4,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../main/animal/Animal.c 
+../main/bird/Bird.c 
 
 OBJS += \
-./main/animal/Animal.o 
+./main/bird/Bird.o 
 
 C_DEPS += \
-./main/animal/Animal.d 
+./main/bird/Bird.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
-main/animal/%.o: ../main/animal/%.c
+main/bird/%.o: ../main/bird/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
 	gcc -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/animal" -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/bird" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
