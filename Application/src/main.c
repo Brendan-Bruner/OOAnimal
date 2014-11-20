@@ -20,13 +20,18 @@ int main(int argc, char *argv[])
   new_State(&state);
   standByP = (State *)&standBy;
 
-  pursueMissionObjective_State(&standBy, 0);
-  test_StandBy(&standBy);
+  ((State *) &standBy)->vtable.pursueMissionObjective(&standBy, 0);
+  standBy.vtable.test(&standBy);
+  //pursueMissionObjective_State(&standBy, 0);
+  //test_StandBy(&standBy);
 
-  pursueMissionObjective_State(standByP, 0);
-  test_StandBy(standByP);
+  standByP->vtable.pursueMissionObjective(standByP, 0);
+  ((StandBy *) standByP)->vtable.test(standByP);
+  //pursueMissionObjective_State(standByP, 0);
+  //test_StandBy(standByP);
 
-  pursueMissionObjective_State(&state, 0);
+  state.vtable.pursueMissionObjective(&state,0);
+  //pursueMissionObjective_State(&state, 0);
 
   return 0;
 }

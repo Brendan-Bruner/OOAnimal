@@ -41,7 +41,7 @@ struct State
 };
 
 /******************************************************************************
- * Class functions
+ * Constructor and destructor prototypes
  *****************************************************************************/
 /**
  * State constructor.
@@ -55,17 +55,5 @@ void new_State(State *this);
  * @param this The State object to destroy.
  */
 void destroy_State(State *this);
-
-/**
- * Takes actions to accomplish the satellite's mission. This function
- * is unimplemented and therefore children classes need to make an
- * implementation.
- *@param thisState
- * The object calling the method.
- *@param satellite
- * The Satellite object invoking the method.
- */
-void pursueMissionObjective_State(State *this,
-								  Satellite *satellite);
 
 #endif /* STATE_H_ */

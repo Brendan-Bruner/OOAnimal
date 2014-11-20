@@ -10,52 +10,35 @@
 #include "State.h"
 #include "Satellite.h"
 
-#define NO_CHILD 0
-
 /******************************************************************************
- * Concrete method prototypes
+ * Class methods
  *****************************************************************************/
-void static stateConcrete_pursueMissionObjective(State *state,
-	  	  	  	  	  	  	  	  	  	  	  	 Satellite *satellite);
-
-/******************************************************************************
- * vtable.
- *****************************************************************************/
-static struct State_vtable state_vtable =
+/**
+ * Takes actions to accomplish the satellite's mission. This function
+ * is unimplemented and therefore children classes need to make an
+ * implementation.
+ *@param thisState
+ * The object calling the method.
+ *@param satellite
+ * The Satellite object invoking the method.
+ */
+void static pursueMissionObjective_State(State *this,
+										 Satellite *satellite)
 {
-	&stateConcrete_pursueMissionObjective
-};
+	printf("Unimplemented\n");
+	return;
+}
 
 /******************************************************************************
- * Class functions
+ * Constructor and destructor
  *****************************************************************************/
 void new_State(State *this)
 {
 	/* Assign the vtable and child */
-	this->vtable.pursueMissionObjective = &stateConcrete_pursueMissionObjective;
+	this->vtable.pursueMissionObjective = &pursueMissionObjective_State;
 }
 
 void destroy_State(State *this)
 {
 	return;
 }
-
-void pursueMissionObjective_State(State *this,
-				  	  	  	  	  Satellite *satellite)
-{
-	/* Call the State objects pursueMissionObjective function. */
-	this->vtable.pursueMissionObjective(this, satellite);
-}
-
-
-
-/******************************************************************************
- * Concrete methods
- *****************************************************************************/
-void static stateConcrete_pursueMissionObjective(State *this,
-	  	  	  	  	  	  	  	  	  	  	  	 Satellite *satellite)
-{
-	printf("Unimplemented\n");
-	return;
-}
-

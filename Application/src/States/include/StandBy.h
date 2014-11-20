@@ -43,7 +43,7 @@ struct StandBy
 };
 
 /******************************************************************************
- * Class functions
+ * Constructor and destructor prototypes
  *****************************************************************************/
 /**
  * StandBy constructor.
@@ -57,11 +57,5 @@ void new_StandBy(StandBy *this);
  * @param thisStandBy The StandBy object to destroy.
  */
 void destroy_StandBy(StandBy *this);
-
-/**
- * A test function which prints a string to the console.
- * @param this The object calling test_StandBy.
- */
-void test_StandBy(StandBy *this);
 
 #endif /* STANDBY_H_ */
