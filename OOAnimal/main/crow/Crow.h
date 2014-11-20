@@ -29,15 +29,19 @@ struct vtable_Crow
 };
 
 /******************************************************************************
+ * Class data members
+ *****************************************************************************/
+struct data_Crow
+{
+};
+
+/******************************************************************************
  * Class data structure
  *****************************************************************************/
-/**
- * @param super Crow's super class.
- * @param vtable Function pointer table.
- */
 struct Crow
 {
 	Bird super;
+	struct data_Crow data;
 	struct vtable_Crow vtable;
 };
 
