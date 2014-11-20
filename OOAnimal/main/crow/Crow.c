@@ -21,10 +21,10 @@
  */
 static int dive(Crow * this)
 {
-	int height = ((Bird *) this)->height;
+	int height = ((Bird *) this)->vtable.getHeight(this);
 	if( height >= 50)
 	{
-		((Bird *) this)->height = 0;
+		((Bird *) this)->vtable.fly(this, 0);
 		return height*2;
 	}
 	return 0;
@@ -54,15 +54,17 @@ void new_Crow(Crow *this, char const *name)
 	/* Initialize super class */
 	new_Bird(&this->super, name);
 
+	/* Set Crow's vtable */
 	this->vtable.useTool = &useTool;
 
+	/* Override Bird's dive method. */
 	((Bird *) this)->vtable.dive = &dive;
 
+	/* Override Animal's talk and location method. */
 	((Animal *) this)->vtable.talk = &talk;
 	((Animal *) this)->vtable.location = &location;
 }
 
-/* TODO: Implement destructor. */
 void destroy_Crow(Crow *this)
 {
 	return;

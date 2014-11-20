@@ -12,6 +12,16 @@
  * Class methods
  *****************************************************************************/
 /**
+ * Get how high the bird is.
+ * @param this The Bird object.
+ * @return How high the Bird is.
+ */
+static int getHeight(Bird * this)
+{
+	return this->height;
+}
+
+/**
  * Override
  * Makes the bird talk.
  * @param this The Bird Object.
@@ -53,7 +63,6 @@ static int dive(Bird * this)
 /******************************************************************************
  * Constructor and destructor
  *****************************************************************************/
-/* TODO: Implement constructor. */
 void new_Bird(Bird *this, char const *name)
 {
 	/* Initialize super class */
@@ -62,6 +71,7 @@ void new_Bird(Bird *this, char const *name)
 	/* Set Bird's vtable */
 	this->vtable.dive = &dive;
 	this->vtable.fly = &fly;
+	this->vtable.getHeight = &getHeight;
 
 	/* Override super class function talk */
 	this->super.vtable.talk = (void(*)(Animal *)) &talk;

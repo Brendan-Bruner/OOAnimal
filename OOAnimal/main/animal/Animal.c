@@ -10,26 +10,50 @@
 /******************************************************************************
  * Class methods
  *****************************************************************************/
+/**
+ * Get the Animal's name.
+ * @param this The Animal object.
+ * @return A pointer to the animals name - a string. Does not
+ * guarantee a null terminating character.
+ */
 static char * getName(Animal *this)
 {
 	return this->name;
 }
 
+/**
+ * Make the Animal talk.
+ * @param this The Animal object.
+ */
 static void talk(Animal * this)
 {
 	printf("Hello, i'm an Animal. My name is %s.\n", this->vtable.getName(this));
 }
 
+/*
+ * Set how many the Animal has.
+ * @param this The Animal object.
+ * @param numLegs How many legs to set.
+ */
 static void setLegs(Animal *this, int numLegs)
 {
 	this->numLegs = numLegs;
 }
 
+/**
+ * Get how many legs the animal has.
+ * @param this The Animal object.
+ * @return The number of legs the Animal has.
+ */
 static int getLegs(Animal *this)
 {
 	return this->numLegs;
 }
 
+/**
+ * Prints the Animal's location, ie, where it will typically live.
+ * @param this The animal object.
+ */
 static void location(Animal *this)
 {
 	printf("I live almost every where on Earth\n");
@@ -40,13 +64,14 @@ static void location(Animal *this)
  *****************************************************************************/
 void new_Animal(Animal *this, char const *name)
 {
+	/* Set the Animals vtable */
 	this->vtable.getName = &getName;
 	this->vtable.talk = &talk;
 	this->vtable.setLegs = &setLegs;
 	this->vtable.getLegs = &getLegs;
 	this->vtable.location = &location;
 
-	this->numLegs = 0;
+	this->vtable.setLegs(this, 0);
 	this->name = name;
 }
 

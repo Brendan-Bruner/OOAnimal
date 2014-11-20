@@ -25,6 +25,7 @@ typedef struct Bird Bird;
 struct vtable_Bird
 {
 	void (* fly)(Bird *, int);
+	int (* getHeight)(Bird *);
 	int (* dive)(Bird *);
 };
 
