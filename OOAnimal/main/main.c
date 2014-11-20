@@ -31,9 +31,11 @@ int main(int argc, char *argv[])
 	new_Animal(&animal, animalName);
 	new_Bird(&bird, birdName);
 	new_Bird(&mutantBird, mutantBirdName);
-	((Animal *) &mutantBird)->vtable.setLegs(&mutantBird, 3);
 	new_Cat(&cat, catsName);
 	new_Crow(&crow, crowName);
+
+	/* Set mutant bird's legs to be 3 */
+	((Animal *) &mutantBird)->vtable.setLegs(&mutantBird, 3);
 
 	test_animal(&animal);
 	test_animal(&bird);
