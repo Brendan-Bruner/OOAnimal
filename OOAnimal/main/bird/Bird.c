@@ -16,9 +16,9 @@
  * Makes the bird talk.
  * @param this The Bird Object.
  */
-void talk(Bird *this)
+static void talk(Bird *this)
 {
-	printf("Hello, i'm a bird.\n");
+	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) this)->vtable.getName(this));
 }
 
 /**
@@ -26,7 +26,7 @@ void talk(Bird *this)
  * @param height Distance to fly above the ground.
  * @param this The Bird object.
  */
-void fly(Bird *this, int height)
+static void fly(Bird *this, int height)
 {
 	this->height = height;
 }
@@ -39,7 +39,7 @@ void fly(Bird *this, int height)
  * @return The force the bird hits the ground with. Returns 0 if the bird
  * is not high enough to dive.
  */
-int dive(Bird * this)
+static int dive(Bird * this)
 {
 	if(this->height >= 300)
 	{
@@ -54,10 +54,10 @@ int dive(Bird * this)
  * Constructor and destructor
  *****************************************************************************/
 /* TODO: Implement constructor. */
-void new_Bird(Bird *this)
+void new_Bird(Bird *this, char const *name)
 {
 	/* Initialize super class */
-	new_Animal(&this->super);
+	new_Animal(&this->super, name);
 
 	/* Set Bird's vtable */
 	this->vtable.dive = &dive;
@@ -70,7 +70,6 @@ void new_Bird(Bird *this)
 	((Animal *) this)->vtable.setLegs(this, 2);
 }
 
-/* TODO: Implement destructor. */
 void destroy_Bird(Bird *this)
 {
 	return;

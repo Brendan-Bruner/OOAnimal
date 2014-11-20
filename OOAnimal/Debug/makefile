@@ -8,6 +8,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
+-include main/crow/subdir.mk
 -include main/bird/subdir.mk
 -include main/animal/subdir.mk
 -include main/subdir.mk

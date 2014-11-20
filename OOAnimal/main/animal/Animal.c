@@ -10,9 +10,14 @@
 /******************************************************************************
  * Class methods
  *****************************************************************************/
+static char * getName(Animal *this)
+{
+	return this->name;
+}
+
 static void talk(Animal * this)
 {
-	printf("Hello, i'm an Animal\n");
+	printf("Hello, i'm an Animal. My name is %s.\n", this->vtable.getName(this));
 }
 
 static void setLegs(Animal *this, int numLegs)
@@ -33,14 +38,16 @@ static void location(Animal *this)
 /******************************************************************************
  * Constructor and destructor
  *****************************************************************************/
-void new_Animal(Animal *this)
+void new_Animal(Animal *this, char const *name)
 {
+	this->vtable.getName = &getName;
 	this->vtable.talk = &talk;
 	this->vtable.setLegs = &setLegs;
 	this->vtable.getLegs = &getLegs;
 	this->vtable.location = &location;
 
 	this->numLegs = 0;
+	this->name = name;
 }
 
 void destroy_Animal(Animal *this)

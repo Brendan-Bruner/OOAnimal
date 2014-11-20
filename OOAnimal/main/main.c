@@ -4,8 +4,13 @@
  *  Created on: 2014-11-19
  *      Author: brendan
  */
+#include <stdio.h>
 #include "Animal.h"
 #include "Bird.h"
+
+char const *animalName = "Spooky";
+char const *birdName = "Craw";
+char const *mutantBirdName = "Mutaeto";
 
 void test_animal(Animal *);
 void test_bird(Bird *);
@@ -13,13 +18,16 @@ void test_bird(Bird *);
 int main(int argc, char *argv[])
 {
 	Animal animal;
-	Bird bird;
+	Bird bird, mutantBird;
 
-	new_Animal(&animal);
-	new_Bird(&bird);
+	new_Animal(&animal, animalName);
+	new_Bird(&bird, birdName);
+	new_Bird(&mutantBird, mutantBirdName);
+	((Animal *) &mutantBird)->vtable.setLegs(&mutantBird, 3);
 
 	test_animal(&animal);
 	test_bird(&bird);
+	test_bird(&mutantBird);
 
 	return 0;
 }
@@ -40,7 +48,7 @@ void test_animal(Animal *ani)
 
 void test_bird(Bird *bird)
 {
-	printf("\nBegining of test animal\n****************************\n");
+	printf("\nBegining of test Bird\n****************************\n");
 
 	((Animal *) bird)->vtable.talk(bird);
 	((Animal *) bird)->vtable.location(bird);
@@ -51,7 +59,7 @@ void test_bird(Bird *bird)
 	printf("Force of impact after diving from 89 height: %i\n", bird->vtable.dive(bird));
 
 	bird->vtable.fly(bird, 350);
-	printf("Force of impact fter diving from 350 height: %i\n", bird->vtable.dive(bird));
+	printf("Force of impact after diving from 350 height: %i\n", bird->vtable.dive(bird));
 
 	printf("*************************\nDone testing\n");
 }

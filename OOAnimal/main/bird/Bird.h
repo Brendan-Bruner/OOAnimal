@@ -50,8 +50,9 @@ struct Bird
  * Constructor.
  * Initializes an object.
  * @param this Object to initialize.
+ * @param name The Bird's name.
  */
-void new_Bird(Bird *this);
+void new_Bird(Bird *this, char const *name);
 
 /**
  * Destructor.
