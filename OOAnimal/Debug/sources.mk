@@ -15,6 +15,7 @@ EXECUTABLES :=
 SUBDIRS := \
 main \
 main/crow \
+main/cat \
 main/bird \
 main/animal \
 

@@ -7,33 +7,41 @@
 #include <stdio.h>
 #include "Animal.h"
 #include "Bird.h"
+#include "Cat.h"
 #include "Crow.h"
 
 char const *animalName = "Spooky";
 char const *birdName = "Craw";
 char const *mutantBirdName = "Mutaeto";
 char const *crowName = "Bob";
+char const *catsName = "Derp";
 
 void test_animal(Animal *);
 void test_bird(Bird *);
 void test_crow(Crow *);
+void test_cat(Cat *);
 
 int main(int argc, char *argv[])
 {
 	Animal animal;
 	Bird bird, mutantBird;
+	Cat cat;
 	Crow crow;
 
 	new_Animal(&animal, animalName);
 	new_Bird(&bird, birdName);
 	new_Bird(&mutantBird, mutantBirdName);
 	((Animal *) &mutantBird)->vtable.setLegs(&mutantBird, 3);
+	new_Cat(&cat, catsName);
 	new_Crow(&crow, crowName);
 
 	test_animal(&animal);
 	test_animal(&bird);
 	test_animal(&mutantBird);
+	test_animal(&cat);
 	test_animal(&crow);
+
+	test_cat(&cat);
 
 	test_bird(&bird);
 	test_bird(&mutantBird);
@@ -46,7 +54,7 @@ int main(int argc, char *argv[])
 
 void test_animal(Animal *ani)
 {
-	printf("\nBegining of test animal\n****************************\n");
+	printf("\nBeginning of test animal\n****************************\n");
 
 	ani->vtable.talk(ani);
 	ani->vtable.location(ani);
@@ -58,9 +66,23 @@ void test_animal(Animal *ani)
 	printf("*************************\nDone testing\n");
 }
 
+void test_cat(Cat *cat)
+{
+	printf("\nBeginning of test animal\n****************************\n");
+
+	((Animal *) cat)->vtable.talk(cat);
+	((Animal *) cat)->vtable.location(cat);
+
+	printf("I have %i legs after construction\n", ((Animal *) cat)->vtable.getLegs(cat));
+
+	cat->vtable.meow(cat);
+
+	printf("*************************\nDone testing\n");
+}
+
 void test_bird(Bird *bird)
 {
-	printf("\nBegining of test Bird\n****************************\n");
+	printf("\nBeginning of test Bird\n****************************\n");
 
 	((Animal *) bird)->vtable.talk(bird);
 	((Animal *) bird)->vtable.location(bird);
