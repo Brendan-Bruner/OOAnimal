@@ -1,0 +1,3 @@
+#Instructions
+
+To import this project into Eclipse you need have the CDT installed. This is the C development toolkit for Eclipse. Open Eclipse and file->import. Choose General->Existing Projects in Workspace then click Next. The "select root directory" radio button should selected. If it isn't then select it. Choose browse and navigate to the OOAnimal directory. Finally, click Finish. To compile and run, click Project->Build All. After the project is compiled, right click on the project in the Project Explorer and click Run As->Local C/C++ Application.

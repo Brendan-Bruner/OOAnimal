@@ -23,4 +23,4 @@ run:
 	./$(PROG)
 
 clean:
-	rm $(OBJECTS) $(PROG) $(OBJECTS)
+	rm $(OBJECTS) $(PROG)
