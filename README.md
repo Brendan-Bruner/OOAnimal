@@ -1,7 +1,7 @@
 OOAnimal
 ========
 
-OOAnimal provides an example of how to do object oriented programming in C. It enables classes to do single inheritance, function overriding, and polymorphism. In the application folder is an eclipse project which demonstrates how to do this.
+OOAnimal provides an example of how to do object oriented programming in C. There are no wrappers, just a template to follow. Implementing classes this way enables single inheritance, virtual functions, and polymorphism. Since I developed this template for use in embedded applications there is no dynamic memory allocation. This means there is no concept of private and protected class members. Everything is public. In the application folder is an eclipse project which demonstrates how to follow the template. I used Eclipse 3.8 on Lubuntu.
 
 OOAnimal is licensed under the GNU General Public License verion 2 or later. I did this so hopefully everyone can use these ideas in their projects.
 
