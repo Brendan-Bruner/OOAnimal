@@ -16,7 +16,7 @@ The software engineer / programmer will have to be tolerant of some extra overhe
 
 ##The Ugly
 
-Everything good comes at a prices. The price with this standard is a larger code base and the run time cost of dynamic linkage. What this means is, everytime an object is instantiated (with a call to new_Obj()) the function has to spend time setting up the function pointers. When every a class method is called (ie, obj.vtable.func(&obj)) there is a small amount of overhead to put the pointer to the object on the stack. Finally, the code base is larger because each object will have its own collect of function pointers.
+The worst of the overhead with this standard is a larger code base and the run time cost of dynamic linkage. What this means is, everytime an object is instantiated (with a call to new_Obj()) the function has to spend time setting up the function pointers. When every a class method is called (ie, obj.vtable.func(&obj)) there is a small amount of overhead to put the pointer to the object on the stack. Finally, the code base is larger because each object will have its own collect of function pointers.
 
 ##Standard Directory
 
