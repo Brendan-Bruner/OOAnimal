@@ -17,7 +17,7 @@ C_DEPS += \
 main/cat/%.o: ../main/cat/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
-	gcc -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/animal" -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/cat" -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/crow" -I"/home/brendan/AlbertaSat/firmware/prototypes/git/OOAnimal/OOAnimal/main/bird" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
+	gcc -I"/home/brendan/Endeavors/OOAnimal/git/OOAnimal/OOAnimal/main/animal" -I"/home/brendan/Endeavors/OOAnimal/git/OOAnimal/OOAnimal/main/cat" -I"/home/brendan/Endeavors/OOAnimal/git/OOAnimal/OOAnimal/main/crow" -I"/home/brendan/Endeavors/OOAnimal/git/OOAnimal/OOAnimal/main/bird" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

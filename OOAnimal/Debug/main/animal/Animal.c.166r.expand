@@ -1,0 +1,1005 @@
+
+;; Function getName (getName, funcdef_no=0, decl_uid=1848, cgraph_uid=0)
+
+getName (struct Animal * this)
+{
+  char * D.1871;
+  char * _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.name;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+
+Live on entry to BB2 : this_1(D)  
+
+Live on entry to BB3 : 
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+
+getName (struct Animal * this)
+{
+  char * D.1871;
+  char * _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.name;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = this_1(D)->_data.name;
+
+(insn 5 4 6 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:21 -1
+     (nil))
+
+(insn 6 5 0 (set (reg/f:SI 59 [ D.1885 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 24 [0x18])) [0 this_1(D)->_data.name+0 S4 A32])) ../main/animal/Animal.c:21 -1
+     (nil))
+
+;; Generating RTL for gimple basic block 3
+
+;; <L0>:
+
+(code_label 7 6 8 2 "" [0 uses])
+
+(note 8 7 0 NOTE_INSN_BASIC_BLOCK)
+
+;; return _2;
+
+(insn 9 8 10 (set (reg:SI 60 [ <retval> ])
+        (reg/f:SI 59 [ D.1885 ])) ../main/animal/Animal.c:21 -1
+     (nil))
+
+(jump_insn 10 9 11 (set (pc)
+        (label_ref 0)) ../main/animal/Animal.c:21 -1
+     (nil))
+
+(barrier 11 10 0)
+deleting block 5
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+Merging block 5 into block 2...
+Merged blocks 2 and 5.
+Merged 2 and 5 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:21 -1
+     (nil))
+(insn 6 5 9 2 (set (reg/f:SI 59 [ D.1885 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 24 [0x18])) [0 this_1(D)->_data.name+0 S4 A32])) ../main/animal/Animal.c:21 -1
+     (nil))
+(insn 9 6 13 2 (set (reg:SI 60 [ <retval> ])
+        (reg/f:SI 59 [ D.1885 ])) ../main/animal/Animal.c:21 -1
+     (nil))
+(insn 13 9 16 2 (set (reg/i:SI 0 ax)
+        (reg:SI 60 [ <retval> ])) ../main/animal/Animal.c:22 -1
+     (nil))
+(insn 16 13 0 2 (use (reg/i:SI 0 ax)) ../main/animal/Animal.c:22 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function talk (talk, funcdef_no=1, decl_uid=1851, cgraph_uid=1)
+
+talk (struct Animal * this)
+{
+  char * D.1874;
+  char * (*<T2a8>) (struct Animal *) D.1873;
+  char * (*<T2a8>) (struct Animal *) _2;
+  char * _3;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->vtable.getName;
+  _3 = _2 (this_1(D));
+  printf ("Hello, i\'m an Animal. My name is %s.\n", _3);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+Partition 3 (_3 - 3 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+
+Live on entry to BB2 : this_1(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+Partition 2 (_3 - 3 )
+
+talk (struct Animal * this)
+{
+  char * D.1874;
+  char * (*<T2a8>) (struct Animal *) D.1873;
+  char * (*<T2a8>) (struct Animal *) _2;
+  char * _3;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->vtable.getName;
+  _3 = _2 (this_1(D));
+  printf ("Hello, i\'m an Animal. My name is %s.\n", _3);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = this_1(D)->vtable.getName;
+
+(insn 5 4 6 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+
+(insn 6 5 0 (set (reg/f:SI 59 [ D.1886 ])
+        (mem/f/j:SI (reg/f:SI 61) [0 this_1(D)->vtable.getName+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+
+;; _3 = _2 (this_1(D));
+
+(insn 7 6 8 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+
+(insn 8 7 9 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 62)) ../main/animal/Animal.c:30 -1
+     (nil))
+
+(call_insn 9 8 10 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 59 [ D.1886 ]) [0 *_2 S1 A8])
+            (const_int 4 [0x4]))) ../main/animal/Animal.c:30 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+
+(insn 10 9 0 (set (reg/f:SI 60 [ D.1887 ])
+        (reg:SI 0 ax)) ../main/animal/Animal.c:30 -1
+     (nil))
+
+;; printf ("Hello, i\'m an Animal. My name is %s.\n", _3);
+
+(insn 11 10 12 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ D.1887 ])) ../main/animal/Animal.c:30 -1
+     (nil))
+
+(insn 12 11 13 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC0") [flags 0x2]  <var_decl 0x408819b4 *.LC0>)) ../main/animal/Animal.c:30 -1
+     (nil))
+
+(call_insn 13 12 0 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/animal/Animal.c:30 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+(insn 6 5 7 2 (set (reg/f:SI 59 [ D.1886 ])
+        (mem/f/j:SI (reg/f:SI 61) [0 this_1(D)->vtable.getName+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+(insn 7 6 8 2 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:30 -1
+     (nil))
+(insn 8 7 9 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 62)) ../main/animal/Animal.c:30 -1
+     (nil))
+(call_insn 9 8 10 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 59 [ D.1886 ]) [0 *_2 S1 A8])
+            (const_int 4 [0x4]))) ../main/animal/Animal.c:30 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+(insn 10 9 11 2 (set (reg/f:SI 60 [ D.1887 ])
+        (reg:SI 0 ax)) ../main/animal/Animal.c:30 -1
+     (nil))
+(insn 11 10 12 2 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ D.1887 ])) ../main/animal/Animal.c:30 -1
+     (nil))
+(insn 12 11 13 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC0") [flags 0x2]  <var_decl 0x408819b4 *.LC0>)) ../main/animal/Animal.c:30 -1
+     (nil))
+(call_insn 13 12 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/animal/Animal.c:30 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function setLegs (setLegs, funcdef_no=2, decl_uid=1855, cgraph_uid=2)
+
+setLegs (struct Animal * this, int numLegs)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->_data.numLegs = numLegs_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (numLegs_2(D) - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (numLegs_2(D) - 2 )
+
+
+Live on entry to BB2 : this_1(D)  numLegs_2(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (numLegs_2(D) - 2 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (numLegs_2(D) - 2 )
+
+setLegs (struct Animal * this, int numLegs)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->_data.numLegs = numLegs_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; this_1(D)->_data.numLegs = numLegs_2(D);
+
+(insn 5 4 6 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:40 -1
+     (nil))
+
+(insn 6 5 7 (set (reg:SI 60)
+        (mem/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 numLegs+0 S4 A32])) ../main/animal/Animal.c:40 -1
+     (nil))
+
+(insn 7 6 0 (set (mem/j:SI (plus:SI (reg/f:SI 59)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])
+        (reg:SI 60)) ../main/animal/Animal.c:40 -1
+     (nil))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:40 -1
+     (nil))
+(insn 6 5 7 2 (set (reg:SI 60)
+        (mem/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 numLegs+0 S4 A32])) ../main/animal/Animal.c:40 -1
+     (nil))
+(insn 7 6 0 2 (set (mem/j:SI (plus:SI (reg/f:SI 59)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])
+        (reg:SI 60)) ../main/animal/Animal.c:40 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function getLegs (getLegs, funcdef_no=3, decl_uid=1858, cgraph_uid=3)
+
+getLegs (struct Animal * this)
+{
+  int D.1875;
+  int _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.numLegs;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+
+Live on entry to BB2 : this_1(D)  
+
+Live on entry to BB3 : 
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+
+getLegs (struct Animal * this)
+{
+  int D.1875;
+  int _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.numLegs;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = this_1(D)->_data.numLegs;
+
+(insn 5 4 6 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:50 -1
+     (nil))
+
+(insn 6 5 0 (set (reg:SI 59 [ D.1889 ])
+        (mem/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])) ../main/animal/Animal.c:50 -1
+     (nil))
+
+;; Generating RTL for gimple basic block 3
+
+;; <L0>:
+
+(code_label 7 6 8 6 "" [0 uses])
+
+(note 8 7 0 NOTE_INSN_BASIC_BLOCK)
+
+;; return _2;
+
+(insn 9 8 10 (set (reg:SI 60 [ <retval> ])
+        (reg:SI 59 [ D.1889 ])) ../main/animal/Animal.c:50 -1
+     (nil))
+
+(jump_insn 10 9 11 (set (pc)
+        (label_ref 0)) ../main/animal/Animal.c:50 -1
+     (nil))
+
+(barrier 11 10 0)
+deleting block 5
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+Merging block 5 into block 2...
+Merged blocks 2 and 5.
+Merged 2 and 5 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:50 -1
+     (nil))
+(insn 6 5 9 2 (set (reg:SI 59 [ D.1889 ])
+        (mem/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])) ../main/animal/Animal.c:50 -1
+     (nil))
+(insn 9 6 13 2 (set (reg:SI 60 [ <retval> ])
+        (reg:SI 59 [ D.1889 ])) ../main/animal/Animal.c:50 -1
+     (nil))
+(insn 13 9 16 2 (set (reg/i:SI 0 ax)
+        (reg:SI 60 [ <retval> ])) ../main/animal/Animal.c:51 -1
+     (nil))
+(insn 16 13 0 2 (use (reg/i:SI 0 ax)) ../main/animal/Animal.c:51 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function location (location, funcdef_no=4, decl_uid=1861, cgraph_uid=4)
+
+location (struct Animal * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  __builtin_puts (&"I live almost every where on Earth"[0]);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+
+After Coalescing:
+
+Partition map 
+
+
+location (struct Animal * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  __builtin_puts (&"I live almost every where on Earth"[0]);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; __builtin_puts (&"I live almost every where on Earth"[0]);
+
+(insn 5 4 6 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC1") [flags 0x2]  <var_decl 0x40881a6c *.LC1>)) ../main/animal/Animal.c:59 -1
+     (nil))
+
+(call_insn 6 5 0 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/animal/Animal.c:59 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC1") [flags 0x2]  <var_decl 0x40881a6c *.LC1>)) ../main/animal/Animal.c:59 -1
+     (nil))
+(call_insn 6 5 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/animal/Animal.c:59 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function new_Animal (new_Animal, funcdef_no=5, decl_uid=1389, cgraph_uid=5)
+
+new_Animal (struct Animal * this, const char * name)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->vtable.getName = getName;
+  this_1(D)->vtable.talk = talk;
+  this_1(D)->vtable.setLegs = setLegs;
+  this_1(D)->vtable.getLegs = getLegs;
+  this_1(D)->vtable.location = location;
+  this_1(D)->_data.numLegs = 0;
+  this_1(D)->_data.name = name_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (name_2(D) - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (name_2(D) - 2 )
+
+
+Live on entry to BB2 : this_1(D)  name_2(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (name_2(D) - 2 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (name_2(D) - 2 )
+
+new_Animal (struct Animal * this, const char * name)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->vtable.getName = getName;
+  this_1(D)->vtable.talk = talk;
+  this_1(D)->vtable.setLegs = setLegs;
+  this_1(D)->vtable.getLegs = getLegs;
+  this_1(D)->vtable.location = location;
+  this_1(D)->_data.numLegs = 0;
+  this_1(D)->_data.name = name_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; this_1(D)->vtable.getName = getName;
+
+(insn 5 4 6 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:68 -1
+     (nil))
+
+(insn 6 5 0 (set (mem/f/j:SI (reg/f:SI 59) [0 this_1(D)->vtable.getName+0 S4 A32])
+        (symbol_ref:SI ("getName") [flags 0x3]  <function_decl 0x4087b380 getName>)) ../main/animal/Animal.c:68 -1
+     (nil))
+
+;; this_1(D)->vtable.talk = talk;
+
+(insn 7 6 8 (set (reg/f:SI 60)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:69 -1
+     (nil))
+
+(insn 8 7 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 60)
+                (const_int 4 [0x4])) [0 this_1(D)->vtable.talk+0 S4 A32])
+        (symbol_ref:SI ("talk") [flags 0x3]  <function_decl 0x4087b400 talk>)) ../main/animal/Animal.c:69 -1
+     (nil))
+
+;; this_1(D)->vtable.setLegs = setLegs;
+
+(insn 9 8 10 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:70 -1
+     (nil))
+
+(insn 10 9 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 8 [0x8])) [0 this_1(D)->vtable.setLegs+0 S4 A32])
+        (symbol_ref:SI ("setLegs") [flags 0x3]  <function_decl 0x4087b480 setLegs>)) ../main/animal/Animal.c:70 -1
+     (nil))
+
+;; this_1(D)->vtable.getLegs = getLegs;
+
+(insn 11 10 12 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:71 -1
+     (nil))
+
+(insn 12 11 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 62)
+                (const_int 12 [0xc])) [0 this_1(D)->vtable.getLegs+0 S4 A32])
+        (symbol_ref:SI ("getLegs") [flags 0x3]  <function_decl 0x4087b500 getLegs>)) ../main/animal/Animal.c:71 -1
+     (nil))
+
+;; this_1(D)->vtable.location = location;
+
+(insn 13 12 14 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:72 -1
+     (nil))
+
+(insn 14 13 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 16 [0x10])) [0 this_1(D)->vtable.location+0 S4 A32])
+        (symbol_ref:SI ("location") [flags 0x3]  <function_decl 0x4087b580 location>)) ../main/animal/Animal.c:72 -1
+     (nil))
+
+;; this_1(D)->_data.numLegs = 0;
+
+(insn 15 14 16 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:74 -1
+     (nil))
+
+(insn 16 15 0 (set (mem/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])
+        (const_int 0 [0])) ../main/animal/Animal.c:74 -1
+     (nil))
+
+;; this_1(D)->_data.name = name_2(D);
+
+(insn 17 16 18 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:75 -1
+     (nil))
+
+(insn 18 17 19 (set (reg/f:SI 66)
+        (mem/f/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 name+0 S4 A32])) ../main/animal/Animal.c:75 -1
+     (nil))
+
+(insn 19 18 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 24 [0x18])) [0 this_1(D)->_data.name+0 S4 A32])
+        (reg/f:SI 66)) ../main/animal/Animal.c:75 -1
+     (nil))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:68 -1
+     (nil))
+(insn 6 5 7 2 (set (mem/f/j:SI (reg/f:SI 59) [0 this_1(D)->vtable.getName+0 S4 A32])
+        (symbol_ref:SI ("getName") [flags 0x3]  <function_decl 0x4087b380 getName>)) ../main/animal/Animal.c:68 -1
+     (nil))
+(insn 7 6 8 2 (set (reg/f:SI 60)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:69 -1
+     (nil))
+(insn 8 7 9 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 60)
+                (const_int 4 [0x4])) [0 this_1(D)->vtable.talk+0 S4 A32])
+        (symbol_ref:SI ("talk") [flags 0x3]  <function_decl 0x4087b400 talk>)) ../main/animal/Animal.c:69 -1
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:70 -1
+     (nil))
+(insn 10 9 11 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 8 [0x8])) [0 this_1(D)->vtable.setLegs+0 S4 A32])
+        (symbol_ref:SI ("setLegs") [flags 0x3]  <function_decl 0x4087b480 setLegs>)) ../main/animal/Animal.c:70 -1
+     (nil))
+(insn 11 10 12 2 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:71 -1
+     (nil))
+(insn 12 11 13 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 62)
+                (const_int 12 [0xc])) [0 this_1(D)->vtable.getLegs+0 S4 A32])
+        (symbol_ref:SI ("getLegs") [flags 0x3]  <function_decl 0x4087b500 getLegs>)) ../main/animal/Animal.c:71 -1
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:72 -1
+     (nil))
+(insn 14 13 15 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 16 [0x10])) [0 this_1(D)->vtable.location+0 S4 A32])
+        (symbol_ref:SI ("location") [flags 0x3]  <function_decl 0x4087b580 location>)) ../main/animal/Animal.c:72 -1
+     (nil))
+(insn 15 14 16 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:74 -1
+     (nil))
+(insn 16 15 17 2 (set (mem/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 20 [0x14])) [0 this_1(D)->_data.numLegs+0 S4 A32])
+        (const_int 0 [0])) ../main/animal/Animal.c:74 -1
+     (nil))
+(insn 17 16 18 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/animal/Animal.c:75 -1
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 name+0 S4 A32])) ../main/animal/Animal.c:75 -1
+     (nil))
+(insn 19 18 0 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 24 [0x18])) [0 this_1(D)->_data.name+0 S4 A32])
+        (reg/f:SI 66)) ../main/animal/Animal.c:75 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function destroy_Animal (destroy_Animal, funcdef_no=6, decl_uid=1391, cgraph_uid=6)
+
+destroy_Animal (struct Animal * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+
+After Coalescing:
+
+Partition map 
+
+
+destroy_Animal (struct Animal * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; Generating RTL for gimple basic block 3
+
+;; <L0>:
+
+(code_label 5 4 6 10 "" [0 uses])
+
+(note 6 5 0 NOTE_INSN_BASIC_BLOCK)
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Forwarding edge 2->4 to 5 failed.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+Merging block 5 into block 2...
+Merged blocks 2 and 5.
+Merged 2 and 5 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 9 2 NOTE_INSN_FUNCTION_BEG)
+(insn 9 2 0 2 (const_int 0 [0]) ../main/animal/Animal.c:80 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+

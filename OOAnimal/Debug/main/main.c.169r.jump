@@ -1,0 +1,2148 @@
+
+;; Function main (main, funcdef_no=0, decl_uid=1910, cgraph_uid=0)
+
+
+3 basic blocks, 2 edges.
+basic block 0, loop depth 0, count 0, freq 0, maybe hot
+ prev block (nil), next block 2, flags: (RTL)
+ pred:      
+ succ:       2 (FALLTHRU)
+
+basic block 2, loop depth 0, count 0, freq 0, maybe hot
+ prev block 0, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+ pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59 [ animalName.0 ])
+        (mem/f/c:SI (symbol_ref:SI ("animalName") [flags 0x2]  <var_decl 0x40855da8 animalName>) [0 animalName+0 S4 A32])) ../main/main.c:31 89 {*movsi_internal}
+     (nil))
+(insn 6 5 7 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 59 [ animalName.0 ])) ../main/main.c:31 89 {*movsi_internal}
+     (nil))
+(insn 7 6 8 2 (parallel [
+            (set (reg:SI 68)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -196 [0xffffffffffffff3c])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:31 273 {*addsi_1}
+     (nil))
+(insn 8 7 9 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 68)) ../main/main.c:31 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -196 [0xffffffffffffff3c]))
+        (nil)))
+(call_insn 9 8 10 2 (call (mem:QI (symbol_ref:SI ("new_Animal") [flags 0x41]  <function_decl 0x4087b600 new_Animal>) [0 new_Animal S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:31 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 10 9 11 2 (set (reg/f:SI 60 [ birdName.1 ])
+        (mem/f/c:SI (symbol_ref:SI ("birdName") [flags 0x2]  <var_decl 0x40855e04 birdName>) [0 birdName+0 S4 A32])) ../main/main.c:32 89 {*movsi_internal}
+     (nil))
+(insn 11 10 12 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ birdName.1 ])) ../main/main.c:32 89 {*movsi_internal}
+     (nil))
+(insn 12 11 13 2 (parallel [
+            (set (reg:SI 69)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:32 273 {*addsi_1}
+     (nil))
+(insn 13 12 14 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 69)) ../main/main.c:32 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 14 13 15 2 (call (mem:QI (symbol_ref:SI ("new_Bird") [flags 0x41]  <function_decl 0x4087b000 new_Bird>) [0 new_Bird S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:32 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 15 14 16 2 (set (reg/f:SI 61 [ mutantBirdName.2 ])
+        (mem/f/c:SI (symbol_ref:SI ("mutantBirdName") [flags 0x2]  <var_decl 0x40855e60 mutantBirdName>) [0 mutantBirdName+0 S4 A32])) ../main/main.c:33 89 {*movsi_internal}
+     (nil))
+(insn 16 15 17 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 61 [ mutantBirdName.2 ])) ../main/main.c:33 89 {*movsi_internal}
+     (nil))
+(insn 17 16 18 2 (parallel [
+            (set (reg:SI 70)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:33 273 {*addsi_1}
+     (nil))
+(insn 18 17 19 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 70)) ../main/main.c:33 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 19 18 20 2 (call (mem:QI (symbol_ref:SI ("new_Bird") [flags 0x41]  <function_decl 0x4087b000 new_Bird>) [0 new_Bird S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:33 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 20 19 21 2 (set (reg/f:SI 62 [ catsName.3 ])
+        (mem/f/c:SI (symbol_ref:SI ("catsName") [flags 0x2]  <var_decl 0x40855f18 catsName>) [0 catsName+0 S4 A32])) ../main/main.c:34 89 {*movsi_internal}
+     (nil))
+(insn 21 20 22 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 62 [ catsName.3 ])) ../main/main.c:34 89 {*movsi_internal}
+     (nil))
+(insn 22 21 23 2 (parallel [
+            (set (reg:SI 71)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:34 273 {*addsi_1}
+     (nil))
+(insn 23 22 24 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 71)) ../main/main.c:34 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 24 23 25 2 (call (mem:QI (symbol_ref:SI ("new_Cat") [flags 0x41]  <function_decl 0x4087bd80 new_Cat>) [0 new_Cat S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:34 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 25 24 26 2 (set (reg/f:SI 63 [ crowName.4 ])
+        (mem/f/c:SI (symbol_ref:SI ("crowName") [flags 0x2]  <var_decl 0x40855ebc crowName>) [0 crowName+0 S4 A32])) ../main/main.c:35 89 {*movsi_internal}
+     (nil))
+(insn 26 25 27 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 63 [ crowName.4 ])) ../main/main.c:35 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (parallel [
+            (set (reg:SI 72)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:35 273 {*addsi_1}
+     (nil))
+(insn 28 27 29 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 72)) ../main/main.c:35 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 29 28 30 2 (call (mem:QI (symbol_ref:SI ("new_Crow") [flags 0x41]  <function_decl 0x40880580 new_Crow>) [0 new_Crow S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:35 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 30 29 31 2 (parallel [
+            (set (reg/f:SI 64 [ mutantBird.5 ])
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:38 273 {*addsi_1}
+     (nil))
+(insn 31 30 32 2 (set (reg/f:SI 65 [ D.1980 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 64 [ mutantBird.5 ])
+                (const_int 8 [0x8])) [0 MEM[(struct Animal *)mutantBird.5_6].vtable.setLegs+0 S4 A32])) ../main/main.c:38 89 {*movsi_internal}
+     (nil))
+(insn 32 31 33 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 3 [0x3])) ../main/main.c:38 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (parallel [
+            (set (reg:SI 73)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:38 273 {*addsi_1}
+     (nil))
+(insn 34 33 35 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 73)) ../main/main.c:38 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 35 34 36 2 (call (mem:QI (reg/f:SI 65 [ D.1980 ]) [0 *_7 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:38 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 36 35 37 2 (parallel [
+            (set (reg:SI 74)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -196 [0xffffffffffffff3c])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:42 273 {*addsi_1}
+     (nil))
+(insn 37 36 38 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 74)) ../main/main.c:42 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -196 [0xffffffffffffff3c]))
+        (nil)))
+(call_insn 38 37 39 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:42 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 39 38 40 2 (parallel [
+            (set (reg:SI 75)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:43 273 {*addsi_1}
+     (nil))
+(insn 40 39 41 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 75)) ../main/main.c:43 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 41 40 42 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:43 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 42 41 43 2 (parallel [
+            (set (reg:SI 76)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:44 273 {*addsi_1}
+     (nil))
+(insn 43 42 44 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 76)) ../main/main.c:44 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 44 43 45 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:44 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 45 44 46 2 (parallel [
+            (set (reg:SI 77)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:45 273 {*addsi_1}
+     (nil))
+(insn 46 45 47 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 77)) ../main/main.c:45 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 47 46 48 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:45 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 48 47 49 2 (parallel [
+            (set (reg:SI 78)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:46 273 {*addsi_1}
+     (nil))
+(insn 49 48 50 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 78)) ../main/main.c:46 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 50 49 51 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:46 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 51 50 52 2 (parallel [
+            (set (reg:SI 79)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:48 273 {*addsi_1}
+     (nil))
+(insn 52 51 53 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 79)) ../main/main.c:48 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 53 52 54 2 (call (mem:QI (symbol_ref:SI ("test_cat") [flags 0x3]  <function_decl 0x40880800 test_cat>) [0 test_cat S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:48 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 54 53 55 2 (parallel [
+            (set (reg:SI 80)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:50 273 {*addsi_1}
+     (nil))
+(insn 55 54 56 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 80)) ../main/main.c:50 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 56 55 57 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:50 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 57 56 58 2 (parallel [
+            (set (reg:SI 81)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:51 273 {*addsi_1}
+     (nil))
+(insn 58 57 59 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 81)) ../main/main.c:51 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 59 58 60 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:51 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 60 59 61 2 (parallel [
+            (set (reg:SI 82)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:52 273 {*addsi_1}
+     (nil))
+(insn 61 60 62 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 82)) ../main/main.c:52 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 62 61 63 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:52 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 63 62 64 2 (parallel [
+            (set (reg:SI 83)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:54 273 {*addsi_1}
+     (nil))
+(insn 64 63 65 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 83)) ../main/main.c:54 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 65 64 66 2 (call (mem:QI (symbol_ref:SI ("test_crow") [flags 0x3]  <function_decl 0x40880780 test_crow>) [0 test_crow S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:54 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 66 65 69 2 (set (reg:SI 66 [ D.1981 ])
+        (const_int 0 [0])) ../main/main.c:56 89 {*movsi_internal}
+     (nil))
+(insn 69 66 73 2 (set (reg:SI 67 [ <retval> ])
+        (reg:SI 66 [ D.1981 ])) ../main/main.c:56 89 {*movsi_internal}
+     (nil))
+(insn 73 69 76 2 (set (reg/i:SI 0 ax)
+        (reg:SI 67 [ <retval> ])) ../main/main.c:57 89 {*movsi_internal}
+     (nil))
+(insn 76 73 0 2 (use (reg/i:SI 0 ax)) ../main/main.c:57 -1
+     (nil))
+ succ:       EXIT [100.0%]  (FALLTHRU)
+
+basic block 1, loop depth 0, count 0, freq 0, maybe hot
+ prev block 2, next block (nil), flags: (REACHABLE, RTL)
+ pred:       2 [100.0%]  (FALLTHRU)
+ succ:      
+
+
+
+
+try_optimize_cfg iteration 1
+
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59 [ animalName.0 ])
+        (mem/f/c:SI (symbol_ref:SI ("animalName") [flags 0x2]  <var_decl 0x40855da8 animalName>) [0 animalName+0 S4 A32])) ../main/main.c:31 89 {*movsi_internal}
+     (nil))
+(insn 6 5 7 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 59 [ animalName.0 ])) ../main/main.c:31 89 {*movsi_internal}
+     (nil))
+(insn 7 6 8 2 (parallel [
+            (set (reg:SI 68)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -196 [0xffffffffffffff3c])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:31 273 {*addsi_1}
+     (nil))
+(insn 8 7 9 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 68)) ../main/main.c:31 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -196 [0xffffffffffffff3c]))
+        (nil)))
+(call_insn 9 8 10 2 (call (mem:QI (symbol_ref:SI ("new_Animal") [flags 0x41]  <function_decl 0x4087b600 new_Animal>) [0 new_Animal S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:31 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 10 9 11 2 (set (reg/f:SI 60 [ birdName.1 ])
+        (mem/f/c:SI (symbol_ref:SI ("birdName") [flags 0x2]  <var_decl 0x40855e04 birdName>) [0 birdName+0 S4 A32])) ../main/main.c:32 89 {*movsi_internal}
+     (nil))
+(insn 11 10 12 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ birdName.1 ])) ../main/main.c:32 89 {*movsi_internal}
+     (nil))
+(insn 12 11 13 2 (parallel [
+            (set (reg:SI 69)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:32 273 {*addsi_1}
+     (nil))
+(insn 13 12 14 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 69)) ../main/main.c:32 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 14 13 15 2 (call (mem:QI (symbol_ref:SI ("new_Bird") [flags 0x41]  <function_decl 0x4087b000 new_Bird>) [0 new_Bird S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:32 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 15 14 16 2 (set (reg/f:SI 61 [ mutantBirdName.2 ])
+        (mem/f/c:SI (symbol_ref:SI ("mutantBirdName") [flags 0x2]  <var_decl 0x40855e60 mutantBirdName>) [0 mutantBirdName+0 S4 A32])) ../main/main.c:33 89 {*movsi_internal}
+     (nil))
+(insn 16 15 17 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 61 [ mutantBirdName.2 ])) ../main/main.c:33 89 {*movsi_internal}
+     (nil))
+(insn 17 16 18 2 (parallel [
+            (set (reg:SI 70)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:33 273 {*addsi_1}
+     (nil))
+(insn 18 17 19 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 70)) ../main/main.c:33 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 19 18 20 2 (call (mem:QI (symbol_ref:SI ("new_Bird") [flags 0x41]  <function_decl 0x4087b000 new_Bird>) [0 new_Bird S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:33 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 20 19 21 2 (set (reg/f:SI 62 [ catsName.3 ])
+        (mem/f/c:SI (symbol_ref:SI ("catsName") [flags 0x2]  <var_decl 0x40855f18 catsName>) [0 catsName+0 S4 A32])) ../main/main.c:34 89 {*movsi_internal}
+     (nil))
+(insn 21 20 22 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 62 [ catsName.3 ])) ../main/main.c:34 89 {*movsi_internal}
+     (nil))
+(insn 22 21 23 2 (parallel [
+            (set (reg:SI 71)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:34 273 {*addsi_1}
+     (nil))
+(insn 23 22 24 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 71)) ../main/main.c:34 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 24 23 25 2 (call (mem:QI (symbol_ref:SI ("new_Cat") [flags 0x41]  <function_decl 0x4087bd80 new_Cat>) [0 new_Cat S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:34 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 25 24 26 2 (set (reg/f:SI 63 [ crowName.4 ])
+        (mem/f/c:SI (symbol_ref:SI ("crowName") [flags 0x2]  <var_decl 0x40855ebc crowName>) [0 crowName+0 S4 A32])) ../main/main.c:35 89 {*movsi_internal}
+     (nil))
+(insn 26 25 27 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 63 [ crowName.4 ])) ../main/main.c:35 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (parallel [
+            (set (reg:SI 72)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:35 273 {*addsi_1}
+     (nil))
+(insn 28 27 29 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 72)) ../main/main.c:35 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 29 28 30 2 (call (mem:QI (symbol_ref:SI ("new_Crow") [flags 0x41]  <function_decl 0x40880580 new_Crow>) [0 new_Crow S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:35 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 30 29 31 2 (parallel [
+            (set (reg/f:SI 64 [ mutantBird.5 ])
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:38 273 {*addsi_1}
+     (nil))
+(insn 31 30 32 2 (set (reg/f:SI 65 [ D.1980 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 64 [ mutantBird.5 ])
+                (const_int 8 [0x8])) [0 MEM[(struct Animal *)mutantBird.5_6].vtable.setLegs+0 S4 A32])) ../main/main.c:38 89 {*movsi_internal}
+     (nil))
+(insn 32 31 33 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 3 [0x3])) ../main/main.c:38 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (parallel [
+            (set (reg:SI 73)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:38 273 {*addsi_1}
+     (nil))
+(insn 34 33 35 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 73)) ../main/main.c:38 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 35 34 36 2 (call (mem:QI (reg/f:SI 65 [ D.1980 ]) [0 *_7 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:38 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 36 35 37 2 (parallel [
+            (set (reg:SI 74)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -196 [0xffffffffffffff3c])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:42 273 {*addsi_1}
+     (nil))
+(insn 37 36 38 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 74)) ../main/main.c:42 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -196 [0xffffffffffffff3c]))
+        (nil)))
+(call_insn 38 37 39 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:42 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 39 38 40 2 (parallel [
+            (set (reg:SI 75)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:43 273 {*addsi_1}
+     (nil))
+(insn 40 39 41 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 75)) ../main/main.c:43 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 41 40 42 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:43 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 42 41 43 2 (parallel [
+            (set (reg:SI 76)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:44 273 {*addsi_1}
+     (nil))
+(insn 43 42 44 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 76)) ../main/main.c:44 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 44 43 45 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:44 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 45 44 46 2 (parallel [
+            (set (reg:SI 77)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:45 273 {*addsi_1}
+     (nil))
+(insn 46 45 47 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 77)) ../main/main.c:45 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 47 46 48 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:45 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 48 47 49 2 (parallel [
+            (set (reg:SI 78)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:46 273 {*addsi_1}
+     (nil))
+(insn 49 48 50 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 78)) ../main/main.c:46 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 50 49 51 2 (call (mem:QI (symbol_ref:SI ("test_animal") [flags 0x3]  <function_decl 0x40880680 test_animal>) [0 test_animal S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:46 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 51 50 52 2 (parallel [
+            (set (reg:SI 79)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -168 [0xffffffffffffff58])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:48 273 {*addsi_1}
+     (nil))
+(insn 52 51 53 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 79)) ../main/main.c:48 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -168 [0xffffffffffffff58]))
+        (nil)))
+(call_insn 53 52 54 2 (call (mem:QI (symbol_ref:SI ("test_cat") [flags 0x3]  <function_decl 0x40880800 test_cat>) [0 test_cat S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:48 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 54 53 55 2 (parallel [
+            (set (reg:SI 80)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -136 [0xffffffffffffff78])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:50 273 {*addsi_1}
+     (nil))
+(insn 55 54 56 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 80)) ../main/main.c:50 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -136 [0xffffffffffffff78]))
+        (nil)))
+(call_insn 56 55 57 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:50 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 57 56 58 2 (parallel [
+            (set (reg:SI 81)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -92 [0xffffffffffffffa4])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:51 273 {*addsi_1}
+     (nil))
+(insn 58 57 59 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 81)) ../main/main.c:51 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -92 [0xffffffffffffffa4]))
+        (nil)))
+(call_insn 59 58 60 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:51 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 60 59 61 2 (parallel [
+            (set (reg:SI 82)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:52 273 {*addsi_1}
+     (nil))
+(insn 61 60 62 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 82)) ../main/main.c:52 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 62 61 63 2 (call (mem:QI (symbol_ref:SI ("test_bird") [flags 0x3]  <function_decl 0x40880700 test_bird>) [0 test_bird S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:52 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 63 62 64 2 (parallel [
+            (set (reg:SI 83)
+                (plus:SI (reg/f:SI 20 frame)
+                    (const_int -48 [0xffffffffffffffd0])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/main.c:54 273 {*addsi_1}
+     (nil))
+(insn 64 63 65 2 (set (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg:SI 83)) ../main/main.c:54 89 {*movsi_internal}
+     (expr_list:REG_EQUAL (plus:SI (reg/f:SI 20 frame)
+            (const_int -48 [0xffffffffffffffd0]))
+        (nil)))
+(call_insn 65 64 66 2 (call (mem:QI (symbol_ref:SI ("test_crow") [flags 0x3]  <function_decl 0x40880780 test_crow>) [0 test_crow S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:54 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 66 65 69 2 (set (reg:SI 66 [ D.1981 ])
+        (const_int 0 [0])) ../main/main.c:56 89 {*movsi_internal}
+     (nil))
+(insn 69 66 73 2 (set (reg:SI 67 [ <retval> ])
+        (reg:SI 66 [ D.1981 ])) ../main/main.c:56 89 {*movsi_internal}
+     (nil))
+(insn 73 69 76 2 (set (reg/i:SI 0 ax)
+        (reg:SI 67 [ <retval> ])) ../main/main.c:57 89 {*movsi_internal}
+     (nil))
+(insn 76 73 0 2 (use (reg/i:SI 0 ax)) ../main/main.c:57 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function test_animal (test_animal, funcdef_no=1, decl_uid=1901, cgraph_uid=1)
+
+
+3 basic blocks, 2 edges.
+basic block 0, loop depth 0, count 0, freq 0, maybe hot
+ prev block (nil), next block 2, flags: (RTL)
+ pred:      
+ succ:       2 (FALLTHRU)
+
+basic block 2, loop depth 0, count 0, freq 0, maybe hot
+ prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+ pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC5") [flags 0x2]  <var_decl 0x4088fcf0 *.LC5>)) ../main/main.c:61 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:61 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1982 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 4 [0x4])) [0 ani_1(D)->vtable.talk+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 64)) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1982 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:63 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1982 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 16 [0x10])) [0 ani_1(D)->vtable.location+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 66)) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1982 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:64 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1983 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 67)
+                (const_int 12 [0xc])) [0 ani_1(D)->vtable.getLegs+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 68)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1983 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:66 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1984 ])
+        (reg:SI 0 ax)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1984 ])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:66 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:68 89 {*movsi_internal}
+     (nil))
+(call_insn 27 26 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:68 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+ succ:       EXIT [100.0%]  (FALLTHRU)
+
+basic block 1, loop depth 0, count 0, freq 0, maybe hot
+ prev block 2, next block (nil), flags: (REACHABLE, RTL)
+ pred:       2 [100.0%]  (FALLTHRU)
+ succ:      
+
+
+
+
+try_optimize_cfg iteration 1
+
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC5") [flags 0x2]  <var_decl 0x4088fcf0 *.LC5>)) ../main/main.c:61 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:61 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1982 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 4 [0x4])) [0 ani_1(D)->vtable.talk+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 64)) ../main/main.c:63 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1982 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:63 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1982 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 16 [0x10])) [0 ani_1(D)->vtable.location+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 66)) ../main/main.c:64 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1982 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:64 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1983 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 67)
+                (const_int 12 [0xc])) [0 ani_1(D)->vtable.getLegs+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 ani+0 S4 A32])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 68)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1983 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:66 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1984 ])
+        (reg:SI 0 ax)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1984 ])) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:66 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:66 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:68 89 {*movsi_internal}
+     (nil))
+(call_insn 27 26 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:68 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function test_cat (test_cat, funcdef_no=2, decl_uid=1907, cgraph_uid=2)
+
+
+3 basic blocks, 2 edges.
+basic block 0, loop depth 0, count 0, freq 0, maybe hot
+ prev block (nil), next block 2, flags: (RTL)
+ pred:      
+ succ:       2 (FALLTHRU)
+
+basic block 2, loop depth 0, count 0, freq 0, maybe hot
+ prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+ pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC8") [flags 0x2]  <var_decl 0x4088ff74 *.LC8>)) ../main/main.c:73 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:73 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1988 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)cat_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 65)) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1988 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:75 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1988 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)cat_1(D)].vtable.location+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 67)) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1988 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:76 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1989 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 68)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)cat_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 69)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1989 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:78 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1990 ])
+        (reg:SI 0 ax)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1990 ])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:78 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.1991 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 70)
+                (const_int 28 [0x1c])) [0 cat_1(D)->vtable.meow+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 71)) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(call_insn 30 29 31 2 (call (mem:QI (reg/f:SI 63 [ D.1991 ]) [0 *_6 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:80 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 31 30 32 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:82 89 {*movsi_internal}
+     (nil))
+(call_insn 32 31 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:82 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+ succ:       EXIT [100.0%]  (FALLTHRU)
+
+basic block 1, loop depth 0, count 0, freq 0, maybe hot
+ prev block 2, next block (nil), flags: (REACHABLE, RTL)
+ pred:       2 [100.0%]  (FALLTHRU)
+ succ:      
+
+
+
+
+try_optimize_cfg iteration 1
+
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC8") [flags 0x2]  <var_decl 0x4088ff74 *.LC8>)) ../main/main.c:73 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:73 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1988 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)cat_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 65)) ../main/main.c:75 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1988 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:75 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1988 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)cat_1(D)].vtable.location+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 67)) ../main/main.c:76 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1988 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:76 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1989 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 68)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)cat_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 69)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1989 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:78 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1990 ])
+        (reg:SI 0 ax)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1990 ])) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:78 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:78 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.1991 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 70)
+                (const_int 28 [0x1c])) [0 cat_1(D)->vtable.meow+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 cat+0 S4 A32])) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 71)) ../main/main.c:80 89 {*movsi_internal}
+     (nil))
+(call_insn 30 29 31 2 (call (mem:QI (reg/f:SI 63 [ D.1991 ]) [0 *_6 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:80 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 31 30 32 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:82 89 {*movsi_internal}
+     (nil))
+(call_insn 32 31 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:82 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function test_bird (test_bird, funcdef_no=3, decl_uid=1903, cgraph_uid=3)
+
+
+3 basic blocks, 2 edges.
+basic block 0, loop depth 0, count 0, freq 0, maybe hot
+ prev block (nil), next block 2, flags: (RTL)
+ pred:      
+ succ:       2 (FALLTHRU)
+
+basic block 2, loop depth 0, count 0, freq 0, maybe hot
+ prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+ pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC9") [flags 0x2]  <var_decl 0x408a10b8 *.LC9>)) ../main/main.c:87 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:87 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1993 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 69)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)bird_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 70)) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1993 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:89 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1993 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 71)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)bird_1(D)].vtable.location+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 72)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 72)) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1993 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:90 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 73)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1994 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 73)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)bird_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 74)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 74)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1994 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:92 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1995 ])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:92 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 75)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.1996 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 75)
+                (const_int 28 [0x1c])) [0 bird_1(D)->vtable.fly+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 89 [0x59])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (reg/f:SI 76)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 30 29 31 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 76)) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(call_insn 31 30 32 2 (call (mem:QI (reg/f:SI 63 [ D.1996 ]) [0 *_6 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:94 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 32 31 33 2 (set (reg/f:SI 77)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (set (reg/f:SI 64 [ D.1997 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 77)
+                (const_int 36 [0x24])) [0 bird_1(D)->vtable.dive+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 34 33 35 2 (set (reg/f:SI 78)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 35 34 36 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 78)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(call_insn 36 35 37 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 64 [ D.1997 ]) [0 *_7 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:95 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 37 36 38 2 (set (reg:SI 65 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 38 37 39 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 65 [ D.1995 ])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 39 38 40 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC10") [flags 0x2]  <var_decl 0x408a1114 *.LC10>)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(call_insn 40 39 41 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:95 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 41 40 42 2 (set (reg/f:SI 79)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 42 41 43 2 (set (reg/f:SI 66 [ D.1996 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 79)
+                (const_int 28 [0x1c])) [0 bird_1(D)->vtable.fly+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 43 42 44 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 350 [0x15e])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 44 43 45 2 (set (reg/f:SI 80)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 45 44 46 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 80)) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(call_insn 46 45 47 2 (call (mem:QI (reg/f:SI 66 [ D.1996 ]) [0 *_9 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:97 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 47 46 48 2 (set (reg/f:SI 81)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 48 47 49 2 (set (reg/f:SI 67 [ D.1997 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 81)
+                (const_int 36 [0x24])) [0 bird_1(D)->vtable.dive+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 49 48 50 2 (set (reg/f:SI 82)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 50 49 51 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 82)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(call_insn 51 50 52 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 67 [ D.1997 ]) [0 *_10 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:98 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 52 51 53 2 (set (reg:SI 68 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 53 52 54 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 68 [ D.1995 ])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 54 53 55 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC11") [flags 0x2]  <var_decl 0x408a1170 *.LC11>)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(call_insn 55 54 56 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:98 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 56 55 57 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:100 89 {*movsi_internal}
+     (nil))
+(call_insn 57 56 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:100 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+ succ:       EXIT [100.0%]  (FALLTHRU)
+
+basic block 1, loop depth 0, count 0, freq 0, maybe hot
+ prev block 2, next block (nil), flags: (REACHABLE, RTL)
+ pred:       2 [100.0%]  (FALLTHRU)
+ succ:      
+
+
+
+
+try_optimize_cfg iteration 1
+
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC9") [flags 0x2]  <var_decl 0x408a10b8 *.LC9>)) ../main/main.c:87 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:87 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.1993 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 69)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)bird_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 70)) ../main/main.c:89 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.1993 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:89 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.1993 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 71)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)bird_1(D)].vtable.location+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 72)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 72)) ../main/main.c:90 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.1993 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:90 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 73)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.1994 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 73)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)bird_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 74)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 74)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.1994 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:92 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.1995 ])) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:92 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:92 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 75)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.1996 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 75)
+                (const_int 28 [0x1c])) [0 bird_1(D)->vtable.fly+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 89 [0x59])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (reg/f:SI 76)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(insn 30 29 31 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 76)) ../main/main.c:94 89 {*movsi_internal}
+     (nil))
+(call_insn 31 30 32 2 (call (mem:QI (reg/f:SI 63 [ D.1996 ]) [0 *_6 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:94 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 32 31 33 2 (set (reg/f:SI 77)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (set (reg/f:SI 64 [ D.1997 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 77)
+                (const_int 36 [0x24])) [0 bird_1(D)->vtable.dive+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 34 33 35 2 (set (reg/f:SI 78)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 35 34 36 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 78)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(call_insn 36 35 37 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 64 [ D.1997 ]) [0 *_7 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:95 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 37 36 38 2 (set (reg:SI 65 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 38 37 39 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 65 [ D.1995 ])) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(insn 39 38 40 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC10") [flags 0x2]  <var_decl 0x408a1114 *.LC10>)) ../main/main.c:95 89 {*movsi_internal}
+     (nil))
+(call_insn 40 39 41 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:95 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 41 40 42 2 (set (reg/f:SI 79)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 42 41 43 2 (set (reg/f:SI 66 [ D.1996 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 79)
+                (const_int 28 [0x1c])) [0 bird_1(D)->vtable.fly+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 43 42 44 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 350 [0x15e])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 44 43 45 2 (set (reg/f:SI 80)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(insn 45 44 46 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 80)) ../main/main.c:97 89 {*movsi_internal}
+     (nil))
+(call_insn 46 45 47 2 (call (mem:QI (reg/f:SI 66 [ D.1996 ]) [0 *_9 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:97 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 47 46 48 2 (set (reg/f:SI 81)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 48 47 49 2 (set (reg/f:SI 67 [ D.1997 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 81)
+                (const_int 36 [0x24])) [0 bird_1(D)->vtable.dive+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 49 48 50 2 (set (reg/f:SI 82)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 50 49 51 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 82)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(call_insn 51 50 52 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 67 [ D.1997 ]) [0 *_10 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:98 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 52 51 53 2 (set (reg:SI 68 [ D.1995 ])
+        (reg:SI 0 ax)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 53 52 54 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 68 [ D.1995 ])) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(insn 54 53 55 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC11") [flags 0x2]  <var_decl 0x408a1170 *.LC11>)) ../main/main.c:98 89 {*movsi_internal}
+     (nil))
+(call_insn 55 54 56 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:98 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 56 55 57 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:100 89 {*movsi_internal}
+     (nil))
+(call_insn 57 56 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:100 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function test_crow (test_crow, funcdef_no=4, decl_uid=1905, cgraph_uid=4)
+
+
+3 basic blocks, 2 edges.
+basic block 0, loop depth 0, count 0, freq 0, maybe hot
+ prev block (nil), next block 2, flags: (RTL)
+ pred:      
+ succ:       2 (FALLTHRU)
+
+basic block 2, loop depth 0, count 0, freq 0, maybe hot
+ prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+ pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC12") [flags 0x2]  <var_decl 0x408a13f4 *.LC12>)) ../main/main.c:105 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:105 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.2001 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 70)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)bird_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 71)) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.2001 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:107 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 72)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.2001 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 72)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)bird_1(D)].vtable.location+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 73)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 73)) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.2001 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:108 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 74)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.2002 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 74)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)bird_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 75)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 75)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.2002 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:110 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.2003 ])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:110 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 76)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.2004 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 76)
+                (const_int 28 [0x1c])) [0 MEM[(struct Bird *)bird_1(D)].vtable.fly+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 3 [0x3])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (reg/f:SI 77)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 30 29 31 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 77)) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(call_insn 31 30 32 2 (call (mem:QI (reg/f:SI 63 [ D.2004 ]) [0 *_6 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:112 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 32 31 33 2 (set (reg/f:SI 78)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (set (reg/f:SI 64 [ D.2005 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 78)
+                (const_int 36 [0x24])) [0 MEM[(struct Bird *)bird_1(D)].vtable.dive+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 34 33 35 2 (set (reg/f:SI 79)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 35 34 36 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 79)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(call_insn 36 35 37 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 64 [ D.2005 ]) [0 *_7 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:113 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 37 36 38 2 (set (reg:SI 65 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 38 37 39 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 65 [ D.2003 ])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 39 38 40 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC13") [flags 0x2]  <var_decl 0x408a1450 *.LC13>)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(call_insn 40 39 41 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:113 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 41 40 42 2 (set (reg/f:SI 80)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 42 41 43 2 (set (reg/f:SI 66 [ D.2004 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 80)
+                (const_int 28 [0x1c])) [0 MEM[(struct Bird *)bird_1(D)].vtable.fly+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 43 42 44 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 79 [0x4f])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 44 43 45 2 (set (reg/f:SI 81)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 45 44 46 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 81)) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(call_insn 46 45 47 2 (call (mem:QI (reg/f:SI 66 [ D.2004 ]) [0 *_9 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:115 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 47 46 48 2 (set (reg/f:SI 82)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 48 47 49 2 (set (reg/f:SI 67 [ D.2005 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 82)
+                (const_int 36 [0x24])) [0 MEM[(struct Bird *)bird_1(D)].vtable.dive+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 49 48 50 2 (set (reg/f:SI 83)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 50 49 51 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 83)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(call_insn 51 50 52 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 67 [ D.2005 ]) [0 *_10 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:116 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 52 51 53 2 (set (reg:SI 68 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 53 52 54 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 68 [ D.2003 ])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 54 53 55 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC14") [flags 0x2]  <var_decl 0x408a14ac *.LC14>)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(call_insn 55 54 56 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:116 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 56 55 57 2 (set (reg/f:SI 84)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 57 56 58 2 (set (reg/f:SI 69 [ D.2006 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 84)
+                (const_int 44 [0x2c])) [0 bird_1(D)->vtable.useTool+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 58 57 59 2 (set (reg/f:SI 85)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 59 58 60 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 85)) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(call_insn 60 59 61 2 (call (mem:QI (reg/f:SI 69 [ D.2006 ]) [0 *_12 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:118 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 61 60 62 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:120 89 {*movsi_internal}
+     (nil))
+(call_insn 62 61 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:120 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+ succ:       EXIT [100.0%]  (FALLTHRU)
+
+basic block 1, loop depth 0, count 0, freq 0, maybe hot
+ prev block 2, next block (nil), flags: (REACHABLE, RTL)
+ pred:       2 [100.0%]  (FALLTHRU)
+ succ:      
+
+
+
+
+try_optimize_cfg iteration 1
+
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 0 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC12") [flags 0x2]  <var_decl 0x408a13f4 *.LC12>)) ../main/main.c:105 89 {*movsi_internal}
+     (nil))
+(call_insn 6 5 7 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:105 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 7 6 8 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 8 7 9 2 (set (reg/f:SI 59 [ D.2001 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 70)
+                (const_int 4 [0x4])) [0 MEM[(struct Animal *)bird_1(D)].vtable.talk+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 9 8 10 2 (set (reg/f:SI 71)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(insn 10 9 11 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 71)) ../main/main.c:107 89 {*movsi_internal}
+     (nil))
+(call_insn 11 10 12 2 (call (mem:QI (reg/f:SI 59 [ D.2001 ]) [0 *_2 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:107 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 12 11 13 2 (set (reg/f:SI 72)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 13 12 14 2 (set (reg/f:SI 60 [ D.2001 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 72)
+                (const_int 16 [0x10])) [0 MEM[(struct Animal *)bird_1(D)].vtable.location+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 73)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(insn 15 14 16 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 73)) ../main/main.c:108 89 {*movsi_internal}
+     (nil))
+(call_insn 16 15 17 2 (call (mem:QI (reg/f:SI 60 [ D.2001 ]) [0 *_3 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:108 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 17 16 18 2 (set (reg/f:SI 74)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 18 17 19 2 (set (reg/f:SI 61 [ D.2002 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 74)
+                (const_int 12 [0xc])) [0 MEM[(struct Animal *)bird_1(D)].vtable.getLegs+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 75)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 75)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(call_insn 21 20 22 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 61 [ D.2002 ]) [0 *_4 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:110 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 22 21 23 2 (set (reg:SI 62 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 23 22 24 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 62 [ D.2003 ])) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(insn 24 23 25 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC6") [flags 0x2]  <var_decl 0x4088fd4c *.LC6>)) ../main/main.c:110 89 {*movsi_internal}
+     (nil))
+(call_insn 25 24 26 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:110 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 26 25 27 2 (set (reg/f:SI 76)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 63 [ D.2004 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 76)
+                (const_int 28 [0x1c])) [0 MEM[(struct Bird *)bird_1(D)].vtable.fly+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 28 27 29 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 3 [0x3])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 29 28 30 2 (set (reg/f:SI 77)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(insn 30 29 31 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 77)) ../main/main.c:112 89 {*movsi_internal}
+     (nil))
+(call_insn 31 30 32 2 (call (mem:QI (reg/f:SI 63 [ D.2004 ]) [0 *_6 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:112 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 32 31 33 2 (set (reg/f:SI 78)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 33 32 34 2 (set (reg/f:SI 64 [ D.2005 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 78)
+                (const_int 36 [0x24])) [0 MEM[(struct Bird *)bird_1(D)].vtable.dive+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 34 33 35 2 (set (reg/f:SI 79)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 35 34 36 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 79)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(call_insn 36 35 37 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 64 [ D.2005 ]) [0 *_7 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:113 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 37 36 38 2 (set (reg:SI 65 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 38 37 39 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 65 [ D.2003 ])) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(insn 39 38 40 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC13") [flags 0x2]  <var_decl 0x408a1450 *.LC13>)) ../main/main.c:113 89 {*movsi_internal}
+     (nil))
+(call_insn 40 39 41 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:113 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 41 40 42 2 (set (reg/f:SI 80)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 42 41 43 2 (set (reg/f:SI 66 [ D.2004 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 80)
+                (const_int 28 [0x1c])) [0 MEM[(struct Bird *)bird_1(D)].vtable.fly+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 43 42 44 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 79 [0x4f])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 44 43 45 2 (set (reg/f:SI 81)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(insn 45 44 46 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 81)) ../main/main.c:115 89 {*movsi_internal}
+     (nil))
+(call_insn 46 45 47 2 (call (mem:QI (reg/f:SI 66 [ D.2004 ]) [0 *_9 S1 A8])
+        (const_int 8 [0x8])) ../main/main.c:115 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 47 46 48 2 (set (reg/f:SI 82)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 48 47 49 2 (set (reg/f:SI 67 [ D.2005 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 82)
+                (const_int 36 [0x24])) [0 MEM[(struct Bird *)bird_1(D)].vtable.dive+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 49 48 50 2 (set (reg/f:SI 83)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 50 49 51 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 83)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(call_insn 51 50 52 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 67 [ D.2005 ]) [0 *_10 S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:116 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 52 51 53 2 (set (reg:SI 68 [ D.2003 ])
+        (reg:SI 0 ax)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 53 52 54 2 (set (mem:SI (plus:SI (reg/f:SI 7 sp)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg:SI 68 [ D.2003 ])) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(insn 54 53 55 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC14") [flags 0x2]  <var_decl 0x408a14ac *.LC14>)) ../main/main.c:116 89 {*movsi_internal}
+     (nil))
+(call_insn 55 54 56 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/main.c:116 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 7 sp)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 56 55 57 2 (set (reg/f:SI 84)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 57 56 58 2 (set (reg/f:SI 69 [ D.2006 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 84)
+                (const_int 44 [0x2c])) [0 bird_1(D)->vtable.useTool+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 58 57 59 2 (set (reg/f:SI 85)
+        (mem/f/c:SI (reg/f:SI 16 argp) [0 bird+0 S4 A32])) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(insn 59 58 60 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (reg/f:SI 85)) ../main/main.c:118 89 {*movsi_internal}
+     (nil))
+(call_insn 60 59 61 2 (call (mem:QI (reg/f:SI 69 [ D.2006 ]) [0 *_12 S1 A8])
+        (const_int 4 [0x4])) ../main/main.c:118 655 {*call}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+(insn 61 60 62 2 (set (mem:SI (reg/f:SI 7 sp) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC7") [flags 0x2]  <var_decl 0x4088fda8 *.LC7>)) ../main/main.c:120 89 {*movsi_internal}
+     (nil))
+(call_insn 62 61 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("puts") [flags 0x41]  <function_decl 0x407f4a80 __builtin_puts>) [0 __builtin_puts S1 A8])
+            (const_int 4 [0x4]))) ../main/main.c:120 662 {*call_value}
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 7 sp) [0  S4 A32]))
+        (nil)))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+

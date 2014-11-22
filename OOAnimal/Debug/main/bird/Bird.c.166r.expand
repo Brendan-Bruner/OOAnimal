@@ -1,0 +1,1315 @@
+
+;; Function getHeight (getHeight, funcdef_no=0, decl_uid=1868, cgraph_uid=0)
+
+getHeight (struct Bird * this)
+{
+  int D.1890;
+  int _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.height;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+
+Live on entry to BB2 : this_1(D)  
+
+Live on entry to BB3 : 
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+
+getHeight (struct Bird * this)
+{
+  int D.1890;
+  int _2;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = this_1(D)->_data.height;
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return _2;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = this_1(D)->_data.height;
+
+(insn 5 4 6 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:21 -1
+     (nil))
+
+(insn 6 5 0 (set (reg:SI 59 [ D.1910 ])
+        (mem/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 40 [0x28])) [0 this_1(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:21 -1
+     (nil))
+
+;; Generating RTL for gimple basic block 3
+
+;; <L0>:
+
+(code_label 7 6 8 2 "" [0 uses])
+
+(note 8 7 0 NOTE_INSN_BASIC_BLOCK)
+
+;; return _2;
+
+(insn 9 8 10 (set (reg:SI 60 [ <retval> ])
+        (reg:SI 59 [ D.1910 ])) ../main/bird/Bird.c:21 -1
+     (nil))
+
+(jump_insn 10 9 11 (set (pc)
+        (label_ref 0)) ../main/bird/Bird.c:21 -1
+     (nil))
+
+(barrier 11 10 0)
+deleting block 5
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+Merging block 5 into block 2...
+Merged blocks 2 and 5.
+Merged 2 and 5 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:21 -1
+     (nil))
+(insn 6 5 9 2 (set (reg:SI 59 [ D.1910 ])
+        (mem/j:SI (plus:SI (reg/f:SI 61)
+                (const_int 40 [0x28])) [0 this_1(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:21 -1
+     (nil))
+(insn 9 6 13 2 (set (reg:SI 60 [ <retval> ])
+        (reg:SI 59 [ D.1910 ])) ../main/bird/Bird.c:21 -1
+     (nil))
+(insn 13 9 16 2 (set (reg/i:SI 0 ax)
+        (reg:SI 60 [ <retval> ])) ../main/bird/Bird.c:22 -1
+     (nil))
+(insn 16 13 0 2 (use (reg/i:SI 0 ax)) ../main/bird/Bird.c:22 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function talk (talk, funcdef_no=1, decl_uid=1871, cgraph_uid=1)
+
+talk (struct Bird * this)
+{
+  char * D.1893;
+  char * (*<T2a8>) (struct Animal *) D.1892;
+  char * (*<T2a8>) (struct Animal *) _2;
+  char * _3;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = MEM[(struct Animal *)this_1(D)].vtable.getName;
+  _3 = _2 (this_1(D));
+  printf ("Hello, i\'m a bird. My name is %s.\n", _3);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+Partition 3 (_3 - 3 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+
+Live on entry to BB2 : this_1(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+Partition 2 (_3 - 3 )
+
+talk (struct Bird * this)
+{
+  char * D.1893;
+  char * (*<T2a8>) (struct Animal *) D.1892;
+  char * (*<T2a8>) (struct Animal *) _2;
+  char * _3;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = MEM[(struct Animal *)this_1(D)].vtable.getName;
+  _3 = _2 (this_1(D));
+  printf ("Hello, i\'m a bird. My name is %s.\n", _3);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = MEM[(struct Animal *)this_1(D)].vtable.getName;
+
+(insn 5 4 6 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+
+(insn 6 5 0 (set (reg/f:SI 59 [ D.1911 ])
+        (mem/f/j:SI (reg/f:SI 61) [0 MEM[(struct Animal *)this_1(D)].vtable.getName+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+
+;; _3 = _2 (this_1(D));
+
+(insn 7 6 8 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+
+(insn 8 7 9 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 62)) ../main/bird/Bird.c:31 -1
+     (nil))
+
+(call_insn 9 8 10 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 59 [ D.1911 ]) [0 *_2 S1 A8])
+            (const_int 4 [0x4]))) ../main/bird/Bird.c:31 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+
+(insn 10 9 0 (set (reg/f:SI 60 [ D.1912 ])
+        (reg:SI 0 ax)) ../main/bird/Bird.c:31 -1
+     (nil))
+
+;; printf ("Hello, i\'m a bird. My name is %s.\n", _3);
+
+(insn 11 10 12 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ D.1912 ])) ../main/bird/Bird.c:31 -1
+     (nil))
+
+(insn 12 11 13 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC0") [flags 0x2]  <var_decl 0x40881d4c *.LC0>)) ../main/bird/Bird.c:31 -1
+     (nil))
+
+(call_insn 13 12 0 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/bird/Bird.c:31 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 61)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+(insn 6 5 7 2 (set (reg/f:SI 59 [ D.1911 ])
+        (mem/f/j:SI (reg/f:SI 61) [0 MEM[(struct Animal *)this_1(D)].vtable.getName+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+(insn 7 6 8 2 (set (reg/f:SI 62)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:31 -1
+     (nil))
+(insn 8 7 9 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 62)) ../main/bird/Bird.c:31 -1
+     (nil))
+(call_insn 9 8 10 2 (set (reg:SI 0 ax)
+        (call (mem:QI (reg/f:SI 59 [ D.1911 ]) [0 *_2 S1 A8])
+            (const_int 4 [0x4]))) ../main/bird/Bird.c:31 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (nil)))
+(insn 10 9 11 2 (set (reg/f:SI 60 [ D.1912 ])
+        (reg:SI 0 ax)) ../main/bird/Bird.c:31 -1
+     (nil))
+(insn 11 10 12 2 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 60 [ D.1912 ])) ../main/bird/Bird.c:31 -1
+     (nil))
+(insn 12 11 13 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (symbol_ref/f:SI ("*.LC0") [flags 0x2]  <var_decl 0x40881d4c *.LC0>)) ../main/bird/Bird.c:31 -1
+     (nil))
+(call_insn 13 12 0 2 (set (reg:SI 0 ax)
+        (call (mem:QI (symbol_ref:SI ("printf") [flags 0x41]  <function_decl 0x407f4700 printf>) [0 __builtin_printf S1 A8])
+            (const_int 8 [0x8]))) ../main/bird/Bird.c:31 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function fly (fly, funcdef_no=2, decl_uid=1875, cgraph_uid=2)
+
+fly (struct Bird * this, int height)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->_data.height = height_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (height_2(D) - 2 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (height_2(D) - 2 )
+
+
+Live on entry to BB2 : this_1(D)  height_2(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (height_2(D) - 2 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (height_2(D) - 2 )
+
+fly (struct Bird * this, int height)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  this_1(D)->_data.height = height_2(D);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; this_1(D)->_data.height = height_2(D);
+
+(insn 5 4 6 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:41 -1
+     (nil))
+
+(insn 6 5 7 (set (reg:SI 60)
+        (mem/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 height+0 S4 A32])) ../main/bird/Bird.c:41 -1
+     (nil))
+
+(insn 7 6 0 (set (mem/j:SI (plus:SI (reg/f:SI 59)
+                (const_int 40 [0x28])) [0 this_1(D)->_data.height+0 S4 A32])
+        (reg:SI 60)) ../main/bird/Bird.c:41 -1
+     (nil))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:41 -1
+     (nil))
+(insn 6 5 7 2 (set (reg:SI 60)
+        (mem/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 height+0 S4 A32])) ../main/bird/Bird.c:41 -1
+     (nil))
+(insn 7 6 0 2 (set (mem/j:SI (plus:SI (reg/f:SI 59)
+                (const_int 40 [0x28])) [0 this_1(D)->_data.height+0 S4 A32])
+        (reg:SI 60)) ../main/bird/Bird.c:41 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function dive (dive, funcdef_no=3, decl_uid=1878, cgraph_uid=3)
+
+dive (struct Bird * this)
+{
+  int height;
+  int D.1898;
+  void (*<T2c4>) (struct Bird *, int) D.1897;
+  int D.1894;
+  int _1;
+  int _3;
+  void (*<T2c4>) (struct Bird *, int) _5;
+  int _6;
+  int _7;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _3 = this_2(D)->_data.height;
+  if (_3 > 299)
+    goto <bb 3>;
+  else
+    goto <bb 4>;
+;;    succ:       3
+;;                4
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+  height_4 = this_2(D)->_data.height;
+  _5 = this_2(D)->vtable.fly;
+  _5 (this_2(D), 0);
+  _6 = height_4 * 2;
+  goto <bb 5> (<L2>);
+;;    succ:       5
+
+;;   basic block 4, loop depth 0
+;;    pred:       2
+  _7 = 0;
+;;    succ:       5
+
+;;   basic block 5, loop depth 0
+;;    pred:       3
+;;                4
+  # _1 = PHI <_6(3), _7(4)>
+<L2>:
+  return _1;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (_1 - 1 )
+Partition 2 (this_2(D) - 2 )
+Partition 3 (_3 - 3 )
+Partition 4 (height_4 - 4 )
+Partition 5 (_5 - 5 )
+Partition 6 (_6 - 6 )
+Partition 7 (_7 - 7 )
+
+
+Partition map 
+
+Partition 0 (_1 - 1 )
+Partition 1 (this_2(D) - 2 )
+Partition 2 (_6 - 6 )
+Partition 3 (_7 - 7 )
+
+
+Live on entry to BB2 : this_2(D)  
+
+Live on entry to BB3 : this_2(D)  
+
+Live on entry to BB4 : 
+
+Live on entry to BB5 : 
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (_1 - 1 )
+Partition 1 (this_2(D) - 2 )
+Partition 2 (_6 - 6 )
+Partition 3 (_7 - 7 )
+
+Coalesce list: (1)_1 & (7)_7 [map: 0, 3] : Success -> 0
+Coalesce list: (1)_1 & (6)_6 [map: 0, 2] : Success -> 0
+After Coalescing:
+
+Partition map 
+
+Partition 0 (_1 - 1 6 7 )
+Partition 1 (this_2(D) - 2 )
+Partition 2 (_3 - 3 )
+Partition 3 (height_4 - 4 )
+Partition 4 (_5 - 5 )
+
+dive (struct Bird * this)
+{
+  int height;
+  int D.1898;
+  void (*<T2c4>) (struct Bird *, int) D.1897;
+  int D.1894;
+  int _1;
+  int _3;
+  void (*<T2c4>) (struct Bird *, int) _5;
+  int _6;
+  int _7;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _3 = this_2(D)->_data.height;
+  if (_3 > 299)
+    goto <bb 3>;
+  else
+    goto <bb 4>;
+;;    succ:       3
+;;                4
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+  height_4 = this_2(D)->_data.height;
+  _5 = this_2(D)->vtable.fly;
+  _5 (this_2(D), 0);
+  _6 = height_4 * 2;
+  goto <bb 5> (<L2>);
+;;    succ:       5
+
+;;   basic block 4, loop depth 0
+;;    pred:       2
+  _7 = 0;
+;;    succ:       5
+
+;;   basic block 5, loop depth 0
+;;    pred:       3
+;;                4
+  # _1 = PHI <_6(3), _7(4)>
+<L2>:
+  return _1;
+;;    succ:       EXIT
+
+}
+
+
+Partition 0: size 4 align 4
+	height_4
+
+;; Generating RTL for gimple basic block 2
+
+;; _3 = this_2(D)->_data.height;
+
+(insn 5 4 6 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:54 -1
+     (nil))
+
+(insn 6 5 0 (set (reg:SI 60 [ D.1914 ])
+        (mem/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 40 [0x28])) [0 this_2(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:54 -1
+     (nil))
+
+;; if (_3 > 299)
+
+(insn 7 6 8 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg:SI 60 [ D.1914 ])
+            (const_int 299 [0x12b]))) ../main/bird/Bird.c:54 -1
+     (nil))
+
+(jump_insn 8 7 0 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref 0)
+            (pc))) ../main/bird/Bird.c:54 -1
+     (nil))
+
+;; Generating RTL for gimple basic block 3
+
+;; height_4 = this_2(D)->_data.height;
+
+(insn 10 9 11 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:56 -1
+     (nil))
+
+(insn 11 10 12 (set (reg:SI 65)
+        (mem/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 40 [0x28])) [0 this_2(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:56 -1
+     (nil))
+
+(insn 12 11 0 (set (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])
+        (reg:SI 65)) ../main/bird/Bird.c:56 -1
+     (nil))
+
+;; _5 = this_2(D)->vtable.fly;
+
+(insn 13 12 14 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+
+(insn 14 13 0 (set (reg/f:SI 61 [ D.1915 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 28 [0x1c])) [0 this_2(D)->vtable.fly+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+
+;; _5 (this_2(D), 0);
+
+(insn 15 14 16 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 0 [0])) ../main/bird/Bird.c:57 -1
+     (nil))
+
+(insn 16 15 17 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+
+(insn 17 16 18 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 67)) ../main/bird/Bird.c:57 -1
+     (nil))
+
+(call_insn 18 17 0 (call (mem:QI (reg/f:SI 61 [ D.1915 ]) [0 *_5 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:57 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+;; _6 = height_4 * 2;
+
+(insn 19 18 20 (set (reg:SI 68)
+        (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])) ../main/bird/Bird.c:58 -1
+     (nil))
+
+(insn 20 19 0 (parallel [
+            (set (reg:SI 59 [ D.1914 ])
+                (ashift:SI (reg:SI 68)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/bird/Bird.c:58 -1
+     (expr_list:REG_EQUAL (ashift:SI (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                    (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])
+            (const_int 1 [0x1]))
+        (nil)))
+
+;; Generating RTL for gimple basic block 4
+
+;; 
+
+(code_label 23 22 24 6 "" [0 uses])
+
+(note 24 23 0 NOTE_INSN_BASIC_BLOCK)
+
+;; _7 = 0;
+
+(insn 25 24 0 (set (reg:SI 59 [ D.1914 ])
+        (const_int 0 [0])) ../main/bird/Bird.c:60 -1
+     (nil))
+
+;; Generating RTL for gimple basic block 5
+
+;; <L2>:
+
+(code_label 26 25 27 7 "" [0 uses])
+
+(note 27 26 0 NOTE_INSN_BASIC_BLOCK)
+
+;; return _1;
+
+(insn 28 27 29 (set (reg:SI 62 [ <retval> ])
+        (reg:SI 59 [ D.1914 ])) -1
+     (nil))
+
+(jump_insn 29 28 30 (set (pc)
+        (label_ref 0)) -1
+     (nil))
+
+(barrier 30 29 0)
+deleting block 7
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 7 into block 6...
+Merged blocks 6 and 7.
+Merged 6 and 7 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 4, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:54 -1
+     (nil))
+(insn 6 5 7 2 (set (reg:SI 60 [ D.1914 ])
+        (mem/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 40 [0x28])) [0 this_2(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:54 -1
+     (nil))
+(insn 7 6 8 2 (set (reg:CCGC 17 flags)
+        (compare:CCGC (reg:SI 60 [ D.1914 ])
+            (const_int 299 [0x12b]))) ../main/bird/Bird.c:54 -1
+     (nil))
+(jump_insn 8 7 9 2 (set (pc)
+        (if_then_else (le (reg:CCGC 17 flags)
+                (const_int 0 [0]))
+            (label_ref 23)
+            (pc))) ../main/bird/Bird.c:54 -1
+     (nil)
+ -> 23)
+;;  succ:       4 (FALLTHRU)
+;;              5
+
+;; basic block 4, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 2, next block 5, flags: (NEW, REACHABLE, RTL)
+;;  pred:       2 (FALLTHRU)
+(note 9 8 10 4 [bb 4] NOTE_INSN_BASIC_BLOCK)
+(insn 10 9 11 4 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:56 -1
+     (nil))
+(insn 11 10 12 4 (set (reg:SI 65)
+        (mem/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 40 [0x28])) [0 this_2(D)->_data.height+0 S4 A32])) ../main/bird/Bird.c:56 -1
+     (nil))
+(insn 12 11 13 4 (set (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])
+        (reg:SI 65)) ../main/bird/Bird.c:56 -1
+     (nil))
+(insn 13 12 14 4 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+(insn 14 13 15 4 (set (reg/f:SI 61 [ D.1915 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 28 [0x1c])) [0 this_2(D)->vtable.fly+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+(insn 15 14 16 4 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 0 [0])) ../main/bird/Bird.c:57 -1
+     (nil))
+(insn 16 15 17 4 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:57 -1
+     (nil))
+(insn 17 16 18 4 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 67)) ../main/bird/Bird.c:57 -1
+     (nil))
+(call_insn 18 17 19 4 (call (mem:QI (reg/f:SI 61 [ D.1915 ]) [0 *_5 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:57 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 19 18 20 4 (set (reg:SI 68)
+        (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])) ../main/bird/Bird.c:58 -1
+     (nil))
+(insn 20 19 21 4 (parallel [
+            (set (reg:SI 59 [ D.1914 ])
+                (ashift:SI (reg:SI 68)
+                    (const_int 1 [0x1])))
+            (clobber (reg:CC 17 flags))
+        ]) ../main/bird/Bird.c:58 -1
+     (expr_list:REG_EQUAL (ashift:SI (mem/c:SI (plus:SI (reg/f:SI 54 virtual-stack-vars)
+                    (const_int -4 [0xfffffffffffffffc])) [0 height+0 S4 A32])
+            (const_int 1 [0x1]))
+        (nil)))
+(jump_insn 21 20 22 4 (set (pc)
+        (label_ref 26)) ../main/bird/Bird.c:58 -1
+     (nil)
+ -> 26)
+;;  succ:       6
+
+(barrier 22 21 23)
+;; basic block 5, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 4, next block 6, flags: (NEW, REACHABLE, RTL)
+;;  pred:       2
+(code_label 23 22 24 5 6 "" [1 uses])
+(note 24 23 25 5 [bb 5] NOTE_INSN_BASIC_BLOCK)
+(insn 25 24 26 5 (set (reg:SI 59 [ D.1914 ])
+        (const_int 0 [0])) ../main/bird/Bird.c:60 -1
+     (nil))
+;;  succ:       6 (FALLTHRU)
+
+;; basic block 6, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 5, next block 1, flags: (NEW, REACHABLE, RTL, MODIFIED)
+;;  pred:       4
+;;              5 (FALLTHRU)
+(code_label 26 25 27 6 7 "" [1 uses])
+(note 27 26 28 6 [bb 6] NOTE_INSN_BASIC_BLOCK)
+(insn 28 27 32 6 (set (reg:SI 62 [ <retval> ])
+        (reg:SI 59 [ D.1914 ])) -1
+     (nil))
+(insn 32 28 35 6 (set (reg/i:SI 0 ax)
+        (reg:SI 62 [ <retval> ])) ../main/bird/Bird.c:61 -1
+     (nil))
+(insn 35 32 0 6 (use (reg/i:SI 0 ax)) ../main/bird/Bird.c:61 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function new_Bird (new_Bird, funcdef_no=4, decl_uid=1409, cgraph_uid=4)
+
+new_Bird (struct Bird * this, const char * name)
+{
+  void (*<T2b0>) (struct Animal *, int) D.1902;
+  void (*<T2c4>) (struct Bird *, int) D.1901;
+  struct Animal * D.1900;
+  struct Animal * _2;
+  void (*<T2c4>) (struct Bird *, int) _4;
+  void (*<T2b0>) (struct Animal *, int) _5;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = &this_1(D)->super;
+  new_Animal (_2, name_3(D));
+  this_1(D)->vtable.dive = dive;
+  this_1(D)->vtable.fly = fly;
+  this_1(D)->vtable.getHeight = getHeight;
+  _4 = this_1(D)->vtable.fly;
+  _4 (this_1(D), 2);
+  this_1(D)->super.vtable.talk = talk;
+  _5 = MEM[(struct Animal *)this_1(D)].vtable.setLegs;
+  _5 (this_1(D), 2);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+Partition 1 (this_1(D) - 1 )
+Partition 2 (_2 - 2 )
+Partition 3 (name_3(D) - 3 )
+Partition 4 (_4 - 4 )
+Partition 5 (_5 - 5 )
+
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (name_3(D) - 3 )
+
+
+Live on entry to BB2 : this_1(D)  name_3(D)  
+
+Conflict graph:
+
+After sorting:
+Coalesce List:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (name_3(D) - 3 )
+
+After Coalescing:
+
+Partition map 
+
+Partition 0 (this_1(D) - 1 )
+Partition 1 (_2 - 2 )
+Partition 2 (name_3(D) - 3 )
+Partition 3 (_4 - 4 )
+Partition 4 (_5 - 5 )
+
+new_Bird (struct Bird * this, const char * name)
+{
+  void (*<T2b0>) (struct Animal *, int) D.1902;
+  void (*<T2c4>) (struct Bird *, int) D.1901;
+  struct Animal * D.1900;
+  struct Animal * _2;
+  void (*<T2c4>) (struct Bird *, int) _4;
+  void (*<T2b0>) (struct Animal *, int) _5;
+
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+  _2 = &this_1(D)->super;
+  new_Animal (_2, name_3(D));
+  this_1(D)->vtable.dive = dive;
+  this_1(D)->vtable.fly = fly;
+  this_1(D)->vtable.getHeight = getHeight;
+  _4 = this_1(D)->vtable.fly;
+  _4 (this_1(D), 2);
+  this_1(D)->super.vtable.talk = talk;
+  _5 = MEM[(struct Animal *)this_1(D)].vtable.setLegs;
+  _5 (this_1(D), 2);
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; _2 = &this_1(D)->super;
+
+(insn 5 4 0 (set (reg/f:SI 59 [ D.1916 ])
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:69 -1
+     (nil))
+
+;; new_Animal (_2, name_3(D));
+
+(insn 6 5 7 (set (reg/f:SI 62)
+        (mem/f/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 name+0 S4 A32])) ../main/bird/Bird.c:69 -1
+     (nil))
+
+(insn 7 6 8 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 62)) ../main/bird/Bird.c:69 -1
+     (nil))
+
+(insn 8 7 9 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 59 [ D.1916 ])) ../main/bird/Bird.c:69 -1
+     (nil))
+
+(call_insn 9 8 0 (call (mem:QI (symbol_ref:SI ("new_Animal") [flags 0x41]  <function_decl 0x4083bc00 new_Animal>) [0 new_Animal S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:69 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+;; this_1(D)->vtable.dive = dive;
+
+(insn 10 9 11 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:72 -1
+     (nil))
+
+(insn 11 10 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 36 [0x24])) [0 this_1(D)->vtable.dive+0 S4 A32])
+        (symbol_ref:SI ("dive") [flags 0x3]  <function_decl 0x4087ac00 dive>)) ../main/bird/Bird.c:72 -1
+     (nil))
+
+;; this_1(D)->vtable.fly = fly;
+
+(insn 12 11 13 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:73 -1
+     (nil))
+
+(insn 13 12 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 28 [0x1c])) [0 this_1(D)->vtable.fly+0 S4 A32])
+        (symbol_ref:SI ("fly") [flags 0x3]  <function_decl 0x4087ab80 fly>)) ../main/bird/Bird.c:73 -1
+     (nil))
+
+;; this_1(D)->vtable.getHeight = getHeight;
+
+(insn 14 13 15 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:74 -1
+     (nil))
+
+(insn 15 14 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 32 [0x20])) [0 this_1(D)->vtable.getHeight+0 S4 A32])
+        (symbol_ref:SI ("getHeight") [flags 0x3]  <function_decl 0x4087aa80 getHeight>)) ../main/bird/Bird.c:74 -1
+     (nil))
+
+;; _4 = this_1(D)->vtable.fly;
+
+(insn 16 15 17 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+
+(insn 17 16 0 (set (reg/f:SI 60 [ D.1917 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 28 [0x1c])) [0 this_1(D)->vtable.fly+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+
+;; _4 (this_1(D), 2);
+
+(insn 18 17 19 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 2 [0x2])) ../main/bird/Bird.c:77 -1
+     (nil))
+
+(insn 19 18 20 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+
+(insn 20 19 21 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 67)) ../main/bird/Bird.c:77 -1
+     (nil))
+
+(call_insn 21 20 0 (call (mem:QI (reg/f:SI 60 [ D.1917 ]) [0 *_4 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:77 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+;; this_1(D)->super.vtable.talk = talk;
+
+(insn 22 21 23 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:80 -1
+     (nil))
+
+(insn 23 22 0 (set (mem/f/j:SI (plus:SI (reg/f:SI 68)
+                (const_int 4 [0x4])) [0 this_1(D)->super.vtable.talk+0 S4 A32])
+        (symbol_ref:SI ("talk") [flags 0x3]  <function_decl 0x4087ab00 talk>)) ../main/bird/Bird.c:80 -1
+     (nil))
+
+;; _5 = MEM[(struct Animal *)this_1(D)].vtable.setLegs;
+
+(insn 24 23 25 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+
+(insn 25 24 0 (set (reg/f:SI 61 [ D.1918 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 69)
+                (const_int 8 [0x8])) [0 MEM[(struct Animal *)this_1(D)].vtable.setLegs+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+
+;; _5 (this_1(D), 2);
+
+(insn 26 25 27 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 2 [0x2])) ../main/bird/Bird.c:83 -1
+     (nil))
+
+(insn 27 26 28 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+
+(insn 28 27 29 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 70)) ../main/bird/Bird.c:83 -1
+     (nil))
+
+(call_insn 29 28 0 (call (mem:QI (reg/f:SI 61 [ D.1918 ]) [0 *_5 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:83 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 5 2 NOTE_INSN_FUNCTION_BEG)
+(insn 5 2 6 2 (set (reg/f:SI 59 [ D.1916 ])
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:69 -1
+     (nil))
+(insn 6 5 7 2 (set (reg/f:SI 62)
+        (mem/f/c:SI (plus:SI (reg/f:SI 53 virtual-incoming-args)
+                (const_int 4 [0x4])) [0 name+0 S4 A32])) ../main/bird/Bird.c:69 -1
+     (nil))
+(insn 7 6 8 2 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (reg/f:SI 62)) ../main/bird/Bird.c:69 -1
+     (nil))
+(insn 8 7 9 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 59 [ D.1916 ])) ../main/bird/Bird.c:69 -1
+     (nil))
+(call_insn 9 8 10 2 (call (mem:QI (symbol_ref:SI ("new_Animal") [flags 0x41]  <function_decl 0x4083bc00 new_Animal>) [0 new_Animal S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:69 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem/f:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 10 9 11 2 (set (reg/f:SI 63)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:72 -1
+     (nil))
+(insn 11 10 12 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 63)
+                (const_int 36 [0x24])) [0 this_1(D)->vtable.dive+0 S4 A32])
+        (symbol_ref:SI ("dive") [flags 0x3]  <function_decl 0x4087ac00 dive>)) ../main/bird/Bird.c:72 -1
+     (nil))
+(insn 12 11 13 2 (set (reg/f:SI 64)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:73 -1
+     (nil))
+(insn 13 12 14 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 64)
+                (const_int 28 [0x1c])) [0 this_1(D)->vtable.fly+0 S4 A32])
+        (symbol_ref:SI ("fly") [flags 0x3]  <function_decl 0x4087ab80 fly>)) ../main/bird/Bird.c:73 -1
+     (nil))
+(insn 14 13 15 2 (set (reg/f:SI 65)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:74 -1
+     (nil))
+(insn 15 14 16 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 65)
+                (const_int 32 [0x20])) [0 this_1(D)->vtable.getHeight+0 S4 A32])
+        (symbol_ref:SI ("getHeight") [flags 0x3]  <function_decl 0x4087aa80 getHeight>)) ../main/bird/Bird.c:74 -1
+     (nil))
+(insn 16 15 17 2 (set (reg/f:SI 66)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+(insn 17 16 18 2 (set (reg/f:SI 60 [ D.1917 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 66)
+                (const_int 28 [0x1c])) [0 this_1(D)->vtable.fly+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+(insn 18 17 19 2 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 2 [0x2])) ../main/bird/Bird.c:77 -1
+     (nil))
+(insn 19 18 20 2 (set (reg/f:SI 67)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:77 -1
+     (nil))
+(insn 20 19 21 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 67)) ../main/bird/Bird.c:77 -1
+     (nil))
+(call_insn 21 20 22 2 (call (mem:QI (reg/f:SI 60 [ D.1917 ]) [0 *_4 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:77 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+(insn 22 21 23 2 (set (reg/f:SI 68)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:80 -1
+     (nil))
+(insn 23 22 24 2 (set (mem/f/j:SI (plus:SI (reg/f:SI 68)
+                (const_int 4 [0x4])) [0 this_1(D)->super.vtable.talk+0 S4 A32])
+        (symbol_ref:SI ("talk") [flags 0x3]  <function_decl 0x4087ab00 talk>)) ../main/bird/Bird.c:80 -1
+     (nil))
+(insn 24 23 25 2 (set (reg/f:SI 69)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+(insn 25 24 26 2 (set (reg/f:SI 61 [ D.1918 ])
+        (mem/f/j:SI (plus:SI (reg/f:SI 69)
+                (const_int 8 [0x8])) [0 MEM[(struct Animal *)this_1(D)].vtable.setLegs+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+(insn 26 25 27 2 (set (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                (const_int 4 [0x4])) [0  S4 A32])
+        (const_int 2 [0x2])) ../main/bird/Bird.c:83 -1
+     (nil))
+(insn 27 26 28 2 (set (reg/f:SI 70)
+        (mem/f/c:SI (reg/f:SI 53 virtual-incoming-args) [0 this+0 S4 A32])) ../main/bird/Bird.c:83 -1
+     (nil))
+(insn 28 27 29 2 (set (mem:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32])
+        (reg/f:SI 70)) ../main/bird/Bird.c:83 -1
+     (nil))
+(call_insn 29 28 0 2 (call (mem:QI (reg/f:SI 61 [ D.1918 ]) [0 *_5 S1 A8])
+        (const_int 8 [0x8])) ../main/bird/Bird.c:83 -1
+     (nil)
+    (expr_list:REG_BR_PRED (use (mem/f:SI (reg/f:SI 56 virtual-outgoing-args) [0  S4 A32]))
+        (expr_list:REG_BR_PRED (use (mem:SI (plus:SI (reg/f:SI 56 virtual-outgoing-args)
+                        (const_int 4 [0x4])) [0  S4 A32]))
+            (nil))))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
+
+;; Function destroy_Bird (destroy_Bird, funcdef_no=5, decl_uid=1411, cgraph_uid=5)
+
+destroy_Bird (struct Bird * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+Partition map 
+
+
+After Coalescing:
+
+Partition map 
+
+
+destroy_Bird (struct Bird * this)
+{
+;;   basic block 2, loop depth 0
+;;    pred:       ENTRY
+;;    succ:       3
+
+;;   basic block 3, loop depth 0
+;;    pred:       2
+<L0>:
+  return;
+;;    succ:       EXIT
+
+}
+
+
+
+;; Generating RTL for gimple basic block 2
+
+;; Generating RTL for gimple basic block 3
+
+;; <L0>:
+
+(code_label 5 4 6 10 "" [0 uses])
+
+(note 6 5 0 NOTE_INSN_BASIC_BLOCK)
+
+
+try_optimize_cfg iteration 1
+
+Merging block 3 into block 2...
+Merged blocks 2 and 3.
+Merged 2 and 3 without moving.
+Forwarding edge 2->4 to 5 failed.
+Merging block 4 into block 2...
+Merged blocks 2 and 4.
+Merged 2 and 4 without moving.
+Merging block 5 into block 2...
+Merged blocks 2 and 5.
+Merged 2 and 5 without moving.
+
+
+try_optimize_cfg iteration 2
+
+
+
+;;
+;; Full RTL generated for this function:
+;;
+(note 1 0 3 NOTE_INSN_DELETED)
+;; basic block 2, loop depth 0, count 0, freq 0, maybe hot
+;;  prev block 0, next block 1, flags: (NEW, REACHABLE, RTL)
+;;  pred:       ENTRY (FALLTHRU)
+(note 3 1 2 2 [bb 2] NOTE_INSN_BASIC_BLOCK)
+(note 2 3 9 2 NOTE_INSN_FUNCTION_BEG)
+(insn 9 2 0 2 (const_int 0 [0]) ../main/bird/Bird.c:88 -1
+     (nil))
+;;  succ:       EXIT [100.0%]  (FALLTHRU)
+
