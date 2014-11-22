@@ -39,7 +39,7 @@ struct data_${file_base}
 struct vtable_${file_base}
 {
 	/* TODO: Declariation of pointers to class functions */
-	/*		 Do not include constructor and destructor	 */
+	/*	 Do not include constructor and destructor   */
 };
 
 /******************************************************************************
@@ -48,11 +48,11 @@ struct vtable_${file_base}
 struct ${file_base}
 {
 	/* *********************** IMPORTANT ************************** */
-	/* 		super class must be first data member for struct.		*/
-	/* 		If the class has no super class ignore this message.	*/
+	/*    super class must be first data member for struct.		*/
+	/*    If the class has no super class ignore this message.	*/
 	/* TODO: Super class */
-	struct data_${file_base} data;
 	struct vtable_${file_base} vtable;
+	struct data_${file_base} _data;
 };
 
 /******************************************************************************
