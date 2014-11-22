@@ -3,7 +3,9 @@ OOAnimal
 
 ##The Good
 
-OOAnimal provides an example of how to do object oriented programming in C. There are no wrappers, just a template to follow. Implementing classes this way enables single inheritance, virtual functions, and polymorphism. Since I developed this template for use in embedded applications there is no dynamic memory allocation. This means there is no concept of private and protected class members. Everything is public. In the OOAnimal folder is an eclipse project which demonstrates how to follow the standard. I used Eclipse 3.8 on Lubuntu. In the CommandLineCompile folder is a Makefile to run the project from the command line.
+OOAnimal provides a standard for object oriented programming in C. There are no wrappers, just a template to follow. Implementing classes this way enables single inheritance, virtual functions, polymorphism, and aggregation. Since I developed this standard for use in embedded applications there is no dynamic memory allocation. Everything is put on the stack. However, an object can still be allocated on the heap, like any other data type. 
+
+In the OOAnimal folder is an eclipse project which demonstrates how to follow the standard. I used Eclipse 3.8 on Lubuntu. In the CommandLineCompile folder is a Makefile to run the project from the command line.
 
 OOAnimal is licensed under the GNU General Public License v2. I did this so hopefully everyone can use these ideas in their projects.
 
@@ -12,7 +14,7 @@ OOAnimal is licensed under the GNU General Public License v2. I did this so hope
 The compiler will give several "warning: assignment from incompatible pointer type" using this standard. Adding type casts will remove these warnings, but it makes no difference to the functionality.
 
 
-The software engineer / programmer will have to be tolerant of some extra overhead when writing code. The most notable is setting up the function pointers in each classes constructors.
+The software engineer / programmer will have some overhead when writing code. The most notable is setting up the function pointers in each classes constructors. In addition, the naming convention in the standard (or what ever naming convention is used) must be strictly followed.
 
 ##The Ugly
 
