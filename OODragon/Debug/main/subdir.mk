@@ -4,12 +4,15 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../main/Dragon.c \
 ../main/main.c 
 
 OBJS += \
+./main/Dragon.o \
 ./main/main.o 
 
 C_DEPS += \
+./main/Dragon.d \
 ./main/main.d 
 
 

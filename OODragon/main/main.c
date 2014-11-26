@@ -12,6 +12,7 @@ Dragon dragon;
 
 int main(int argc, char **argv)
 {
-	printf("size: %d", sizeof(dragon));
+	newDragon(&dragon);
+	printf("Dragon's attack did %d damage\n", dragon.method.attack(&dragon));
 	return 0;
 }

@@ -8,14 +8,14 @@
 #ifndef DRAGON_H_
 #define DRAGON_H_
 
+#include <stdint.h>
 #include "Class.h"
-
 
 Class(Dragon)
 	Data
-		int x;
+		uint8_t strength;
 	Methods
-		void (* derp)(void);
+		uint8_t (* attack)(Dragon *);
 End;
 
 #endif /* DRAGON_H_ */
