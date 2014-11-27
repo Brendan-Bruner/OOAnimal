@@ -28,8 +28,9 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.1763446786" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.622717265" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.756868810" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/main/Traits}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/main/Classes/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Class}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/main/include}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.preprocess.1873474018" name="Preprocess only (-E)" superClass="gnu.c.compiler.option.preprocessor.preprocess" value="false" valueType="boolean"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.2007738097" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
@@ -43,6 +44,26 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.536475872" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.119076846" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1282744585" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+					<folderInfo id="cdt.managedbuild.config.gnu.exe.debug.784297660.856942154" name="/" resourcePath="Class">
+						<toolChain id="cdt.managedbuild.toolchain.gnu.exe.debug.2059519307" name="Linux GCC" superClass="cdt.managedbuild.toolchain.gnu.exe.debug" unusedChildren="">
+							<targetPlatform id="cdt.managedbuild.target.gnu.platform.exe.debug" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.exe.debug"/>
+							<tool id="cdt.managedbuild.tool.gnu.archiver.base.1760689542" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base.787227459"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1728977222" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.debug.1843498930"/>
+							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1083695889" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1262230062">
+								<option id="gnu.c.compiler.option.include.paths.605250439" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/main/Traits}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/main/Classes/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/Class}&quot;"/>
+								</option>
+								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.878046964" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
+							</tool>
+							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.327389486" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1826865923"/>
+							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.422916774" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.536475872"/>
+							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1701508114" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug.119076846">
+								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.435535550" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
 					</folderInfo>
