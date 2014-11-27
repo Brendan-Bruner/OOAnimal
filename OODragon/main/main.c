@@ -5,7 +5,6 @@
  *      Author: brendan
  */
 
-#include "Trait.h"
 #include "Dragon.h"
 #include <stdio.h>
 
