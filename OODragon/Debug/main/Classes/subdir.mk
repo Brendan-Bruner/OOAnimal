@@ -4,16 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-../main/Classes/Dragon.c \
-../main/Classes/FlameGuard.c 
+../main/Classes/FlameGuard.c \
+../main/Classes/Whelp.c 
 
 OBJS += \
-./main/Classes/Dragon.o \
-./main/Classes/FlameGuard.o 
+./main/Classes/FlameGuard.o \
+./main/Classes/Whelp.o 
 
 C_DEPS += \
-./main/Classes/Dragon.d \
-./main/Classes/FlameGuard.d 
+./main/Classes/FlameGuard.d \
+./main/Classes/Whelp.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

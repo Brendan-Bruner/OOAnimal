@@ -4,12 +4,12 @@
  *  Created on: 2014-11-26
  *      Author: brendan
  */
-#include "Dragon.h"
+#include "Whelp.h"
 
 /****************************************************************************/
 /* Methods																	*/
 /****************************************************************************/
-uint8_t attack(Dragon *this)
+uint8_t attack(Whelp *this)
 {
 	return this->data.strength;
 }
@@ -17,8 +17,8 @@ uint8_t attack(Dragon *this)
 /****************************************************************************/
 /* Constructor																*/
 /****************************************************************************/
-Constructor(Dragon)
+Constructor(Whelp)
 {
 	this->data.strength = 3;
-	this->method.attack = &attack;
+	this->attack = &attack;
 }

@@ -9,9 +9,9 @@
 #define FLAMEGUARD_H_
 
 #include "FireBreath.h"
-#include "Dragon.h"
+#include "Whelp.h"
 
-Class(FlameGuard) extends(Dragon) uses(FireBreath)
+Class(FlameGuard) extends(Whelp) uses(FireBreath)
 	Data
 		int magicPower;
 	Methods

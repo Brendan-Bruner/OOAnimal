@@ -13,16 +13,14 @@ typedef void * delta_t;
 #define Trait(T) 	typedef struct _##T T;	\
 					struct _##T				\
 					{						\
-						struct				\
-						{
-							/* Methods */
-#define EndTrait		} method;			\
-						delta_t delta;		\
+
+						/* Methods */
+#define EndTrait		delta_t _delta;		\
 					}
 
-#define uses(T)		T trait##T;
+#define uses(t)		t t##T;
 
-#define LinkTrait(C, T) C->trait##T.delta = (delta_t)(((void *) &(C->trait##T)) - (void *)C)
-#define UseTrait(C, O)	C *this = (C *)((void *)O - (void *)O->delta)
+#define LinkTrait(C, t) C->t##T._delta = (delta_t)(((void *) &(C->t##T)) - (void *)C)
+#define UseTrait(C, O)	C *this = (C *)((void *)O - (void *)O->_delta)
 
 #endif /* TRAIT_H_ */

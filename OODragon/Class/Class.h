@@ -11,22 +11,16 @@
 #define Constructor(D)	void new##D(D *this)
 
 #define Class(D)	typedef struct _##D D;		\
-					Constructor(D);			\
+					Constructor(D);				\
 					struct _##D					\
 					{
 						/* Super class */
-
 #define Data			struct					\
 						{
 							/* Class data */
-
-#define Methods			} data;					\
-						struct					\
-						{
+#define Methods			} data;
 							/* Function pointers */
-
-#define End				} method;				\
-					}
+#define End			}
 
 #define extends(S)	S super;
 

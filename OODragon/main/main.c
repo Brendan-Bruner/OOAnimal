@@ -5,14 +5,21 @@
  *      Author: brendan
  */
 
-#include "Dragon.h"
+#include "Whelp.h"
+#include "FlameGuard.h"
 #include <stdio.h>
 
-Dragon dragon;
+FlameGuard flameGuard;
+Whelp dragon;
 
 int main(int argc, char **argv)
 {
-	newDragon(&dragon);
-	printf("Dragon's attack did %d damage\n", dragon.method.attack(&dragon));
+	newFlameGuard(&flameGuard);
+	newWhelp(&dragon);
+	printf("Dragon's attack did %d damage\n", dragon.attack(&dragon));
+	printf("Flame guard's attack did %d damage\n"
+			"Flame guard's fire did %d damage\n",
+			((Whelp *) &flameGuard)->attack(&flameGuard),
+			flameGuard.FireBreathT.flames(&flameGuard.FireBreathT));
 	return 0;
 }

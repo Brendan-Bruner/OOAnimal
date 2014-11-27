@@ -11,11 +11,11 @@
 #include <stdint.h>
 #include "Class.h"
 
-Class(Dragon)
+Class(Whelp)
 	Data
 		uint8_t strength;
 	Methods
-		uint8_t (* attack)(Dragon *);
+		uint8_t (* attack)(Whelp *);
 End;
 
 #endif /* DRAGON_H_ */

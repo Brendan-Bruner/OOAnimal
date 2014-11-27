@@ -15,9 +15,9 @@ static int flames(FireBreath *trait)
 
 Constructor(FlameGuard)
 {
-	newDragon(this);
+	newWhelp(this);
 	LinkTrait(this, FireBreath);
-	this->traitFireBreath.method.flames = &flames;
+	this->FireBreathT.flames = &flames;
 	this->data.magicPower = 23;
 }
 
