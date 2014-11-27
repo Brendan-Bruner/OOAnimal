@@ -21,14 +21,24 @@
  * Class methods
  *****************************************************************************/
 /**
+ * Set the Animal's name.
+ * @param this The Animal object.
+ * @param name A pointer to an array of chars - the Animal's name.
+ */
+static void setName(Animal *this, char const *name)
+{
+	this->data.name = name;
+}
+
+/**
  * Get the Animal's name.
  * @param this The Animal object.
  * @return A pointer to the animals name - a string. Does not
  * guarantee a null terminating character.
  */
-static char * getName(Animal *this)
+static char const * getName(Animal *this)
 {
-	return this->_data.name;
+	return this->data.name;
 }
 
 /**
@@ -37,7 +47,7 @@ static char * getName(Animal *this)
  */
 static void talk(Animal * this)
 {
-	printf("Hello, i'm an Animal. My name is %s.\n", this->vtable.getName(this));
+	printf("Hello, i'm an Animal. My name is %s.\n", this->method.getName(this));
 }
 
 /*
@@ -47,7 +57,7 @@ static void talk(Animal * this)
  */
 static void setLegs(Animal *this, int numLegs)
 {
-	this->_data.numLegs = numLegs;
+	this->data.numLegs = numLegs;
 }
 
 /**
@@ -57,7 +67,7 @@ static void setLegs(Animal *this, int numLegs)
  */
 static int getLegs(Animal *this)
 {
-	return this->_data.numLegs;
+	return this->data.numLegs;
 }
 
 /**
@@ -72,20 +82,15 @@ static void location(Animal *this)
 /******************************************************************************
  * Constructor and destructor
  *****************************************************************************/
-void new_Animal(Animal *this, char const *name)
+Constructor(Animal)
 {
-	/* Set the Animals vtable */
-	this->vtable.getName = &getName;
-	this->vtable.talk = &talk;
-	this->vtable.setLegs = &setLegs;
-	this->vtable.getLegs = &getLegs;
-	this->vtable.location = &location;
+	/* Set the Animals method table */
+	this->method.setName = &setName;
+	this->method.getName = &getName;
+	this->method.talk = &talk;
+	this->method.setLegs = &setLegs;
+	this->method.getLegs = &getLegs;
+	this->method.location = &location;
 
-	this->_data.numLegs = 0;
-	this->_data.name = name;
-}
-
-void destroy_Animal(Animal *this)
-{
-	return;
+	this->data.numLegs = 0;
 }

@@ -28,7 +28,7 @@
  */
 static int getHeight(Bird * this)
 {
-	return this->_data.height;
+	return this->data.height;
 }
 
 /**
@@ -38,7 +38,7 @@ static int getHeight(Bird * this)
  */
 static void talk(Bird *this)
 {
-	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) this)->vtable.getName(this));
+	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) this)->method.getName(this));
 }
 
 /**
@@ -48,7 +48,7 @@ static void talk(Bird *this)
  */
 static void fly(Bird *this, int height)
 {
-	this->_data.height = height;
+	this->data.height = height;
 }
 
 /**
@@ -61,10 +61,10 @@ static void fly(Bird *this, int height)
  */
 static int dive(Bird * this)
 {
-	if(this->_data.height >= 300)
+	if(this->data.height >= 300)
 	{
-		int height = this->_data.height;
-		this->vtable.fly(this,0);
+		int height = this->data.height;
+		this->method.fly(this,0);
 		return height*2;
 	}
 	return 0;
@@ -73,27 +73,22 @@ static int dive(Bird * this)
 /******************************************************************************
  * Constructor and destructor
  *****************************************************************************/
-void new_Bird(Bird *this, char const *name)
+Constructor(Bird)
 {
 	/* Initialize super class */
-	new_Animal(&this->super, name);
+	newAnimal(this);
 
 	/* Set Bird's vtable */
-	this->vtable.dive = &dive;
-	this->vtable.fly = &fly;
-	this->vtable.getHeight = &getHeight;
+	this->method.dive = &dive;
+	this->method.fly = &fly;
+	this->method.getHeight = &getHeight;
 
 	/* Set Bird's initial height */
-	this->vtable.fly(this, 2);
+	this->method.fly(this, 2);
 
 	/* Override super class function talk */
-	this->super.vtable.talk = (void(*)(Animal *)) &talk;
+	this->super.method.talk = &talk;
 
 	/* Set the Birds legs to 2 */
-	((Animal *) this)->vtable.setLegs(this, 2);
-}
-
-void destroy_Bird(Bird *this)
-{
-	return;
+	((Animal *) this)->method.setLegs(this, 2);
 }

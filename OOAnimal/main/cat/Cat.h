@@ -18,57 +18,13 @@
 #ifndef CAT_H_
 #define CAT_H_
 
+#include "Class.h"
 #include "Animal.h"
 
-/******************************************************************************
- * Class Cat
- *****************************************************************************/
-/**
- * Cat class which inherits from Animal.
- * This class overrides Animal's talk method.
- */
-typedef struct Cat Cat;
-
-/******************************************************************************
- * Class Cat data members
- *****************************************************************************/
-struct data_Cat
-{
-};
-
-/******************************************************************************
- * vtable prototype
- *****************************************************************************/
-struct vtable_Cat
-{
-	void (* meow)(Cat *);
-};
-
-/******************************************************************************
- * Class data structure
- *****************************************************************************/
-struct Cat
-{
-	Animal super;
-	struct vtable_Cat vtable;
-	struct data_Cat _data;
-};
-
-/******************************************************************************
- * Constructor and destructor prototypes
- *****************************************************************************/
-/**
- * Constructor.
- * Initializes an object.
- * @param this Object to initialize.
- * @param name Name of the Cat.
- */
-void new_Cat(Cat *this, char const *name);
-
-/**
- * Destructor.
- * @param this The object to destroy.
- */
-void destroy_Cat(Cat *this);
+Class(Cat) extends(Animal)
+	Data
+	Methods
+		void (* meow)(Cat *);
+End;
 
 #endif /* CAT_H_ */

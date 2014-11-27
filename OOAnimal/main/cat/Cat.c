@@ -36,27 +36,23 @@ static void meow(Cat *this)
  */
 static void talk(Cat *this)
 {
-	printf("Hello, i'm a cat. My name is %s\n", ((Animal *) this)->vtable.getName(this));
+	printf("Hello, i'm a cat. My name is %s\n", ((Animal *) this)->method.getName(this));
 }
 
 /******************************************************************************
  * Constructor and destructor
  *****************************************************************************/
-void new_Cat(Cat *this, char const *name)
+Constructor(Cat)
 {
-	new_Animal(&this->super, name);
+	newAnimal(this);
 
 	/* Set Cat vtable */
-	this->vtable.meow = &meow;
+	this->method.meow = &meow;
 
 	/* Override Animal's talk method */
-	((Animal *) this)->vtable.talk = &talk;
+	((Animal *) this)->method.talk = &talk;
 
 	/* Set how many legs a Cat has */
-	((Animal *) this)->vtable.setLegs(this, 4);
+	((Animal *) this)->method.setLegs(this, 4);
 }
 
-void destroy_Cat(Cat *this)
-{
-	return;
-}
