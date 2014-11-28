@@ -20,7 +20,7 @@ A trait prototypes functions. A class can use a trait. When it does this it has 
 
 #Rules
 
-There are a few rules that need to be followed to avoid issues like the diamond problem. The compiler does not enforce these so hopefully they're obvious.
+There are a few rules that need to be followed to avoid issues like the diamond problem. The compiler does not enforce these so i've tried to make them as simple as possible.
 
 * A trait cannot use a trait
 * A class cannot use a trait which its super class uses. Instead, the derived  class has to use function overriding.
