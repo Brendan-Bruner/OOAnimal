@@ -1,21 +1,27 @@
 /*
- * Dragon.h
+ * Whelp.h
  *
- *  Created on: 2014-11-26
+ *  Created on: 2014-11-27
  *      Author: brendan
  */
 
-#ifndef DRAGON_H_
-#define DRAGON_H_
+#ifndef WHELP_H_
+#define WHELP_H_
 
-#include <stdint.h>
 #include "Class.h"
 
 Class(Whelp)
 	Data
-		uint8_t strength;
+		int _strength;
+		int _level;
+		int _agility;
 	Methods
-		uint8_t (* attack)(Whelp *);
+		int (* attack)(Whelp *);
+		void (*setLevel)(Whelp *, int);
+		void (*setAgility)(Whelp *, int);
+		int (*getLevel)(Whelp *);
+		int (*getAgility)(Whelp *);
+		int (*special)(Whelp *);
 EndClass;
 
-#endif /* DRAGON_H_ */
+#endif /* WHELP_H_ */

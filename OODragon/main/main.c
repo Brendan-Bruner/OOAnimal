@@ -13,7 +13,8 @@
 #include "FireBreath.h"
 #include "FireElement.h"
 #include "LivingFlameThrower.h"
-#include "FireLord.h"
+#include "FlameLord.h"
+#include "Dragon.h"
 #include "InnerFire.h"
 #include "VolatileCore.h"
 #include <stdio.h>
@@ -29,33 +30,33 @@
  * Tests that a derived class can override a traits function where
  * the super class uses the trait.
  */
-static void testTraitOverride(void);
+void testTraitOverride(void);
 
 /**
  * Tests that a class which uses multiple traits implements them
  * properly.
  */
-static void testMultipleTraits(void);
+void testMultipleTraits(void);
 
 /**
  * Test that a trait can be cast down to its derived class
  */
-static void testTraitCastToDerived(void);
+void testTraitCastToDerived(void);
 
 /**
  * Test that a base class can be cast down to its derived class
  */
-static void testClassCastToDerived(void);
+void testClassCastToDerived(void);
 
 /**
  * Test that derived classes can override their super classes functions.
  */
-static void testFunctionOverride(void);
+void testFunctionOverride(void);
 
 /**
  * Test that a classes methods and data work by using setters and getters
  */
-static void testClass(void);
+void testClass(void);
 
 /**
  * Test that an array of FireBreath's all have a method flames. It should
@@ -63,24 +64,31 @@ static void testClass(void);
  * just that when the flames method is called on the object. The
  * appropriate implementation of flames should then be called
  */
-static void testTraitPolymorphism(void);
+void testTraitPolymorphism(void);
 
 /**
  * Test an array of Whelp's. This performs the same test as
  * testTraitPolymorphism except it is testing classes, not traits,
  * for polymorphism.
  */
-static void testClassPolymorphism(void);
+void testClassPolymorphism(void);
 
 int main(int argc, char **argv)
 {
-	printf("hello world\n");
+	testTraitPolymorphism();
+	testClassPolymorphism();
+	testClass();
+	testFunctionOverride();
+	testClassCastToDerived();
+	testTraitCastToDerived();
+	testMultipleTraits();
+	testTraitOverride();
 	return 0;
 }
 
-static void testTraitPolymorphism(void)
+void testTraitPolymorphism(void)
 {
-	int 				i, damage;
+	int 				damage;
 	FireBreath 			*breathers[8];
 	FlameGuard 			guard1, guard2, guard3;
 	FireElement 		element1, element2, element3;
@@ -114,7 +122,7 @@ static void testTraitPolymorphism(void)
 	ASSERT_EQUAL(7, lft2.FireBreathT.flames(&lft2), breathers[7]->flames(breathers[7]));
 }
 
-static void testClassPolymorphism(void)
+void testClassPolymorphism(void)
 {
 	int i, damage;
 	Whelp 		*whelps[8];
@@ -151,7 +159,7 @@ static void testClassPolymorphism(void)
 	ASSERT_EQUAL(15, ((Whelp *) &dragon2)->attack(&dragon2), whelps[7]->attack(whelps[7]));
 }
 
-static void testClass(void)
+void testClass(void)
 {
 	Whelp whelp;
 	int level = 78;
@@ -165,7 +173,7 @@ static void testClass(void)
 	ASSERT_EQUAL(17, whelp.getAgility(&whelp), agility);
 }
 
-static void testFunctionOverride(void)
+void testFunctionOverride(void)
 {
 	/*
 	 * Implementation of special() is made different for each class. Therefore, these tests
@@ -190,7 +198,7 @@ static void testFunctionOverride(void)
 
 }
 
-static void testClassCastToDerived(void)
+void testClassCastToDerived(void)
 {
 	Whelp *whelp;
 	FlameLord lord;
@@ -202,7 +210,7 @@ static void testClassCastToDerived(void)
 	ASSERT_EQUAL(25, ((FlameLord *) whelp)->reap(whelp), lord.reap(&lord));
 }
 
-static void testTraitCastToDerived(void)
+void testTraitCastToDerived(void)
 {
 	FireBreath *trait;
 	FlameGuard guard;
@@ -214,7 +222,7 @@ static void testTraitCastToDerived(void)
 	ASSERT_EQUAL(27, guard.FireBreathT.flames(&guard.FireBreathT), ((FlameGuard *) CastTrait(trait))->FireBreathT.flames(trait));
 }
 
-static void testMultipleTraits(void)
+void testMultipleTraits(void)
 {
 	FireElement elemental;
 
@@ -223,18 +231,18 @@ static void testMultipleTraits(void)
 	/* A fire elements flames is set to do 2*magic as damage */
 	ASSERT_EQUAL(28, elemental.FireBreathT.flames(&elemental.FireBreathT), elemental.getMagic(&elemental)*2);
 	/* A fire elements heatWave is set to do 4*magic as a damage */
-	ASSERT_EQUAL(29, elemental.InnerFireT.heatWave(&elemental.InnerFireT), elemental.getMagic(&elemental)*2);
+	ASSERT_EQUAL(29, elemental.InnerFireT.heatWave(&elemental.InnerFireT), elemental.getMagic(&elemental)*4);
 	/* A fire elements explosion is set to do 2*heatWave damage => 8*magic as a damage */
 	ASSERT_EQUAL(30, elemental.VolatileCoreT.explosion(&elemental.VolatileCoreT), elemental.getMagic(&elemental)*8);
 }
 
-static void testTraitOverride(void)
+void testTraitOverride(void)
 {
-	FireLord lord;
-	FireGuard guard;
+	FlameLord lord;
+	FlameGuard guard;
 
-	newFireLord(&lord);
-	newGuard(&guard);
+	newFlameLord(&lord);
+	newFlameGuard(&guard);
 
-	ASSERT_NOT_EQUAL(31, ((FireGuard *) &lord)->FireBreathT.flames(&((FireGuard *) &lord)->FireBreathT), guard.FireBreathT.flames(&guard.FireBreathT));
+	ASSERT_NOT_EQUAL(31, ((FlameGuard *) &lord)->FireBreathT.flames(&((FlameGuard *) &lord)->FireBreathT), guard.FireBreathT.flames(&guard.FireBreathT));
 }

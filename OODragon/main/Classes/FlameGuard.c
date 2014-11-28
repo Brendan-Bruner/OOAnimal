@@ -11,14 +11,22 @@
 static int flames(FireBreath *trait)
 {
 	FlameGuard *this = (FlameGuard *) CastTrait(trait);
-	return this->data.magicPower;
+	return this->data._magicPower;
+}
+
+/* Override special in super class */
+static int special(FlameGuard *this)
+{
+	return this->data._magicPower + 9;
 }
 
 Constructor(FlameGuard)
 {
 	newWhelp(this);
+	((Whelp *) this)->special = &special;
+
 	LinkTrait(this, FireBreath);
 	this->FireBreathT.flames = &flames;
-	this->data.magicPower = 23;
+	this->data._magicPower = 23;
 }
 

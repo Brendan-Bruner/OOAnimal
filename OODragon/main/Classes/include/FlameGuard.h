@@ -13,7 +13,7 @@
 
 Class(FlameGuard) extends(Whelp) uses(FireBreath)
 	Data
-		int magicPower;
+		int _magicPower;
 	Methods
 EndClass;
 

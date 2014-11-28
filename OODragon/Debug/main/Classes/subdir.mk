@@ -4,15 +4,27 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../main/Classes/Dragon.c \
+../main/Classes/FireElement.c \
 ../main/Classes/FlameGuard.c \
+../main/Classes/FlameLord.c \
+../main/Classes/LivingFlameThrower.c \
 ../main/Classes/Whelp.c 
 
 OBJS += \
+./main/Classes/Dragon.o \
+./main/Classes/FireElement.o \
 ./main/Classes/FlameGuard.o \
+./main/Classes/FlameLord.o \
+./main/Classes/LivingFlameThrower.o \
 ./main/Classes/Whelp.o 
 
 C_DEPS += \
+./main/Classes/Dragon.d \
+./main/Classes/FireElement.d \
 ./main/Classes/FlameGuard.d \
+./main/Classes/FlameLord.d \
+./main/Classes/LivingFlameThrower.d \
 ./main/Classes/Whelp.d 
 
 
