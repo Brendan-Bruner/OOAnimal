@@ -29,3 +29,14 @@ There are a few rules that need to be followed to avoid issues like the diamond 
 * Function pointer names declared in header must be the same name as static implementation in source
 
 These rules are probably confusing right now. They will each be cleared up.
+
+#Classes
+
+Each class needs a header and source file. Starting with the header.
+
+***Header***
+
+```
+code
+```
+''''''''''
