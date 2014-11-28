@@ -60,3 +60,40 @@ EndClass;
 Thats all there is to it. We have created a class which has data member, _age (note, the underscore is to tell people it should be treated as a private data member), and two methods, getAge and brithday. The rules that are being followed are:
 * Class and trait names should be the same as their source and header file names
 * Functions must have their first argument be a pointer to their class or trait
+
+***Source***
+
+The source file implements the functions and constructor. 
+
+Animal.c
+```
+#include "Animal.h"
+
+/******************************************************************************/
+/* Method Implementation                                                      */
+/******************************************************************************/
+static int getAge(Animal *this)
+{
+  return this->data._age;
+}
+
+static void brithday(Animal *this)
+{
+  ++this->data._age;
+}
+
+/******************************************************************************/
+/* Constructor                                                                */
+/******************************************************************************/
+Constructor(Animal)
+{
+  LinkMethod(getAge);
+  LinkMethod(birthday);
+  this->data._age = 1;
+}
+```
+There it is. The Animal class is implemented. Take note of the rules being followed here:
+* All function implementations have to be static
+* Function pointer names declared in header must be the same name as static implementation in source
+* Class and trait names should be the same as their source and header file names
+* Functions must have their first argument be a pointer to their class or trait
