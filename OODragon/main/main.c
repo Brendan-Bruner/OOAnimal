@@ -3,6 +3,9 @@
  *
  *  Created on: 2014-11-26
  *      Author: brendan
+ *
+ *  Compile without optimization to ensure compiler doesn't optimize away variable
+ *  assignment in test cases.
  */
 
 #include "Whelp.h"
@@ -12,9 +15,22 @@
 #include "LivingFlameThrower.h"
 #include <stdio.h>
 
-/* Asserts A and B are equal with == operator */
+/* Asserts A and B are not equal with == operator */
 #define ASSERT_EQUAL(N,A,B) if((A) == (B)) { printf("Test %d passed\n", (N)); } else \
 													printf("Test %d failed\n", (N))
+
+#define ASSERT_NOT_EQUAL(N, A, B) if((A) != (B)) { printf("Test %d passed\n", (N)); } else \
+													printf("Test %d failed\n", (N))
+
+/**
+ * Test that a base class can be cast down to its derived class
+ */
+static void testCastToDerived(void);
+
+/**
+ * Test that derived classes can override their super classes functions.
+ */
+static void testFunctionOverride(void);
 
 /**
  * Test that a classes methods and data work by using setters and getters
@@ -127,4 +143,34 @@ static void testClass(void)
 
 	ASSERT_EQUAL(16, whelp.getLevel(&whelp), level);
 	ASSERT_EQUAL(17, whelp.getAgility(&whelp), agility);
+}
+
+static void testFunctionOverride(void)
+{
+	/*
+	 * Implementation of special() is made different for each class. Therefore, these tests
+	 * ought to pass.
+	 */
+	Whelp whelp;
+	FlameGuard guard;
+	FlameLord lord;
+	Dragon dragon;
+
+	newWhelp(&whelp);
+	newFlameGuard(&guard);
+	newFlameLord(&lord);
+	newDragon(&dragon);
+
+	ASSERT_NOT_EQUAL(18, whelp.special(&whelp), ((Whelp *) &guard)->special(&guard));
+	ASSERT_NOT_EQUAL(19, whelp.special(&whelp), ((Whelp *) &lord)->special(&lord));
+	ASSERT_NOT_EQUAL(20, whelp.special(&whelp), ((Whelp *) &dragon)->special(&dragon));
+	ASSERT_NOT_EQUAL(21, ((Whelp *) &guard)->special(&guard), ((Whelp *) &lord)->special(&lord));
+	ASSERT_NOT_EQUAL(22, ((Whelp *) &guard)->special(&guard), ((Whelp *) &dragon)->special(&dragon));
+	ASSERT_NOT_EQUAL(23, ((Whelp *) &lord)->special(&guard), ((Whelp *) &dragon)->special(&dragon));
+
+}
+
+static void testCastToDerived(void)
+{
+
 }
