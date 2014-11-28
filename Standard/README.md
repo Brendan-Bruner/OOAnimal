@@ -89,7 +89,7 @@ Constructor(Animal)
 {
   LinkMethod(getAge);
   LinkMethod(birthday);
-  this->data._age = 1;
+  this->data._age = 0;
 }
 ```
 There it is. The Animal class is implemented. Take note of the rules being followed here:
@@ -97,3 +97,32 @@ There it is. The Animal class is implemented. Take note of the rules being follo
 * Function pointer names declared in header must be the same name as static implementation in source
 * Class and trait names should be the same as their source and header file names
 * Functions must have their first argument be a pointer to their class or trait
+
+Functions have to be static so that their name can be reused (ie, the implementation of getAge defined in the source file is not the global implementation of getAge).
+
+In the constructor, a call to the LinkMethod macro is made for each method. This macro links the functions to the object at run time. This macro assumes that the function implementation and the function pointer (declared in the header) have the same name.
+
+Look at the methods. Both of them do something to the data member _age. They do this by getting the data element and then, within the data element, getting _age. All variables declared in the Data section of the class header will be inside this element.
+
+***Main***
+
+Lets see how this class is used.
+
+```
+#include <stdio.h>
+#include "Animal.h"
+
+int main(int argc, char **argv)
+{
+  Animal fox;       /* Declare a new Animal. This one will be called fox */
+  newAnimal(&fox)   /* Initialize the object. Note, this is the constructor, and it takes a pointer to the object */
+  
+  printf("I was just born, I am %d years old\n", fox.getAge(&fox));
+  
+  fox.birthday(&fox)  /* Its the foxes birthday :), he is one year old now. */
+  
+  printf("I just had my first birthday, I am %d year old now\n", fox.getAge(&fox));
+  
+  return 0;
+}
+```
