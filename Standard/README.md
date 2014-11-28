@@ -25,4 +25,7 @@ There are a few rules that need to be followed to avoid issues like the diamond 
 * A trait cannot use a trait
 * A class cannot use a trait which its super class uses. Instead, the derived  class has to use function overriding.
 * A class can only inherit from one class (single inheritance)
-* All function definitions have to be static
+* All function implementations have to be static
+* Function pointer names declared in header must be the same name as static implementation in source
+
+These rules are probably confusing right now. They will each be cleared up.
