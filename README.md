@@ -3,7 +3,7 @@ OOAnimal
 
 ##The Good
 
-OOAnimal provides a standard for object oriented programming in C. There are no wrappers, just a template to follow. Implementing classes this way enables single inheritance, virtual functions, polymorphism, and aggregation. Since I developed this standard for use in embedded applications there is no dynamic memory allocation. Everything is put on the stack. However, an object can still be allocated on the heap, like any other data type. 
+OOAnimal provides a standard for object oriented programming in C. Implementing classes this way enables single inheritance, virtual functions, polymorphism, and aggregation. Since I developed this standard for use in embedded applications there is no dynamic memory allocation. Everything is put on the stack. However, an object can still be allocated on the heap, like any other data type. 
 
 In the OOAnimal folder is an eclipse project which demonstrates how to follow the standard. I used Eclipse 3.8 on Lubuntu. In the CommandLineCompile folder is a Makefile to run the project from the command line.
 
