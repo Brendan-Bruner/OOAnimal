@@ -7,9 +7,10 @@
 
 #include "FlameGuard.h"
 
+/* Using FireBreath trait */
 static int flames(FireBreath *trait)
 {
-	UseTrait(FlameGuard, trait);
+	FlameGuard *this = (FlameGuard *) CastTrait(trait);
 	return this->data.magicPower;
 }
 

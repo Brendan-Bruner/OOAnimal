@@ -13,6 +13,9 @@
 #include "FireBreath.h"
 #include "FireElement.h"
 #include "LivingFlameThrower.h"
+#include "FireLord.h"
+#include "InnerFire.h"
+#include "VolatileCore.h"
 #include <stdio.h>
 
 /* Asserts A and B are not equal with == operator */
@@ -23,9 +26,26 @@
 													printf("Test %d failed\n", (N))
 
 /**
+ * Tests that a derived class can override a traits function where
+ * the super class uses the trait.
+ */
+static void testTraitOverride(void);
+
+/**
+ * Tests that a class which uses multiple traits implements them
+ * properly.
+ */
+static void testMultipleTraits(void);
+
+/**
+ * Test that a trait can be cast down to its derived class
+ */
+static void testTraitCastToDerived(void);
+
+/**
  * Test that a base class can be cast down to its derived class
  */
-static void testCastToDerived(void);
+static void testClassCastToDerived(void);
 
 /**
  * Test that derived classes can override their super classes functions.
@@ -170,7 +190,51 @@ static void testFunctionOverride(void)
 
 }
 
-static void testCastToDerived(void)
+static void testClassCastToDerived(void)
 {
+	Whelp *whelp;
+	FlameLord lord;
 
+	newFlameLord(&lord);
+	whelp = &lord;
+
+	ASSERT_EQUAL(24, whelp->attack(whelp), ((Whelp *) &lord)->attack(&lord));
+	ASSERT_EQUAL(25, ((FlameLord *) whelp)->reap(whelp), lord.reap(&lord));
+}
+
+static void testTraitCastToDerived(void)
+{
+	FireBreath *trait;
+	FlameGuard guard;
+
+	newFlameGuard(&guard);
+	trait = &guard.FireBreathT;
+
+	ASSERT_EQUAL(26, guard.FireBreathT.flames(&guard.FireBreathT), trait->flames(trait));
+	ASSERT_EQUAL(27, guard.FireBreathT.flames(&guard.FireBreathT), ((FlameGuard *) CastTrait(trait))->FireBreathT.flames(trait));
+}
+
+static void testMultipleTraits(void)
+{
+	FireElement elemental;
+
+	newFireElement(&elemental);
+
+	/* A fire elements flames is set to do 2*magic as damage */
+	ASSERT_EQUAL(28, elemental.FireBreathT.flames(&elemental.FireBreathT), elemental.getMagic(&elemental)*2);
+	/* A fire elements heatWave is set to do 4*magic as a damage */
+	ASSERT_EQUAL(29, elemental.InnerFireT.heatWave(&elemental.InnerFireT), elemental.getMagic(&elemental)*2);
+	/* A fire elements explosion is set to do 2*heatWave damage => 8*magic as a damage */
+	ASSERT_EQUAL(30, elemental.VolatileCoreT.explosion(&elemental.VolatileCoreT), elemental.getMagic(&elemental)*8);
+}
+
+static void testTraitOverride(void)
+{
+	FireLord lord;
+	FireGuard guard;
+
+	newFireLord(&lord);
+	newGuard(&guard);
+
+	ASSERT_NOT_EQUAL(31, ((FireGuard *) &lord)->FireBreathT.flames(&((FireGuard *) &lord)->FireBreathT), guard.FireBreathT.flames(&guard.FireBreathT));
 }

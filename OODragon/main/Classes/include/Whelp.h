@@ -16,6 +16,6 @@ Class(Whelp)
 		uint8_t strength;
 	Methods
 		uint8_t (* attack)(Whelp *);
-End;
+EndClass;
 
 #endif /* DRAGON_H_ */

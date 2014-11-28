@@ -21,6 +21,6 @@ typedef void * delta_t;
 #define uses(t)		t t##T;
 
 #define LinkTrait(C, t) C->t##T._delta = (delta_t)(((void *) &(C->t##T)) - (void *)C)
-#define UseTrait(C, O)	C *this = (C *)((void *)O - (void *)O->_delta)
+#define getClass(t)		((void *)t - (void *)t->_delta)
 
 #endif /* TRAIT_H_ */
