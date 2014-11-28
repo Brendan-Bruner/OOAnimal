@@ -15,5 +15,5 @@ static int special(Dragon *this)
 Constructor(Dragon)
 {
 	newWhelp(this);
-	((Whelp *) this)->special = &special;
+	OverrideMethod(Whelp, special);
 }

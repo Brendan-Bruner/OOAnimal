@@ -35,16 +35,15 @@ static int getMagic(FireElement *this)
 
 Constructor(FireElement)
 {
-	LinkTrait(this, FireBreath);
-	this->FireBreathT.flames = &flames;
+	LinkTrait(FireBreath);
+	LinkTraitMethod(FireBreath, flames);
 
-	LinkTrait(this, InnerFire);
-	this->InnerFireT.heatWave = &heatWave;
+	LinkTrait(InnerFire);
+	LinkTraitMethod(InnerFire, heatWave);
 
-	LinkTrait(this, VolatileCore);
-	this->VolatileCoreT.explosion = &explosion;
-
-	this->getMagic = &getMagic;
+	LinkTrait(VolatileCore);
+	LinkTraitMethod(VolatileCore, explosion);
+	LinkMethod(getMagic);
 
 	this->data._magic = 7;
 }

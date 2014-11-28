@@ -48,10 +48,10 @@ Constructor(Whelp)
 	this->data._level = 0;
 	this->data._agility = 4;
 
-	this->attack = &attack;
-	this->setLevel = &setLevel;
-	this->setAgility = &setAgility;
-	this->getLevel = &getLevel;
-	this->getAgility = &getAgility;
-	this->special = &special;
+	LinkMethod(attack);
+	LinkMethod(setLevel);
+	LinkMethod(setAgility);
+	LinkMethod(getLevel);
+	LinkMethod(getAgility);
+	LinkMethod(special);
 }

@@ -15,8 +15,8 @@ static int flames(FireBreath *trait)
 
 Constructor(LivingFlameThrower)
 {
-	LinkTrait(this, FireBreath);
-	this->FireBreathT.flames = &flames;
+	LinkTrait(FireBreath);
+	LinkTraitMethod(FireBreath, flames);
 
 	this->data._fuelPower = 21;
 }

@@ -10,18 +10,21 @@
 
 #define Constructor(D)	void new##D(D *this)
 
-#define Class(D)	typedef struct _##D D;		\
-					Constructor(D);				\
-					struct _##D					\
-					{
-						/* Super class */
-#define Data			struct					\
+#define Class(D)		typedef struct _##D D;			\
+						Constructor(D);					\
+						struct _##D						\
 						{
-							/* Class data */
+							/* Super class */
+#define Data				struct						\
+							{
+								/* Class data */
 #define Methods			} data;
 							/* Function pointers */
-#define EndClass	}
+#define EndClass		}
 
-#define extends(S)	S super;
+#define extends(S)		S super;
+
+#define LinkMethod(M)		this-> M = & M
+#define OverrideMethod(S,M)	((S *) this)-> M = & M
 
 #endif /* CLASS_H_ */

@@ -20,7 +20,10 @@ typedef void * delta_t;
 
 #define uses(t)		t t##T;
 
-#define LinkTrait(C, t) C->t##T._delta = (delta_t)(((void *) &(C->t##T)) - (void *)C)
+#define LinkTrait(t) 				this->t##T._delta = (delta_t)(((void *) &(this->t##T)) - (void *)this)
+#define LinkTraitMethod(t,M)		this->t##T. M = & M
+#define OverrideTraitMethod(S,t,M)	((S *) this)-> t##T. M = & M
+
 #define CastTrait(t)	((void *)t - (void *)t->_delta)
 
 #endif /* TRAIT_H_ */

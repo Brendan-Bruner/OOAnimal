@@ -23,10 +23,11 @@ static int special(FlameGuard *this)
 Constructor(FlameGuard)
 {
 	newWhelp(this);
-	((Whelp *) this)->special = &special;
+	OverrideMethod(Whelp, special);
 
-	LinkTrait(this, FireBreath);
-	this->FireBreathT.flames = &flames;
+	LinkTrait(FireBreath);
+	LinkTraitMethod(FireBreath, flames);
+
 	this->data._magicPower = 23;
 }
 
