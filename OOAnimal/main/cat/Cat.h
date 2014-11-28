@@ -25,6 +25,6 @@ Class(Cat) extends(Animal)
 	Data
 	Methods
 		void (* meow)(Cat *);
-End;
+EndClass;
 
 #endif /* CAT_H_ */

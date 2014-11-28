@@ -31,6 +31,6 @@ Class(Animal)
 		void (* setLegs)(Animal *, int);
 		int (* getLegs)(Animal *);
 		void (* location)(Animal *);
-End;
+EndClass;
 
 #endif /* ANIMAL_H_ */

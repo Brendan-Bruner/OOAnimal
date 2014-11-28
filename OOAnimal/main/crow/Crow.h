@@ -25,6 +25,6 @@ Class(Crow) extends(Bird)
 	Data
 	Methods
 		void (* useTool)(Crow *);
-End;
+EndClass;
 
 #endif /* CROW_H_ */

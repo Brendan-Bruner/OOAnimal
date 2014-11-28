@@ -20,7 +20,7 @@
 							/* Class data */
 #define Methods			} data;
 						/* Function pointers */
-#define End			}
+#define EndClass	}
 
 #define extends(S)	S super;
 

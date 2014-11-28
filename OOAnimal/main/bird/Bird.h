@@ -28,6 +28,6 @@ Class(Bird) extends(Animal)
 		void (* fly)(Bird *, int);
 		int (* getHeight)(Bird *);
 		int (* dive)(Bird *);
-End;
+EndClass;
 
 #endif /* BIRD_H_ */
