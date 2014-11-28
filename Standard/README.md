@@ -47,14 +47,16 @@ Animal.h
 
 #include "Class.h"
 
-Class(Animal)
+Class(Animal)                     /* Class name is the same as file name */
   Data
     int _age;
   Methods
-    int (*getAge)(Animal *);
-    void (*birthday)(Animal *);
+    int (*getAge)(Animal *);      /* First argument is a pointer to the class (Animal *) */
+    void (*birthday)(Animal *);   /* First argument is a pointer to the class (Animal *) */
 EndClass;
 
 #endif /* ANIMAL_H_ */
 ```
-Thats all there is to it. We have created a class which has data member, _age (note, the underscore is to tell people it should be treated as a private data member), and two methods, getAge and brithday. The rules that are being
+Thats all there is to it. We have created a class which has data member, _age (note, the underscore is to tell people it should be treated as a private data member), and two methods, getAge and brithday. The rules that are being followed are:
+* Class and trait names should be the same as their source and header file names
+* Functions must have their first argument be a pointer to their class or trait
