@@ -22,6 +22,7 @@ A trait prototypes functions. A class can use a trait. When it does this it has 
 
 There are a few rules that need to be followed to avoid issues like the diamond problem. The compiler does not enforce these so i've tried to make them as simple as possible.
 
+* Do not use C++ style comments (// C++ comment) in the definition of class (in the header file)
 * A trait cannot use a trait
 * A class cannot use a trait which its super class uses. Instead, the derived  class has to use function overriding.
 * A class can only inherit from one class (single inheritance)
@@ -34,7 +35,7 @@ These rules are probably confusing right now. They will each be cleared up.
 
 #Classes
 
-Each class needs a header and source file. Starting with the header.
+This section will explain how to create a base class. 
 
 ***Header***
 
@@ -42,7 +43,7 @@ The header file is where you prototype your class. Make sure you #include "Class
 
 Animal.h
 ```
-#ifndf ANIMAL_H_
+#ifndef ANIMAL_H_
 #define ANIMAL_H_
 
 #include "Class.h"
@@ -50,7 +51,7 @@ Animal.h
 Class(Animal)                     /* Class name is the same as file name */
   Data
     int _age;
-  Methods
+  Methods                         /* Note, methods are function pointers, not prototypes */
     int (*getAge)(Animal *);      /* First argument is a pointer to the class (Animal *) */
     void (*birthday)(Animal *);   /* First argument is a pointer to the class (Animal *) */
 EndClass;
@@ -58,6 +59,7 @@ EndClass;
 #endif /* ANIMAL_H_ */
 ```
 Thats all there is to it. We have created a class which has data member, _age (note, the underscore is to tell people it should be treated as a private data member), and two methods, getAge and brithday. The rules that are being followed are:
+* Do not use C++ style comments (// C++ comment) in the definition of class (in the header file)
 * Class and trait names should be the same as their source and header file names
 * Functions must have their first argument be a pointer to their class or trait
 
@@ -126,3 +128,41 @@ int main(int argc, char **argv)
   return 0;
 }
 ```
+output
+```
+I was just born, I am 0 years old
+I just had my first birthday, I am 1 year old now
+```
+
+#Inheritance
+
+This section will explain how to do inheritance and function overriding.
+
+***Header***
+
+Lets create a specialization of a fox. The Fox class will inherit from the Animal class. It will also override
+the method birthday in the Animal class.
+
+Fox.h
+```
+#ifndef FOX_H_
+#define FOX_H_
+
+#include "Class.h"
+#include "Animal.h"
+
+Class(Fox) extends(Animal)  /* Use extends to inherit */
+  Data
+    int _savagery;
+  Methods
+    void (*setSavagery)(Fox *, int);
+    int (*getSavagery)(Fox *);
+EndClass;
+
+#endif /* FOX_H_ */
+```
+The rules being followed are:
+* Do not use C++ style comments (// C++ comment) in the definition of class (in the header file)
+* A class can only inherit from one class (single inheritance)
+* Class and trait names should be the same as their source and header file names
+* Functions must have their first argument be a pointer to their class or trait
