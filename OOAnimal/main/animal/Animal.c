@@ -47,7 +47,7 @@ static char const * getName(Animal *this)
  */
 static void talk(Animal * this)
 {
-	printf("Hello, i'm an Animal. My name is %s.\n", this->method.getName(this));
+	printf("Hello, i'm an Animal. My name is %s.\n", this->getName(this));
 }
 
 /*
@@ -80,17 +80,17 @@ static void location(Animal *this)
 }
 
 /******************************************************************************
- * Constructor and destructor
+ * Constructor
  *****************************************************************************/
 Constructor(Animal)
 {
 	/* Set the Animals method table */
-	this->method.setName = &setName;
-	this->method.getName = &getName;
-	this->method.talk = &talk;
-	this->method.setLegs = &setLegs;
-	this->method.getLegs = &getLegs;
-	this->method.location = &location;
+	this->setName = &setName;
+	this->getName = &getName;
+	this->talk = &talk;
+	this->setLegs = &setLegs;
+	this->getLegs = &getLegs;
+	this->location = &location;
 
 	this->data.numLegs = 0;
 }

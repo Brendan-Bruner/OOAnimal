@@ -15,18 +15,12 @@
 					struct _##D					\
 					{
 						/* Super class */
-
 #define Data			struct					\
 						{
 							/* Class data */
-
-#define Methods			} data;					\
-						struct					\
-						{
-							/* Function pointers */
-
-#define End				} method;				\
-					}
+#define Methods			} data;
+						/* Function pointers */
+#define End			}
 
 #define extends(S)	S super;
 
