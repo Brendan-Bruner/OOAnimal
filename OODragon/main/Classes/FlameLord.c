@@ -26,7 +26,7 @@ static int reap(FlameLord *this)
 
 Constructor(FlameLord)
 {
-	newFlameGuard(this);
+	Super(FlameGuard);
 	OverrideMethod(Whelp, special);
 	OverrideTraitMethod(FlameGuard, FireBreath, flames);
 	LinkMethod(reap);

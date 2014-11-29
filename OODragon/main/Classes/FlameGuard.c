@@ -22,7 +22,7 @@ static int special(FlameGuard *this)
 
 Constructor(FlameGuard)
 {
-	newWhelp(this);
+	Super(Whelp);
 	OverrideMethod(Whelp, special);
 
 	LinkTrait(FireBreath);

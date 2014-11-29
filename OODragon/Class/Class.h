@@ -23,6 +23,7 @@
 #define EndClass		}
 
 #define extends(S)		S super;
+#define Super(S)		new##S(( S *) this);
 
 #define LinkMethod(M)		this-> M = & M
 #define OverrideMethod(S,M)	((S *) this)-> M = & M

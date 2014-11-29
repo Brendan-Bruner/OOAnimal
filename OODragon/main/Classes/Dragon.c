@@ -9,11 +9,12 @@
 
 static int special(Dragon *this)
 {
-	return ((Whelp *) this)->getAgility + 130;
+	return ((Whelp *) this)->getAgility(this) + 130;
 }
 
 Constructor(Dragon)
 {
-	newWhelp(this);
+	Super(Whelp);
+	//newWhelp(this);
 	OverrideMethod(Whelp, special);
 }
