@@ -1,6 +1,6 @@
 #Welcome
 
-Welcome to the OOAnimal github. 
+Welcome to the OOAnimal github. Don't foget to checkout the wiki.
 
 #Directory Structure
 
