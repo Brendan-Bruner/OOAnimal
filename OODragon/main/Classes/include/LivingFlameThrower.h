@@ -11,7 +11,7 @@
 #include "Class.h"
 #include "FireBreath.h"
 
-Class(LivingFlameThrower) uses(FireBreath)
+Class(LivingFlameThrower) Uses(FireBreath)
 	Data
 		int _fuelPower;
 	Methods

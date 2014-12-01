@@ -13,7 +13,7 @@
 #include "InnerFire.h"
 #include "VolatileCore.h"
 
-Class(FireElement) uses(FireBreath) uses(InnerFire) uses(VolatileCore)
+Class(FireElement) Uses(FireBreath) Uses(InnerFire) Uses(VolatileCore)
 	Data
 		int _magic;
 	Methods

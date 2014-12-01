@@ -7,14 +7,13 @@
 
 #include "Dragon.h"
 
-static int special(Dragon *this)
+static int special(Whelp *this)
 {
-	return ((Whelp *) this)->getAgility(this) + 130;
+	return this->getAgility(this) + 130;
 }
 
 Constructor(Dragon)
 {
 	Super(Whelp);
-	//newWhelp(this);
 	OverrideMethod(Whelp, special);
 }

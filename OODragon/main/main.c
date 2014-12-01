@@ -88,7 +88,6 @@ int main(int argc, char **argv)
 
 void testTraitPolymorphism(void)
 {
-	int 				damage;
 	FireBreath 			*breathers[8];
 	FlameGuard 			guard1, guard2, guard3;
 	FireElement 		element1, element2, element3;
@@ -118,13 +117,12 @@ void testTraitPolymorphism(void)
 	ASSERT_EQUAL(3, element1.FireBreathT.flames(&element1.FireBreathT), breathers[3]->flames(breathers[3]));
 	ASSERT_EQUAL(4, element2.FireBreathT.flames(&element2.FireBreathT), breathers[4]->flames(breathers[4]));
 	ASSERT_EQUAL(5, element3.FireBreathT.flames(&element3.FireBreathT), breathers[5]->flames(breathers[5]));
-	ASSERT_EQUAL(6, lft1.FireBreathT.flames(&lft1), breathers[6]->flames(breathers[6]));
-	ASSERT_EQUAL(7, lft2.FireBreathT.flames(&lft2), breathers[7]->flames(breathers[7]));
+	ASSERT_EQUAL(6, lft1.FireBreathT.flames(&lft1.FireBreathT), breathers[6]->flames(breathers[6]));
+	ASSERT_EQUAL(7, lft2.FireBreathT.flames(&lft2.FireBreathT), breathers[7]->flames(breathers[7]));
 }
 
 void testClassPolymorphism(void)
 {
-	int i, damage;
 	Whelp 		*whelps[8];
 	Whelp 		whelp1, whelp2;
 	FlameGuard 	guard1, guard2;
@@ -142,21 +140,21 @@ void testClassPolymorphism(void)
 
 	whelps[0] = &whelp1;
 	whelps[1] = &whelp2;
-	whelps[2] = &guard1;
-	whelps[3] = &guard2;
-	whelps[4] = &lord1;
-	whelps[5] = &lord2;
-	whelps[6] = &dragon1;
-	whelps[7] = &dragon2;
+	whelps[2] = (Whelp *) &guard1;
+	whelps[3] = (Whelp *) &guard2;
+	whelps[4] = (Whelp *) &lord1;
+	whelps[5] = (Whelp *) &lord2;
+	whelps[6] = (Whelp *) &dragon1;
+	whelps[7] = (Whelp *) &dragon2;
 
 	ASSERT_EQUAL(8, whelp1.attack(&whelp1), whelps[0]->attack(whelps[0]));
 	ASSERT_EQUAL(9, whelp2.attack(&whelp2), whelps[1]->attack(whelps[1]));
-	ASSERT_EQUAL(10, ((Whelp *) &guard1)->attack(&guard1), whelps[2]->attack(whelps[2]));
-	ASSERT_EQUAL(11, ((Whelp *) &guard2)->attack(&guard2), whelps[3]->attack(whelps[3]));
-	ASSERT_EQUAL(12, ((Whelp *) &lord1)->attack(&lord1), whelps[4]->attack(whelps[4]));
-	ASSERT_EQUAL(13, ((Whelp *) &lord2)->attack(&lord2), whelps[5]->attack(whelps[5]));
-	ASSERT_EQUAL(14, ((Whelp *) &dragon1)->attack(&dragon1), whelps[6]->attack(whelps[6]));
-	ASSERT_EQUAL(15, ((Whelp *) &dragon2)->attack(&dragon2), whelps[7]->attack(whelps[7]));
+	ASSERT_EQUAL(10, ((Whelp *) &guard1)->attack((Whelp *) &guard1), whelps[2]->attack(whelps[2]));
+	ASSERT_EQUAL(11, ((Whelp *) &guard2)->attack((Whelp *) &guard2), whelps[3]->attack(whelps[3]));
+	ASSERT_EQUAL(12, ((Whelp *) &lord1)->attack((Whelp *) &lord1), whelps[4]->attack(whelps[4]));
+	ASSERT_EQUAL(13, ((Whelp *) &lord2)->attack((Whelp *) &lord2), whelps[5]->attack(whelps[5]));
+	ASSERT_EQUAL(14, ((Whelp *) &dragon1)->attack((Whelp *) &dragon1), whelps[6]->attack(whelps[6]));
+	ASSERT_EQUAL(15, ((Whelp *) &dragon2)->attack((Whelp *) &dragon2), whelps[7]->attack(whelps[7]));
 }
 
 void testClass(void)
@@ -189,12 +187,12 @@ void testFunctionOverride(void)
 	newFlameLord(&lord);
 	newDragon(&dragon);
 
-	ASSERT_NOT_EQUAL(18, whelp.special(&whelp), ((Whelp *) &guard)->special(&guard));
-	ASSERT_NOT_EQUAL(19, whelp.special(&whelp), ((Whelp *) &lord)->special(&lord));
-	ASSERT_NOT_EQUAL(20, whelp.special(&whelp), ((Whelp *) &dragon)->special(&dragon));
-	ASSERT_NOT_EQUAL(21, ((Whelp *) &guard)->special(&guard), ((Whelp *) &lord)->special(&lord));
-	ASSERT_NOT_EQUAL(22, ((Whelp *) &guard)->special(&guard), ((Whelp *) &dragon)->special(&dragon));
-	ASSERT_NOT_EQUAL(23, ((Whelp *) &lord)->special(&guard), ((Whelp *) &dragon)->special(&dragon));
+	ASSERT_NOT_EQUAL(18, whelp.special(&whelp), ((Whelp *) &guard)->special((Whelp *) &guard));
+	ASSERT_NOT_EQUAL(19, whelp.special(&whelp), ((Whelp *) &lord)->special((Whelp *) &lord));
+	ASSERT_NOT_EQUAL(20, whelp.special(&whelp), ((Whelp *) &dragon)->special((Whelp *) &dragon));
+	ASSERT_NOT_EQUAL(21, ((Whelp *) &guard)->special((Whelp *) &guard), ((Whelp *) &lord)->special((Whelp *) &lord));
+	ASSERT_NOT_EQUAL(22, ((Whelp *) &guard)->special((Whelp *) &guard), ((Whelp *) &dragon)->special((Whelp *) &dragon));
+	ASSERT_NOT_EQUAL(23, ((Whelp *) &lord)->special((Whelp *) &guard), ((Whelp *) &dragon)->special((Whelp *) &dragon));
 
 }
 
@@ -204,10 +202,10 @@ void testClassCastToDerived(void)
 	FlameLord lord;
 
 	newFlameLord(&lord);
-	whelp = &lord;
+	whelp = (Whelp *) &lord;
 
-	ASSERT_EQUAL(24, whelp->attack(whelp), ((Whelp *) &lord)->attack(&lord));
-	ASSERT_EQUAL(25, ((FlameLord *) whelp)->reap(whelp), lord.reap(&lord));
+	ASSERT_EQUAL(24, whelp->attack(whelp), ((Whelp *) &lord)->attack((Whelp *) &lord));
+	ASSERT_EQUAL(25, ((FlameLord *) whelp)->reap((FlameLord *) whelp), lord.reap(&lord));
 }
 
 void testTraitCastToDerived(void)

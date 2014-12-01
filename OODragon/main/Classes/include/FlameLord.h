@@ -11,7 +11,7 @@
 #include "Class.h"
 #include "FlameGuard.h"
 
-Class(FlameLord) extends(FlameGuard)
+Class(FlameLord) Extends(FlameGuard)
 	Data
 	Methods
 		int (*reap)(FlameLord *);

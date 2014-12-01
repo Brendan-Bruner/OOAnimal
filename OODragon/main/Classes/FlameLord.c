@@ -9,19 +9,19 @@
 /* Override trait method flames in super class */
 static int flames(FireBreath *trait)
 {
-	FlameLord *this = (FlameLord *) CastTrait(trait);
+	/* FlameLord *this = (FlameLord *) CastTrait(trait); */
 	return 89999;
 }
 
 /* Override super classes special method */
-static int special(FlameLord *this)
+static int special(Whelp *this)
 {
 	return 723;
 }
 
 static int reap(FlameLord *this)
 {
-	return ((Whelp *) this)->getAgility(this) * 3 + 89;
+	return ((Whelp *) this)->getAgility((Whelp *) this) * 3 + 89;
 }
 
 Constructor(FlameLord)

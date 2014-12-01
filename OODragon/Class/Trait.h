@@ -18,7 +18,7 @@ typedef void * delta_t;
 #define EndTrait		delta_t _delta;		\
 					}
 
-#define uses(t)		t t##T;
+#define Uses(t)		t t##T;
 
 #define LinkTrait(t) 				this->t##T._delta = (delta_t)(((void *) &(this->t##T)) - (void *)this)
 #define LinkTraitMethod(t,M)		this->t##T. M = & M

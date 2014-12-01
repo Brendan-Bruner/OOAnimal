@@ -11,7 +11,7 @@
 #include "Class.h"
 #include "Whelp.h"
 
-Class(Dragon) extends(Whelp)
+Class(Dragon) Extends(Whelp)
 	Data
 	Methods
 EndClass;

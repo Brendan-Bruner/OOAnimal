@@ -11,7 +11,7 @@
 #include "FireBreath.h"
 #include "Whelp.h"
 
-Class(FlameGuard) extends(Whelp) uses(FireBreath)
+Class(FlameGuard) Extends(Whelp) Uses(FireBreath)
 	Data
 		int _magicPower;
 	Methods

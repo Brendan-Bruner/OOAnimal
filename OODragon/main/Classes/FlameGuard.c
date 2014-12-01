@@ -15,9 +15,10 @@ static int flames(FireBreath *trait)
 }
 
 /* Override special in super class */
-static int special(FlameGuard *this)
+static int special(Whelp *this)
 {
-	return this->data._magicPower + 9;
+	FlameGuard *derived = (FlameGuard *) this;
+	return derived->data._magicPower + 9;
 }
 
 Constructor(FlameGuard)
