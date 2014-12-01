@@ -34,7 +34,7 @@ bg=orange</panel_attributes>
 amplitude : double
 freqHz : double
 --
-- hook(SinLimiter, double) : double
++ hook(SinLimiter, double) : double
 + setAmplitude(SinLimiter, double) : void
 + setFreqHz(SinLimiter, double) : void
 
@@ -65,7 +65,7 @@ bg=orange</panel_attributes>
 slope : double
 yIntercept : double
 --
-- hook(LinearLimiter, double) : double
++ hook(LinearLimiter, double) : double
 + setSlope(LinearLimiter, double) : void
 + setYIntercept(LinearLimiter, double) : void
 bg=orange</panel_attributes>
