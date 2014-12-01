@@ -29,30 +29,30 @@
  * @return The force the crow hits the ground with. Returns 0 if the crow
  * is not high enough to dive.
  */
-static int dive(Crow * this)
+static int dive(Bird * this)
 {
-	int height = ((Bird *) this)->getHeight(this);
+	int height = this->getHeight(this);
 	if( height >= 50)
 	{
-		((Bird *) this)->fly(this, 0);
+		this->fly(this, 0);
 		return height*2;
 	}
 	return 0;
 }
 
-static void location(Crow *this)
+static void location(Animal *this)
 {
 	printf("I live mostly in places with a warmer climate\n");
 }
 
-static void talk(Crow * this)
+static void talk(Animal * this)
 {
-	printf("Hello, i'm Crow. My name is %s.\n", ((Animal *) this)->getName(this));
+	printf("Hello, i'm Crow. My name is %s.\n", this->getName(this));
 }
 
 static void useTool(Crow *this)
 {
-	printf("%s is using a tool, what a smart crow\n", ((Animal *) this)->getName(this));
+	printf("%s is using a tool, what a smart crow\n", ((Animal *) this)->getName((Animal *) this));
 }
 
 /******************************************************************************
@@ -61,15 +61,14 @@ static void useTool(Crow *this)
 Constructor(Crow)
 {
 	/* Initialize super class */
-	newBird(this);
+	Super(Bird);
 
-	/* Set Crow's vtable */
-	this->useTool = &useTool;
+	LinkMethod(useTool);
 
 	/* Override Bird's dive  */
-	((Bird *) this)->dive = &dive;
+	OverrideMethod(Bird, dive);
 
 	/* Override Animal's talk and location  */
-	((Animal *) this)->talk = &talk;
-	((Animal *) this)->location = &location;
+	OverrideMethod(Animal, talk);
+	OverrideMethod(Animal, location);
 }

@@ -36,9 +36,9 @@ static int getHeight(Bird * this)
  * Makes the bird talk.
  * @param this The Bird Object.
  */
-static void talk(Bird *this)
+static void talk(Animal *this)
 {
-	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) this)->getName(this));
+	printf("Hello, i'm a bird. My name is %s.\n", this->getName(this));
 }
 
 /**
@@ -76,19 +76,17 @@ static int dive(Bird * this)
 Constructor(Bird)
 {
 	/* Initialize super class */
-	newAnimal(this);
-
-	/* Set Bird's vtable */
-	this->dive = &dive;
-	this->fly = &fly;
-	this->getHeight = &getHeight;
+	Super(Animal);
+	LinkMethod(dive);
+	LinkMethod(fly);
+	LinkMethod(getHeight);
 
 	/* Set Bird's initial height */
 	this->fly(this, 2);
 
 	/* Override super class function talk */
-	((Animal *) this)->talk = &talk;
+	OverrideMethod(Animal, talk);
 
 	/* Set the Birds legs to 2 */
-	((Animal *) this)->setLegs(this, 2);
+	((Animal *) this)->setLegs((Animal *) this, 2);
 }

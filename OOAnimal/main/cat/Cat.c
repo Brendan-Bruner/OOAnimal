@@ -34,9 +34,9 @@ static void meow(Cat *this)
  * Make the cat talk
  * @param this Cat object.
  */
-static void talk(Cat *this)
+static void talk(Animal *this)
 {
-	printf("Hello, i'm a cat. My name is %s\n", ((Animal *) this)->getName(this));
+	printf("Hello, i'm a cat. My name is %s\n", this->getName(this));
 }
 
 /******************************************************************************
@@ -44,14 +44,12 @@ static void talk(Cat *this)
  *****************************************************************************/
 Constructor(Cat)
 {
-	newAnimal(this);
-
-	/* Set Cat vtable */
-	this->meow = &meow;
+	Super(Animal);
+	LinkMethod(meow);
 
 	/* Override Animal's talk method */
-	((Animal *) this)->talk = &talk;
+	OverrideMethod(Animal, talk);
 
 	/* Set how many legs a Cat has */
-	((Animal *) this)->setLegs(this, 4);
+	((Animal *) this)->setLegs((Animal *) this, 4);
 }

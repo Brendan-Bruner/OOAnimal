@@ -21,7 +21,7 @@
 #include "Class.h"
 #include "Animal.h"
 
-Class(Bird) extends(Animal)
+Class(Bird) Extends(Animal)
 	Data
 		int height;
 	Methods

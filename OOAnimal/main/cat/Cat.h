@@ -21,7 +21,7 @@
 #include "Class.h"
 #include "Animal.h"
 
-Class(Cat) extends(Animal)
+Class(Cat) Extends(Animal)
 	Data
 	Methods
 		void (* meow)(Cat *);

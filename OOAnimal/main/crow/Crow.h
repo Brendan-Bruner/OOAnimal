@@ -21,7 +21,7 @@
 #include "Class.h"
 #include "Bird.h"
 
-Class(Crow) extends(Bird)
+Class(Crow) Extends(Bird)
 	Data
 	Methods
 		void (* useTool)(Crow *);

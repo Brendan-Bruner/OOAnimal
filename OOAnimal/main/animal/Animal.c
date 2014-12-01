@@ -85,12 +85,12 @@ static void location(Animal *this)
 Constructor(Animal)
 {
 	/* Set the Animals method table */
-	this->setName = &setName;
-	this->getName = &getName;
-	this->talk = &talk;
-	this->setLegs = &setLegs;
-	this->getLegs = &getLegs;
-	this->location = &location;
+	LinkMethod(setName);
+	LinkMethod(getName);
+	LinkMethod(talk);
+	LinkMethod(setLegs);
+	LinkMethod(getLegs);
+	LinkMethod(location);
 
 	this->data.numLegs = 0;
 }

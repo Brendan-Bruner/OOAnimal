@@ -42,29 +42,29 @@ int main(int argc, char *argv[])
 	animal.setName(&animal, animalName);
 
 	newBird(&bird);
-	((Animal *) &bird)->setName(&bird, birdName);
+	((Animal *) &bird)->setName((Animal *) &bird, birdName);
 
 	newBird(&mutantBird);
-	((Animal *) &mutantBird)->setName(&mutantBird, mutantBirdName);
-	((Animal *) &mutantBird)->setLegs(&mutantBird, 3);
+	((Animal *) &mutantBird)->setName((Animal *) &mutantBird, mutantBirdName);
+	((Animal *) &mutantBird)->setLegs((Animal *) &mutantBird, 3);
 
 	newCat(&cat);
-	((Animal *) &cat)->setName(&cat, catsName);
+	((Animal *) &cat)->setName((Animal *) &cat, catsName);
 
 	newCrow(&crow);
-	((Animal *) &crow)->setName(&crow, crowName);
+	((Animal *) &crow)->setName((Animal *) &crow, crowName);
 
 	test_animal(&animal);
-	test_animal(&bird);
-	test_animal(&mutantBird);
-	test_animal(&cat);
-	test_animal(&crow);
+	test_animal((Animal *) &bird);
+	test_animal((Animal *) &mutantBird);
+	test_animal((Animal *) &cat);
+	test_animal((Animal *) &crow);
 
 	test_cat(&cat);
 
 	test_bird(&bird);
-	test_bird(&mutantBird);
-	test_bird(&crow);
+	test_bird((Bird *) &mutantBird);
+	test_bird((Bird *) &crow);
 
 	test_crow(&crow);
 
@@ -87,10 +87,10 @@ void test_cat(Cat *cat)
 {
 	printf("\nBeginning of test cat\n****************************\n");
 
-	((Animal *) cat)->talk(cat);
-	((Animal *) cat)->location(cat);
+	((Animal *) cat)->talk((Animal *) cat);
+	((Animal *) cat)->location((Animal *) cat);
 
-	printf("I have %i legs after construction\n", ((Animal *) cat)->getLegs(cat));
+	printf("I have %i legs after construction\n", ((Animal *) cat)->getLegs((Animal *) cat));
 
 	cat->meow(cat);
 
@@ -101,10 +101,10 @@ void test_bird(Bird *bird)
 {
 	printf("\nBeginning of test Bird\n****************************\n");
 
-	((Animal *) bird)->talk(bird);
-	((Animal *) bird)->location(bird);
+	((Animal *) bird)->talk((Animal *) bird);
+	((Animal *) bird)->location((Animal *) bird);
 
-	printf("I have %i legs after construction\n", ((Animal *) bird)->getLegs(bird));
+	printf("I have %i legs after construction\n", ((Animal *) bird)->getLegs((Animal *) bird));
 
 	bird->fly(bird, 89);
 	printf("Force of impact after diving from 89 height: %i\n", bird->dive(bird));
@@ -119,16 +119,16 @@ void test_crow(Crow *bird)
 {
 	printf("\nBegining of test Crow\n****************************\n");
 
-	((Animal *) bird)->talk(bird);
-	((Animal *) bird)->location(bird);
+	((Animal *) bird)->talk((Animal *) bird);
+	((Animal *) bird)->location((Animal *) bird);
 
-	printf("I have %i legs after construction\n", ((Animal *) bird)->getLegs(bird));
+	printf("I have %i legs after construction\n", ((Animal *) bird)->getLegs((Animal *) bird));
 
-	((Bird *) bird)->fly(bird, 3);
-	printf("Force of impact after diving from 3 height: %i\n", ((Bird *) bird)->dive(bird));
+	((Bird *) bird)->fly((Bird *) bird, 3);
+	printf("Force of impact after diving from 3 height: %i\n", ((Bird *) bird)->dive((Bird *) bird));
 
-	((Bird *) bird)->fly(bird, 79);
-	printf("Force of impact after diving from 79 height: %i\n", ((Bird *) bird)->dive(bird));
+	((Bird *) bird)->fly((Bird *) bird, 79);
+	printf("Force of impact after diving from 79 height: %i\n", ((Bird *) bird)->dive((Bird *) bird));
 
 	bird->useTool(bird);
 
