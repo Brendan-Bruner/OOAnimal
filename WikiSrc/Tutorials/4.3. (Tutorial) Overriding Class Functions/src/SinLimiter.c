@@ -15,9 +15,10 @@ static void setFreqHz(SinLimiter *this, double freq)
   this->data._freq = freq;
 }
 
-static double hook(SinLimiter *this, double time)
+static double hook(SignalLimiter *this, double time)
 {
-  return this->data._amplitude * sin( 2 * M_PI * this->data._freq * time);
+  SinLimiter *derived = (SinLimiter *) this;
+  return derived->data._amplitude * sin( 2 * M_PI * derived->data._freq * time);
 }
 
 /******************************************************************************/
@@ -28,5 +29,5 @@ Constructor(SinLimiter)
   Super(SignalLimiter);
   LinkMethod(setAmplitude);
   LinkMethod(setFreqHz);
-  OverrideMethod(SignalLimiter, hook, double (*)(SignalLimiter *, double));
+  OverrideMethod(SignalLimiter, hook);
 }

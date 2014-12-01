@@ -26,6 +26,6 @@
 #define Super(S)		new##S(( S *) this);
 
 #define LinkMethod(M)		this-> M = & M
-#define OverrideMethod(S,M,C) ((S *) this)-> M = (C) & M
+#define OverrideMethod(S,M) ((S *) this)-> M = & M
 
 #endif /* CLASS_H_ */
