@@ -22,7 +22,7 @@
 							/* Function pointers */
 #define EndClass		}
 
-#define extends(S)		S super;
+#define Extends(S)		S super;
 #define Super(S)		new##S(( S *) this);
 
 #define LinkMethod(M)		this-> M = & M
