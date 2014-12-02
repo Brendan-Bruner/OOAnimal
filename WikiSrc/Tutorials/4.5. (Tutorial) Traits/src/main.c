@@ -16,10 +16,16 @@ int main(int argc, char **argv)
       /*
        * Below, there are a couple things to note about calling the
        * implementation of a traits function.
+       *
        * First, the trait always has the same name, except it ends with a 
-       * captial 'T'. 
+       * captial 'T' - mySig.SignalT -. This navigates through the struct,
+       * to the the place where the traits function pointers are.
+       *
+       * Second, the methods used from a trait take a pointer to their
+       * trait. Hence, the first argument to the signal function is 
+       * a pointer to the Signal trait - &mySig.SignalT -.
        */
-      fx = mySig.SignalT.signal(&mySig.SignalT, time);
+      double fx = mySig.SignalT.signal(&mySig.SignalT, time);
       printf("f(%f) = %f\n", time, fx);
     }
 

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="13.0">
-  <zoom_level>5</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>160</y>
-      <w>130</w>
-      <h>35</h>
+      <x>273</x>
+      <y>7</y>
+      <w>182</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Trait&gt;&gt;
 Signal
@@ -19,31 +19,33 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>20</x>
-      <y>250</y>
-      <w>155</w>
-      <h>75</h>
+      <x>133</x>
+      <y>133</y>
+      <w>217</w>
+      <h>133</h>
     </coordinates>
     <panel_attributes>Sinusoid
 --
 - amplitude : double
 - freqHz : double
 - dcBias : double
+- phase : double
 --
 + signal(Signal *, double) : double
 + setAmplitude(Sinusoid *, double) : void
 + setFreqHz(Sinusoid *, double) : void
 + setDCBias(Sinusoid *, double) : void
++ setPhate(Sinusoid *, double) : void
 bg=orange</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>205</x>
-      <y>250</y>
-      <w>135</w>
-      <h>60</h>
+      <x>392</x>
+      <y>133</y>
+      <w>189</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>Linear
 --
@@ -59,10 +61,10 @@ bg=orange</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>90</x>
-      <y>190</y>
-      <w>75</w>
-      <h>70</h>
+      <x>231</x>
+      <y>49</y>
+      <w>105</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>130.0;10.0;130.0;70.0;10.0;70.0;10.0;120.0</additional_attributes>
@@ -70,10 +72,10 @@ bg=orange</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>205</x>
-      <y>190</y>
-      <w>75</w>
-      <h>70</h>
+      <x>392</x>
+      <y>49</y>
+      <w>105</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0;130.0;70.0;130.0;120.0</additional_attributes>
@@ -81,10 +83,10 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>360</x>
-      <y>155</y>
-      <w>125</w>
-      <h>60</h>
+      <x>609</x>
+      <y>0</y>
+      <w>175</w>
+      <h>84</h>
     </coordinates>
     <panel_attributes>Limiter
 --
@@ -100,12 +102,40 @@ bg=red</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>245</x>
-      <y>170</y>
-      <w>125</w>
-      <h>15</h>
+      <x>448</x>
+      <y>21</y>
+      <w>175</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;-</panel_attributes>
     <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>119</x>
+      <y>322</y>
+      <w>238</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>DampedSinusoid
+--
+- decay : double
+--
++ signal(Signal *, double) : double
++ setDecay(DampedSinusoid *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>231</x>
+      <y>259</y>
+      <w>21</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
   </element>
 </diagram>

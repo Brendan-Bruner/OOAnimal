@@ -1,8 +1,0 @@
-#ifndef SIGNAL_H_
-#define SIGNAL_H_
-
-#include "Trait.h"
-
-Trait(Signal)
-
-#endif /* SIGNAL_H_ */
