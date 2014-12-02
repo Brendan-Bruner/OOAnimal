@@ -4,6 +4,14 @@ Welcome to the OOAnimal github. Don't foget to checkout the wiki.
 
 #Directory Structure
 
+***CommandLineDemo***
+
+Contains the same OOAnimal and OODragon demo, but with a makefile to run from the command line.
+
+***Old***
+
+This is where OOAnimal originally started. It is from a different repo which was merged into this one.
+
 ***OOAnimal***
 
 A demo of using classes, inheritance, polymorphism, and function overriding with Eclipse 3.8.
@@ -16,10 +24,7 @@ A demo of everything: classes, inheritance, polymorphism, function overriding, t
 
 Contains the Class.h and Trait.h files. These files provide the wrappers for doing OO programming in C.
 
-***Old***
+***WikiSrc***
 
-This is where OOAnimal originally started. It is from a different repo which was merged into this one.
+Contains source files used in the wiki and the code used in the tutorials in the wiki.
 
-***CommandLineDemo***
-
-Contains the same OOAnimal and OODragon demo, but with a makefile to run from the command line.
