@@ -4,8 +4,8 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>273</x>
-      <y>7</y>
+      <x>203</x>
+      <y>133</y>
       <w>182</w>
       <h>49</h>
     </coordinates>
@@ -19,8 +19,8 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>133</x>
-      <y>133</y>
+      <x>63</x>
+      <y>259</y>
       <w>217</w>
       <h>133</h>
     </coordinates>
@@ -42,8 +42,8 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>133</y>
+      <x>322</x>
+      <y>259</y>
       <w>189</w>
       <h>84</h>
     </coordinates>
@@ -61,8 +61,8 @@ bg=orange</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>231</x>
-      <y>49</y>
+      <x>161</x>
+      <y>175</y>
       <w>105</w>
       <h>98</h>
     </coordinates>
@@ -72,8 +72,8 @@ bg=orange</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>392</x>
-      <y>49</y>
+      <x>322</x>
+      <y>175</y>
       <w>105</w>
       <h>98</h>
     </coordinates>
@@ -83,8 +83,8 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>609</x>
-      <y>0</y>
+      <x>539</x>
+      <y>126</y>
       <w>175</w>
       <h>84</h>
     </coordinates>
@@ -95,15 +95,15 @@ bg=orange</panel_attributes>
 --
 + setMin(Limiter *, double) : void
 + setMax(Limiter *, double) : void
-+ limit(Signal *, double) : double
++ limit(Limiter *, Signal *, double) : double
 bg=red</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>448</x>
-      <y>21</y>
+      <x>378</x>
+      <y>147</y>
       <w>175</w>
       <h>21</h>
     </coordinates>
@@ -113,8 +113,8 @@ bg=red</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>119</x>
-      <y>322</y>
+      <x>49</x>
+      <y>448</y>
       <w>238</w>
       <h>63</h>
     </coordinates>
@@ -130,8 +130,8 @@ bg=orange</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>231</x>
-      <y>259</y>
+      <x>161</x>
+      <y>385</y>
       <w>21</w>
       <h>77</h>
     </coordinates>
