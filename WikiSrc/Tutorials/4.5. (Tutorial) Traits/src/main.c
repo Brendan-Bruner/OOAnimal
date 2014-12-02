@@ -9,6 +9,7 @@ int main(int argc, char **argv)
   mySig.setAmplitude(&mySig, 10.0);
   mySig.setFreqHz(&mySig, 1.0);
   mySig.setDCBias(&mySig, 0.0);
+  mySig.setPhase(&mySig, 0.0);
 
   double time;
   for( time = 0.0; time <= 1.0; time += 0.05 )

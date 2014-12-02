@@ -41,6 +41,11 @@ static void setDCBias(Sinusoid *this, double bias)
   this->data._dcBias = bias;
 }
 
+static void setPhase(Sinusoid *this, double phase)
+{
+  this->data._phase = phase;
+}
+
 /******************************************************************************/
 /* Constructor                                                                */
 /******************************************************************************/
@@ -49,6 +54,7 @@ Constructor(Sinusoid)
   LinkMethod(setAmplitude);
   LinkMethod(setFreqHz);
   LinkMethod(setDCBias);
+  LinkMethod(setPhase);
 
   /*
    * Below, the LinkTrait macro is used to link the trait to the class. This has 
