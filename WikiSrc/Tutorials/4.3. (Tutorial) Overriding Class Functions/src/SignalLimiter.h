@@ -7,9 +7,11 @@ Class(SignalLimiter)
   Data
     double _max;
     double _min;
+    double _dcBias;
   Methods
     void (*setMin)(SignalLimiter *, double);
     void (*setMax)(SignalLimiter *, double);
+    void (*setDCBias)(SignalLimiter *, double);
     double (*hook)(SignalLimiter *, double);
     double (*signal)(SignalLimiter *, double);
 EndClass;

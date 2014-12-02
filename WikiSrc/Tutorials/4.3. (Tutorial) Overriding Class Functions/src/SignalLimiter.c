@@ -1,7 +1,5 @@
 #include "SignalLimiter.h"
 
-#define DC_BIAS 0
-
 /******************************************************************************/
 /* Methods                                                                    */
 /******************************************************************************/
@@ -15,9 +13,14 @@ static void setMin(SignalLimiter *this, double min)
   this->data._min = min;
 }
 
+static void setDCBias(SignalLimiter *this, double bias)
+{
+  this->data._dcBias = bias;
+}
+
 static double hook(SignalLimiter *this, double time)
 {
-  return DC_BIAS;
+  return this->data._dcBias;
 }
 
 static double signal(SignalLimiter *this, double time)
@@ -44,6 +47,5 @@ Constructor(SignalLimiter)
   LinkMethod(setMin);
   LinkMethod(hook);
   LinkMethod(signal);
-  this->data._min = DC_BIAS;
-  this->data._max = DC_BIAS;
+  LinkMethod(setDCBias);
 }

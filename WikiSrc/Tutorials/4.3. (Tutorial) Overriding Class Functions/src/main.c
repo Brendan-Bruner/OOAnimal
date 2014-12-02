@@ -8,6 +8,7 @@ int main(int argc, char **argv)
   
   ((SignalLimiter *) &mySig)->setMax((SignalLimiter *) &mySig, 9.0);
   ((SignalLimiter *) &mySig)->setMin((SignalLimiter *) &mySig, -9.0);
+  ((SignalLimiter *) &mySig)->setDCBias((SignalLimiter *) &mySig, 0.0);
   mySig.setAmplitude(&mySig, 10.0);
   mySig.setFreqHz(&mySig, 1.0);
 

@@ -18,7 +18,7 @@ static void setFreqHz(SinLimiter *this, double freq)
 static double hook(SignalLimiter *this, double time)
 {
   SinLimiter *derived = (SinLimiter *) this;
-  return derived->data._amplitude * sin( 2 * M_PI * derived->data._freq * time);
+  return derived->data._amplitude * sin( 2 * M_PI * derived->data._freq * time) + this->data._dcBias;
 }
 
 /******************************************************************************/
