@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>203</x>
+      <y>133</y>
+      <w>182</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+Signal
+--
+/+ signal(Signal *, double) : double/
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>63</x>
+      <y>259</y>
+      <w>217</w>
+      <h>133</h>
+    </coordinates>
+    <panel_attributes>Sinusoid
+--
+- amplitude : double
+- freqHz : double
+- dcBias : double
+- phase : double
+--
++ signal(Signal *, double) : double
++ setAmplitude(Sinusoid *, double) : void
++ setFreqHz(Sinusoid *, double) : void
++ setDCBias(Sinusoid *, double) : void
++ setPhate(Sinusoid *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>322</x>
+      <y>259</y>
+      <w>189</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Linear
+--
+- slope : double
+- dcBias : double
+--
++ signal(Signal *, double) : double
++ setSlope(Linear *, double) : void
++ setDCBias(Linear *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>161</x>
+      <y>175</y>
+      <w>105</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>130.0;10.0;130.0;70.0;10.0;70.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>322</x>
+      <y>175</y>
+      <w>105</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0;130.0;70.0;130.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>539</x>
+      <y>126</y>
+      <w>175</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Limiter
+--
+- min : double
+- max : double
+--
++ setMin(Limiter *, double) : void
++ setMax(Limiter *, double) : void
++ limit(Limiter *, Signal *, double) : double
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>378</x>
+      <y>147</y>
+      <w>175</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>49</x>
+      <y>448</y>
+      <w>238</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>DampedSinusoid
+--
+- decay : double
+--
++ signal(Signal *, double) : double
++ setDecay(DampedSinusoid *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>161</x>
+      <y>385</y>
+      <w>21</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
+  </element>
+</diagram>
