@@ -1,0 +1,20 @@
+#include <stdio.h>
+#include "Sinusoid.h"
+
+int main(int argc, char **argv)
+{
+  Sinusoid mySig;
+  newSinusoid(&mySig);
+
+  mySig.setAmplitude(&mySig, 10.0);
+  mySig.setFreqHz(&mySig, 1.0);
+  mySig.setDCBias(&mySig, 0.0);
+
+  double time;
+  for( time = 0.0; time <= 1.0; time += 0.05 )
+    {
+      printf("f(%f) = %f\n", time, mySig.SignalT.signal(&mySig.SignalT, time));
+    }
+
+  return 0;
+}

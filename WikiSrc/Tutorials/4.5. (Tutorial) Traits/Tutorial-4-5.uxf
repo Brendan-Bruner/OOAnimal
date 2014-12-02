@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="13.0">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>160</y>
+      <w>130</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+Signal
+--
+/+ signal(Signal *, double) : double/
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>20</x>
+      <y>250</y>
+      <w>155</w>
+      <h>75</h>
+    </coordinates>
+    <panel_attributes>Sinusoid
+--
+- amplitude : double
+- freqHz : double
+- dcBias : double
+--
++ signal(Signal *, double) : double
++ setAmplitude(Sinusoid *, double) : void
++ setFreqHz(Sinusoid *, double) : void
++ setDCBias(Sinusoid *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>205</x>
+      <y>250</y>
+      <w>135</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Linear
+--
+- slope : double
+- dcBias : double
+--
++ signal(Signal *, double) : double
++ setSlope(Linear *, double) : void
++ setDCBias(Linear *, double) : void
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>90</x>
+      <y>190</y>
+      <w>75</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>130.0;10.0;130.0;70.0;10.0;70.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>205</x>
+      <y>190</y>
+      <w>75</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0;130.0;70.0;130.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>360</x>
+      <y>155</y>
+      <w>125</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>Limiter
+--
+- min : double
+- max : double
+--
++ setMin(Limiter *, double) : void
++ setMax(Limiter *, double) : void
++ limit(Signal *, double) : double
+bg=red</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>245</x>
+      <y>170</y>
+      <w>125</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>230.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+</diagram>
