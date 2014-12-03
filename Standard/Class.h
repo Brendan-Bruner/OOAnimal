@@ -38,4 +38,6 @@
 #define LinkMethod(M)		this-> M = & M
 #define OverrideMethod(S,M) ((S *) this)-> M = & M
 
+#define Forward(C) typedef struct _##C C
+
 #endif /* CLASS_H_ */
