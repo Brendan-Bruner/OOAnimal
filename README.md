@@ -6,11 +6,11 @@ Welcome to the OOAnimal github. This repo was created to apply object oriented d
 
 ***OOAnimal***
 
-A demo of using classes, inheritance, polymorphism, and function overriding.
+A demo of using classes, inheritance, polymorphism, and function overriding. Code compiles and runs in Ubuntu - untested on other operating systems.
 
 ***OODragon***
 
-A demo of everything: classes, inheritance, polymorphism, function overriding, traits, overriding trait functions.
+A demo of everything: classes, inheritance, polymorphism, function overriding, traits, overriding trait functions. Code compiles and runs in Ubuntu - untested on other operating systems.
 
 ***Standard***
 
