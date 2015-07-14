@@ -1,6 +1,6 @@
 #Welcome
 
-Welcome to the OOAnimal github. Don't foget to checkout the wiki.
+Welcome to the OOAnimal github. This repo was created to apply object oriented design patterns to the C language. Don't foget to checkout the wiki.
 
 #Directory Structure
 
