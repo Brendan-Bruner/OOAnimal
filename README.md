@@ -14,7 +14,7 @@ A demo of everything: classes, inheritance, polymorphism, function overriding, t
 
 ***Standard***
 
-Contains the Class.h and Trait.h files. These files provide the wrappers for doing OO programming in C.
+Contains the Class.h and Trait.h files. These files provide the wrappers to make OO programming in C easier.
 
 ***WikiSrc***
 
