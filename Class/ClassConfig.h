@@ -27,9 +27,18 @@
 /* This will be the variable name of an object. */
 #define OBJ_REFERENCE		self
 
+/* This variable will never be used directly. It should be named to avoid any */
+/* name conflicts. */
+#define SUPER_OBJ_REFERENCE	selfReference
+
 /* Do not change what is defined, instead, change the define's name. */
 /* This is the macro that is used in function prototypes. */
 #define self( class )		class *OBJ_REFERENCE	
+
+/* Do not change what is defined, instead, change the define's name. */
+/* This is the macro that is used in function prototyping methods */
+/* which override a method. */
+#define super( class )		class *SUPER_OBJ_REFERENCE
 
 /* Used to validate a pointer to an object. */
 #define CLASS_ASSERT( O )	do{ (void) 0; } while( 0 )
@@ -42,6 +51,10 @@
 					for( ;; );								\
 				} while( 0 )
 */
+
+/* Used to suppress compiler warnings about unused function arguments. */
+/* Use this macro when you do not use the function reference. */
+#define ObjectUnused( )		(void) OBJ_REFERENCE
 
 /* Base class of all classes. Add variables and function pointers here. */
 /* For example, adding a 'serialize( )' function here will reliable give */

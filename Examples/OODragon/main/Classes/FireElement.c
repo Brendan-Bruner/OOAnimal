@@ -50,6 +50,9 @@ static int getMagic( self(FireElement) )
 
 void newFireElement( self(FireElement) )
 {
+	/* Initialize super class. */
+	newObject( (Object *) self );
+
 	/* Link FireBreath trait. */
 	LinkTrait(FireBreath);
 	LinkTraitMethod(FireBreath, flames);

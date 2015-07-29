@@ -59,6 +59,8 @@ static int special( self(Whelp) )
 /****************************************************************************/
 void newWhelp( self(Whelp) )
 {
+	newObject( (Object *) self );
+
 	self->_strength = 3;
 	self->_level = 0;
 	self->_agility = 4;

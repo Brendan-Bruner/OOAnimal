@@ -34,9 +34,10 @@ static void meow(self(Cat))
  * Make the cat talk
  * @param self Cat object.
  */
-static void talk(self(Animal))
+static void talk(super(Animal))
 {
-	printf("Hello, i'm a cat. My name is %s\n", self->getName(self));
+	MemberOf(Cat);
+	printf("Hello, i'm a cat. My name is %s\n", ((Animal *) self)->getName((Animal *) self));
 }
 
 /******************************************************************************

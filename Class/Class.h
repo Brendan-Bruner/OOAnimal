@@ -45,6 +45,12 @@
 
 
 
+/* Used at the beginning of virtual methods which override a super class */
+/* method. */
+#define MemberOf( C )		C *OBJ_REFERENCE = (C *) SUPER_OBJ_REFERENCE
+
+
+
 /* Simple macro to do forward declaration. */
 #define Forward(C)		typedef struct _##C C
 

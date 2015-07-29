@@ -30,10 +30,10 @@ static int flames( trait(FireBreath) )
 }
 
 /* Override special in super class */
-static int special( self(Whelp) )
+static int special( super(Whelp) )
 {
-	FlameGuard *derived = (FlameGuard *) self;
-	return derived->_magicPower + 9;
+	MemberOf(FlameGuard);    
+	return self->_magicPower + 9;
 }
 
 void newFlameGuard( self(FlameGuard) )

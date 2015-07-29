@@ -25,13 +25,15 @@
 static int flames( trait(FireBreath) )
 {
   	TraitOf( FlameLord );
-	(void) self;
+	ObjectUnused( );
 	return 89999;
 }
 
 /* Override super classes special method */
-static int special( self(Whelp) )
+static int special( super(Whelp) )
 {
+	MemberOf(FlameLord);
+	ObjectUnused( );
 	return 723;
 }
 

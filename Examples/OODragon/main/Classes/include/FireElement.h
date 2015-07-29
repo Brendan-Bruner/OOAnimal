@@ -28,7 +28,7 @@
 #include "InnerFire.h"
 #include "VolatileCore.h"
 
-Class(FireElement) Uses(FireBreath) Uses(InnerFire) Uses(VolatileCore)
+Class(FireElement) Extends(Object) Uses(FireBreath) Uses(InnerFire) Uses(VolatileCore)
 	int _magic;
 	int (*getMagic)( self(FireElement) );
 EndClass;

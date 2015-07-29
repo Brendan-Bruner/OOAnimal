@@ -26,7 +26,7 @@
 #include "Class.h"
 #include "FireBreath.h"
 
-Class(LivingFlameThrower) Uses(FireBreath)
+Class(LivingFlameThrower) Extends(Object) Uses(FireBreath)
 	int _fuelPower;     
 EndClass;
 

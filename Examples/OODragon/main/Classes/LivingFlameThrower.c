@@ -30,6 +30,9 @@ static int flames( trait(FireBreath) )
 
 void newLivingFlameThrower( self(LivingFlameThrower) )
 {
+	/* Initialize super class. */
+	newObject( (Object *) self );
+	
 	/* Link FireBreath trait. */
 	LinkTrait(FireBreath);
 	LinkTraitMethod(FireBreath, flames);

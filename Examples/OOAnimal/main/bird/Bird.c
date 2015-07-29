@@ -36,9 +36,10 @@ static int getHeight(self(Bird))
  * Makes the bird talk.
  * @param self The Bird Object.
  */
-static void talk(self(Animal))
+static void talk(super(Animal))
 {
-	printf("Hello, i'm a bird. My name is %s.\n", self->getName(self));
+	MemberOf(Bird);
+	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) self)->getName((Animal *) self));
 }
 
 /**

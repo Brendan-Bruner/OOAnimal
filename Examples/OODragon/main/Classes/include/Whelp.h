@@ -25,7 +25,7 @@
 
 #include "Class.h"
 
-Class(Whelp)
+Class(Whelp) Extends(Object)
 	int _strength;
 	int _level;
 	int _agility;
