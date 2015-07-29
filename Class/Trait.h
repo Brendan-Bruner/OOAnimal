@@ -18,22 +18,39 @@
 #ifndef TRAIT_H_
 #define TRAIT_H_
 
-typedef void * delta_t;
+#include "TraitConfig.h"
+#include "ClassConfig.h"
 
+/* Open a trait declaration. */
 #define Trait(T) 	typedef struct _##T T;	\
-					struct _##T				\
-					{						\
+			struct _##T		\
+			{			\
+				/* Methods */
+/* Close a trait declaration. */
+#define EndTrait	        void * _trait_offset_;	\
+       			}
 
-						/* Methods */
-#define EndTrait		delta_t _delta;		\
-					}
 
-#define Uses(t)		t t##T;
 
-#define LinkTrait(t) 				this->t##T._delta = (delta_t)(((void *) &(this->t##T)) - (void *)this)
-#define LinkTraitMethod(t,M)		this->t##T. M = & M
-#define OverrideTraitMethod(S,t,M)	((S *) this)-> t##T. M = & M
+/* Adds a trait to a class declaration, used after opening a class declaration and any inheritance. */
+#define Uses(t)		t _trait##t##_; t *trait##t;
 
-#define CastTrait(t)	((void *)t - (void *)t->_delta)
+
+
+/* Link a trait to a class, called in constructor. */
+#define LinkTrait(t)			OBJ_REFERENCE->trait##t = &OBJ_REFERENCE->_trait##t##_;			\
+  					OBJ_REFERENCE->trait##t->_trait_offset_ =				\
+					  (void *) (((unsigned char *) (OBJ_REFERENCE->trait##t)) - (unsigned char *)OBJ_REFERENCE)
+/* Link a trait method to a class. */
+#define LinkTraitMethod(t,M)		OBJ_REFERENCE->trait##t-> M = & M
+/* Override a trait method defined in a super class. */
+#define OverrideTraitMethod(S,t,M)	((S *) OBJ_REFERENCE)-> trait##t-> M = & M
+
+
+
+/* Cast a pointer to a trait into the class it is a part of. */
+/* Must only be called inside of trait method definitions. */
+#define TraitOf(C)		C *OBJ_REFERENCE = \
+    				(C *) ((unsigned char *)TRAIT_REFERENCE - (unsigned char *)TRAIT_REFERENCE->_trait_offset_)
 
 #endif /* TRAIT_H_ */

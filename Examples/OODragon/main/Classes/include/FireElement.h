@@ -29,10 +29,10 @@
 #include "VolatileCore.h"
 
 Class(FireElement) Uses(FireBreath) Uses(InnerFire) Uses(VolatileCore)
-	Data
-		int _magic;
-	Methods
-		int (*getMagic)(FireElement *);
+	int _magic;
+	int (*getMagic)( self(FireElement) );
 EndClass;
+
+void newFireElement( self(FireElement) );
 
 #endif /* FIREELEMENT_H_ */

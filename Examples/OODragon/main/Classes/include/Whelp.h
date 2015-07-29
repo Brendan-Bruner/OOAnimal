@@ -26,17 +26,18 @@
 #include "Class.h"
 
 Class(Whelp)
-	Data
-		int _strength;
-		int _level;
-		int _agility;
-	Methods
-		int (* attack)(Whelp *);
-		void (*setLevel)(Whelp *, int);
-		void (*setAgility)(Whelp *, int);
-		int (*getLevel)(Whelp *);
-		int (*getAgility)(Whelp *);
-		int (*special)(Whelp *);
+	int _strength;
+	int _level;
+	int _agility;
+
+	int (* attack)( self(Whelp) );
+	void (*setLevel)( self(Whelp), int);
+	void (*setAgility)( self(Whelp), int);
+	int (*getLevel)( self(Whelp) );
+	int (*getAgility)( self(Whelp) );
+	int (*special)( self(Whelp) );
 EndClass;
+
+void newWhelp( self(Whelp) );
 
 #endif /* WHELP_H_ */

@@ -27,9 +27,9 @@
 #include "FireBreath.h"
 
 Class(LivingFlameThrower) Uses(FireBreath)
-	Data
-		int _fuelPower;
-	Methods
+	int _fuelPower;     
 EndClass;
+
+void newLivingFlameThrower( self(LivingFlameThrower) );
 
 #endif /* LIVINGFLAMETHROWER_H_ */

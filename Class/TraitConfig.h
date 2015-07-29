@@ -14,22 +14,15 @@
  *      Author: Brendan Bruner
  */
 
-#ifndef BASEOBJECT_H_
-#define BASEOBJECT_H_
+#ifndef TRAITCONFIG_H_
+#define TRAITCONFIG_H_
 
-#include "ClassConfig.h"
+/* Variable name of a trait. This will never be used directly */
+/* so it should be named to avoid naming conflicts only. */
+#define TRAIT_REFERENCE 	traitReference
 
-/* Declare / Define macro for implementing base object constructor. */
-#define NewBaseObject( ) void new##BASE_OBJECT( self(BASE_OBJECT) )
+/* Do not change what is being defined, change the definition. */
+/* This is the macro used when prototyping a trait method. */
+#define trait(T)		T *TRAIT_REFERENCE
 
-/**
- * @brief
- *	Constructor for the BASE_OBJECT.
- * @details
- *	Constructor for the BASE_OBJECT.
- * @param OBJ_REFERENCE
- *	BASE_OBJECT class to create.
- */
-NewBaseObject( );
-
-#endif /* BASEOBJECT_H_ */
+#endif /* TRAITCONFIG_H_ */

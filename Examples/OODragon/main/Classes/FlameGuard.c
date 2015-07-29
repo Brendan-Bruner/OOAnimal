@@ -23,27 +23,29 @@
 #include "FlameGuard.h"
 
 /* Using FireBreath trait */
-static int flames(FireBreath *trait)
+static int flames( trait(FireBreath) )
 {
-	FlameGuard *this = (FlameGuard *) CastTrait(trait);
-	return this->data._magicPower;
+	TraitOf( FlameGuard );
+	return self->_magicPower;
 }
 
 /* Override special in super class */
-static int special(Whelp *this)
+static int special( self(Whelp) )
 {
-	FlameGuard *derived = (FlameGuard *) this;
-	return derived->data._magicPower + 9;
+	FlameGuard *derived = (FlameGuard *) self;
+	return derived->_magicPower + 9;
 }
 
-Constructor(FlameGuard)
+void newFlameGuard( self(FlameGuard) )
 {
-	Super(Whelp);
+	/* Initialize super class and override a method in it. */
+	newWhelp( (Whelp *) self );
 	OverrideMethod(Whelp, special);
 
+	/* Link FireBreath trait. */
 	LinkTrait(FireBreath);
 	LinkTraitMethod(FireBreath, flames);
 
-	this->data._magicPower = 23;
+	self->_magicPower = 23;
 }
 

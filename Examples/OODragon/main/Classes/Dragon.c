@@ -22,13 +22,16 @@
 
 #include "Dragon.h"
 
-static int special(Whelp *this)
+static int special( self(Whelp) )
 {
-	return this->getAgility(this) + 130;
+	return self->getAgility(self) + 130;
 }
 
-Constructor(Dragon)
+void newDragon( self(Dragon) )
 {
-	Super(Whelp);
+	/* Initialize super class. */
+	newWhelp( (Whelp *) self );
+	
+	/* Override super class method. */
 	OverrideMethod(Whelp, special);
 }

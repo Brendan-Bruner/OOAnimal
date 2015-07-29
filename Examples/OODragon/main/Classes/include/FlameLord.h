@@ -27,9 +27,9 @@
 #include "FlameGuard.h"
 
 Class(FlameLord) Extends(FlameGuard)
-	Data
-	Methods
-		int (*reap)(FlameLord *);
+	int (*reap)( self(FlameLord) );
 EndClass;
+
+void newFlameLord( self(FlameLord) );
 
 #endif /* FLAMELORD_H_ */

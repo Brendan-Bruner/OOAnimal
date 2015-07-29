@@ -39,11 +39,6 @@ void testTraitOverride(void);
 void testMultipleTraits(void);
 
 /**
- * Test that a trait can be cast down to its derived class
- */
-void testTraitCastToDerived(void);
-
-/**
  * Test that a base class can be cast down to its derived class
  */
 void testClassCastToDerived(void);
@@ -80,7 +75,6 @@ int main(int argc, char **argv)
 	testClass();
 	testFunctionOverride();
 	testClassCastToDerived();
-	testTraitCastToDerived();
 	testMultipleTraits();
 	testTraitOverride();
 	return 0;
@@ -102,23 +96,23 @@ void testTraitPolymorphism(void)
 	newLivingFlameThrower(&lft1);
 	newLivingFlameThrower(&lft2);
 
-	breathers[0] = &guard1.FireBreathT;
-	breathers[1] = &guard2.FireBreathT;
-	breathers[2] = &guard3.FireBreathT;
-	breathers[3] = &element1.FireBreathT;
-	breathers[4] = &element2.FireBreathT;
-	breathers[5] = &element3.FireBreathT;
-	breathers[6] = &lft1.FireBreathT;
-	breathers[7] = &lft2.FireBreathT;
+	breathers[0] = guard1.traitFireBreath;
+	breathers[1] = guard2.traitFireBreath;
+	breathers[2] = guard3.traitFireBreath;
+	breathers[3] = element1.traitFireBreath;
+	breathers[4] = element2.traitFireBreath;
+	breathers[5] = element3.traitFireBreath;
+	breathers[6] = lft1.traitFireBreath;
+	breathers[7] = lft2.traitFireBreath;
 
-	ASSERT_EQUAL(0, guard1.FireBreathT.flames(&guard1.FireBreathT), breathers[0]->flames(breathers[0]));
-	ASSERT_EQUAL(1, guard2.FireBreathT.flames(&guard2.FireBreathT), breathers[1]->flames(breathers[1]));
-	ASSERT_EQUAL(2, guard3.FireBreathT.flames(&guard3.FireBreathT), breathers[2]->flames(breathers[2]));
-	ASSERT_EQUAL(3, element1.FireBreathT.flames(&element1.FireBreathT), breathers[3]->flames(breathers[3]));
-	ASSERT_EQUAL(4, element2.FireBreathT.flames(&element2.FireBreathT), breathers[4]->flames(breathers[4]));
-	ASSERT_EQUAL(5, element3.FireBreathT.flames(&element3.FireBreathT), breathers[5]->flames(breathers[5]));
-	ASSERT_EQUAL(6, lft1.FireBreathT.flames(&lft1.FireBreathT), breathers[6]->flames(breathers[6]));
-	ASSERT_EQUAL(7, lft2.FireBreathT.flames(&lft2.FireBreathT), breathers[7]->flames(breathers[7]));
+	ASSERT_EQUAL(0, guard1.traitFireBreath->flames(guard1.traitFireBreath), breathers[0]->flames(breathers[0]));
+	ASSERT_EQUAL(1, guard2.traitFireBreath->flames(guard2.traitFireBreath), breathers[1]->flames(breathers[1]));
+	ASSERT_EQUAL(2, guard3.traitFireBreath->flames(guard3.traitFireBreath), breathers[2]->flames(breathers[2]));
+	ASSERT_EQUAL(3, element1.traitFireBreath->flames(element1.traitFireBreath), breathers[3]->flames(breathers[3]));
+	ASSERT_EQUAL(4, element2.traitFireBreath->flames(element2.traitFireBreath), breathers[4]->flames(breathers[4]));
+	ASSERT_EQUAL(5, element3.traitFireBreath->flames(element3.traitFireBreath), breathers[5]->flames(breathers[5]));
+	ASSERT_EQUAL(6, lft1.traitFireBreath->flames(lft1.traitFireBreath), breathers[6]->flames(breathers[6]));
+	ASSERT_EQUAL(7, lft2.traitFireBreath->flames(lft2.traitFireBreath), breathers[7]->flames(breathers[7]));
 }
 
 void testClassPolymorphism(void)
@@ -208,18 +202,6 @@ void testClassCastToDerived(void)
 	ASSERT_EQUAL(25, ((FlameLord *) whelp)->reap((FlameLord *) whelp), lord.reap(&lord));
 }
 
-void testTraitCastToDerived(void)
-{
-	FireBreath *trait;
-	FlameGuard guard;
-
-	newFlameGuard(&guard);
-	trait = &guard.FireBreathT;
-
-	ASSERT_EQUAL(26, guard.FireBreathT.flames(&guard.FireBreathT), trait->flames(trait));
-	ASSERT_EQUAL(27, guard.FireBreathT.flames(&guard.FireBreathT), ((FlameGuard *) CastTrait(trait))->FireBreathT.flames(trait));
-}
-
 void testMultipleTraits(void)
 {
 	FireElement elemental;
@@ -227,11 +209,11 @@ void testMultipleTraits(void)
 	newFireElement(&elemental);
 
 	/* A fire elements flames is set to do 2*magic as damage */
-	ASSERT_EQUAL(28, elemental.FireBreathT.flames(&elemental.FireBreathT), elemental.getMagic(&elemental)*2);
+	ASSERT_EQUAL(28, elemental.traitFireBreath->flames(elemental.traitFireBreath), elemental.getMagic(&elemental)*2);
 	/* A fire elements heatWave is set to do 4*magic as a damage */
-	ASSERT_EQUAL(29, elemental.InnerFireT.heatWave(&elemental.InnerFireT), elemental.getMagic(&elemental)*4);
+	ASSERT_EQUAL(29, elemental.traitInnerFire->heatWave(elemental.traitInnerFire), elemental.getMagic(&elemental)*4);
 	/* A fire elements explosion is set to do 2*heatWave damage => 8*magic as a damage */
-	ASSERT_EQUAL(30, elemental.VolatileCoreT.explosion(&elemental.VolatileCoreT), elemental.getMagic(&elemental)*8);
+	ASSERT_EQUAL(30, elemental.traitVolatileCore->explosion(elemental.traitVolatileCore), elemental.getMagic(&elemental)*8);
 }
 
 void testTraitOverride(void)
@@ -242,5 +224,5 @@ void testTraitOverride(void)
 	newFlameLord(&lord);
 	newFlameGuard(&guard);
 
-	ASSERT_NOT_EQUAL(31, ((FlameGuard *) &lord)->FireBreathT.flames(&((FlameGuard *) &lord)->FireBreathT), guard.FireBreathT.flames(&guard.FireBreathT));
+	ASSERT_NOT_EQUAL(31, ((FlameGuard *) &lord)->traitFireBreath->flames(((FlameGuard *) &lord)->traitFireBreath), guard.traitFireBreath->flames(guard.traitFireBreath));
 }

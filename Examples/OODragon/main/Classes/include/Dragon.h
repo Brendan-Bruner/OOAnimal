@@ -27,8 +27,8 @@
 #include "Whelp.h"
 
 Class(Dragon) Extends(Whelp)
-	Data
-	Methods
 EndClass;
+
+void newDragon( self(Dragon) );
 
 #endif /* DRAGON_H_ */

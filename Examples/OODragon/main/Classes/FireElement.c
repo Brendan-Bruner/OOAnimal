@@ -22,43 +22,48 @@
 #include "FireElement.h"
 
 /* Use FireBreath trait */
-static int flames(FireBreath *trait)
+static int flames( trait(FireBreath) )
 {
-	FireElement *this = (FireElement *) CastTrait(trait);
-	return this->data._magic * 2;
+	TraitOf( FireElement );
+	return self->_magic * 2;
 }
 
 /* Use InnerFire trait */
-static int heatWave(InnerFire *trait)
+static int heatWave( trait(InnerFire) )
 {
-	FireElement *this = (FireElement *) CastTrait(trait);
-	return this->data._magic * 4;
+	TraitOf( FireElement );
+	return self->_magic * 4;
 }
 
 /* Use VolatileCore trait */
-static int explosion(VolatileCore *trait)
+static int explosion( trait(VolatileCore) )
 {
-	FireElement *this = (FireElement *) CastTrait(trait);
-	return this->InnerFireT.heatWave(&this->InnerFireT) * 2;
+	TraitOf( FireElement );
+	return self->traitInnerFire->heatWave( self->traitInnerFire ) * 2;
 }
 
 /* Get magic */
-static int getMagic(FireElement *this)
+static int getMagic( self(FireElement) )
 {
-	return this->data._magic;
+	return self->_magic;
 }
 
-Constructor(FireElement)
+void newFireElement( self(FireElement) )
 {
+	/* Link FireBreath trait. */
 	LinkTrait(FireBreath);
 	LinkTraitMethod(FireBreath, flames);
 
+	/* Link InnerFire trait. */
 	LinkTrait(InnerFire);
 	LinkTraitMethod(InnerFire, heatWave);
 
+	/* Link VolatileCore trait. */
 	LinkTrait(VolatileCore);
 	LinkTraitMethod(VolatileCore, explosion);
+
+	/* Link class methods. */
 	LinkMethod(getMagic);
 
-	this->data._magic = 7;
+	self->_magic = 7;
 }

@@ -22,27 +22,33 @@
 #include "FlameLord.h"
 
 /* Override trait method flames in super class */
-static int flames(FireBreath *trait)
+static int flames( trait(FireBreath) )
 {
-	/* FlameLord *this = (FlameLord *) CastTrait(trait); */
+  	TraitOf( FlameLord );
+	(void) self;
 	return 89999;
 }
 
 /* Override super classes special method */
-static int special(Whelp *this)
+static int special( self(Whelp) )
 {
 	return 723;
 }
 
-static int reap(FlameLord *this)
+static int reap( self(FlameLord) )
 {
-	return ((Whelp *) this)->getAgility((Whelp *) this) * 3 + 89;
+	return ((Whelp *) self)->getAgility((Whelp *) self) * 3 + 89;
 }
 
-Constructor(FlameLord)
+void newFlameLord( self(FlameLord) )
 {
-	Super(FlameGuard);
+	/* Initialize super class and override methods in it. */
+	newFlameGuard( (FlameGuard *) self );
 	OverrideMethod(Whelp, special);
+	
+	/* Override trait method. */
 	OverrideTraitMethod(FlameGuard, FireBreath, flames);
+
+	/* Link class methods. */
 	LinkMethod(reap);
 }

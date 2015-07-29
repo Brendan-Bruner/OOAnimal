@@ -1,5 +1,6 @@
 CC = gcc
 
+CLASS_SRC = ../../Class/*.c
 # Path to object directories / files
 COREOBJ = obj/
 # Path to the start of all source files
@@ -15,7 +16,7 @@ OBJECTS = $(addprefix $(OBJDIR),$(OBJ)) obj/main.o
 EXEC = OODragon
 
 all : MKDIR $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+	$(CC) $(OBJECTS) $(CLASS_SRC) -o $(EXEC)
 
 $(addprefix $(COREOBJ),%.o) : $(addprefix $(COREMAIN),%.c)
 	$(CC) -Wall -c $(INC) $< -o $@

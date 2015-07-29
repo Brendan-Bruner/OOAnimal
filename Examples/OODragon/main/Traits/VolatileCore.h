@@ -26,7 +26,7 @@
 #include "Trait.h"
 
 Trait(VolatileCore)
-	int (*explosion)(VolatileCore *);
+	int (*explosion)( trait(VolatileCore) );
 EndTrait;
 
 #endif /* VOLATILECORE_H_ */

@@ -22,16 +22,17 @@
 #include "LivingFlameThrower.h"
 
 /* Use FireBreath trait */
-static int flames(FireBreath *trait)
+static int flames( trait(FireBreath) )
 {
-	LivingFlameThrower *this = (LivingFlameThrower *) CastTrait(trait);
-	return this->data._fuelPower;
+	TraitOf( LivingFlameThrower );
+	return self->_fuelPower;
 }
 
-Constructor(LivingFlameThrower)
+void newLivingFlameThrower( self(LivingFlameThrower) )
 {
+	/* Link FireBreath trait. */
 	LinkTrait(FireBreath);
 	LinkTraitMethod(FireBreath, flames);
 
-	this->data._fuelPower = 21;
+	self->_fuelPower = 21;
 }

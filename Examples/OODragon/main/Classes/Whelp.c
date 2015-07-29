@@ -24,44 +24,44 @@
 /****************************************************************************/
 /* Methods																	*/
 /****************************************************************************/
-static int attack(Whelp *this)
+static int attack( self(Whelp) )
 {
-	return this->data._strength;
+	return self->_strength;
 }
 
-static void setLevel(Whelp *this, int level)
+static void setLevel( self(Whelp) , int level)
 {
-	this->data._level = level;
+	self->_level = level;
 }
 
-static void setAgility(Whelp *this, int agility)
+static void setAgility( self(Whelp) , int agility)
 {
-	this->data._agility = agility;
+	self->_agility = agility;
 }
 
-static int getLevel(Whelp *this)
+static int getLevel( self(Whelp) )
 {
-	return this->data._level;
+	return self->_level;
 }
 
-static int getAgility(Whelp *this)
+static int getAgility( self(Whelp) )
 {
-	return this->data._agility;
+	return self->_agility;
 }
 
-static int special(Whelp *this)
+static int special( self(Whelp) )
 {
-	return this->data._agility + this->data._strength;
+	return self->_agility + self->_strength;
 }
 
 /****************************************************************************/
 /* Constructor																*/
 /****************************************************************************/
-Constructor(Whelp)
+void newWhelp( self(Whelp) )
 {
-	this->data._strength = 3;
-	this->data._level = 0;
-	this->data._agility = 4;
+	self->_strength = 3;
+	self->_level = 0;
+	self->_agility = 4;
 
 	LinkMethod(attack);
 	LinkMethod(setLevel);
