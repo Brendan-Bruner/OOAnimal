@@ -22,59 +22,59 @@
  *****************************************************************************/
 /**
  * Set the Animal's name.
- * @param this The Animal object.
+ * @param self The Animal object.
  * @param name A pointer to an array of chars - the Animal's name.
  */
-static void setName(Animal *this, char const *name)
+static void setName(self(Animal), char const *name)
 {
-	this->data.name = name;
+	self->_name = name;
 }
 
 /**
  * Get the Animal's name.
- * @param this The Animal object.
+ * @param self The Animal object.
  * @return A pointer to the animals name - a string. Does not
  * guarantee a null terminating character.
  */
-static char const * getName(Animal *this)
+static char const * getName(self(Animal))
 {
-	return this->data.name;
+	return self->_name;
 }
 
 /**
  * Make the Animal talk.
- * @param this The Animal object.
+ * @param self The Animal object.
  */
-static void talk(Animal * this)
+static void talk(self(Animal))
 {
-	printf("Hello, i'm an Animal. My name is %s.\n", this->getName(this));
+	printf("Hello, i'm an Animal. My name is %s.\n", self->getName(self));
 }
 
 /*
  * Set how many the Animal has.
- * @param this The Animal object.
+ * @param self The Animal object.
  * @param numLegs How many legs to set.
  */
-static void setLegs(Animal *this, int numLegs)
+static void setLegs(self(Animal), int numLegs)
 {
-	this->data.numLegs = numLegs;
+	self->_numLegs = numLegs;
 }
 
 /**
  * Get how many legs the animal has.
- * @param this The Animal object.
+ * @param self The Animal object.
  * @return The number of legs the Animal has.
  */
-static int getLegs(Animal *this)
+static int getLegs(self(Animal))
 {
-	return this->data.numLegs;
+	return self->_numLegs;
 }
 
 /**
  * Prints the Animal's location, ie, where it will typically live.
- * @param this The animal object.
+ * @param self The animal object.
  */
-static void location(Animal *this)
+static void location(self(Animal))
 {
 	printf("I live almost every where on Earth\n");
 }
@@ -82,8 +82,11 @@ static void location(Animal *this)
 /******************************************************************************
  * Constructor
  *****************************************************************************/
-Constructor(Animal)
+void newAnimal(self(Animal))
 {
+	/* Initialize super class. */
+	newObject( (Object *) self );
+
 	/* Set the Animals method table */
 	LinkMethod(setName);
 	LinkMethod(getName);
@@ -92,5 +95,5 @@ Constructor(Animal)
 	LinkMethod(getLegs);
 	LinkMethod(location);
 
-	this->data.numLegs = 0;
+	self->_numLegs = 0;
 }

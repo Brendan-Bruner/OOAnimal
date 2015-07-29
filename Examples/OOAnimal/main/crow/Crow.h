@@ -22,9 +22,9 @@
 #include "Bird.h"
 
 Class(Crow) Extends(Bird)
-	Data
-	Methods
-		void (* useTool)(Crow *);
+	void (* useTool)(self(Crow));
 EndClass;
+
+void newCrow( self(Crow) );
 
 #endif /* CROW_H_ */

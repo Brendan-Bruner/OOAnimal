@@ -20,24 +20,32 @@
 
 #include "ClassConfig.h"
 
+
+
+/* Start the declaration of a class. */
 #define Class(D)		typedef struct _##D D;			\
 				struct _##D				\
-				{					
+				{
+/* Optionally inherit after the Class() declaration. */					
 #define Extends(S)			/* Super class */		\
 					S _super##S;
+/* End the declaration of a class. */
 #define EndClass		}
 
 
-#define Constructor( )		do { OBJ_REFERENCE->destroy = _base_destroy; } while( 0 )
 
 
+/* Link a virtual method. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
 				OBJ_REFERENCE-> M = & M
+/* Override a virtual method. */
 #define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
 				/* in super class. */			\
 				((S *) OBJ_REFERENCE)-> M = & M
 
 
+
+/* Simple macro to do forward declaration. */
 #define Forward(C)		typedef struct _##C C
 
 #endif /* CLASS_H_ */

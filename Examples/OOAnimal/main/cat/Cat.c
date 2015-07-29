@@ -23,33 +23,36 @@
  *****************************************************************************/
 /**
  * Make the Cat meow
- * @param this Cat object.
+ * @param self Cat object.
  */
-static void meow(Cat *this)
+static void meow(self(Cat))
 {
 	printf("MEOW!\n");
 }
 
 /**
  * Make the cat talk
- * @param this Cat object.
+ * @param self Cat object.
  */
-static void talk(Animal *this)
+static void talk(self(Animal))
 {
-	printf("Hello, i'm a cat. My name is %s\n", this->getName(this));
+	printf("Hello, i'm a cat. My name is %s\n", self->getName(self));
 }
 
 /******************************************************************************
  * Constructor
  *****************************************************************************/
-Constructor(Cat)
+void newCat(self(Cat))
 {
-	Super(Animal);
+	/* Initialize super class. */
+	newAnimal( (Animal *) self );
+	
+	/* Link methods. */
 	LinkMethod(meow);
 
 	/* Override Animal's talk method */
 	OverrideMethod(Animal, talk);
 
 	/* Set how many legs a Cat has */
-	((Animal *) this)->setLegs((Animal *) this, 4);
+	((Animal *) self)->setLegs((Animal *) self, 4);
 }

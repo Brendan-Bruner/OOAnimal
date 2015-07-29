@@ -1,11 +1,12 @@
 CC = gcc
 
+CLASS_SRC = ../../Class/*.c
 COREOBJ = obj/
 COREMAIN = main/
 COREDIR = animal/ bird/ cat/ crow/ ./
 INCLUDES = ../../Class
 
-SRCNAME = Animal.c Bird.c Cat.c Crow.c main.c
+SRCNAME = Animal.c Bird.c Cat.c Crow.c main.c 
 OBJNAME = $(SRCNAME:.c=.o)
 
 # Path to the source files and object files
@@ -22,7 +23,7 @@ OBJECTS = $(join $(OBJDIR),$(OBJNAME))
 EXEC = OOAnimal
 
 all : MKDIR $(OBJECTS)
-	$(CC) $(OBJECTS) -o $(EXEC)
+	$(CC) $(OBJECTS) $(CLASS_SRC) -o $(EXEC)
 
 $(addprefix $(COREOBJ),%.o) : $(addprefix $(COREMAIN),%.c)
 	$(CC) -Wall -c $(INC) $< -o $@

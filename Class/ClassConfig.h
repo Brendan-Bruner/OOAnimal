@@ -15,17 +15,14 @@
  *      Author: Brendan Bruner
  */
 
-/* Memory allocation scheme */
-/* DYNAMIC: object allocation is done with malloc and free. */
-/* LINKED_LIST: object allocation is done used a linked list allocated at start */
-/* 		up. */
-/* CUSTOM: allows your own allocator implementation to be used. */
-#define DYNAMIC
-/* #define LINKED_LIST */
-/* #define CUSTOM */
+#ifndef CLASSCONFIG_H_
+#define CLASSCONFIG_H_
 
 /* Name of the base object class. */
 #define BASE_OBJECT		Object
+
+/* Name of the base object constructor. */
+#define BASE_CONSTRUCTOR	newObject
 
 /* This will be the variable name of an object. */
 #define OBJ_REFERENCE		self
@@ -60,7 +57,20 @@
  *	<b>Returns</b>
  *	<br>Nothing.
  */
-typedef struct
+typedef struct BASE_OBJECT BASE_OBJECT;
+struct BASE_OBJECT
 {
-  void (*destroy)( self(BASE_OBJECT) );
-} BASE_OBJECT;
+	void (*destroy)( self(BASE_OBJECT) );
+};
+
+/**
+ * @brief
+ *	Constructor for the BASE_OBJECT.
+ * @details
+ *	Constructor for the BASE_OBJECT.
+ * @param OBJ_REFERENCE
+ *	BASE_OBJECT class to create.
+ */
+void BASE_CONSTRUCTOR( self(BASE_OBJECT) );
+
+#endif /* CLASSCONFIG_H_ */

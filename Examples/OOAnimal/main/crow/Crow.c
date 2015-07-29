@@ -25,43 +25,43 @@
  * Makes the crow dive to the ground. Only works if the crow is at least
  * at a height of 50 above the ground. Returns the force the crow hits
  * the ground with.
- * @param this The Crow object.
+ * @param self The Crow object.
  * @return The force the crow hits the ground with. Returns 0 if the crow
  * is not high enough to dive.
  */
-static int dive(Bird * this)
+static int dive(self(Bird))
 {
-	int height = this->getHeight(this);
+	int height = self->getHeight(self);
 	if( height >= 50)
 	{
-		this->fly(this, 0);
+		self->fly(self, 0);
 		return height*2;
 	}
 	return 0;
 }
 
-static void location(Animal *this)
+static void location(self(Animal))
 {
 	printf("I live mostly in places with a warmer climate\n");
 }
 
-static void talk(Animal * this)
+static void talk(self(Animal))
 {
-	printf("Hello, i'm Crow. My name is %s.\n", this->getName(this));
+	printf("Hello, i'm Crow. My name is %s.\n", self->getName(self));
 }
 
-static void useTool(Crow *this)
+static void useTool(self(Crow))
 {
-	printf("%s is using a tool, what a smart crow\n", ((Animal *) this)->getName((Animal *) this));
+	printf("%s is using a tool, what a smart crow\n", ((Animal *) self)->getName((Animal *) self));
 }
 
 /******************************************************************************
  * Constructor
  *****************************************************************************/
-Constructor(Crow)
+void newCrow( self(Crow) )
 {
 	/* Initialize super class */
-	Super(Bird);
+  	newBird( (Bird *) self );
 
 	LinkMethod(useTool);
 

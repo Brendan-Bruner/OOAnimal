@@ -23,48 +23,48 @@
  *****************************************************************************/
 /**
  * Get how high the bird is.
- * @param this The Bird object.
+ * @param self The Bird object.
  * @return How high the Bird is.
  */
-static int getHeight(Bird * this)
+static int getHeight(self(Bird))
 {
-	return this->data.height;
+	return self->_height;
 }
 
 /**
  * Override
  * Makes the bird talk.
- * @param this The Bird Object.
+ * @param self The Bird Object.
  */
-static void talk(Animal *this)
+static void talk(self(Animal))
 {
-	printf("Hello, i'm a bird. My name is %s.\n", this->getName(this));
+	printf("Hello, i'm a bird. My name is %s.\n", self->getName(self));
 }
 
 /**
  * Makes the bird fly above the ground. Negative heights are treated as zero.
  * @param height Distance to fly above the ground.
- * @param this The Bird object.
+ * @param self The Bird object.
  */
-static void fly(Bird *this, int height)
+static void fly(self(Bird), int height)
 {
-	this->data.height = height;
+	self->_height = height;
 }
 
 /**
  * Makes the bird dive to the ground. Only works if the bird is at least
  * at a height of 300 above the ground. Returns the force the bird hits
  * the ground with.
- * @param this The Bird object.
+ * @param self The Bird object.
  * @return The force the bird hits the ground with. Returns 0 if the bird
  * is not high enough to dive.
  */
-static int dive(Bird * this)
+static int dive(self(Bird))
 {
-	if(this->data.height >= 300)
+	if(self->_height >= 300)
 	{
-		int height = this->data.height;
-		this->fly(this,0);
+		int height = self->_height;
+		self->fly(self,0);
 		return height*2;
 	}
 	return 0;
@@ -73,20 +73,22 @@ static int dive(Bird * this)
 /******************************************************************************
  * Constructor
  *****************************************************************************/
-Constructor(Bird)
+void newBird(self(Bird))
 {
 	/* Initialize super class */
-	Super(Animal);
+  	newAnimal( (Animal *) self );
+	
+	/* Link Methods */
 	LinkMethod(dive);
 	LinkMethod(fly);
 	LinkMethod(getHeight);
 
 	/* Set Bird's initial height */
-	this->fly(this, 2);
+	self->fly(self, 2);
 
 	/* Override super class function talk */
 	OverrideMethod(Animal, talk);
 
 	/* Set the Birds legs to 2 */
-	((Animal *) this)->setLegs((Animal *) this, 2);
+	((Animal *) self)->setLegs((Animal *) self, 2);
 }

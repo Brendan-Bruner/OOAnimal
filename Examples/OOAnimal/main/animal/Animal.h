@@ -20,17 +20,18 @@
 
 #include "Class.h"
 
-Class(Animal)
-	Data
-		int numLegs;
-		char const *name;
-	Methods
-		void (* setName)(Animal *, char const *);
-		char const * (* getName)(Animal *);
-		void (* talk)(Animal *);
-		void (* setLegs)(Animal *, int);
-		int (* getLegs)(Animal *);
-		void (* location)(Animal *);
+Class(Animal) Extends(Object)
+	int _numLegs;
+	char const *_name;
+
+	void (* setName)(self(Animal), char const *);
+	char const * (* getName)(self(Animal));
+	void (* talk)(self(Animal));
+	void (* setLegs)(self(Animal), int);
+	int (* getLegs)(self(Animal));
+	void (* location)(self(Animal));
 EndClass;
+
+void newAnimal( self(Animal) );
 
 #endif /* ANIMAL_H_ */

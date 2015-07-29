@@ -22,9 +22,9 @@
 #include "Animal.h"
 
 Class(Cat) Extends(Animal)
-	Data
-	Methods
-		void (* meow)(Cat *);
+	void (* meow)(self(Cat));
 EndClass;
+
+void newCat(self(Cat));
 
 #endif /* CAT_H_ */

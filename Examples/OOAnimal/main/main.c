@@ -68,6 +68,12 @@ int main(int argc, char *argv[])
 
 	test_crow(&crow);
 
+	((Object *) &animal)->destroy( (Object *) &animal );
+	((Object *) &bird)->destroy( (Object *) &bird );
+	((Object *) &mutantBird)->destroy( (Object *) &mutantBird );
+	((Object *) &cat)->destroy( (Object *) &cat );
+	((Object *) &crow)->destroy( (Object *) &crow );
+
 	return 0;
 }
 
