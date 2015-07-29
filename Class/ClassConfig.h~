@@ -1,0 +1,27 @@
+/* Class header
+ * Copyright (C) 2014 Brendan Bruner
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * bbruner@ualberta.ca
+ *
+ *  Created on: 2015-07-29
+ *      Author: Brendan Bruner
+ */
+
+/* This will be the variable name of an object. */
+#define OBJ_REFERENCE		self
+
+/* Do not change what is defined, instead, change the define's name. */
+/* This is the macro that is used in function prototypes. */
+#define self( class )		class *OBJ_REFERENCE	
+
+/* Used to validate a pointer to an object. */					
+#define OBJECT_ASSERT( O )	do{ (void) O } while( 0 )
+
