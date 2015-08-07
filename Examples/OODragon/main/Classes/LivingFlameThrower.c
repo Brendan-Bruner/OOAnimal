@@ -30,6 +30,8 @@ static int flames( trait(FireBreath) )
 
 void newLivingFlameThrower( self(LivingFlameThrower) )
 {
+	MemberOf(LivingFlameThrower);
+
 	/* Initialize super class. */
 	newObject( (Object *) self );
 	

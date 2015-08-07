@@ -1,4 +1,5 @@
 CC = gcc
+CFLAGS = -Wall -Wextra -pedantic
 
 CLASS_SRC = ../../Class/*.c
 # Path to object directories / files
@@ -16,10 +17,10 @@ OBJECTS = $(addprefix $(OBJDIR),$(OBJ)) obj/main.o
 EXEC = OODragon
 
 all : MKDIR $(OBJECTS)
-	$(CC) $(OBJECTS) $(CLASS_SRC) -o $(EXEC)
+	$(CC) $(CFLAGS) $(OBJECTS) $(CLASS_SRC) -o $(EXEC)
 
 $(addprefix $(COREOBJ),%.o) : $(addprefix $(COREMAIN),%.c)
-	$(CC) -Wall -c $(INC) $< -o $@
+	$(CC) $(CFLAGS) -c $(INC) $< -o $@
 
 MKDIR :
 	mkdir -p $(OBJDIR)

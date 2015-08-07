@@ -26,31 +26,37 @@
 /****************************************************************************/
 static int attack( self(Whelp) )
 {
+	MemberOf(Whelp);
 	return self->_strength;
 }
 
 static void setLevel( self(Whelp) , int level)
 {
+	MemberOf(Whelp);
 	self->_level = level;
 }
 
 static void setAgility( self(Whelp) , int agility)
 {
+	MemberOf(Whelp);
 	self->_agility = agility;
 }
 
 static int getLevel( self(Whelp) )
 {
+	MemberOf(Whelp);
 	return self->_level;
 }
 
 static int getAgility( self(Whelp) )
 {
+	MemberOf(Whelp);
 	return self->_agility;
 }
 
 static int special( self(Whelp) )
 {
+	MemberOf(Whelp);
 	return self->_agility + self->_strength;
 }
 
@@ -59,6 +65,8 @@ static int special( self(Whelp) )
 /****************************************************************************/
 void newWhelp( self(Whelp) )
 {
+	MemberOf(Whelp);
+
 	newObject( (Object *) self );
 
 	self->_strength = 3;

@@ -30,7 +30,7 @@ static int flames( trait(FireBreath) )
 }
 
 /* Override super classes special method */
-static int special( super(Whelp) )
+static int special( self(Whelp) )
 {
 	MemberOf(FlameLord);
 	ObjectUnused( );
@@ -39,11 +39,14 @@ static int special( super(Whelp) )
 
 static int reap( self(FlameLord) )
 {
+	MemberOf(FlameLord);
 	return ((Whelp *) self)->getAgility((Whelp *) self) * 3 + 89;
 }
 
 void newFlameLord( self(FlameLord) )
 {
+	MemberOf(FlameLord);
+
 	/* Initialize super class and override methods in it. */
 	newFlameGuard( (FlameGuard *) self );
 	OverrideMethod(Whelp, special);

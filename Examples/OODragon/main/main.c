@@ -70,6 +70,10 @@ void testClassPolymorphism(void);
 
 int main(int argc, char **argv)
 {
+	/* Supress compiler warnings about unused variables. */
+	(void) argc;
+	(void) argv;
+
 	testTraitPolymorphism();
 	testClassPolymorphism();
 	testClass();

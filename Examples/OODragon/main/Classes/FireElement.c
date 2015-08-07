@@ -45,11 +45,14 @@ static int explosion( trait(VolatileCore) )
 /* Get magic */
 static int getMagic( self(FireElement) )
 {
+	MemberOf(FireElement);
 	return self->_magic;
 }
 
 void newFireElement( self(FireElement) )
 {
+	MemberOf(FireElement);
+
 	/* Initialize super class. */
 	newObject( (Object *) self );
 

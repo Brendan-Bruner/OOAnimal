@@ -22,7 +22,7 @@
 
 #include "Dragon.h"
 
-static int special( super(Whelp) )
+static int special( self(Whelp) )
 {
 	MemberOf(Dragon);
 	return ((Whelp *) self)->getAgility((Whelp *) self) + 130;
@@ -30,6 +30,8 @@ static int special( super(Whelp) )
 
 void newDragon( self(Dragon) )
 {
+	MemberOf(Dragon);
+
 	/* Initialize super class. */
 	newWhelp( (Whelp *) self );
 	

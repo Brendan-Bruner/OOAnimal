@@ -30,7 +30,7 @@ static int flames( trait(FireBreath) )
 }
 
 /* Override special in super class */
-static int special( super(Whelp) )
+static int special( self(Whelp) )
 {
 	MemberOf(FlameGuard);    
 	return self->_magicPower + 9;
@@ -38,6 +38,8 @@ static int special( super(Whelp) )
 
 void newFlameGuard( self(FlameGuard) )
 {
+	MemberOf(FlameGuard);
+
 	/* Initialize super class and override a method in it. */
 	newWhelp( (Whelp *) self );
 	OverrideMethod(Whelp, special);
