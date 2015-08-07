@@ -35,19 +35,18 @@
 
 
 
-/* Link a virtual method. */
+/* Link a virtual method on a class by class basis. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
 				OBJ_REFERENCE-> M = & M
-/* Override a virtual method. */
+/* Override a virtual method on a class by class basis. */
 #define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
 				/* in super class. */			\
 				((S *) OBJ_REFERENCE)-> M = & M
 
 
 
-/* Used at the beginning of virtual methods which override a super class */
-/* method. */
-#define MemberOf( C )		C *OBJ_REFERENCE = (C *) SUPER_OBJ_REFERENCE
+/* Used to register a function with a class, on a function by function basis. */
+#define MemberOf( C )		C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
 
 
 

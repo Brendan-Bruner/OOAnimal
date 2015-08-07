@@ -19,12 +19,14 @@
 /* Base destroy method. */
 static void destroy( self(BASE_OBJECT) )
 {
-	(void) self; /* Prevent compiler warning. */
+	MemberOf( BASE_OBJECT );
+	ObjectUnused( );
 	return;
 }
 
 /* Base constructor. */
 void BASE_CONSTRUCTOR( self(BASE_OBJECT) )
 {
+	MemberOf( BASE_OBJECT );
 	LinkMethod( destroy );
 }

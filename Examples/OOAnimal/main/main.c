@@ -38,6 +38,10 @@ int main(int argc, char *argv[])
 	Cat cat;
 	Crow crow;
 
+	/* Suppress compiler warnings about unused function arguments. */
+	(void) argc;
+	(void) argv;
+
 	newAnimal(&animal);
 	animal.setName(&animal, animalName);
 

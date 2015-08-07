@@ -29,16 +29,11 @@
 
 /* This variable will never be used directly. It should be named to avoid any */
 /* name conflicts. */
-#define SUPER_OBJ_REFERENCE	selfReference
+#define PRE_OBJ_REFERENCE	selfReference
 
 /* Do not change what is defined, instead, change the define's name. */
 /* This is the macro that is used in function prototypes. */
-#define self( class )		class *OBJ_REFERENCE	
-
-/* Do not change what is defined, instead, change the define's name. */
-/* This is the macro that is used in function prototyping methods */
-/* which override a method. */
-#define super( class )		class *SUPER_OBJ_REFERENCE
+#define self( class )		class *PRE_OBJ_REFERENCE    
 
 /* Used to validate a pointer to an object. */
 #define CLASS_ASSERT( O )	do{ (void) 0; } while( 0 )

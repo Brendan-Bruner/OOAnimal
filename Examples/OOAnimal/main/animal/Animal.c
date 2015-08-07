@@ -27,6 +27,7 @@
  */
 static void setName(self(Animal), char const *name)
 {
+	MemberOf(Animal);
 	self->_name = name;
 }
 
@@ -38,6 +39,7 @@ static void setName(self(Animal), char const *name)
  */
 static char const * getName(self(Animal))
 {
+	MemberOf(Animal);
 	return self->_name;
 }
 
@@ -47,16 +49,18 @@ static char const * getName(self(Animal))
  */
 static void talk(self(Animal))
 {
+	MemberOf(Animal);
 	printf("Hello, i'm an Animal. My name is %s.\n", self->getName(self));
 }
 
-/*
+/**
  * Set how many the Animal has.
  * @param self The Animal object.
  * @param numLegs How many legs to set.
  */
 static void setLegs(self(Animal), int numLegs)
 {
+	MemberOf(Animal);
 	self->_numLegs = numLegs;
 }
 
@@ -67,6 +71,7 @@ static void setLegs(self(Animal), int numLegs)
  */
 static int getLegs(self(Animal))
 {
+	MemberOf(Animal);
 	return self->_numLegs;
 }
 
@@ -76,6 +81,8 @@ static int getLegs(self(Animal))
  */
 static void location(self(Animal))
 {
+	MemberOf(Animal);
+	ObjectUnused( );
 	printf("I live almost every where on Earth\n");
 }
 
@@ -84,6 +91,8 @@ static void location(self(Animal))
  *****************************************************************************/
 void newAnimal(self(Animal))
 {
+	MemberOf(Animal);
+
 	/* Initialize super class. */
 	newObject( (Object *) self );
 

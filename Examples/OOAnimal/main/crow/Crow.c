@@ -29,7 +29,7 @@
  * @return The force the crow hits the ground with. Returns 0 if the crow
  * is not high enough to dive.
  */
-static int dive(super(Bird))
+static int dive(self(Bird))
 {
 	MemberOf(Crow);
 	int height = ((Bird *) self)->getHeight((Bird *) self);
@@ -41,14 +41,14 @@ static int dive(super(Bird))
 	return 0;
 }
 
-static void location(super(Animal))
+static void location(self(Animal))
 {
 	MemberOf(Crow);
 	ObjectUnused();
 	printf("I live mostly in places with a warmer climate\n");
 }
 
-static void talk(super(Animal))
+static void talk(self(Animal))
 {
 	MemberOf(Crow);
 	printf("Hello, i'm Crow. My name is %s.\n", ((Animal *) self)->getName((Animal *) self));
@@ -56,6 +56,7 @@ static void talk(super(Animal))
 
 static void useTool(self(Crow))
 {
+	MemberOf(Crow);
 	printf("%s is using a tool, what a smart crow\n", ((Animal *) self)->getName((Animal *) self));
 }
 
@@ -64,6 +65,8 @@ static void useTool(self(Crow))
  *****************************************************************************/
 void newCrow( self(Crow) )
 {
+	MemberOf(Crow);
+
 	/* Initialize super class */
   	newBird( (Bird *) self );
 

@@ -27,6 +27,8 @@
  */
 static void meow(self(Cat))
 {
+	MemberOf(Cat);
+	ObjectUnused( );
 	printf("MEOW!\n");
 }
 
@@ -34,7 +36,7 @@ static void meow(self(Cat))
  * Make the cat talk
  * @param self Cat object.
  */
-static void talk(super(Animal))
+static void talk(self(Animal))
 {
 	MemberOf(Cat);
 	printf("Hello, i'm a cat. My name is %s\n", ((Animal *) self)->getName((Animal *) self));
@@ -45,6 +47,8 @@ static void talk(super(Animal))
  *****************************************************************************/
 void newCat(self(Cat))
 {
+	MemberOf(Cat);
+
 	/* Initialize super class. */
 	newAnimal( (Animal *) self );
 	

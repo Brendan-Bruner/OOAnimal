@@ -28,6 +28,7 @@
  */
 static int getHeight(self(Bird))
 {
+	MemberOf(Bird);
 	return self->_height;
 }
 
@@ -36,7 +37,7 @@ static int getHeight(self(Bird))
  * Makes the bird talk.
  * @param self The Bird Object.
  */
-static void talk(super(Animal))
+static void talk(self(Animal))
 {
 	MemberOf(Bird);
 	printf("Hello, i'm a bird. My name is %s.\n", ((Animal *) self)->getName((Animal *) self));
@@ -49,6 +50,7 @@ static void talk(super(Animal))
  */
 static void fly(self(Bird), int height)
 {
+	MemberOf(Bird);
 	self->_height = height;
 }
 
@@ -62,6 +64,7 @@ static void fly(self(Bird), int height)
  */
 static int dive(self(Bird))
 {
+	MemberOf(Bird);
 	if(self->_height >= 300)
 	{
 		int height = self->_height;
@@ -76,6 +79,8 @@ static int dive(self(Bird))
  *****************************************************************************/
 void newBird(self(Bird))
 {
+	MemberOf(Bird);
+
 	/* Initialize super class */
   	newAnimal( (Animal *) self );
 	
