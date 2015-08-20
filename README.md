@@ -1,25 +1,21 @@
 #Welcome
 
-Welcome to the OOAnimal github. Don't foget to checkout the wiki.
+Welcome to the OOAnimal github. This repo was created to apply object oriented design patterns to the C language. Don't foget to checkout the wiki.
 
 #Directory Structure
 
-***OOAnimal***
+***Archive***
 
-A demo of using classes, inheritance, polymorphism, and function overriding.
+This is a copy of the repo where OOAnimal started.
 
-***OODragon***
+***Examples***
 
-A demo of everything: classes, inheritance, polymorphism, function overriding, traits, overriding trait functions.
+A demo of using classes. Code compiles and runs in Ubuntu - untested on other operating systems.
 
-***Standard***
+***Class***
 
-Contains the Class.h and Trait.h files. These files provide the wrappers for doing OO programming in C.
+Contains the source files used to do OO programming in C.
 
 ***WikiSrc***
 
 Contains source files used in the wiki and the code used in the tutorials in the wiki.
-
-***Old***
-
-This is where OOAnimal originally started. It is from a different repo which was merged into this one.
