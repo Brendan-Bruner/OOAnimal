@@ -1,23 +1,22 @@
-#include "Circle.h"
-//#include "Point.h"
+//#include "Circle.h"
+#include "Point.h"
 #include <stdio.h>
 
 int main( int argc, char **argv )
 {
-  struct Point_t mem;
-  struct Point_t* point;
-  struct Circle_t cmem;
-  struct Circle_t* circle;
+  Point pmem, *point;
+  //struct Circle_t cmem;
+  //  Circle_t circle;
 
-  circle = (struct Circle_t*) createCircle( &cmem );
-  point = (struct Point_t*) createPoint( &mem );
+  //  circle = Circle( &cmem );
+  point = newPoint( &pmem );
 
-  point->symbolRef_.move( point, 3, 4 );
-  point->symbolRef_.draw( point );
+  class( Point, point )->move( point, 3, 4 );
+  class( Point, point )->draw( point );
 
-  ((struct Point_t*) circle)->symbolRef_.move( (struct Point_t*) circle, 10, 11 );  
-  circle->symbolRef_.scale( circle, 5 );
-  ((struct Point_t*) circle)->symbolRef_.draw( (struct Point_t*) circle );
+  //  PointMove( (Point_t) circle, 10, 11 );  
+  //  CircleScale( circle, 5 );
+  //  PointDraw( (Point_t) circle );
 
   return 0;
 }

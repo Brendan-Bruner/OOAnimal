@@ -4,11 +4,10 @@
 #include "Point.h"
 
 typedef void* Circle_t;
-extern Circle_t Circle;
 
-struct CircleSymbolTable_t
+struct CircleVirtualTable_t
 {
-  Class_t circleClass;
+  Class_t class;
   void (*draw)( Point_t );
   void (*scale)( Circle_t, int );
 };
@@ -16,12 +15,13 @@ struct CircleSymbolTable_t
 struct Circle_t
 {
   struct Point_t super;
-  struct CircleSymbolTable_t symbolRef_;
-  struct CircleSymbolTable_t* mySymbols_;
+  struct CircleVirtualTable_t virtualTable_;
+  struct CircleVirtualTable_t const* circleTable_;
 
   int rad;
 };
 
-Circle_t createCircle( struct Circle_t* );
+void CircleScale( Circle_t, int );
+Circle_t Circle( struct Circle_t* self );
 
 #endif /* CIRCLE_H */

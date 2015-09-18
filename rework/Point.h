@@ -3,27 +3,25 @@
 
 #include "Class.h"
 
+/*
+ * Class Declare.
+ */
+CLASS
+( 
+ Point, EXTENDS( Object ),
+ VIRTUAL(
+	 void (*move)( Point*, int, int );
+	 void (*draw)( Point* );
+	),
+ DATA(
+      int x;
+      int y;
+     )
+)
 
-
-typedef void* Point_t;
-extern Point_t Point;
-
-struct PointSymbolTable_t
-{
-  Class_t pointClass;
-  void (*move)( Point_t, int, int );
-  void (*draw)( Point_t );
-};
-
-struct Point_t
-{
-  struct PointSymbolTable_t symbolRef_;
-  struct PointSymbolTable_t* mySymbols_;
-
-  int x;
-  int y;
-};
-
-Point_t createPoint( struct Point_t* self );
+/*
+ * Method declares.
+ */
+Point* newPoint( Point* );
 
 #endif /* POINT_H */
