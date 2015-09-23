@@ -23,6 +23,8 @@
 #define SUPER_NAME _s
 #define RECURSIVE_DESTRUCTOR _d
 #define RECURSIVE_STRUCT_NAME _r
+#define PRIVATE_STRUCT_NAME _p0
+#define PROTECTED_STRUCT_NAME _p1
 
 
 /******************************************************************************/
@@ -33,18 +35,28 @@
 				struct D				\
 				{
 /* Optionally inherit after the Class() declaration. */					
-#define Extends(S)			/* Super class */		\
-				        S SUPER_NAME;
+#define Extends(S)		        S SUPER_NAME;
+/* Declare private member data/methods. */
+#define Private( ... )			struct				\
+					{				\
+					  __VA_ARGS__			\
+					} PRVIATE_STRUCT_NAME;
+/* Declare protected member data/methods. */
+#define Protected( ... )		struct			     	\
+					{				\
+					  __VA_ARGS__			\
+					} PROTECTED_STRUCT_NAME;
+/* Declare public member data/methods. */
+#define Public( ... )			__VA_ARGS__
 /* Optionally declare methods in super */
 /* class which will be overrode and then */
 /* referenced in the overrode method. */
-#define RecursivelyOverride( ... )	struct				\
+#define SoftOverrides( ... )		struct				\
 					{				\
-  						__VA_ARGS__		\
+					  __VA_ARGS__			\
 				        } RECURSIVE_STRUCT_NAME;
 /* End the declaration of a class. */
-#define EndClass			destructor RECURSIVE_DESTRUCTOR;\
-  				}
+#define EndClass		}
 
 
 
@@ -58,9 +70,11 @@
 #define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
 				/* in super class. */			\
 				((S *) OBJ_REFERENCE)-> M = & M
-#define RecursivelyOverrideMethod(M) \
-  OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = OBJ_REFERENCE->SUPER_NAME-> M; \
-  OBJ_REFERENCE->SUPER_NAME-> M = & M
+#define SoftOverrideMethod(S,M) \
+  do {										\
+    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)-> M; 	\
+    OverrideMethod(S,M);							\
+  } while( 0 )
 
 
 /******************************************************************************/
@@ -72,16 +86,7 @@
 
 
 /******************************************************************************/
-/* Being a class' constructor implementation to the class.
-/******************************************************************************/
-#define ConstructorOf( C ) \
-  MemberOf( C );	   \
-  OBJ_REFERENCE->RECURSIVE_DESTRUCTOR = OBJ_REFERENCE->SUPER_NAME->DESTRUCTOR_NAME; \
-  OverrideMethod( BASE_OBJECT, DESTRUCTOR_NAME )
-
-
-/******************************************************************************/
-/* Access super classes methods which are recursively overrode.
+/* Access super classes methods which are softly  overrode.
 /******************************************************************************/
 #define Super \
   (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))

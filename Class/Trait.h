@@ -63,10 +63,10 @@
 
 /* Override a trait method in immediate super class, but retain reference to */
 /* original implementation so that it can be called in the overrode method. */
-#define RecursivelyOverrideTraitMethod(t,M) \
+#define SoftOverrideTraitMethod(S,t,M) \
   do {												\
-    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = OBJ_REFERENCE->SUPER_NAME->TRAIT_PREFIX##t. M; 	\
-    OBJ_REFERENCE->SUPER_NAME->TRAIT_PREFIX##t. M = & M;					\
+    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. M; 	\
+    OverrideTraitMethod(S,t,M);									\
   } while( 0 )
 
 
