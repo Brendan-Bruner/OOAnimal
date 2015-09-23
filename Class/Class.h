@@ -20,8 +20,9 @@
 
 #include "ClassConfig.h"
 
-#define SUPER_NAME __
-#define RECURSIVE_STRUCT_NAME ___
+#define SUPER_NAME _s
+#define RECURSIVE_DESTRUCTOR _d
+#define RECURSIVE_STRUCT_NAME _r
 
 
 /******************************************************************************/
@@ -42,7 +43,8 @@
   						__VA_ARGS__		\
 				        } RECURSIVE_STRUCT_NAME;
 /* End the declaration of a class. */
-#define EndClass		}
+#define EndClass			destructor RECURSIVE_DESTRUCTOR;\
+  				}
 
 
 
@@ -65,8 +67,24 @@
 /* Bind a class' implementation to the class implementing the method
 /******************************************************************************/
 /* Used to register a function with a class, on a function by function basis. */
-#define MemberOf( C )		C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
+#define MemberOf( C ) \
+  C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
 
+
+/******************************************************************************/
+/* Being a class' constructor implementation to the class.
+/******************************************************************************/
+#define ConstructorOf( C ) \
+  MemberOf( C );	   \
+  OBJ_REFERENCE->RECURSIVE_DESTRUCTOR = OBJ_REFERENCE->SUPER_NAME->DESTRUCTOR_NAME; \
+  OverrideMethod( BASE_OBJECT, DESTRUCTOR_NAME )
+
+
+/******************************************************************************/
+/* Access super classes methods which are recursively overrode.
+/******************************************************************************/
+#define Super \
+  (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))
 
 
 /* Simple macro to do forward declaration. */

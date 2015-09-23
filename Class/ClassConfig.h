@@ -18,12 +18,6 @@
 #ifndef CLASSCONFIG_H_
 #define CLASSCONFIG_H_
 
-/* Name of the base object class. */
-#define BASE_OBJECT		Object
-
-/* Name of the base object constructor. */
-#define BASE_CONSTRUCTOR	newObject
-
 /* This will be the variable name of an object. */
 #define OBJ_REFERENCE		self
 
@@ -51,6 +45,18 @@
 /* Use this macro when you do not use the function reference. */
 #define ObjectUnused( )		(void) OBJ_REFERENCE
 
+/* Name of destructor. */
+#define DESTRUCTOR_NAME destroy
+
+/* Name of the base object class. */
+#define BASE_OBJECT Object
+
+/* Function signature of destructor */
+typedef void (*destructor)( self(BASE_OBJECT) );
+
+/* Name of the base object constructor. */
+#define BASE_CONSTRUCTOR	newObject
+
 /* Base class of all classes. Add variables and function pointers here. */
 /* For example, adding a 'serialize( )' function here will reliable give */
 /* every class a 'serialize( )' method. */
@@ -64,7 +70,7 @@
 typedef struct BASE_OBJECT BASE_OBJECT;
 struct BASE_OBJECT
 {
-	void (*destroy)( self(BASE_OBJECT) );
+  destructor DESTRUCTOR_NAME;
 };
 
 /**
