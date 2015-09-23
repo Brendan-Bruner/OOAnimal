@@ -20,21 +20,35 @@
 
 #include "ClassConfig.h"
 
+#define SUPER_NAME __
+#define RECURSIVE_STRUCT_NAME ___
 
 
+/******************************************************************************/
+/* Class Declaration
+/******************************************************************************/
 /* Start the declaration of a class. */
-#define Class(D)		typedef struct _##D D;			\
-				struct _##D				\
+#define Class(D)		typedef struct D D;			\
+				struct D				\
 				{
 /* Optionally inherit after the Class() declaration. */					
 #define Extends(S)			/* Super class */		\
-					S _super##S;
+				        S SUPER_NAME;
+/* Optionally declare methods in super */
+/* class which will be overrode and then */
+/* referenced in the overrode method. */
+#define RecursivelyOverride( ... )	struct				\
+					{				\
+  						__VA_ARGS__		\
+				        } RECURSIVE_STRUCT_NAME;
 /* End the declaration of a class. */
 #define EndClass		}
 
 
 
-
+/******************************************************************************/
+/* Link class methods to an object an construction time
+/******************************************************************************/
 /* Link a virtual method on a class by class basis. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
 				OBJ_REFERENCE-> M = & M
@@ -42,15 +56,20 @@
 #define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
 				/* in super class. */			\
 				((S *) OBJ_REFERENCE)-> M = & M
+#define RecursivelyOverrideMethod(M) \
+  OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = OBJ_REFERENCE->SUPER_NAME-> M; \
+  OBJ_REFERENCE->SUPER_NAME-> M = & M
 
 
-
+/******************************************************************************/
+/* Bind a class' implementation to the class implementing the method
+/******************************************************************************/
 /* Used to register a function with a class, on a function by function basis. */
 #define MemberOf( C )		C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
 
 
 
 /* Simple macro to do forward declaration. */
-#define Forward(C)		typedef struct _##C C
+#define Forward(C)		typedef struct C C
 
 #endif /* CLASS_H_ */

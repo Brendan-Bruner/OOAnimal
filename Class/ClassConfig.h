@@ -60,19 +60,6 @@
  *	Base class for everything.
  * @details
  *	Base class for everything.
- * @var BASE_OBJECT::destroy
- *	@code
- *	void destroy( self(BASE_OBJECT) );
- *	@endcode
- *	Destroys the object. This method can be used to clean up memory allocation.
- *	
- *	<b>Parameters</b>
- *	<ul>
- *	<li><b>OBJ_REFERENCE</b>: Pointer to itself.</li>
- *	</ul>
- *
- *	<b>Returns</b>
- *	<br>Nothing.
  */
 typedef struct BASE_OBJECT BASE_OBJECT;
 struct BASE_OBJECT
@@ -82,9 +69,9 @@ struct BASE_OBJECT
 
 /**
  * @brief
- *	Constructor for the BASE_OBJECT.
+ *	Constructor for class BASE_OBJECT.
  * @details
- *	Constructor for the BASE_OBJECT.
+ *	Constructor for class BASE_OBJECT.
  * @param OBJ_REFERENCE
  *	BASE_OBJECT class to create.
  */

@@ -16,7 +16,16 @@
 
 #include "Class.h"
 
-/* Base destroy method. */
+/**
+ * @memberof BASE_OBJECT
+ * @public
+ * @brief
+ * 	Destroys the object.
+ * @details
+ *	This method is used to clean up memory allocation.
+ * @param OBJ_REFERENCE[in]
+ *	Pointer to itself.
+ */
 static void destroy( self(BASE_OBJECT) )
 {
 	MemberOf( BASE_OBJECT );
