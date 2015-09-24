@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
-  <zoom_level>10</zoom_level>
+<diagram program="umlet" version="13.2">
+  <zoom_level>4</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>590</x>
-      <y>90</y>
-      <w>140</w>
-      <h>70</h>
+      <x>464</x>
+      <y>416</y>
+      <w>56</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Trait&gt;&gt;
 Observer
@@ -18,56 +18,59 @@ Observer
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>120</x>
-      <y>250</y>
-      <w>150</w>
-      <h>70</h>
+      <x>184</x>
+      <y>596</y>
+      <w>116</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>&lt;&lt;active&gt;&gt;
-PressurePlate
+ButtonAlarm
 --
-
-</panel_attributes>
+- buttons: char[]
+--
++getCode( ): char
++registerSource( source: char ): void
++deregisterSource( source: char ): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>40</x>
-      <y>80</y>
-      <w>320</w>
-      <h>110</h>
+      <x>184</x>
+      <y>412</y>
+      <w>128</w>
+      <h>44</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Abstract&gt;&gt;
-/Model/
+    <panel_attributes>/Model/
 --
+observers: Observer*[]
 --
 +observe( observer: Observer ): void
 +stopObserving( observer: Observer ): void
-+notify( ): void</panel_attributes>
++notifyObservers( ): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>350</x>
-      <y>110</y>
-      <w>260</w>
-      <h>50</h>
+      <x>308</x>
+      <y>424</y>
+      <w>164</w>
+      <h>20</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m1=0..*
 m2=1
 &lt; listens for update</panel_attributes>
-    <additional_attributes>10.0;20.0;240.0;20.0</additional_attributes>
+    <additional_attributes>10.0;20.0;390.0;20.0</additional_attributes>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>400</x>
-      <y>160</y>
-      <w>180</w>
-      <h>60</h>
+      <x>328</x>
+      <y>444</y>
+      <w>72</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>for all o in observers {
     o-&gt;update( )
@@ -77,12 +80,247 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>150</x>
-      <y>160</y>
-      <w>270</w>
-      <h>30</h>
+      <x>260</x>
+      <y>444</y>
+      <w>76</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;250.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>176</x>
+      <y>512</y>
+      <w>136</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Alarm
+--
+-model: Model
+--
++notifyObservers( ): void
++observe( observer: Observer ): void
++stopObserving( observer: Observer ): void
+/+getCode( ): char/
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>168</x>
+      <y>368</y>
+      <w>376</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>Observer Pattern</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>320</x>
+      <y>532</y>
+      <w>92</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>model-&gt;notifyObservers( );</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>248</x>
+      <y>536</y>
+      <w>80</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>452</y>
+      <w>12</w>
+      <h>68</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+m1=1
+m2=1</panel_attributes>
+    <additional_attributes>10.0;150.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>240</x>
+      <y>568</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>584</x>
+      <y>416</y>
+      <w>96</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;trait&gt;&gt;
+Printer
+--
+--
++print( string: char*, ... ): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>488</x>
+      <y>440</y>
+      <w>100</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+m2=realizes</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;240.0;180.0;240.0;180.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>572</y>
+      <w>96</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>AlarmPrinter
+--
+-alarm: ButtonAlarm
+--
++printf( string: char*, ... ): void
++update( ): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>512</x>
+      <y>632</y>
+      <w>96</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>CriticalAlarmPrinter
+--
+--
++printf( string: char*, ... ): void
++update( ): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>556</x>
+      <y>440</y>
+      <w>84</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;.
+m2=realizes</panel_attributes>
+    <additional_attributes>190.0;10.0;190.0;240.0;10.0;240.0;10.0;330.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>556</x>
+      <y>604</y>
+      <w>12</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>24</x>
+      <y>572</y>
+      <w>132</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>Demonstrate hard override via getCode( ).
+Demonstrate soft override via destructor.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>296</x>
+      <y>588</y>
+      <w>224</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
+m1=1
+m2=1
+</panel_attributes>
+    <additional_attributes>540.0;10.0;460.0;10.0;460.0;60.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>620</x>
+      <y>648</y>
+      <w>72</w>
+      <h>24</h>
+    </coordinates>
+    <panel_attributes>printf( "Critical" )
+super-&gt;update( )
+printf( "Critical" )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>620</x>
+      <y>604</y>
+      <w>144</w>
+      <h>20</h>
+    </coordinates>
+    <panel_attributes>Demonstrate hard override of trait via printf( ).
+Demonstrate soft override of trait via update( ).</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>560</x>
+      <y>652</y>
+      <w>68</w>
+      <h>12</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLNote</id>
+    <coordinates>
+      <x>272</x>
+      <y>316</y>
+      <w>148</w>
+      <h>36</h>
+    </coordinates>
+    <panel_attributes>REQUIREMENTS
+chars 'a', 'c', 'e' are critical, print these alarams
+normally followed by a critical alarm message
+All other sources are not critical alarams</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>
