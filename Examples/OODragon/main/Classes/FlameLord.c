@@ -22,7 +22,7 @@
 #include "FlameLord.h"
 
 /* Override trait method flames in super class */
-static int flames( trait(FireBreath) )
+static int flames( self(FireBreath) )
 {
   	TraitOf( FlameLord );
 	ObjectUnused( );

@@ -22,24 +22,24 @@
 #include "FireElement.h"
 
 /* Use FireBreath trait */
-static int flames( trait(FireBreath) )
+static int flames( self(FireBreath) )
 {
 	TraitOf( FireElement );
 	return self->_magic * 2;
 }
 
 /* Use InnerFire trait */
-static int heatWave( trait(InnerFire) )
+static int heatWave( self(InnerFire) )
 {
 	TraitOf( FireElement );
 	return self->_magic * 4;
 }
 
 /* Use VolatileCore trait */
-static int explosion( trait(VolatileCore) )
+static int explosion( self(VolatileCore) )
 {
 	TraitOf( FireElement );
-	return self->traitInnerFire->heatWave( self->traitInnerFire ) * 2;
+	return trait( InnerFire, self )->heatWave( trait( InnerFire, self ) ) * 2;
 }
 
 /* Get magic */

@@ -28,7 +28,7 @@
 
 
 /******************************************************************************/
-/* Class Declaration
+/* Class Declaration */
 /******************************************************************************/
 /* Start the declaration of a class. */
 #define Class(D)		typedef struct D D;			\
@@ -61,7 +61,7 @@
 
 
 /******************************************************************************/
-/* Link class methods to an object an construction time
+/* Link class methods to an object an construction time */
 /******************************************************************************/
 /* Link a virtual method on a class by class basis. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
@@ -78,7 +78,7 @@
 
 
 /******************************************************************************/
-/* Bind a class' implementation to the class implementing the method
+/* Bind a class' implementation to the class implementing the method */
 /******************************************************************************/
 /* Used to register a function with a class, on a function by function basis. */
 #define MemberOf( C ) \
@@ -86,7 +86,7 @@
 
 
 /******************************************************************************/
-/* Access super classes methods which are softly  overrode.
+/* Access super classes methods which are softly overrode. */
 /******************************************************************************/
 #define Super \
   (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))

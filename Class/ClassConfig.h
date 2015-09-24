@@ -51,9 +51,6 @@
 /* Name of the base object class. */
 #define BASE_OBJECT Object
 
-/* Function signature of destructor */
-typedef void (*destructor)( self(BASE_OBJECT) );
-
 /* Name of the base object constructor. */
 #define BASE_CONSTRUCTOR	newObject
 
@@ -68,6 +65,8 @@ typedef void (*destructor)( self(BASE_OBJECT) );
  *	Base class for everything.
  */
 typedef struct BASE_OBJECT BASE_OBJECT;
+/* Function signature of destructor */
+typedef void (*destructor)( self(BASE_OBJECT) );
 struct BASE_OBJECT
 {
   destructor DESTRUCTOR_NAME;

@@ -26,7 +26,7 @@
 #include "Trait.h"
 
 Trait(FireBreath)
-	int (* flames)( trait(FireBreath) );
+	int (* flames)( self(FireBreath) );
 EndTrait;
 
 #endif /* FIREBREATH_H_ */

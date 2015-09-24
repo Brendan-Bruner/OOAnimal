@@ -100,23 +100,23 @@ void testTraitPolymorphism(void)
 	newLivingFlameThrower(&lft1);
 	newLivingFlameThrower(&lft2);
 
-	breathers[0] = guard1.traitFireBreath;
-	breathers[1] = guard2.traitFireBreath;
-	breathers[2] = guard3.traitFireBreath;
-	breathers[3] = element1.traitFireBreath;
-	breathers[4] = element2.traitFireBreath;
-	breathers[5] = element3.traitFireBreath;
-	breathers[6] = lft1.traitFireBreath;
-	breathers[7] = lft2.traitFireBreath;
+	breathers[0] = trait( FireBreath, &guard1 );
+	breathers[1] = trait( FireBreath, &guard2 );
+	breathers[2] = trait( FireBreath, &guard3 );
+	breathers[3] = trait( FireBreath, &element1 );
+	breathers[4] = trait( FireBreath, &element2 );
+	breathers[5] = trait( FireBreath, &element3 );
+	breathers[6] = trait( FireBreath, &lft1 );
+	breathers[7] = trait( FireBreath, &lft2 );
 
-	ASSERT_EQUAL(0, guard1.traitFireBreath->flames(guard1.traitFireBreath), breathers[0]->flames(breathers[0]));
-	ASSERT_EQUAL(1, guard2.traitFireBreath->flames(guard2.traitFireBreath), breathers[1]->flames(breathers[1]));
-	ASSERT_EQUAL(2, guard3.traitFireBreath->flames(guard3.traitFireBreath), breathers[2]->flames(breathers[2]));
-	ASSERT_EQUAL(3, element1.traitFireBreath->flames(element1.traitFireBreath), breathers[3]->flames(breathers[3]));
-	ASSERT_EQUAL(4, element2.traitFireBreath->flames(element2.traitFireBreath), breathers[4]->flames(breathers[4]));
-	ASSERT_EQUAL(5, element3.traitFireBreath->flames(element3.traitFireBreath), breathers[5]->flames(breathers[5]));
-	ASSERT_EQUAL(6, lft1.traitFireBreath->flames(lft1.traitFireBreath), breathers[6]->flames(breathers[6]));
-	ASSERT_EQUAL(7, lft2.traitFireBreath->flames(lft2.traitFireBreath), breathers[7]->flames(breathers[7]));
+	ASSERT_EQUAL(0, trait( FireBreath, &guard1 )->flames( trait( FireBreath, &guard1 ) ), breathers[0]->flames(breathers[0]));
+	ASSERT_EQUAL(1, trait( FireBreath, &guard2 )->flames( trait( FireBreath, &guard2 ) ), breathers[1]->flames(breathers[1]));
+	ASSERT_EQUAL(2, trait( FireBreath, &guard3 )->flames( trait( FireBreath, &guard3 ) ), breathers[2]->flames(breathers[2]));
+	ASSERT_EQUAL(3, trait( FireBreath, &element1 )->flames( trait( FireBreath, &element1 ) ), breathers[3]->flames(breathers[3]));
+	ASSERT_EQUAL(4, trait( FireBreath, &element2 )->flames( trait( FireBreath, &element2 ) ), breathers[4]->flames(breathers[4]));
+	ASSERT_EQUAL(5, trait( FireBreath, &element3 )->flames( trait( FireBreath, &element3 ) ), breathers[5]->flames(breathers[5]));
+	ASSERT_EQUAL(6, trait( FireBreath, &lft1 )->flames( trait( FireBreath, &lft1 ) ), breathers[6]->flames(breathers[6]));
+	ASSERT_EQUAL(7, trait( FireBreath, &lft2 )->flames( trait( FireBreath, &lft2 ) ), breathers[7]->flames(breathers[7]));
 }
 
 void testClassPolymorphism(void)
@@ -213,11 +213,11 @@ void testMultipleTraits(void)
 	newFireElement(&elemental);
 
 	/* A fire elements flames is set to do 2*magic as damage */
-	ASSERT_EQUAL(28, elemental.traitFireBreath->flames(elemental.traitFireBreath), elemental.getMagic(&elemental)*2);
+	ASSERT_EQUAL(28, trait( FireBreath, &elemental )->flames( trait( FireBreath, &elemental ) ), elemental.getMagic(&elemental)*2);
 	/* A fire elements heatWave is set to do 4*magic as a damage */
-	ASSERT_EQUAL(29, elemental.traitInnerFire->heatWave(elemental.traitInnerFire), elemental.getMagic(&elemental)*4);
+	ASSERT_EQUAL(29, trait( InnerFire, &elemental )->heatWave( trait( InnerFire, &elemental ) ), elemental.getMagic(&elemental)*4);
 	/* A fire elements explosion is set to do 2*heatWave damage => 8*magic as a damage */
-	ASSERT_EQUAL(30, elemental.traitVolatileCore->explosion(elemental.traitVolatileCore), elemental.getMagic(&elemental)*8);
+	ASSERT_EQUAL(30, trait( VolatileCore, &elemental )->explosion( trait( VolatileCore, &elemental ) ), elemental.getMagic(&elemental)*8);
 }
 
 void testTraitOverride(void)
@@ -228,5 +228,5 @@ void testTraitOverride(void)
 	newFlameLord(&lord);
 	newFlameGuard(&guard);
 
-	ASSERT_NOT_EQUAL(31, ((FlameGuard *) &lord)->traitFireBreath->flames(((FlameGuard *) &lord)->traitFireBreath), guard.traitFireBreath->flames(guard.traitFireBreath));
+	ASSERT_NOT_EQUAL(31, trait( FireBreath, (FlameGuard *) &lord )->flames( trait( FireBreath, (FlameGuard *) &lord ) ), trait( FireBreath, &guard )->flames( trait( FireBreath, &guard ) ));
 }

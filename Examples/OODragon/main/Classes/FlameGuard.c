@@ -23,7 +23,7 @@
 #include "FlameGuard.h"
 
 /* Using FireBreath trait */
-static int flames( trait(FireBreath) )
+static int flames( self(FireBreath) )
 {
 	TraitOf( FlameGuard );
 	return self->_magicPower;

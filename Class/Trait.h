@@ -18,14 +18,13 @@
 #ifndef TRAIT_H_
 #define TRAIT_H_
 
-#include "TraitConfig.h"
 #include "ClassConfig.h"
 
 #define TRAIT_PREFIX _trait
 #define TRAIT_OFFSET _
 
 /******************************************************************************/
-/* Trait Declaration
+/* Trait Declaration */
 /******************************************************************************/
 /* Open a trait declaration. */
 #define Trait(T) 	typedef struct T T;	\
@@ -38,7 +37,7 @@
 
 
 /******************************************************************************/
-/* Use a trait within a class
+/* Use a trait within a class */
 /******************************************************************************/
 /* Adds a trait to a class declaration, used after opening a class declaration and any inheritance. */
 #define Uses(t)	\
@@ -46,12 +45,12 @@
 
 
 /******************************************************************************/
-/* Link traits to an object at construction time
+/* Link traits to an object at construction time */
 /******************************************************************************/
 /* Link a trait to a class, called in constructor. */
 #define LinkTrait(t) \
   OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \
-  (void *) (((unsigned char *) (OBJ_REFERENCE->trait##t)) - (unsigned char *)OBJ_REFERENCE)
+  (void *) (((unsigned char *) &(OBJ_REFERENCE->TRAIT_PREFIX##t)) - (unsigned char *) OBJ_REFERENCE)
 
 /* Link a trait method to a class. */
 #define LinkTraitMethod(t,M) \
@@ -71,7 +70,7 @@
 
 
 /******************************************************************************/
-/* Bind a trait's method implementation to the class using it
+/* Bind a trait's method implementation to the class using it */
 /******************************************************************************/
 /* Cast a pointer to a trait into the class it is a part of. */
 /* Must only be called inside of trait method definitions. */
@@ -80,7 +79,7 @@
 
 
 /******************************************************************************/
-/* Call trait methods on an object using the trait
+/* Call trait methods on an object using the trait */
 /******************************************************************************/
 #define trait(t,O) \
   (&(O)->TRAIT_PREFIX##t)

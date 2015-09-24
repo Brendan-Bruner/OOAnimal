@@ -26,7 +26,7 @@
 #include "Trait.h"
 
 Trait(InnerFire)
-	int (*heatWave)( trait(InnerFire) );
+	int (*heatWave)( self(InnerFire) );
 EndTrait;
 
 #endif /* INNERFIRE_H_ */
