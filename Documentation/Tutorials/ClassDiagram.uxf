@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="13.2">
-  <zoom_level>4</zoom_level>
+  <zoom_level>6</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>464</x>
-      <y>416</y>
-      <w>56</w>
-      <h>28</h>
+      <x>600</x>
+      <y>360</y>
+      <w>84</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;Trait&gt;&gt;
 Observer
@@ -18,10 +18,10 @@ Observer
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>184</x>
-      <y>596</y>
-      <w>116</w>
-      <h>48</h>
+      <x>180</x>
+      <y>630</y>
+      <w>174</w>
+      <h>72</h>
     </coordinates>
     <panel_attributes>&lt;&lt;active&gt;&gt;
 ButtonAlarm
@@ -36,10 +36,10 @@ ButtonAlarm
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>184</x>
-      <y>412</y>
-      <w>128</w>
-      <h>44</h>
+      <x>180</x>
+      <y>354</y>
+      <w>192</w>
+      <h>66</h>
     </coordinates>
     <panel_attributes>/Model/
 --
@@ -53,10 +53,10 @@ observers: Observer*[]
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>308</x>
-      <y>424</y>
-      <w>164</w>
-      <h>20</h>
+      <x>366</x>
+      <y>372</y>
+      <w>246</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m1=0..*
@@ -67,10 +67,10 @@ m2=1
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>328</x>
-      <y>444</y>
-      <w>72</w>
-      <h>24</h>
+      <x>396</x>
+      <y>402</y>
+      <w>108</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>for all o in observers {
     o-&gt;update( )
@@ -80,10 +80,10 @@ m2=1
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>260</x>
-      <y>444</y>
-      <w>76</w>
-      <h>12</h>
+      <x>294</x>
+      <y>402</y>
+      <w>114</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
     <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
@@ -91,10 +91,10 @@ m2=1
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>176</x>
-      <y>512</y>
-      <w>136</w>
-      <h>60</h>
+      <x>168</x>
+      <y>504</y>
+      <w>204</w>
+      <h>90</h>
     </coordinates>
     <panel_attributes>&lt;&lt;abstract&gt;&gt;
 Alarm
@@ -112,10 +112,10 @@ Alarm
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>168</x>
-      <y>368</y>
-      <w>376</w>
-      <h>120</h>
+      <x>156</x>
+      <y>288</y>
+      <w>564</w>
+      <h>180</h>
     </coordinates>
     <panel_attributes>Observer Pattern</panel_attributes>
     <additional_attributes/>
@@ -123,10 +123,10 @@ Alarm
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>320</x>
-      <y>532</y>
-      <w>92</w>
-      <h>12</h>
+      <x>0</x>
+      <y>534</y>
+      <w>138</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>model-&gt;notifyObservers( );</panel_attributes>
     <additional_attributes/>
@@ -134,21 +134,21 @@ Alarm
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>248</x>
-      <y>536</y>
-      <w>80</w>
-      <h>12</h>
+      <x>132</x>
+      <y>540</y>
+      <w>48</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;180.0;10.0</additional_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
-      <y>452</y>
-      <w>12</w>
-      <h>68</h>
+      <x>264</x>
+      <y>414</y>
+      <w>18</w>
+      <h>102</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
@@ -158,10 +158,10 @@ m2=1</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>240</x>
-      <y>568</y>
-      <w>12</w>
-      <h>36</h>
+      <x>264</x>
+      <y>588</y>
+      <w>18</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
@@ -169,158 +169,134 @@ m2=1</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>584</x>
-      <y>416</y>
-      <w>96</w>
-      <h>28</h>
+      <x>900</x>
+      <y>402</y>
+      <w>84</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>&lt;&lt;trait&gt;&gt;
-Printer
+Display
 --
 --
-+print( string: char*, ... ): void</panel_attributes>
++display( ): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>488</x>
-      <y>440</y>
-      <w>100</w>
-      <h>140</h>
+      <x>636</x>
+      <y>396</y>
+      <w>48</w>
+      <h>132</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.
 m2=realizes</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;240.0;180.0;240.0;180.0;330.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>512</x>
-      <y>572</y>
-      <w>96</w>
-      <h>36</h>
+      <x>648</x>
+      <y>624</y>
+      <w>162</w>
+      <h>42</h>
     </coordinates>
-    <panel_attributes>AlarmPrinter
+    <panel_attributes>CriticalMessage
 --
--alarm: ButtonAlarm
+-display: ColoredConsoleDisplay
 --
-+printf( string: char*, ... ): void
-+update( ): void</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>UMLClass</id>
-    <coordinates>
-      <x>512</x>
-      <y>632</y>
-      <w>96</w>
-      <h>28</h>
-    </coordinates>
-    <panel_attributes>CriticalAlarmPrinter
---
---
-+printf( string: char*, ... ): void
-+update( ): void</panel_attributes>
++displayHook( source: char ): void</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>556</x>
-      <y>440</y>
-      <w>84</w>
-      <h>140</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;.
-m2=realizes</panel_attributes>
-    <additional_attributes>190.0;10.0;190.0;240.0;10.0;240.0;10.0;330.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>556</x>
-      <y>604</y>
-      <w>12</w>
-      <h>36</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
-  </element>
-  <element>
-    <id>UMLNote</id>
-    <coordinates>
-      <x>24</x>
-      <y>572</y>
-      <w>132</w>
-      <h>20</h>
-    </coordinates>
-    <panel_attributes>Demonstrate hard override via getCode( ).
-Demonstrate soft override via destructor.</panel_attributes>
-    <additional_attributes/>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>296</x>
-      <y>588</y>
-      <w>224</w>
-      <h>36</h>
+      <x>366</x>
+      <y>528</y>
+      <w>204</w>
+      <h>30</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-&gt;
 m1=1
 m2=1
 </panel_attributes>
-    <additional_attributes>540.0;10.0;460.0;10.0;460.0;60.0;10.0;60.0</additional_attributes>
+    <additional_attributes>320.0;20.0;10.0;20.0</additional_attributes>
   </element>
   <element>
-    <id>UMLNote</id>
+    <id>UMLClass</id>
     <coordinates>
-      <x>620</x>
-      <y>648</y>
-      <w>72</w>
-      <h>24</h>
+      <x>558</x>
+      <y>516</y>
+      <w>162</w>
+      <h>60</h>
     </coordinates>
-    <panel_attributes>printf( "Critical" )
-super-&gt;update( )
-printf( "Critical" )</panel_attributes>
+    <panel_attributes>&lt;&lt;abstract&gt;&gt;
+Display
+--
+-alarm: Alarm*
+--
++update( ): void
+/+displayHook( source: char ): void/</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLNote</id>
     <coordinates>
-      <x>620</x>
-      <y>604</y>
-      <w>144</w>
-      <h>20</h>
+      <x>732</x>
+      <y>546</y>
+      <w>150</w>
+      <h>30</h>
     </coordinates>
-    <panel_attributes>Demonstrate hard override of trait via printf( ).
-Demonstrate soft override of trait via update( ).</panel_attributes>
+    <panel_attributes>source = alarm-&gt;getSource( );
+displayHook( source );</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>560</x>
-      <y>652</y>
-      <w>68</w>
-      <h>12</h>
+      <x>630</x>
+      <y>552</y>
+      <w>114</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>lt=-</panel_attributes>
-    <additional_attributes>10.0;10.0;150.0;10.0</additional_attributes>
+    <additional_attributes>10.0;10.0;170.0;10.0</additional_attributes>
   </element>
   <element>
-    <id>UMLNote</id>
+    <id>UMLClass</id>
     <coordinates>
-      <x>272</x>
-      <y>316</y>
-      <w>148</w>
-      <h>36</h>
+      <x>474</x>
+      <y>624</y>
+      <w>162</w>
+      <h>42</h>
     </coordinates>
-    <panel_attributes>REQUIREMENTS
-chars 'a', 'c', 'e' are critical, print these alarams
-normally followed by a critical alarm message
-All other sources are not critical alarams</panel_attributes>
+    <panel_attributes>NormalMessage
+--
+-display: ConsoleDisplay
+--
++displayHook( source: char ): void</panel_attributes>
     <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>546</x>
+      <y>570</y>
+      <w>108</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>160.0;10.0;160.0;50.0;10.0;50.0;10.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>636</x>
+      <y>570</y>
+      <w>102</w>
+      <h>66</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0;150.0;50.0;150.0;90.0</additional_attributes>
   </element>
 </diagram>
