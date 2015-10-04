@@ -40,7 +40,7 @@
 #define Private( ... )			struct				\
 					{				\
 					  __VA_ARGS__			\
-					} PRVIATE_STRUCT_NAME;
+					} PRIVATE_STRUCT_NAME;
 /* Declare protected member data/methods. */
 #define Protected( ... )		struct			     	\
 					{				\
@@ -91,6 +91,13 @@
 #define Super \
   (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))
 
+/******************************************************************************/
+/* Accessors to public and protected data. 									  */
+/******************************************************************************/
+#define private( ) \
+	OBJ_REFERENCE->PRIVATE_STRUCT_NAME
+#define protected( C ) \
+	((C*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME
 
 /* Simple macro to do forward declaration. */
 #define Forward(C)		typedef struct C C

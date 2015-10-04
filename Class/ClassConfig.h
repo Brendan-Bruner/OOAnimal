@@ -30,16 +30,16 @@
 #define self( class )		class *PRE_OBJ_REFERENCE    
 
 /* Used to validate a pointer to an object. */
-#define CLASS_ASSERT( O )	do{ (void) 0; } while( 0 )
+//#define CLASS_ASSERT( O )	do{ (void) 0; } while( 0 )
 /* This implementation will hault the code and print the file and line where the exception occured. */
-/*
-#define CLASS_ASSERT( O )	do{										\
+#include <stdio.h>
+#define ObjectASSERT( O )	do{										\
 				   if( (O) == 0 ) { 								\
 				   	printf("NULL pointer exception:\nfile %s\nline %d\n", 			\
 						(char *) __FILE__, __LINE__ ); 					\
-					for( ;; );								\
+					for( ;; );	}							\
 				} while( 0 )
-*/
+
 
 /* Used to suppress compiler warnings about unused function arguments. */
 /* Use this macro when you do not use the function reference. */
