@@ -68,6 +68,7 @@
 		} RECURSIVE_STRUCT_NAME;
 /* End the declaration of a class. */
 #define EndClass \
+		void* BASE_OBJECT_REFERENCE;	\
 	}
 
 
@@ -83,6 +84,7 @@
 /* Close a trait declaration. */
 #define EndTrait \
 		void* TRAIT_OFFSET;	\
+		void* BASE_OBJECT_REFERENCE; \
 	}
 
 
@@ -97,6 +99,8 @@
 /******************************************************************************/
 /* Link class methods to an object an construction time */
 /******************************************************************************/
+#define LinkDestructor(D) \
+
 /* Link a virtual method on a class by class basis. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
 				OBJ_REFERENCE-> M = & M
