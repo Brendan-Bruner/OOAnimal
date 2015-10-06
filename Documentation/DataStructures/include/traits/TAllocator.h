@@ -14,15 +14,28 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Oct 4, 2015
  */
+#ifndef INCLUDE_TRAITS_TALLOCATOR_H_
+#define INCLUDE_TRAITS_TALLOCATOR_H_
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include <Trait.h>
+#include <stddef.h> /* For size_t */
 
-#include <unit.h>
+/**
+ * @struct TAllocator
+ * @brief
+ * 		Trait which prototypes methods for allocating and freeing memory
+ * @details
+ * 		Trait which prototypes methods for allocating and freeing memory
+ * 		@code
+ * 			void* malloc( self(TAllocator), size_t size );
+ * 			void free( self(TAllocator), void* );
+ * 		@endcode
+ */
+Trait( TAllocator )
+	void* (*malloc)( self(TAllocator), size_t );
+	void (*free)( self(TAllocator), void* );
+EndTrait;
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
-
-#endif /* UNIT_TESTSUITES_H_ */
+#endif /* INCLUDE_TRAITS_TALLOCATOR_H_ */

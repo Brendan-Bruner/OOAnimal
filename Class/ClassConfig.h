@@ -46,7 +46,7 @@
 #define ObjectUnused( )		(void) OBJ_REFERENCE
 
 /* Name of destructor. */
-#define DESTRUCTOR_NAME destroy
+#define DESTROY_OBJECT_METHOD kill
 
 /* Name of the base object class. */
 #define BASE_OBJECT Object

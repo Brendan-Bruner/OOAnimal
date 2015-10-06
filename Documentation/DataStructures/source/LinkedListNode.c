@@ -99,7 +99,7 @@ static void setData( self(LinkedListNode), void* data )
  * 		Get the data saved in node.
  * @returns
  * 		A void pointer to a location in memory set by
- * 		LinkedListNode::getData( ). If the set function was
+ * 		LinkedListNode::setData( ). If the set function was
  * 		has never been called then this will default to return
  * 		NULL.
  */

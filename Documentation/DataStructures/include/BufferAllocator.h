@@ -14,15 +14,22 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Oct 4, 2015
  */
+#ifndef INCLUDE_BUFFERALLOCATOR_H_
+#define INCLUDE_BUFFERALLOCATOR_H_
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include <Class.h>
+#include <traits/TAllocator.h>
+#include <LinkedListNode.h>
+#include <stdint.h>
 
-#include <unit.h>
+Class( BufferAllocator ) Extends( Object ) Uses( TAllocator )
+	Private
+	(
+		LinkedListNode** buffers;
+		uint32_t numBuffers;
+	);
+EndClass;
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
-
-#endif /* UNIT_TESTSUITES_H_ */
+#endif /* INCLUDE_BUFFERALLOCATOR_H_ */

@@ -14,15 +14,16 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Oct 4, 2015
  */
+#ifndef INCLUDE_CIRCULARBUFFER_H_
+#define INCLUDE_CIRCULARBUFFER_H_
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include <Class.h>
+#include <LinkedListNode.h>
 
-#include <unit.h>
+Class( CircularBuffer ) Extends( Object )
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
+EndClass;
 
-#endif /* UNIT_TESTSUITES_H_ */
+#endif /* INCLUDE_CIRCULARBUFFER_H_ */

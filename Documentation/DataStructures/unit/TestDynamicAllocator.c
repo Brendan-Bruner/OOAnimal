@@ -14,15 +14,29 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Oct 4, 2015
  */
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include <DynamicAllocator.h>
+#include <TestSuites.h>
 
-#include <unit.h>
+static TAllocator* allocator;
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
+TEST_SETUP( )
+{
+	allocator = trait( TAllocator, createDynamicAllocator( ) );
+}
+TEST_TEARDOWN( )
+{
 
-#endif /* UNIT_TESTSUITES_H_ */
+}
+
+TEST( malloc_and_free )
+{
+
+}
+
+TEST_SUITE( DynamicAllocator )
+{
+	ADD_TEST( malloc_and_free );
+}

@@ -14,15 +14,25 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Oct 4, 2015
  */
+#ifndef INCLUDE_DYNAMICALLOCATOR_H_
+#define INCLUDE_DYNAMICALLOCATOR_H_
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include <Class.h>
+#include <TAllocator.h>
 
-#include <unit.h>
+/**
+ * @struct DynamicAllocator
+ * @extends TAllocator
+ * @brief
+ * 		Provides wrappers for stdlib's malloc( ) and free( ).
+ * @details
+ * 		Provides wrappers for stdlib's malloc( ) and free( ).
+ */
+Class( DynamicAllocator ) Extends( Object ) Uses( TAllocator )
+EndClass;
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
+DynamicAllocator* createDynamicAllocator( );
 
-#endif /* UNIT_TESTSUITES_H_ */
+#endif /* INCLUDE_DYNAMICALLOCATOR_H_ */
