@@ -16,6 +16,12 @@
 
 #include "Class.h"
 
+void traitBaseDestructor( self( TraitBase ) )
+{
+	TraitOf( BASE_OBJECT );
+	OBJ_REFERENCE->DESTRUCTOR_NAME( OBJ_REFERENCE );
+}
+
 /**
  * @memberof BASE_OBJECT
  * @public

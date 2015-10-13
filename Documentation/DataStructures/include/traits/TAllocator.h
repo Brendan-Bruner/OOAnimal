@@ -19,7 +19,7 @@
 #ifndef INCLUDE_TRAITS_TALLOCATOR_H_
 #define INCLUDE_TRAITS_TALLOCATOR_H_
 
-#include <Trait.h>
+#include <Class.h>
 #include <stddef.h> /* For size_t */
 
 /**

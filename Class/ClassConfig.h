@@ -18,6 +18,25 @@
 #ifndef CLASSCONFIG_H_
 #define CLASSCONFIG_H_
 
+
+/* How are booleans defined. If there is no boolean definition */
+/* use this, otherwise, use defines to integrate yours. */
+typedef enum
+{
+	true = 1,
+	false = !true
+} Boolean;
+/* Below is an example where the type 'bool' is used and it */
+/* is one of TRUE or FALSE. */
+/*
+ * #define Boolean bool
+ * #define true TRUE
+ * #define false FALSE
+ */
+
+/* Data type of the base trait. */
+#define BASE_TRAIT TraitBase
+
 /* This will be the variable name of an object. */
 #define OBJ_REFERENCE		self
 
@@ -52,7 +71,7 @@
 #define BASE_OBJECT Object
 
 /* Name of the base object constructor. */
-#define BASE_CONSTRUCTOR	newObject
+#define BASE_CONSTRUCTOR	createObject
 
 /* Base class of all classes. Add variables and function pointers here. */
 /* For example, adding a 'serialize( )' function here will reliable give */

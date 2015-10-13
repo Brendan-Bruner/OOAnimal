@@ -19,6 +19,7 @@
 #define CLASS_H_		
 
 #include "ClassConfig.h"
+#include <stdlib.h>
 
 #define DESTRUCTOR_NAME destroy
 
@@ -29,7 +30,20 @@
 #define PROTECTED_STRUCT_NAME _p1
 
 #define TRAIT_PREFIX _trait
-#define TRAIT_OFFSET _o
+#define TRAIT_OFFSET _
+
+
+/****************************************************************************/
+/* Memory Management 														*/
+/****************************************************************************/
+static inline void* OOMemMangAlloc_( size_t size )
+{
+	return malloc( size );
+}
+static inline void OOMemMangFree_( void* mem )
+{
+	free( mem );
+}
 
 
 /******************************************************************************/
@@ -75,16 +89,21 @@
 /******************************************************************************/
 /* Trait Declaration */
 /******************************************************************************/
+typedef struct BASE_TRAIT BASE_TRAIT;
+struct
+{
+	void* TRAIT_OFFSET;
+} BASE_TRAIT;
+
 /* Open a trait declaration. */
 #define Trait(T) \
 	typedef struct T T;		\
 	struct T				\
 	{						\
-				/* Methods */
+		void* TRAIT_OFFSET; /* MUST be first variable in a trait. */
 /* Close a trait declaration. */
 #define EndTrait \
-		void* TRAIT_OFFSET;	\
-		void* BASE_OBJECT_REFERENCE; \
+		void (*DESTRUCTOR_NAME)( self( TraitBase ) ); \
 	}
 
 
@@ -109,30 +128,44 @@
 
 /* Override a virtual method on a class by class basis. */
 #define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
-				/* in super class. */			\
-				((S *) OBJ_REFERENCE)-> M = & M
+		/* in super class. */			\
+		((S *) OBJ_REFERENCE)-> M = & M
+#define OverrideProtectedMethod(S,M) \
+		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M = & M
 #define OverrideMethodConflictingNames(S,MP,MD) \
-				((S*) OBJ_REFERENCE)-> MP = & MD
+		((S*) OBJ_REFERENCE)-> MP = & MD
+#define OverrideProtectedMethodConflictingNames(S,MP,MD) \
+		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP = & MD
 
 #define SoftOverrideMethod(S,M) \
   do {										\
     OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)-> M; 	\
     OverrideMethod(S,M);							\
   } while( 0 )
+#define SoftOverrideProtectedMethod(S,M) \
+  do {										\
+    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M; 	\
+    OverrideProtectedMethod(S,M);							\
+  } while( 0 )
 #define SoftOverrideMethodConflictingNames(S,MP,MD) \
 		do {										\
 		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)-> MP; 	\
 		    OverrideMethodConflictingNames(S,MP,MD);							\
 		  } while( 0 )
-
+#define SoftOverrideProtectedMethodConflictingNames(S,MP,MD) \
+		do {										\
+		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP; 	\
+		    OverrideMethodProtectedConflictingNames(S,MP,MD);							\
+		  } while( 0 )
 
 /******************************************************************************/
 /* Link traits to an object at construction time */
 /******************************************************************************/
 /* Link a trait to a class, called in constructor. */
 #define LinkTrait(t) \
-  OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \
-  (void *) (((unsigned char *) &(OBJ_REFERENCE->TRAIT_PREFIX##t)) - (unsigned char *) OBJ_REFERENCE)
+	OBJ_REFERENCE->TRAIT_PREFIX##t.DESTRUCTOR_NAME = traitBaseDestructor; \
+	OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \
+	(void *) (((unsigned char *) &(OBJ_REFERENCE->TRAIT_PREFIX##t)) - (unsigned char *) OBJ_REFERENCE)
 
 /* Link a trait method to a class. */
 #define LinkTraitMethod(t,M) \
@@ -166,6 +199,14 @@
 /* Used to register a function with a class, on a function by function basis. */
 #define MemberOf( C ) \
   C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
+
+#define ConstructorOf( C ) \
+	C* self;									\
+	do {										\
+		self = (C*) OOMemMangAlloc( sizeof(C) );\
+		if( self == NULL ){ return self; }		\
+	} while( 0 )
+
 
 
 /******************************************************************************/

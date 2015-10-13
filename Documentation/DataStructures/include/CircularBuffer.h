@@ -21,9 +21,36 @@
 
 #include <Class.h>
 #include <LinkedListNode.h>
+#include <traits/TBuffer.h>
 
-Class( CircularBuffer ) Extends( Object )
+/**
+ * @struct CircularBuffer
+ * @extends Object
+ * @extends TBuffer
+ * @brief
+ * 		A circular buffer class.
+ * @details
+ * 		A circular buffer class.
+ */
+Class( CircularBuffer ) Extends( Object ) Uses( TBuffer )
+	Public
+	(
+	);
+	Private
+	(
+		LinkedListNode* headNode;
+		LinkedListNode* tailNode;
+		Boolean usingDynamicMemory;
+		Boolean isFIFO;
+	);
+	SoftOverrides
+	(
+		void (*destroy)( self(Object) );
+	);
 
 EndClass;
+
+CircularBuffer* createCircularBufferFIFO( self(CircularBuffer), LinkedListNode*, uint32_t );
+CircularBuffer* createCircularBufferFILO( self(CircularBuffer), LinkedListNode*, uint32_t );
 
 #endif /* INCLUDE_CIRCULARBUFFER_H_ */
