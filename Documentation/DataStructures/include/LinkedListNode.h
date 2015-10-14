@@ -39,15 +39,18 @@ Class( LinkedListNode ) Extends( Object )
 		void (*setData)( self(LinkedListNode), void* );
 		void* (*getData)( self(LinkedListNode) );
 		void (*setNext)( self(LinkedListNode), LinkedListNode* );
+		void (*setPrevious)( self(LinkedListNode), LinkedListNode* );
 		LinkedListNode* (*getNext)( self(LinkedListNode) );
+		LinkedListNode* (*getPrevious)( self(LinkedListNode) );
 		LinkedListNode* (*getAt)( self(LinkedListNode), uint32_t );
 		LinkedListNode* (*getLast)( self(LinkedListNode) );
-		char (*isCircular)( self(LinkedListNode ) );
+		Boolean (*isCircular)( self(LinkedListNode ) );
 	);
 	Private
 	(
 		void* data;
 		LinkedListNode* next;
+		LinkedListNode* previous;
 	);
 EndClass;
 

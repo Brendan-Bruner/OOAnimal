@@ -50,6 +50,7 @@ TEST( setters_and_getters )
 {
 	LinkedListNode* node;
 	LinkedListNode nextNode;
+	LinkedListNode prevNode;
 	uint32_t nodeData;
 	#define nodeDataValue 20320
 
@@ -58,9 +59,11 @@ TEST( setters_and_getters )
 
 	node->setData( node, (void*) &nodeData );
 	node->setNext( node, &nextNode );
+	node->setPrevious( node, &prevNode );
 
 	ASSERT( "Node data incorrect", *((uint32_t*) node->getData( node )) == nodeDataValue );
 	ASSERT( "Next node incorrect", node->getNext( node ) == &nextNode );
+	ASSERT( "Previous node incorrect", node->getPrevious( node ) == &prevNode );
 }
 
 TEST( getAt )

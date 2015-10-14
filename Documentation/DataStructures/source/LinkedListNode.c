@@ -113,6 +113,24 @@ static void* getData( self(LinkedListNode) )
  * @memberof LinkedListNode
  * @public
  * @brief
+ * 		Set the previous node in the list.
+ * @details
+ * 		Set the previous node in the list.
+ * @param next[in]
+ * 		A pointer to the previous node in the list. Passing in NULL
+ * 		will remove the previous node, making this node the first one
+ * 		in the list.
+ */
+static void setPrevious( self(LinkedListNode), LinkedListNode* previous )
+{
+	MemberOf( LinkedListNode );
+	private( ).previous = previous;
+}
+
+/**
+ * @memberof LinkedListNode
+ * @public
+ * @brief
  * 		Set the next node in the list.
  * @details
  * 		Set the next node in the list.
@@ -142,6 +160,23 @@ static LinkedListNode* getNext( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
 	return private( ).next;
+}
+
+/**
+ * @memberof LinkedListNode
+ * @public
+ * @brief
+ * 		Get the previous node in the list.
+ * @details
+ * 		Get the previous node in the list.
+ * @returns
+ * 		The previous node in the list. If NULL is returned then there
+ * 		is no previous node and this is the first node.
+ */
+static LinkedListNode* getPrevious( self(LinkedListNode) )
+{
+	MemberOf( LinkedListNode );
+	return private( ).previous;
 }
 
 /**
@@ -208,22 +243,22 @@ static LinkedListNode* getLast( self(LinkedListNode) )
  * @details
  * 		Traverse the linked list to find out if it is circular.
  * @returns
- * 		CIRCULAR_LINKED_LIST if the list is circular.
- * 		<br>LINEAR_LINKED_LIST if the list is not circular.
+ * 		<b>true</b> if the list is circular.
+ * 		<br><b>false</b> if the list is not circular.
  */
-static char isCircular( self(LinkedListNode ) )
+static Boolean isCircular( self(LinkedListNode ) )
 {
 	MemberOf( LinkedListNode );
 
 	if( traverseList( self ) == NULL )
 	{
 		/* Circular list. */
-		return CIRCULAR_LINKED_LIST;
+		return true;
 	}
 	else
 	{
 		/* Not circular. */
-		return LINEAR_LINKED_LIST;
+		return false;
 	}
 }
 
@@ -248,11 +283,14 @@ void createLinkedListNode( self(LinkedListNode) )
 	LinkMethod( getData );
 	LinkMethod( setData );
 	LinkMethod( setNext );
+	LinkMethod( setPrevious );
 	LinkMethod( getNext );
+	LinkMethod( getPrevious );
 	LinkMethod( getAt );
 	LinkMethod( getLast );
 	LinkMethod( isCircular );
 
 	private( ).data = NULL;
 	private( ).next = NULL;
+	private( ).previous = NULL;
 }
