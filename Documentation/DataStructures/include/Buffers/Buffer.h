@@ -62,15 +62,5 @@ Class( Buffer ) Extends( Object )
 	);
 EndClass;
 
-/**
- * @memberof Buffer
- * @protected
- * @brief
- * 		Constructor for abstract Buffer class.
- * @details
- * 		Constructor for abstract Buffer class.
- */
-Buffer* createBuffer_( self(Buffer) );
-
 
 #endif /* INCLUDE_BUFFERS_BUFFER_H_ */

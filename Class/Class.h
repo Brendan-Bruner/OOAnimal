@@ -36,11 +36,11 @@
 /****************************************************************************/
 /* Memory Management 														*/
 /****************************************************************************/
-static inline void* OOMemMangAlloc_( size_t size )
+static inline void* OOMalloc( size_t size )
 {
 	return malloc( size );
 }
-static inline void OOMemMangFree_( void* mem )
+static inline void OOFree( void* mem )
 {
 	free( mem );
 }
@@ -75,7 +75,7 @@ static inline void OOMemMangFree_( void* mem )
 /* Optionally declare methods in super */
 /* class which will be overrode and then */
 /* referenced in the overrode method. */
-#define SoftOverrides( ... ) \
+#define SoftOverride( ... ) \
 		struct							\
 		{								\
 			__VA_ARGS__					\
@@ -90,10 +90,10 @@ static inline void OOMemMangFree_( void* mem )
 /* Trait Declaration */
 /******************************************************************************/
 typedef struct BASE_TRAIT BASE_TRAIT;
-struct
+struct BASE_TRAIT
 {
 	void* TRAIT_OFFSET;
-} BASE_TRAIT;
+};
 
 /* Open a trait declaration. */
 #define Trait(T) \
@@ -127,14 +127,14 @@ struct
 				OBJ_REFERENCE-> MP = & MD
 
 /* Override a virtual method on a class by class basis. */
-#define OverrideMethod(S,M)	/* Reassign function to a pointer */	\
+#define HardOverrideMethod(S,M)	/* Reassign function to a pointer */	\
 		/* in super class. */			\
 		((S *) OBJ_REFERENCE)-> M = & M
-#define OverrideProtectedMethod(S,M) \
+#define HardOverrideProtectedMethod(S,M) \
 		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M = & M
-#define OverrideMethodConflictingNames(S,MP,MD) \
+#define HardOverrideMethodConflictingNames(S,MP,MD) \
 		((S*) OBJ_REFERENCE)-> MP = & MD
-#define OverrideProtectedMethodConflictingNames(S,MP,MD) \
+#define HardOverrideProtectedMethodConflictingNames(S,MP,MD) \
 		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP = & MD
 
 #define SoftOverrideMethod(S,M) \
@@ -162,6 +162,7 @@ struct
 /* Link traits to an object at construction time */
 /******************************************************************************/
 /* Link a trait to a class, called in constructor. */
+extern void traitBaseDestructor( self( TraitBase ) );
 #define LinkTrait(t) \
 	OBJ_REFERENCE->TRAIT_PREFIX##t.DESTRUCTOR_NAME = traitBaseDestructor; \
 	OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \

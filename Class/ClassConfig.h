@@ -88,7 +88,7 @@ typedef struct BASE_OBJECT BASE_OBJECT;
 typedef void (*destructor)( self(BASE_OBJECT) );
 struct BASE_OBJECT
 {
-  destructor DESTRUCTOR_NAME;
+  destructor destroy;
 };
 
 /**

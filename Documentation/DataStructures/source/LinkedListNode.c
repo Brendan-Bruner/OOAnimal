@@ -21,7 +21,7 @@
 
 
 /****************************************************************************/
-/* Virtual Methods															*/
+/* Methods																	*/
 /****************************************************************************/
 /**
  * @memberof LinkedListNode
@@ -46,13 +46,13 @@ static LinkedListNode* traverseList( self(LinkedListNode) )
 	hare = self;
 	for( ;; )
 	{
-		turtle = turtle->getNext( turtle );
+		turtle = LLNGetNext( turtle );
 		harePrevious = hare;
-		hare = hare->getNext( hare );
+		hare = LLNGetNext( hare );
 		if( hare != NULL )
 		{
 			harePrevious = hare;
-			hare = hare->getNext( hare );
+			hare = LLNGetNext( hare );
 		}
 
 		if( hare == NULL )
@@ -84,7 +84,7 @@ static LinkedListNode* traverseList( self(LinkedListNode) )
  * 		will save this pointer. It can then be retrieved with
  * 		a call to LinkedListNode::getData( ).
  */
-static void setData( self(LinkedListNode), void* data )
+void LLNSetData( self(LinkedListNode), void* data )
 {
 	MemberOf( LinkedListNode );
 	private( ).data = data;
@@ -103,7 +103,7 @@ static void setData( self(LinkedListNode), void* data )
  * 		has never been called then this will default to return
  * 		NULL.
  */
-static void* getData( self(LinkedListNode) )
+void* LLNGetData( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
 	return private( ).data;
@@ -121,7 +121,7 @@ static void* getData( self(LinkedListNode) )
  * 		will remove the previous node, making this node the first one
  * 		in the list.
  */
-static void setPrevious( self(LinkedListNode), LinkedListNode* previous )
+void LLNSetPrevious( self(LinkedListNode), LinkedListNode* previous )
 {
 	MemberOf( LinkedListNode );
 	private( ).previous = previous;
@@ -139,7 +139,7 @@ static void setPrevious( self(LinkedListNode), LinkedListNode* previous )
  * 		will remove the next node, making this node the last one
  * 		in the list.
  */
-static void setNext( self(LinkedListNode), LinkedListNode* next )
+void LLNSetNext( self(LinkedListNode), LinkedListNode* next )
 {
 	MemberOf( LinkedListNode );
 	private( ).next = next;
@@ -156,7 +156,7 @@ static void setNext( self(LinkedListNode), LinkedListNode* next )
  * 		The next node in the list. If NULL is returned then there
  * 		is no next node and this is the last node.
  */
-static LinkedListNode* getNext( self(LinkedListNode) )
+LinkedListNode* LLNGetNext( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
 	return private( ).next;
@@ -173,7 +173,7 @@ static LinkedListNode* getNext( self(LinkedListNode) )
  * 		The previous node in the list. If NULL is returned then there
  * 		is no previous node and this is the first node.
  */
-static LinkedListNode* getPrevious( self(LinkedListNode) )
+LinkedListNode* LLNGetPrevious( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
 	return private( ).previous;
@@ -196,7 +196,7 @@ static LinkedListNode* getPrevious( self(LinkedListNode) )
  * 		next node to be returned, etc. However, if there are not
  * 		<b>depth</b> nodes in the list, NULL will be returned.
  */
-static LinkedListNode* getAt( self(LinkedListNode), uint32_t depth )
+LinkedListNode* LLNGetAt( self(LinkedListNode), uint32_t depth )
 {
 	MemberOf( LinkedListNode );
 	LinkedListNode* nextNode;
@@ -205,7 +205,7 @@ static LinkedListNode* getAt( self(LinkedListNode), uint32_t depth )
 	nextNode = self;
 	for( iter = 0; iter < depth; ++iter )
 	{
-		nextNode = nextNode->getNext( nextNode );
+		nextNode = LLNGetNext( nextNode );
 		if( nextNode == NULL )
 		{
 			/* List does not go 'depth' nodes deep. */
@@ -228,7 +228,7 @@ static LinkedListNode* getAt( self(LinkedListNode), uint32_t depth )
  * 		A pointer to the last node in the list. NULL if there is
  * 		no last node due to a circular list.
  */
-static LinkedListNode* getLast( self(LinkedListNode) )
+LinkedListNode* LLNGetLast( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
 
@@ -246,7 +246,7 @@ static LinkedListNode* getLast( self(LinkedListNode) )
  * 		<b>true</b> if the list is circular.
  * 		<br><b>false</b> if the list is not circular.
  */
-static Boolean isCircular( self(LinkedListNode ) )
+Boolean LLNIsCircular( self(LinkedListNode ) )
 {
 	MemberOf( LinkedListNode );
 
@@ -279,16 +279,7 @@ static Boolean isCircular( self(LinkedListNode ) )
 void createLinkedListNode( self(LinkedListNode) )
 {
 	MemberOf( LinkedListNode );
-	newObject( (Object*) self );
-	LinkMethod( getData );
-	LinkMethod( setData );
-	LinkMethod( setNext );
-	LinkMethod( setPrevious );
-	LinkMethod( getNext );
-	LinkMethod( getPrevious );
-	LinkMethod( getAt );
-	LinkMethod( getLast );
-	LinkMethod( isCircular );
+	createObject( (Object*) self );
 
 	private( ).data = NULL;
 	private( ).next = NULL;

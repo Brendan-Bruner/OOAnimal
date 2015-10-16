@@ -47,7 +47,7 @@ DynamicAllocator* createDynamicAllocator( )
 	if( self == NULL )
 	{
 		self = &self_;
-		newObject( (Object*) self );
+		createObject( (Object*) self );
 		LinkTrait( TAllocator );
 		LinkTraitMethodConflictingNames( TAllocator, malloc, allocatorMalloc );
 		LinkTraitMethodConflictingNames( TAllocator, free, allocatorFree );

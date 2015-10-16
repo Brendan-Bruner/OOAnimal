@@ -165,8 +165,16 @@ static Boolean isFull( self(Buffer) )
 
 
 /****************************************************************************/
-/* Constructor / Destructor													*/
+/* Constructor																*/
 /****************************************************************************/
+/**
+ * @memberof Buffer
+ * @protected
+ * @brief
+ * 		Constructor for abstract Buffer class.
+ * @details
+ * 		Constructor for abstract Buffer class.
+ */
 Buffer* createBuffer_( self(Buffer) )
 {
 	MemberOf( Buffer );

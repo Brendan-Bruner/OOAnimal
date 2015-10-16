@@ -23,9 +23,6 @@
 #include <Class.h>
 #include <stdint.h>
 
-#define CIRCULAR_LINKED_LIST (char) 1
-#define LINEAR_LINKED_LIST (char) 0
-
 /**
  * @struct LinkedListNode
  * @brief
@@ -34,18 +31,6 @@
  * 		A single node in a linked list.
  */
 Class( LinkedListNode ) Extends( Object )
-	Public
-	(
-		void (*setData)( self(LinkedListNode), void* );
-		void* (*getData)( self(LinkedListNode) );
-		void (*setNext)( self(LinkedListNode), LinkedListNode* );
-		void (*setPrevious)( self(LinkedListNode), LinkedListNode* );
-		LinkedListNode* (*getNext)( self(LinkedListNode) );
-		LinkedListNode* (*getPrevious)( self(LinkedListNode) );
-		LinkedListNode* (*getAt)( self(LinkedListNode), uint32_t );
-		LinkedListNode* (*getLast)( self(LinkedListNode) );
-		Boolean (*isCircular)( self(LinkedListNode ) );
-	);
 	Private
 	(
 		void* data;
@@ -53,6 +38,16 @@ Class( LinkedListNode ) Extends( Object )
 		LinkedListNode* previous;
 	);
 EndClass;
+
+void LLNSetData( self(LinkedListNode), void* );
+void* LLNGetData( self(LinkedListNode) );
+void LLNSetNext( self(LinkedListNode), LinkedListNode* );
+void LLNSetPrevious( self(LinkedListNode), LinkedListNode* );
+LinkedListNode* LLNGetNext( self(LinkedListNode) );
+LinkedListNode* LLNGetPrevious( self(LinkedListNode) );
+LinkedListNode* LLNGetAt( self(LinkedListNode), uint32_t );
+LinkedListNode* LLNGetLast( self(LinkedListNode) );
+Boolean LLNIsCircular( self(LinkedListNode ) );
 
 void createLinkedListNode( self(LinkedListNode) );
 

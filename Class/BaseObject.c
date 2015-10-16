@@ -19,7 +19,7 @@
 void traitBaseDestructor( self( TraitBase ) )
 {
 	TraitOf( BASE_OBJECT );
-	OBJ_REFERENCE->DESTRUCTOR_NAME( OBJ_REFERENCE );
+	OBJ_REFERENCE-> DESTRUCTOR_NAME ( OBJ_REFERENCE );
 }
 
 /**

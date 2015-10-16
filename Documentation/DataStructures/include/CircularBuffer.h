@@ -21,7 +21,7 @@
 
 #include <Class.h>
 #include <LinkedListNode.h>
-#include <traits/TBuffer.h>
+#include <Buffers/Buffer.h>
 
 /**
  * @struct CircularBuffer
@@ -32,7 +32,7 @@
  * @details
  * 		A circular buffer class.
  */
-Class( CircularBuffer ) Extends( Object ) Uses( TBuffer )
+Class( CircularBuffer ) Extends( Buffer )
 	Public
 	(
 	);

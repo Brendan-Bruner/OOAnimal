@@ -14,25 +14,27 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct 4, 2015
+ * Oct 15, 2015
  */
-#ifndef INCLUDE_DYNAMICALLOCATOR_H_
-#define INCLUDE_DYNAMICALLOCATOR_H_
+#ifndef INCLUDE_BUFFERS_QUEUE_H_
+#define INCLUDE_BUFFERS_QUEUE_H_
 
-#include <Class.h>
-#include <traits/TAllocator.h>
+#include "Buffer.h"
 
-/**
- * @struct DynamicAllocator
- * @extends TAllocator
- * @brief
- * 		Provides wrappers for stdlib's malloc( ) and free( ).
- * @details
- * 		Provides wrappers for stdlib's malloc( ) and free( ).
- */
-Class( DynamicAllocator ) Extends( Object ) Uses( TAllocator )
+Class( Queue ) Extends( Buffer )
+	Private
+	(
+		Boolean isFixedSized;
+		TAllocator* allocator;
+	);
+	SoftOverride
+	(
+		/* Destructor. */
+		void (*destroy)( self(Object) );
+	);
 EndClass;
 
-DynamicAllocator* createDynamicAllocator( );
+Queue* createFixedQueue( self(Queue), TAllocator*, uint32_t );
+Queue* createExpandingQueue( self(Queue), TAllocator*, uint32_t );
 
-#endif /* INCLUDE_DYNAMICALLOCATOR_H_ */
+#endif /* INCLUDE_BUFFERS_QUEUE_H_ */
