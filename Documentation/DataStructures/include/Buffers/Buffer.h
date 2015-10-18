@@ -55,8 +55,6 @@ Class( Buffer ) Extends( Object )
 	);
 	Protected
 	(
-		LinkedListNode* head;
-		LinkedListNode* tail;
 		uint32_t length;
 		uint32_t maxLength;
 	);

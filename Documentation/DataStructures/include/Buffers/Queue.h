@@ -20,12 +20,26 @@
 #define INCLUDE_BUFFERS_QUEUE_H_
 
 #include "Buffer.h"
+#include <Allocators/TAllocator.h>
 
+#define QUEUE_NODE_SIZE sizeof(LinkedListNode)
+
+/**
+ * @struct Queue
+ * @extends Buffer
+ * @brief
+ * 		A queue (FIFO) buffer.
+ * @details
+ * 		A queue (FIFO) buffer. The queue is initialized with a
+ * 		specified size.
+ */
 Class( Queue ) Extends( Buffer )
 	Private
 	(
-		Boolean isFixedSized;
 		TAllocator* allocator;
+		LinkedListNode* absoluteTop;
+		LinkedListNode* head;
+		LinkedListNode* tail;
 	);
 	SoftOverride
 	(
@@ -34,7 +48,26 @@ Class( Queue ) Extends( Buffer )
 	);
 EndClass;
 
-Queue* createFixedQueue( self(Queue), TAllocator*, uint32_t );
-Queue* createExpandingQueue( self(Queue), TAllocator*, uint32_t );
+/**
+ * @memberof Queue
+ * @brief
+ * 		Constructor.
+ * @details
+ * 		Constructor.
+ * @param allocator[in]
+ * 		This object is used to allocate memory for the queue. It must
+ * 		be able to allocate blocks that are at least the size of
+ * 		<b>QUEUE_NODE_SIZE</b>. In addition, it must remain valid in memory
+ * 		for the duration the queue exists.
+ * @param size
+ * 		The initial size of the queue. If it fails to create a queue of this
+ * 		size it will create the largest one it can. See <b>actual</b> for
+ * 		how large the queue actually is.
+ * @param actual[out]
+ * 		Will contain the actual size allocated for the queue.
+ * @returns
+ * 		Always a valid pointer to a constructed queue.
+ */
+Queue* createQueue( self(Queue), TAllocator* allocator, uint32_t size, uint32_t* actual );
 
 #endif /* INCLUDE_BUFFERS_QUEUE_H_ */

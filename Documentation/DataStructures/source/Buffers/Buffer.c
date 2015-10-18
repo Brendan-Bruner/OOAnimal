@@ -188,8 +188,6 @@ Buffer* createBuffer_( self(Buffer) )
 	LinkMethod( isEmpty );
 	LinkMethod( isFull );
 
-	protected(Buffer).head = NULL;
-	protected(Buffer).tail = NULL;
 	protected(Buffer).length = 0;
 	protected(Buffer).maxLength = 0;
 

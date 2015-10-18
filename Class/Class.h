@@ -140,22 +140,22 @@ struct BASE_TRAIT
 #define SoftOverrideMethod(S,M) \
   do {										\
     OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)-> M; 	\
-    OverrideMethod(S,M);							\
+    HardOverrideMethod(S,M);							\
   } while( 0 )
 #define SoftOverrideProtectedMethod(S,M) \
   do {										\
     OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M; 	\
-    OverrideProtectedMethod(S,M);							\
+    HardOverrideProtectedMethod(S,M);							\
   } while( 0 )
 #define SoftOverrideMethodConflictingNames(S,MP,MD) \
 		do {										\
 		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)-> MP; 	\
-		    OverrideMethodConflictingNames(S,MP,MD);							\
+		    HardOverrideMethodConflictingNames(S,MP,MD);							\
 		  } while( 0 )
 #define SoftOverrideProtectedMethodConflictingNames(S,MP,MD) \
 		do {										\
 		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP; 	\
-		    OverrideMethodProtectedConflictingNames(S,MP,MD);							\
+		    HardOverrideProtectedMethodConflictingNames(S,MP,MD);							\
 		  } while( 0 )
 
 /******************************************************************************/
@@ -175,9 +175,9 @@ extern void traitBaseDestructor( self( TraitBase ) );
 	OBJ_REFERENCE->TRAIT_PREFIX##t. MP = & MD
 
 /* Override a trait method defined in a super class. */
-#define OverrideTraitMethod(S,t,M) \
+#define HardOverrideTraitMethod(S,t,M) \
   ((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. M = & M
-#define OverrideTraitMethodConflictingNames(S,t,MP,MD) \
+#define HardOverrideTraitMethodConflictingNames(S,t,MP,MD) \
 	((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP = & MD
 
 /* Override a trait method in immediate super class, but retain reference to */
@@ -185,12 +185,12 @@ extern void traitBaseDestructor( self( TraitBase ) );
 #define SoftOverrideTraitMethod(S,t,M) \
   do {												\
     OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. M; 	\
-    OverrideTraitMethod(S,t,M);									\
+    HardOverrideTraitMethod(S,t,M);									\
   } while( 0 )
 #define SoftOverrideTraitMethodConflictingNames(S,t,MP,MD) \
 		do {												\
 			OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP; 	\
-			OverrideTraitMethod(S,t,MP,MD);									\
+			HardOverrideTraitMethodConflictingNames(S,t,MP,MD);									\
 		} while( 0 )
 
 
@@ -222,7 +222,7 @@ extern void traitBaseDestructor( self( TraitBase ) );
 /******************************************************************************/
 /* Access super classes methods which are softly overrode. */
 /******************************************************************************/
-#define Super \
+#define super( ) \
   (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))
 
 /******************************************************************************/
