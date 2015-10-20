@@ -40,7 +40,9 @@ static void* peek( self(Buffer) )
 
 static void reset( self(Buffer) )
 {
-
+	MemberOf(Queue);
+	private( ).head = private( ).tail;
+	protected(Buffer).length = 0;
 }
 
 
@@ -80,12 +82,11 @@ Queue* createQueue
 	/* Virtual function linkage and super class creation. */
 	MemberOf(Queue);
 	objASSERT( allocator );
-	extern Buffer* createBuffer_( self(Buffer) );
-	createBuffer_( (Buffer*) self );
-	HardOverrideMethod( Buffer, push );
-	HardOverrideMethod( Buffer, pop );
-	HardOverrideMethod( Buffer, peek );
-	HardOverrideMethod( Buffer, reset );
+	createObject( (Object*) self );
+	LinkMethod( push );
+	LinkMethod(pop );
+	LinkMethod(peek );
+	LinkMethod(reset );
 	SoftOverrideMethod( Object, destroy );
 
 	/* Beginning of constructor. */
@@ -116,6 +117,8 @@ Queue* createQueue
 		LLNSetNext( previousNode, currentNode );
 		previousNode = currentNode;
 	}
+
+	/* Now we know the absolute top node and the maximum size of the queue. */
 	private( ).absoluteTop = currentNode;
 	protected(Buffer).maxLength = iter;
 

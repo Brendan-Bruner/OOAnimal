@@ -33,13 +33,26 @@
  * 		A queue (FIFO) buffer. The queue is initialized with a
  * 		specified size.
  */
-Class( Queue ) Extends( Buffer )
+Class( Queue ) Extends( Object )
+	Public
+	(
+		Boolean (*insert)( self(Queue), void* );
+		void* (*remove)( self(Queue) );
+		void* (*peek)( self(Queue) );
+		void (*reset)( self(Queue) );
+		uint32_t (*length)( self(Queue) );
+		uint32_t (*maxLength)( self(Queue) );
+		Boolean (*isEmpty)( self(Queue) );
+		Boolean (*isFull)( self(Queue) );
+	);
 	Private
 	(
 		TAllocator* allocator;
 		LinkedListNode* absoluteTop;
 		LinkedListNode* head;
 		LinkedListNode* tail;
+		uint32_t length;
+		uint32_t maxLength;
 	);
 	SoftOverride
 	(
