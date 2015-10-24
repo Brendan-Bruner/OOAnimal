@@ -34,8 +34,8 @@ typedef enum
  * #define false FALSE
  */
 
-/* Data type of the base trait. */
-#define BASE_TRAIT TraitBase
+/* Data type of the base interface. */
+#define BASE_TRAIT Interface
 
 /* This will be the variable name of an object. */
 #define OBJ_REFERENCE		self
@@ -52,7 +52,7 @@ typedef enum
 //#define CLASS_ASSERT( O )	do{ (void) 0; } while( 0 )
 /* This implementation will hault the code and print the file and line where the exception occured. */
 #include <stdio.h>
-#define ObjectASSERT( O )	do{										\
+#define objASSERT( O )	do{										\
 				   if( (O) == 0 ) { 								\
 				   	printf("NULL pointer exception:\nfile %s\nline %d\n", 			\
 						(char *) __FILE__, __LINE__ ); 					\

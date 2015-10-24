@@ -14,22 +14,24 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct 4, 2015
+ * Oct 23, 2015
  */
-#ifndef INCLUDE_BUFFERALLOCATOR_H_
-#define INCLUDE_BUFFERALLOCATOR_H_
+#ifndef INCLUDE_ITERATOR_ITERATOR_H_
+#define INCLUDE_ITERATOR_ITERATOR_H_
 
 #include <Class.h>
-#include <traits/TAllocator.h>
-#include <LinkedListNode.h>
-#include <stdint.h>
 
-Class( BufferAllocator ) Extends( Object ) Uses( TAllocator )
-	Private
-	(
-		LinkedListNode** buffers;
-		uint32_t numBuffers;
-	);
-EndClass;
+/**
+ * @struct Iterator
+ * @brief
+ * 		Defines an interface to iterate something.
+ * @details
+ * 		Defines an interface to iterate something.
+ */
+Interface( Iterator )
+	void (*reset)( self(Iterator) );
+	Boolean (*hasNext)( self(Iterator) );
+	void* (*next)( self(Iterator) );
+EndInterface;
 
-#endif /* INCLUDE_BUFFERALLOCATOR_H_ */
+#endif /* INCLUDE_ITERATOR_ITERATOR_H_ */

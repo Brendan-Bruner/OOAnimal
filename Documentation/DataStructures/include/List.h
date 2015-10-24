@@ -21,7 +21,7 @@
 
 #include <Class.h>
 
-Trait( TList )
+Interface( TList )
 	Boolean (*insert)( self(TList), void*, uint32_t );
 	Boolean (*add)( self(TList), void* );
 	void* (*remove)( self(TList), uint32_t );
@@ -32,7 +32,7 @@ Trait( TList )
 	uint32_t (*maxLength)( self(TList) );
 	Boolean (*isEmpty)( self(TList ) );
 	Boolean (*isFull)( self(TList) );
-EndTrait;
+EndInterface;
 
 /**
  * @struct TList

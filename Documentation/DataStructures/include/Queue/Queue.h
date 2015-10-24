@@ -14,28 +14,12 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct 4, 2015
+ * Oct 23, 2015
  */
-#ifndef INCLUDE_TRAITS_TALLOCATOR_H_
-#define INCLUDE_TRAITS_TALLOCATOR_H_
+#ifndef INCLUDE_QUEUE_QUEUE_H_
+#define INCLUDE_QUEUE_QUEUE_H_
 
 #include <Class.h>
-#include <stddef.h> /* For size_t */
 
-/**
- * @struct TAllocator
- * @brief
- * 		Trait which prototypes methods for allocating and freeing memory
- * @details
- * 		Trait which prototypes methods for allocating and freeing memory
- * 		@code
- * 			void* malloc( self(TAllocator), size_t size );
- * 			void free( self(TAllocator), void* );
- * 		@endcode
- */
-Trait( TAllocator )
-	void* (*malloc)( self(TAllocator), size_t );
-	void (*free)( self(TAllocator), void* );
-EndTrait;
 
-#endif /* INCLUDE_TRAITS_TALLOCATOR_H_ */
+#endif /* INCLUDE_QUEUE_QUEUE_H_ */

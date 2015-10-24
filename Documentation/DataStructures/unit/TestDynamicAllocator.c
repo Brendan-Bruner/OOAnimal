@@ -20,20 +20,24 @@
 #include <DynamicAllocator.h>
 #include <TestSuites.h>
 
-static TAllocator* allocator;
+static Allocator* allocator;
 
 TEST_SETUP( )
 {
-	allocator = trait( TAllocator, createDynamicAllocator( ) );
+	allocator = interface( Allocator, createDynamicAllocator( ) );
 }
 TEST_TEARDOWN( )
 {
-
+	allocator->destroy( (Interface*) allocator );
 }
 
 TEST( malloc_and_free )
 {
+	int* testVar;
 
+	testVar = allocator->malloc( allocator, sizeof(int) );
+	ASSERT( "did not get valid pointer", testVar != NULL );
+	allocator->free( allocator, testVar );
 }
 
 TEST_SUITE( DynamicAllocator )

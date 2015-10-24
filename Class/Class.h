@@ -29,7 +29,7 @@
 #define PRIVATE_STRUCT_NAME _p0
 #define PROTECTED_STRUCT_NAME _p1
 
-#define TRAIT_PREFIX _trait
+#define TRAIT_PREFIX _interface
 #define TRAIT_OFFSET _
 
 
@@ -87,7 +87,7 @@ static inline void OOFree( void* mem )
 
 
 /******************************************************************************/
-/* Trait Declaration */
+/* Interface Declaration */
 /******************************************************************************/
 typedef struct BASE_TRAIT BASE_TRAIT;
 struct BASE_TRAIT
@@ -95,22 +95,22 @@ struct BASE_TRAIT
 	void* TRAIT_OFFSET;
 };
 
-/* Open a trait declaration. */
-#define Trait(T) \
+/* Open a interface declaration. */
+#define Interface(T) \
 	typedef struct T T;		\
 	struct T				\
 	{						\
-		void* TRAIT_OFFSET; /* MUST be first variable in a trait. */
-/* Close a trait declaration. */
-#define EndTrait \
-		void (*DESTRUCTOR_NAME)( self( TraitBase ) ); \
+		void* TRAIT_OFFSET; /* MUST be first variable in a interface. */
+/* Close a interface declaration. */
+#define EndInterface \
+		void (*DESTRUCTOR_NAME)( self( BASE_TRAIT ) ); \
 	}
 
 
 /******************************************************************************/
-/* Use a trait within a class */
+/* Use a interface within a class */
 /******************************************************************************/
-/* Adds a trait to a class declaration, used after opening a class declaration and any inheritance. */
+/* Adds a interface to a class declaration, used after opening a class declaration and any inheritance. */
 #define Uses(t)	\
   t TRAIT_PREFIX##t;
 
@@ -118,8 +118,6 @@ struct BASE_TRAIT
 /******************************************************************************/
 /* Link class methods to an object an construction time */
 /******************************************************************************/
-#define LinkDestructor(D) \
-
 /* Link a virtual method on a class by class basis. */
 #define LinkMethod(M)		/* Assign function to pointer. */	\
 				OBJ_REFERENCE-> M = & M
@@ -159,38 +157,41 @@ struct BASE_TRAIT
 		  } while( 0 )
 
 /******************************************************************************/
-/* Link traits to an object at construction time */
+/* Link interfaces to an object at construction time */
 /******************************************************************************/
-/* Link a trait to a class, called in constructor. */
-extern void traitBaseDestructor( self( TraitBase ) );
-#define LinkTrait(t) \
-	OBJ_REFERENCE->TRAIT_PREFIX##t.DESTRUCTOR_NAME = traitBaseDestructor; \
+/* Used to call an objects destructor when only a refrence */
+/* to its interface exists. */
+extern void destroyInterface( self( BASE_TRAIT ) );
+
+/* Link a interface to a class, called in constructor. */
+#define LinkInterface(t) \
+	OBJ_REFERENCE->TRAIT_PREFIX##t.DESTRUCTOR_NAME = destroyInterface; \
 	OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \
 	(void *) (((unsigned char *) &(OBJ_REFERENCE->TRAIT_PREFIX##t)) - (unsigned char *) OBJ_REFERENCE)
 
-/* Link a trait method to a class. */
-#define LinkTraitMethod(t,M) \
+/* Link a interface method to a class. */
+#define LinkInterfaceMethod(t,M) \
   OBJ_REFERENCE->TRAIT_PREFIX##t. M = & M
-#define LinkTraitMethodConflictingNames(t,MP,MD) \
+#define LinkInterfaceMethodConflictingNames(t,MP,MD) \
 	OBJ_REFERENCE->TRAIT_PREFIX##t. MP = & MD
 
-/* Override a trait method defined in a super class. */
-#define HardOverrideTraitMethod(S,t,M) \
+/* Override a interface method defined in a super class. */
+#define HardOverrideInterfaceMethod(S,t,M) \
   ((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. M = & M
-#define HardOverrideTraitMethodConflictingNames(S,t,MP,MD) \
+#define HardOverrideInterfaceMethodConflictingNames(S,t,MP,MD) \
 	((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP = & MD
 
-/* Override a trait method in immediate super class, but retain reference to */
+/* Override a interface method in immediate super class, but retain reference to */
 /* original implementation so that it can be called in the overrode method. */
-#define SoftOverrideTraitMethod(S,t,M) \
+#define SoftOverrideInterfaceMethod(S,t,M) \
   do {												\
     OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. M; 	\
-    HardOverrideTraitMethod(S,t,M);									\
+    HardOverrideInterfaceMethod(S,t,M);									\
   } while( 0 )
-#define SoftOverrideTraitMethodConflictingNames(S,t,MP,MD) \
+#define SoftOverrideInterfaceMethodConflictingNames(S,t,MP,MD) \
 		do {												\
 			OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP; 	\
-			HardOverrideTraitMethodConflictingNames(S,t,MP,MD);									\
+			HardOverrideInterfaceMethodConflictingNames(S,t,MP,MD);									\
 		} while( 0 )
 
 
@@ -199,24 +200,19 @@ extern void traitBaseDestructor( self( TraitBase ) );
 /******************************************************************************/
 /* Used to register a function with a class, on a function by function basis. */
 #define MemberOf( C ) \
-  C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE
-
-#define ConstructorOf( C ) \
-	C* self;									\
-	do {										\
-		self = (C*) OOMemMangAlloc( sizeof(C) );\
-		if( self == NULL ){ return self; }		\
-	} while( 0 )
-
+	C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE; \
+	objASSERT( OBJ_REFERENCE );
 
 
 /******************************************************************************/
-/* Bind a trait's method implementation to the class using it */
+/* Bind a interface's method implementation to the class using it */
 /******************************************************************************/
-/* Cast a pointer to a trait into the class it is a part of. */
-/* Must only be called inside of trait method definitions. */
-#define TraitOf(C) \
-  C *OBJ_REFERENCE = (C *) ((unsigned char *)PRE_OBJ_REFERENCE - (unsigned char *)PRE_OBJ_REFERENCE->TRAIT_OFFSET)
+/* Cast a pointer to a interface into the class it is a part of. */
+/* Must only be called inside of interface method definitions. */
+#define InterfaceOf(C) \
+	objASSERT( PRE_OBJ_REFERENCE ); \
+	C *OBJ_REFERENCE = (C *) ((unsigned char *)PRE_OBJ_REFERENCE - (unsigned char *)PRE_OBJ_REFERENCE->TRAIT_OFFSET); \
+	objASSERT( OBJ_REFERENCE )
 
 
 /******************************************************************************/
@@ -235,17 +231,15 @@ extern void traitBaseDestructor( self( TraitBase ) );
 
 
 /******************************************************************************/
-/* Call trait methods on an object using the trait */
+/* Call interface methods on an object using the interface */
 /******************************************************************************/
-#define trait(t,O) \
-  (&(O)->TRAIT_PREFIX##t)
+#define interface(t,O) \
+	(&(O)->TRAIT_PREFIX##t)
 
 
 /****************************************************************************/
 /* Destructor for all objects												*/
 /****************************************************************************/
-#define kill( O ) \
-	((BASE_OBJECT*) (O)->BASE_OBJECT_REFERENCE)->
 
 
 /* Simple macro to do forward declaration. */

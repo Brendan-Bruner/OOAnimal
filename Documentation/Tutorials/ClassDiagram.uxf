@@ -9,7 +9,7 @@
       <w>84</w>
       <h>42</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;Trait&gt;&gt;
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
 Observer
 --
 /+update( ) : void/</panel_attributes>
@@ -174,7 +174,7 @@ m2=1</panel_attributes>
       <w>246</w>
       <h>54</h>
     </coordinates>
-    <panel_attributes>&lt;&lt;trait&gt;&gt;
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
 Visitor
 --
 --

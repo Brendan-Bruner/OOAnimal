@@ -5,13 +5,13 @@
  *      Author: brendan
  */
 
-#include <Trait.h>
+#include <Interface.h>
 
 #ifndef SOURCE_INCLUDE_OBSERVER_H_
 #define SOURCE_INCLUDE_OBSERVER_H_
 
-Trait( TObserver )
+Interface( TObserver )
 	void (*update)( self(TObserver) );
-EndTrait;
+EndInterface;
 
 #endif /* SOURCE_INCLUDE_OBSERVER_H_ */

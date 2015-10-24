@@ -23,15 +23,15 @@
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
-static void* allocatorMalloc( self(TAllocator), size_t bytes )
+static void* allocatorMalloc( self(Allocator), size_t bytes )
 {
-	TraitOf( DynamicAllocator );
+	InterfaceOf( DynamicAllocator );
 	return malloc( bytes );
 }
 
-static void allocatorFree( self(TAllocator), void* memory )
+static void allocatorFree( self(Allocator), void* memory )
 {
-	TraitOf( DynamicAllocator );
+	InterfaceOf( DynamicAllocator );
 	free( memory );
 }
 
@@ -48,9 +48,9 @@ DynamicAllocator* createDynamicAllocator( )
 	{
 		self = &self_;
 		createObject( (Object*) self );
-		LinkTrait( TAllocator );
-		LinkTraitMethodConflictingNames( TAllocator, malloc, allocatorMalloc );
-		LinkTraitMethodConflictingNames( TAllocator, free, allocatorFree );
+		LinkInterface( Allocator );
+		LinkInterfaceMethodConflictingNames( Allocator, malloc, allocatorMalloc );
+		LinkInterfaceMethodConflictingNames( Allocator, free, allocatorFree );
 	}
 
 	return self;

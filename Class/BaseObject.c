@@ -16,9 +16,9 @@
 
 #include "Class.h"
 
-void traitBaseDestructor( self( TraitBase ) )
+void destroyInterface( self( InterfaceBase ) )
 {
-	TraitOf( BASE_OBJECT );
+	InterfaceOf( BASE_OBJECT );
 	OBJ_REFERENCE-> DESTRUCTOR_NAME ( OBJ_REFERENCE );
 }
 
