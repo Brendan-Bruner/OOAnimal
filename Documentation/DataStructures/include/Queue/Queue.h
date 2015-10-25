@@ -19,7 +19,33 @@
 #ifndef INCLUDE_QUEUE_QUEUE_H_
 #define INCLUDE_QUEUE_QUEUE_H_
 
+#include <StandardConfig.h>
 #include <Class.h>
+#include <Container.h>
+
+#if (configUSE_QUEUE == 1)
+#if (configUSE_CONTAINER == 1)
+/**
+ * @struct Queue
+ * @extends Container
+ */
+#endif
+/**
+ * @struct Queue
+ * @extends Object
+ * @brief
+ * 		Abstract class for all FIFO like containers.
+ */
+Class( Queue ) Extends( Object )
+#if (configUSE_CONTAINER == 1)
+Uses( Container )
+#endif
+	Boolean (*insert)( self(Queue), void* );
+	void* (*remove)( self(Queue) );
+#if (configQUEUE_PEEK == 1)
+	void* (*peek)( self(Queue) );
+#endif
+EndClass;
 
 
 #endif /* INCLUDE_QUEUE_QUEUE_H_ */
