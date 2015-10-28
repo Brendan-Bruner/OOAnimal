@@ -50,6 +50,7 @@ Uses( Container )
 	void* (*peek)( self(Queue) );
 #endif
 EndClass;
+#endif
 
 
 #endif /* INCLUDE_QUEUE_QUEUE_H_ */

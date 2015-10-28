@@ -30,6 +30,9 @@
  * @brief
  * 		Adds an element to the head of the queue.
  * @details
+ * 		@code
+ * 			interface( Container, self )->add( );
+ * 		@endcode
  * 		Adds an element to the head of the queue. Has the
  * 		same effect as calling Queue::insert( ).
  * @attention Implementation of Container::add( ).
@@ -43,6 +46,15 @@ static Boolean add( self(Container), void* element )
 
 #if (configCONTAINER_ADD_ALL == 1) && (configCONTAINER_ITERATOR == 1) \
 	&& (configUSE_ITERATOR == 1)
+/**
+ * @memberof Queue
+ * @brief
+ * 		Adds all elements from the container to the queue.
+ * @details
+ * 		@code
+ * 			interface( Container, self )->addAll( );
+ * 		@endcode
+ */
 static uint32_t addAll( self(Container), Container* container )
 {
 	InterfaceOf(Queue);

@@ -34,7 +34,7 @@ TEST_SETUP( )
 	/* Set up a linked list. */
 	for( iter = 0; iter < TEST_NODES_LENGTH-1; ++iter )
 	{
-		nodes[iter].setNext( &nodes[iter], &nodes[iter+1] );
+		LLNSetNext( &nodes[iter], &nodes[iter+1] );
 	}
 }
 TEST_TEARDOWN( )
@@ -57,13 +57,13 @@ TEST( setters_and_getters )
 	node = &nodes[0];
 	nodeData = nodeDataValue;
 
-	node->setData( node, (void*) &nodeData );
-	node->setNext( node, &nextNode );
-	node->setPrevious( node, &prevNode );
+	LLNSetData( node, (void*) &nodeData );
+	LLNSetNext( node, &nextNode );
+	LLNSetPrevious( node, &prevNode );
 
-	ASSERT( "Node data incorrect", *((uint32_t*) node->getData( node )) == nodeDataValue );
-	ASSERT( "Next node incorrect", node->getNext( node ) == &nextNode );
-	ASSERT( "Previous node incorrect", node->getPrevious( node ) == &prevNode );
+	ASSERT( "Node data incorrect", *((uint32_t*) LLNGetData( node )) == nodeDataValue );
+	ASSERT( "Next node incorrect", LLNGetNext( node ) == &nextNode );
+	ASSERT( "Previous node incorrect", LLNGetPrevious( node ) == &prevNode );
 }
 
 TEST( getAt )
@@ -77,10 +77,10 @@ TEST( getAt )
 	}
 
 	node = &nodes[0];
-	ASSERT( "depth=0 failed", node->getAt( node, 0 ) == node );
-	ASSERT( "depth=1 failed", node->getAt( node, 1 ) == &nodes[1] );
-	ASSERT( "depth=n failed", node->getAt( node, GET_AT_NODE_N ) == &nodes[GET_AT_NODE_N] );
-	ASSERT( "depth=x, x > length(list), failed", node->getAt( node, TEST_NODES_LENGTH ) == NULL );
+	ASSERT( "depth=0 failed", LLNGetAt( node, 0 ) == node );
+	ASSERT( "depth=1 failed", LLNGetAt( node, 1 ) == &nodes[1] );
+	ASSERT( "depth=n failed", LLNGetAt( node, GET_AT_NODE_N ) == &nodes[GET_AT_NODE_N] );
+	ASSERT( "depth=x, x > length(list), failed", LLNGetAt( node, TEST_NODES_LENGTH ) == NULL );
 }
 
 TEST( getLast )
@@ -92,11 +92,11 @@ TEST( getLast )
 		ABORT_TEST( "Linked list too short to run test" );
 	}
 
-	ASSERT( "Get last failed", nodes[0].getLast( &nodes[0] ) == &nodes[TEST_NODES_LENGTH-1] );
-	ASSERT( "Get last at last failed", nodes[TEST_NODES_LENGTH-1].getLast( &nodes[TEST_NODES_LENGTH-1] ) == &nodes[TEST_NODES_LENGTH-1] );
-	nodes[TEST_NODES_LENGTH-1].setNext( &nodes[TEST_NODES_LENGTH-1], &nodes[GET_LAST_NODE_N] );
-	ASSERT( "Get last failed with circular list", nodes[0].getLast( &nodes[0] ) == NULL );
-	ASSERT( "Get last failed with circular list at head", nodes[GET_LAST_NODE_N].getLast( &nodes[GET_LAST_NODE_N] ) == NULL );
+	ASSERT( "Get last failed", LLNGetLast( &nodes[0] ) == &nodes[TEST_NODES_LENGTH-1] );
+	ASSERT( "Get last at last faile", LLNGetLast( &nodes[TEST_NODES_LENGTH-1] ) == &nodes[TEST_NODES_LENGTH-1] );
+	LLNSetNext( &nodes[TEST_NODES_LENGTH-1], &nodes[GET_LAST_NODE_N] );
+	ASSERT( "Get last failed with circular list", LLNGetLast( &nodes[0] ) == NULL );
+	ASSERT( "Get last failed with circular list at head", LLNGetLast( &nodes[GET_LAST_NODE_N] ) == NULL );
 }
 
 TEST( isCircular )
@@ -108,10 +108,10 @@ TEST( isCircular )
 		ABORT_TEST( "Linked list too short to run test" );
 	}
 
-	ASSERT( "failed with linear list", nodes[0].isCircular( &nodes[0] ) == LINEAR_LINKED_LIST );
-	nodes[TEST_NODES_LENGTH-1].setNext( &nodes[TEST_NODES_LENGTH-1], &nodes[IS_CIRCULAR_NODE_N] );
-	ASSERT( "failed with circular list", nodes[0].isCircular( &nodes[0] ) == CIRCULAR_LINKED_LIST );
-	ASSERT( "failed with circular list at head", nodes[IS_CIRCULAR_NODE_N].isCircular( &nodes[IS_CIRCULAR_NODE_N] ) == CIRCULAR_LINKED_LIST );
+	ASSERT( "failed with linear list", LLNIsCircular( &nodes[0] ) == false );
+	LLNSetNext( &nodes[TEST_NODES_LENGTH-1], &nodes[IS_CIRCULAR_NODE_N] );
+	ASSERT( "failed with circular list", LLNIsCircular( &nodes[0] ) == true );
+	ASSERT( "failed with circular list at head", LLNIsCircular( &nodes[IS_CIRCULAR_NODE_N] ) == true );
 }
 
 TEST_SUITE( LinkedListNode )

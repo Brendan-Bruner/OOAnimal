@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="13.3">
-  <zoom_level>6</zoom_level>
+<diagram program="umlet" version="13.2">
+  <zoom_level>3</zoom_level>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>720</x>
-      <y>306</y>
-      <w>204</w>
-      <h>102</h>
+      <x>417</x>
+      <y>243</y>
+      <w>102</w>
+      <h>51</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 /Collection/
 --
-+ add( element: void* ): void
++ add( element: void* ): Boolean
 + addAll( collection: Collection* ): uint32_t
 + iterator( ): Iterator*
 + size( ): uint32_t
@@ -25,10 +25,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>258</x>
-      <y>498</y>
-      <w>312</w>
-      <h>54</h>
+      <x>186</x>
+      <y>339</y>
+      <w>156</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>Queue
 --
@@ -41,10 +41,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>408</x>
-      <y>402</y>
-      <w>354</w>
-      <h>108</h>
+      <x>261</x>
+      <y>291</y>
+      <w>177</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>570.0;10.0;570.0;80.0;10.0;80.0;10.0;160.0</additional_attributes>
@@ -52,10 +52,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1074</x>
-      <y>492</y>
-      <w>300</w>
-      <h>54</h>
+      <x>594</x>
+      <y>336</y>
+      <w>150</w>
+      <h>27</h>
     </coordinates>
     <panel_attributes>Stack
 --
@@ -68,10 +68,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>888</x>
-      <y>402</y>
-      <w>348</w>
-      <h>102</h>
+      <x>501</x>
+      <y>291</y>
+      <w>174</w>
+      <h>51</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;80.0;560.0;80.0;560.0;150.0</additional_attributes>
@@ -79,10 +79,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>666</x>
-      <y>498</y>
-      <w>306</w>
-      <h>84</h>
+      <x>390</x>
+      <y>339</y>
+      <w>153</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>Deque
 --
@@ -98,10 +98,10 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>816</x>
-      <y>402</y>
-      <w>18</w>
-      <h>108</h>
+      <x>465</x>
+      <y>291</y>
+      <w>9</w>
+      <h>54</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
@@ -109,43 +109,49 @@
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>960</x>
-      <y>678</y>
-      <w>66</w>
-      <h>66</h>
+      <x>537</x>
+      <y>489</y>
+      <w>90</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*</panel_attributes>
-    <additional_attributes>10.0;90.0;10.0;10.0;90.0;10.0</additional_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0;280.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>582</x>
-      <y>1152</y>
-      <w>222</w>
-      <h>72</h>
+      <x>363</x>
+      <y>741</y>
+      <w>111</w>
+      <h>66</h>
     </coordinates>
-    <panel_attributes>HashTable
+    <panel_attributes>Dictionary
 --
-buckets: ArrayList&lt;HashNode&gt;
+buckets: Vector&lt;HashNode&gt;
 size: uint32_t
 allocator: Allocator*
 --
 + HashTable( size: uint32_t, allocator: Allocator* )
-- hash( key: uint32_t ): uint32_t</panel_attributes>
+- hash( key: uint32_t ): uint32_t
++ add( key: uint32_t, element: void* ): Boolean
++ replace( key: uint32_t, element: void* ): void*
++ lookUp( key: uint32_t ): void*
++ remove( key: uint32_t ): void*
++ keyOf( element: void* ): uint32_t
++ removeElement( element: void* ): Boolean</panel_attributes>
     <additional_attributes/>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>534</x>
-      <y>1332</y>
-      <w>300</w>
-      <h>72</h>
+      <x>339</x>
+      <y>855</y>
+      <w>150</w>
+      <h>36</h>
     </coordinates>
-    <panel_attributes>ArrayList
+    <panel_attributes>Vector
 --
 allocator: Allocator*
 elements: void**
@@ -158,10 +164,10 @@ maxSize: uint32_t
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1038</x>
-      <y>792</y>
-      <w>270</w>
-      <h>36</h>
+      <x>633</x>
+      <y>546</y>
+      <w>135</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>CircularLinkedStack
 --
@@ -172,10 +178,10 @@ maxSize: uint32_t
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>348</x>
-      <y>786</y>
-      <w>264</w>
-      <h>36</h>
+      <x>123</x>
+      <y>495</y>
+      <w>132</w>
+      <h>18</h>
     </coordinates>
     <panel_attributes>CircularLinkedQueue
 --
@@ -186,10 +192,10 @@ maxSize: uint32_t
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1170</x>
-      <y>738</y>
-      <w>18</w>
-      <h>66</h>
+      <x>699</x>
+      <y>519</y>
+      <w>9</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;90.0</additional_attributes>
@@ -197,10 +203,10 @@ maxSize: uint32_t
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>474</x>
-      <y>750</y>
-      <w>18</w>
-      <h>48</h>
+      <x>186</x>
+      <y>477</y>
+      <w>9</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
@@ -208,15 +214,16 @@ maxSize: uint32_t
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>666</x>
-      <y>948</y>
-      <w>246</w>
-      <h>120</h>
+      <x>405</x>
+      <y>663</y>
+      <w>123</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>/List/
 --
 --
-+ add( index: uint32_t, element: void* ): void*
++ add( index: uint32_t, element: void* ): Boolean
++ replace( index: uint32_t, element: void* ): void*
 + contains( element: void* ): Boolean
 + containsAll( collection: Collection* ): Boolean
 + removeAll( collection: Collection* ): uint32_t
@@ -232,21 +239,21 @@ maxSize: uint32_t
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>780</x>
-      <y>330</y>
-      <w>882</w>
-      <h>630</h>
+      <x>462</x>
+      <y>255</y>
+      <w>426</w>
+      <h>414</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;.</panel_attributes>
-    <additional_attributes>240.0;10.0;1450.0;10.0;1450.0;950.0;10.0;950.0;10.0;1030.0</additional_attributes>
+    <additional_attributes>190.0;10.0;1400.0;10.0;1400.0;1250.0;10.0;1250.0;10.0;1360.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>864</x>
-      <y>1332</y>
-      <w>300</w>
-      <h>84</h>
+      <x>504</x>
+      <y>855</y>
+      <w>150</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>LinkedList
 --
@@ -262,10 +269,10 @@ allocator: Allocator*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>0</x>
-      <y>324</y>
-      <w>150</w>
-      <h>72</h>
+      <x>57</x>
+      <y>252</y>
+      <w>75</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 Iterator
@@ -278,10 +285,10 @@ Iterator
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>144</x>
-      <y>348</y>
-      <w>588</w>
-      <h>24</h>
+      <x>129</x>
+      <y>264</y>
+      <w>294</w>
+      <h>12</h>
     </coordinates>
     <panel_attributes>lt=&lt;-
 &lt; creates</panel_attributes>
@@ -290,43 +297,32 @@ Iterator
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>714</x>
-      <y>1062</y>
-      <w>120</w>
-      <h>282</h>
+      <x>429</x>
+      <y>723</y>
+      <w>60</w>
+      <h>138</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>180.0;10.0;180.0;330.0;10.0;330.0;10.0;450.0</additional_attributes>
+    <additional_attributes>180.0;10.0;180.0;320.0;10.0;320.0;10.0;440.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>846</x>
-      <y>1062</y>
-      <w>186</w>
-      <h>282</h>
+      <x>495</x>
+      <y>723</y>
+      <w>93</w>
+      <h>138</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;280.0;290.0;280.0;290.0;450.0</additional_attributes>
-  </element>
-  <element>
-    <id>Relation</id>
-    <coordinates>
-      <x>726</x>
-      <y>1062</y>
-      <w>18</w>
-      <h>102</h>
-    </coordinates>
-    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;270.0;290.0;270.0;290.0;440.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>240</x>
-      <y>576</y>
-      <w>222</w>
-      <h>72</h>
+      <x>138</x>
+      <y>378</y>
+      <w>111</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>SynchronousQueue
 --
@@ -341,10 +337,10 @@ queue: Queue*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>312</x>
-      <y>666</y>
-      <w>336</w>
-      <h>90</h>
+      <x>105</x>
+      <y>435</y>
+      <w>168</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>LinkedQueue
 --
@@ -361,21 +357,21 @@ allocator: Allocator*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>474</x>
-      <y>546</y>
-      <w>18</w>
-      <h>132</h>
+      <x>186</x>
+      <y>363</y>
+      <w>84</w>
+      <h>78</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>260.0;10.0;260.0;200.0;10.0;200.0;10.0;240.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>348</x>
-      <y>546</y>
-      <w>18</w>
-      <h>42</h>
+      <x>192</x>
+      <y>363</y>
+      <w>9</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
@@ -383,10 +379,10 @@ allocator: Allocator*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1014</x>
-      <y>660</y>
-      <w>336</w>
-      <h>84</h>
+      <x>621</x>
+      <y>480</y>
+      <w>168</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>LinkedStack
 --
@@ -402,10 +398,10 @@ allocator: Allocator*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>1212</x>
-      <y>570</y>
-      <w>222</w>
-      <h>72</h>
+      <x>723</x>
+      <y>387</y>
+      <w>111</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>SynchronousStack
 --
@@ -420,32 +416,32 @@ stack: Stack*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1320</x>
-      <y>540</y>
-      <w>18</w>
-      <h>42</h>
+      <x>717</x>
+      <y>360</y>
+      <w>69</w>
+      <h>33</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;40.0;210.0;40.0;210.0;90.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1176</x>
-      <y>540</y>
-      <w>18</w>
-      <h>132</h>
+      <x>702</x>
+      <y>360</y>
+      <w>9</w>
+      <h>126</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;200.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;400.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>666</x>
-      <y>612</y>
-      <w>240</w>
-      <h>102</h>
+      <x>390</x>
+      <y>396</y>
+      <w>120</w>
+      <h>51</h>
     </coordinates>
     <panel_attributes>SynchronousDeque
 --
@@ -463,10 +459,10 @@ deque: Deque*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>774</x>
-      <y>576</y>
-      <w>18</w>
-      <h>48</h>
+      <x>444</x>
+      <y>378</y>
+      <w>9</w>
+      <h>24</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
@@ -474,10 +470,10 @@ deque: Deque*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>666</x>
-      <y>732</y>
-      <w>336</w>
-      <h>90</h>
+      <x>390</x>
+      <y>516</y>
+      <w>168</w>
+      <h>45</h>
     </coordinates>
     <panel_attributes>LinkedDeque
 --
@@ -494,34 +490,34 @@ allocator: Allocator*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>924</x>
-      <y>576</y>
-      <w>18</w>
-      <h>168</h>
+      <x>519</x>
+      <y>378</y>
+      <w>9</w>
+      <h>144</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;260.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;460.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>198</x>
-      <y>522</y>
-      <w>72</w>
-      <h>114</h>
+      <x>111</x>
+      <y>351</y>
+      <w>81</w>
+      <h>57</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*</panel_attributes>
-    <additional_attributes>70.0;160.0;10.0;160.0;10.0;10.0;100.0;10.0</additional_attributes>
+    <additional_attributes>90.0;160.0;10.0;160.0;10.0;10.0;250.0;10.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>618</x>
-      <y>534</y>
-      <w>60</w>
-      <h>126</h>
+      <x>366</x>
+      <y>357</y>
+      <w>30</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
@@ -531,23 +527,23 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>1368</x>
-      <y>510</y>
-      <w>108</w>
-      <h>102</h>
+      <x>741</x>
+      <y>345</y>
+      <w>117</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*</panel_attributes>
-    <additional_attributes>110.0;140.0;160.0;140.0;160.0;10.0;10.0;10.0</additional_attributes>
+    <additional_attributes>310.0;180.0;370.0;180.0;370.0;10.0;10.0;10.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>942</x>
-      <y>1152</y>
-      <w>144</w>
-      <h>42</h>
+      <x>543</x>
+      <y>765</y>
+      <w>72</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>SynchronousList
 --
@@ -559,21 +555,21 @@ list: List*
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>864</x>
-      <y>1062</y>
-      <w>162</w>
-      <h>102</h>
+      <x>504</x>
+      <y>723</y>
+      <w>81</w>
+      <h>48</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;70.0;250.0;70.0;250.0;150.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0;250.0;60.0;250.0;140.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>906</x>
-      <y>996</y>
-      <w>270</w>
-      <h>192</h>
+      <x>525</x>
+      <y>687</y>
+      <w>135</w>
+      <h>96</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;-
 m1=1
@@ -583,23 +579,23 @@ m2=0..*</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>642</x>
-      <y>1218</y>
-      <w>30</w>
-      <h>126</h>
+      <x>393</x>
+      <y>804</y>
+      <w>15</w>
+      <h>57</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
 m1=1
 m2=0..*</panel_attributes>
-    <additional_attributes>10.0;10.0;10.0;190.0</additional_attributes>
+    <additional_attributes>10.0;10.0;10.0;170.0</additional_attributes>
   </element>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>576</x>
-      <y>6</y>
-      <w>222</w>
-      <h>150</h>
+      <x>345</x>
+      <y>93</y>
+      <w>111</w>
+      <h>75</h>
     </coordinates>
     <panel_attributes>LinkedListNode
 --
@@ -622,10 +618,10 @@ previous: LinkedListNode*
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>792</x>
-      <y>210</y>
-      <w>186</w>
-      <h>42</h>
+      <x>453</x>
+      <y>195</y>
+      <w>93</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>HashNode
 --
@@ -637,12 +633,152 @@ key: uint32_t
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>684</x>
-      <y>150</y>
-      <w>210</w>
-      <h>72</h>
+      <x>399</x>
+      <y>165</y>
+      <w>105</w>
+      <h>36</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;10.0;60.0;330.0;60.0;330.0;100.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>186</x>
+      <y>534</y>
+      <w>171</w>
+      <h>48</h>
+    </coordinates>
+    <panel_attributes>ArrayQueue
+--
+queueContainer: void**
+size: uint32_t
+head: uint32_t
+tail: uint32_t
+limitSize: uint32_t
+allocator: Allocator*
+--
++ ArrayQueue( initializeSize: uint32_t, limitSize: uint32_t allocator: Allocator* )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>267</x>
+      <y>363</y>
+      <w>48</w>
+      <h>177</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>140.0;10.0;140.0;540.0;10.0;540.0;10.0;570.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>204</x>
+      <y>594</y>
+      <w>132</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>CircularArrayQueue
+--
+--
++ CircularArrayQueue( size: uint32_t, allocator: Allocator* )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>267</x>
+      <y>579</y>
+      <w>9</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>552</x>
+      <y>381</y>
+      <w>144</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>LinkedStack
+--
+stackContainer: void**
+head: uint32_t
+tail: uint32_t
+size: uint32_t
+limitSize: uint32_t
+allocator: Allocator*
+--
++ ArrayStack( size: uint32_t, max: uint32_t, allocator: Allocator* )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>621</x>
+      <y>360</y>
+      <w>9</w>
+      <h>27</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>564</x>
+      <y>438</y>
+      <w>135</w>
+      <h>18</h>
+    </coordinates>
+    <panel_attributes>CircularArrayStack
+--
+--
++ CircularArrayStack( size: uint32_t, allocator: Allocator* )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>627</x>
+      <y>423</y>
+      <w>9</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>342</x>
+      <y>471</y>
+      <w>168</w>
+      <h>33</h>
+    </coordinates>
+    <panel_attributes>ArrayDeque
+--
+size: uint32_t
+limitSize: uint32_t
+allocator: Allocator*
+--
++ ArrayDeque( initialSize: uint32_t, limitSize:uint32_t, allocator: Allocator* )</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>423</x>
+      <y>378</y>
+      <w>99</w>
+      <h>99</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>310.0;10.0;310.0;270.0;10.0;270.0;10.0;310.0</additional_attributes>
   </element>
 </diagram>
