@@ -87,7 +87,8 @@ Interface( Container )
 #if (configCONTAINER_ADD == 1)
 	Boolean (*add)( self(Container), void* );
 #endif
-#if (configCONTAINER_ADD_ALL == 1)
+#if (configCONTAINER_ADD_ALL == 1) && (configCONTAINER_ITERATOR == 1) \
+	&& (configUSE_ITERATOR == 1)
 	uint32_t (*addAll)( self(Container), Container* );
 #endif
 #if (configCONTAINER_ITERATOR == 1) && (configUSE_ITERATOR == 1)

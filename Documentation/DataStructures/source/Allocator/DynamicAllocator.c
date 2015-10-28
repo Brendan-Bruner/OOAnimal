@@ -17,7 +17,7 @@
  * Oct 4, 2015
  */
 
-#include <DynamicAllocator.h>
+#include <Allocator/DynamicAllocator.h>
 #include <stdlib.h>
 
 /****************************************************************************/

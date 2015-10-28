@@ -17,12 +17,82 @@
  * Oct 17, 2015
  */
 
-#include <Buffers/Queue.h>
+#include <Queue/Queue.h>
 
 
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
+#if (configUSE_CONTAINER == 1)
+#if (configCONTAINER_ADD == 1)
+/**
+ * @memberof Queue
+ * @brief
+ * 		Adds an element to the head of the queue.
+ * @details
+ * 		Adds an element to the head of the queue. Has the
+ * 		same effect as calling Queue::insert( ).
+ * @attention Implementation of Container::add( ).
+ */
+static Boolean add( self(Container), void* element )
+{
+	InterfaceOf(Queue);
+	return self->insert( self, element );
+}
+#endif
+
+#if (configCONTAINER_ADD_ALL == 1) && (configCONTAINER_ITERATOR == 1) \
+	&& (configUSE_ITERATOR == 1)
+static uint32_t addAll( self(Container), Container* container )
+{
+	InterfaceOf(Queue);
+	objASSERT(container);
+
+	Iterator* 	iter;
+	uint32_t	count;
+
+	/* Get an iterator. */
+	iter = container->iterator(container);
+	if( iter == NULL )
+	{
+		/* Failed to get an iterator. */
+		return 0;
+	}
+
+	/* Copy all the elements from the container into self. */
+	count = 0;
+	while( iter->hasNext(iter) )
+	{
+		self->insert( self, iter->next(iter) );
+		++count;
+		/* TODO: error check insert. */
+	}
+
+	/* Destroy the iterator. */
+	((Object*) iter)->destroy((Object*) iter);
+}
+#endif
+
+#if (configCONTAINER_ITERATOR == 1) && (configUSE_ITERATOR == 1)
+	Iterator* (*iterator)( self(Container) );
+#endif
+
+#if (configCONTAINER_SIZE == 1)
+	uint32_t (*size)( self(Container) );
+#endif
+
+#if (configCONTAINER_RESET == 1 )
+	void (*reset)( self(Container) );
+#endif
+
+#if (configCONTAINER_IS_EMPTY == 1)
+	Boolean (*isEmpty)( self(Container) );
+#endif
+
+#if (configCONTAINER_ADD_CAPACITY == 1)
+	uint32_t (*addCapacity)( self(Container), uint32_t );
+#endif
+#endif
 static Boolean push( self(Buffer), void* element )
 {
 
@@ -49,29 +119,15 @@ static void reset( self(Buffer) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
-static void destroy( self(Object) )
-{
-	MemberOf(Queue);
-
-	LinkedListNode* currentNode;
-	LinkedListNode* nextNode;
-
-	currentNode = private( ).tail;
-	while( currentNode != NULL )
-	{
-		/* Get the next node. */
-		nextNode = LLNGetNext( currentNode );
-
-		/* Free the current node. */
-		private( ).allocator->free( private( ).allocator, currentNode );
-		currentNode = nextNode;
-	}
-
-	/* Call super class' destructor. */
-	super( )->destroy( (Object*) self );
-}
-
-Queue* createQueue
+/**
+ * @memberof Queue
+ * @protected
+ * @brief
+ * 		Constructor for abstract Queue class.
+ * @details
+ * 		Constructor for abstract Queue class.
+ */
+Queue* createQueue_
 (
 	self(Queue),
 	TAllocator* allocator,

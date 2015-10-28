@@ -35,6 +35,10 @@
  * @extends Object
  * @brief
  * 		Abstract class for all FIFO like containers.
+ * @details
+ * 		Abstract class for all FIFO like containers.
+ * 		Defines an insert, remove, and peek operation. It uses
+ * 		the Container interface if configUSE_CONTAINER is set to 1.
  */
 Class( Queue ) Extends( Object )
 #if (configUSE_CONTAINER == 1)

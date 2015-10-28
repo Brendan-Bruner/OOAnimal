@@ -16,26 +16,32 @@
  * bbruner@ualberta.ca
  * Oct 4, 2015
  */
-#ifndef INCLUDE_TRAITS_TALLOCATOR_H_
-#define INCLUDE_TRAITS_TALLOCATOR_H_
+#ifndef INCLUDE_DYNAMICALLOCATOR_H_
+#define INCLUDE_DYNAMICALLOCATOR_H_
 
+#include <Allocator/Allocator.h>
 #include <Class.h>
-#include <stddef.h> /* For size_t */
 
 /**
- * @struct TAllocator
+ * @struct DynamicAllocator
+ * @extends TAllocator
  * @brief
- * 		Interface which prototypes methods for allocating and freeing memory
+ * 		Provides wrappers for stdlib's malloc( ) and free( ).
  * @details
- * 		Interface which prototypes methods for allocating and freeing memory
- * 		@code
- * 			void* malloc( self(TAllocator), size_t size );
- * 			void free( self(TAllocator), void* );
- * 		@endcode
+ * 		Provides wrappers for stdlib's malloc( ) and free( ).
+ * @attention
+ * 		This class is a singleton.
  */
-Interface( Allocator )
-	void* (*malloc)( self(Allocator), size_t );
-	void (*free)( self(Allocator), void* );
-EndInterface;
+Class( DynamicAllocator ) Extends( Object ) Uses( Allocator )
+EndClass;
 
-#endif /* INCLUDE_TRAITS_TALLOCATOR_H_ */
+/**
+ * @member of DynamicAllocator
+ * @brief
+ * 		Constructor.
+ * @details
+ * 		Constructor. Returns singleton instance.
+ */
+DynamicAllocator* createDynamicAllocator( );
+
+#endif /* INCLUDE_DYNAMICALLOCATOR_H_ */

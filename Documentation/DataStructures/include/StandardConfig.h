@@ -64,6 +64,7 @@
 #define configCONTAINER_ADD 			(1)
 
 /* Container::addAll( container: Container* ): uint32_t */
+/* configUSE_ITERATOR and configCONTAINER_ITERATOR must be (1) also. */
 #define configCONTAINER_ADD_ALL 		(1)
 
 /* Container::iterator( ): Iterator* */
