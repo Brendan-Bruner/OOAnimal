@@ -21,25 +21,53 @@
 #include "ClassConfig.h"
 #include <stdlib.h>
 
-#define DESTRUCTOR_NAME destroy
-
 /* Name of the base object class. */
-#define CLASS_OBJECT Object
+#define CLASS_OBJECT 				Object
 
+/* Every class contains a pointer to a CLASS_OBJECT data type. */
+/* This is the name of the pointer. */
+#define CLASS_OBJECT_GLOBAL			_og
+
+/* Every class contains an instance of a CLASS_OBJECT data type. */
+/* This is the name of the variable. */
+#define CLASS_OBJECT_LOCAL			_ol
+
+/* Every class has a unique virtual table data type. The data type's name is */
+/* the class name posfixed with this name. */
 #define VIRTUAL_TABLE_NAME_POSFIX	VirtualTable
+
+/* An anonymous struct inside the class is used to help hide the virtual table. */
+/* This is that structs name. */
 #define VIRTUAL_TABLE_HIDER_NAME	_
+
+/* Each class contains a pointer to their virtual table. This is */
+/* the pointer's name. */
 #define CLASS_VIRTUAL_TABLE_NAME	_ct
+
+/* Each class contains an instance of their virtual table. This is */
+/* the instance's name. */
 #define OBJECT_VIRTUAL_TABLE_NAME	_ot
+
+/* If a class inherits, it will contain an instance of the class it */
+/* is inheriting from. This is the name of that instance. */
 #define SUPER_NAME 					_sp/* Name of the base object class. */
-#define BASE_OBJECT Object
 
-#define INTERFACE_PREFIX 			_interface
+/* When a class implementings an interface, it contains an */
+/* instance of the interface. This is prefixed to the data type */
+/* of the interface and used as the variable name. */
+#define INTERFACE_PREFIX 			_if
+
+/* Interfaces contain a pointer offset from the class implemeting them. */
+/* This is the name of the variable used to save the offset. */
 #define INTERFACE_OFFSET_NAME 		_io
+
+/* In an effort to help hide data, all system variables of an interface */
+/* are put inside an anonymous struct with this name. */
 #define INTERFACE_META_DATA_NAME	_im
-#define INTERFACE_PREFIX			_if
 
-#define CLASS_OBJECT_NAME			_co
-
+/* All objects of a class share a virtual table. The virtual table is */
+/* is declared as a static variable in the class source file. This is */
+/* the name of that variable. */
 #define VIRTUAL_TABLE_DEFINE_NAME	_ClassVirtualTable
 
 /****************************************************************************/
@@ -109,7 +137,6 @@ static inline void OOFree( void* mem )
 /* Use a interface within a class */
 /******************************************************************************/
 /* Adds a interface to a class declaration, used after opening a class */
-/* declaration and any inheritance. */
 #define IMPLEMENTS( i )	\
 	i INTERFACE_PREFIX##i;
 
@@ -117,6 +144,7 @@ static inline void OOFree( void* mem )
 /******************************************************************************/
 /* Put a class' virtual table into memory */
 /******************************************************************************/
+/* Used to put a classes virtual table into memory. */
 #define CLASS_VIRTUAL_TABLE( C, ... )										\
 		static C##VIRTUAL_TABLE_NAME_POSFIX VIRTUAL_TABLE_DEFINE_NAME = 	\
 		{ __VA_ARGS__ };
