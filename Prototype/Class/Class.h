@@ -21,16 +21,13 @@
 #include "ClassConfig.h"
 #include <stdlib.h>
 
-/* Name of the base object class. */
-#define CLASS_OBJECT 				Object
 
-/* Every class contains a pointer to a CLASS_OBJECT data type. */
-/* This is the name of the pointer. */
-#define CLASS_OBJECT_GLOBAL			_og
+/* Destructor signature. */
+typedef void (*DESTRUCTOR)( void* );
 
-/* Every class contains an instance of a CLASS_OBJECT data type. */
-/* This is the name of the variable. */
-#define CLASS_OBJECT_LOCAL			_ol
+/* Names of object / class destructor. */
+#define OBJECT_DESTRUCTOR_NAME 		_od
+#define CLASS_DESTRUCTOR_NAME		_cd
 
 /* Every class has a unique virtual table data type. The data type's name is */
 /* the class name posfixed /prefixed with this name. */
@@ -77,13 +74,19 @@
 #define VIRTUAL_TABLE_DEFINE_NAME	_ClassVirtualTable
 
 /* Name used to reference the object within class methods. This variable */
-/* is 'self' in python and 'this' in java / C++. Note, making this varaible */
+/* is 'self' in python and 'this' in java / C++. Note, making this variable */
 /* 'this' will prevent compatibility with C++ code. */
 #define OBJECT_REFERENCE_NAME 		self
 
 /* Used as an intermediate variable name while casting to the */
 /* OBJECT_REFERENCE_NAME. */
 #define OBJECT_PRE_REFERENCE_NAME	self_
+
+/* Used to posfix/prefix to a function name. */
+#define VIRTUAL_METHOD_NAME_POSFIX
+#define VIRTUAL_METHOD_NAME_PREFIX	_
+#define TO_VIRTUAL_METHOD_NAME( name ) \
+	VIRTUAL_METHOD_NAME_PREFIX##name##VIRTUAL_METHOD_NAME_POSFIX
 
 /****************************************************************************/
 /* Memory Management 														*/
@@ -125,7 +128,8 @@ static inline void OOFree( void* mem )
 
 /* End the definition of a class. */
 #define END_CLASS															\
-		CLASS_OBJECT* CLASS_OBJECT_NAME;									\
+		DESTRUCTOR CLASS_DESTRUCTOR_NAME;									\
+		DESTRUCTOR OBJECT_DESTRUCTOR_NAME;									\
 	};
 
 
@@ -157,27 +161,48 @@ static inline void OOFree( void* mem )
 
 
 /******************************************************************************/
-/* Put a class' virtual table into memory */
+/* Put a class' virtual table into memory. */
 /******************************************************************************/
+/* Used when putting the virtual table into memory. */
+#define VIRTUAL_METHOD( name ) \
+	.name = TO_VIRTUAL_METHOD_NAME( name )
+
 /* Used to put a classes virtual table into memory. */
 #define CLASS_VIRTUAL_TABLE( C, ... )										\
-		static TO_VTABLE_TYPE_NAME( C ) VIRTUAL_TABLE_DEFINE_NAME = 		\
-		{ __VA_ARGS__ };
+	static const TO_VTABLE_TYPE_NAME( C ) VIRTUAL_TABLE_DEFINE_NAME = 		\
+	{ __VA_ARGS__ };
+
+
+/******************************************************************************/
+/* Used in a class' destructor. */
+/******************************************************************************/
+#define DESTRUCTOR( class )													\
+	static void class##Destructor( self(void*) )
+
+
+/******************************************************************************/
+/* Used in a class' constructor. */
+/******************************************************************************/
+#define CONSTRUCTOR_OF( class ) \
+	class * OBJECT_REFERENCE = OBJECT_PRE_REFERENCE;						\
+	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.CLASS_VIRTUAL_TABLE = & VIRTUAL_TABLE_DEFINE_NAME; \
+	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE = VIRTUAL_TABLE_DEFINE_NAME; \
 
 
 /******************************************************************************/
 /* Used to override methods in super class. */
 /******************************************************************************/
 #define OVERRIDE_VIRTUAL_METHOD( class, method )							\
-	(class)->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE_NAME.method = method
+	(class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE_NAME.method = method
 
 #define OVERRIDE_INTERFACE_METHOD( iface, class, method )					\
-	(class)->TO_IFACE_VAR_NAME( iface ).OBJECT_VIRTUAL_TABLE_NAME.method = method
+	(class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).OBJECT_VIRTUAL_TABLE_NAME.method = method
+
 
 /******************************************************************************/
 /* Used to access super class' implementation of a method. */
 /******************************************************************************/
-#define SUPER_CLASS \
+#define SUPER_CLASS( ) \
 	OBJECT_REFERENCE_NAME->SUPER_NAME.VIRTUAL_TABLE_HIDER_NAME.CLASS_VIRTUAL_TABLE_NAME
 
 #define SUPER_INTERFACE( iface ) \
@@ -187,14 +212,14 @@ static inline void OOFree( void* mem )
 /******************************************************************************/
 /* Used to implement virtual methods and interface methods. */
 /******************************************************************************/
-#define VIRTUAL_METHOD( ret, name, arg )									\
-	ret name arg															\
+#define VIRTUAL_METHOD_DEFINE( ret, name, arg )								\
+	ret name args															\
 	{																		\
 		objASSERT( OBJECT_PRE_REFERENCE_NAME );								\
-		objASSERT( OBJECT_PRE_REFERENCE_NAME->name );						\
-		return OBJECT_PRE_REFERENCE->name( OBJECT_PRE_REFERENCE, arg );		\
+		objASSERT( OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE. name );						\
+		return OBJECT_PRE_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE. name ( OBJECT_PRE_REFERENCE, arg );	\
 	}																		\
-	static ret name arg														\
+	static ret TO_VIRTUAL_METHOD_NAME( name ) args
 
 /******************************************************************************/
 /* Link class methods to an object an construction time */
