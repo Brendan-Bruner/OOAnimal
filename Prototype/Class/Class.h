@@ -18,39 +18,40 @@
 #ifndef CLASS_H_
 #define CLASS_H_		
 
-#include "ClassConfig.h"
+#include <stddef.h>
 #include <stdlib.h>
 
+#include <stdio.h>
+#define objASSERT( O )	do{										\
+				   if( (O) == 0 ) { 								\
+				   	printf("NULL pointer exception:\nfile %s\nline %d\n", 			\
+						(char *) __FILE__, __LINE__ ); 					\
+					for( ;; );	}							\
+				} while( 0 )
 
-/* Destructor signature. */
-typedef void (*DESTRUCTOR)( void* );
+/* Name of a variable indicating allocation scheme. */
+#define IS_DYNAMIC_OBJECT 			_id
+#define DYNAMIC_OBJECT				1
+#define STATIC_OBJECT				2
 
-/* Names of object / class destructor. */
-#define OBJECT_DESTRUCTOR_NAME 		_od
-#define CLASS_DESTRUCTOR_NAME		_cd
+/* Data type of the base object class. */
+#define CLASS_OBJECT 				Object_t
 
-/* Every class has a unique virtual table data type. The data type's name is */
-/* the class name posfixed /prefixed with this name. */
-#define VIRTUAL_TABLE_NAME_POSFIX	VirtualTable
-#define VIRTUAL_TABLE_NAME_PREFIX
-#define TO_VTABLE_TYPE_NAME( class ) \
-	VIRTUAL_TABLE_NAME_POSFIX##class##VIRTUAL_TABLE_NAME_PREFIX
+/* All classes and interfaces contain a pointer to their highest */
+/* super class, the base object, this is the name of that pointer. */
+#define CLASS_OBJECT_NAME			_co
 
 /* An anonymous struct inside the class is used to help hide the virtual table. */
 /* This is that structs name. */
-#define VIRTUAL_TABLE_HIDER_NAME	_
+#define VIRTUAL_TABLE_HIDER_NAME	_vt
 
-/* Each class contains a pointer to their virtual table. This is */
-/* the pointer's name. */
-#define CLASS_VIRTUAL_TABLE_NAME	_ct
-
-/* Each class contains an instance of their virtual table. This is */
-/* the instance's name. */
-#define OBJECT_VIRTUAL_TABLE_NAME	_ot
+/* An anonymous struct inside the class is used to help hide the override table. */
+/* This is that structs name. */
+#define OVERRIDE_TABLE_HIDER_NAME	_ot
 
 /* If a class inherits, it will contain an instance of the class it */
 /* is inheriting from. This is the name of that instance. */
-#define SUPER_NAME 					_sp/* Name of the base object class. */
+#define SUPER_NAME 					_sp
 
 /* When a class implementings an interface, it contains an */
 /* instance of the interface. This is prefixed / posfixed to the data type */
@@ -68,68 +69,128 @@ typedef void (*DESTRUCTOR)( void* );
 /* are put inside an anonymous struct with this name. */
 #define INTERFACE_META_DATA_NAME	_im
 
-/* All objects of a class share a virtual table. The virtual table is */
-/* is declared as a static variable in the class source file. This is */
-/* the name of that variable. */
-#define VIRTUAL_TABLE_DEFINE_NAME	_ClassVirtualTable
-
 /* Name used to reference the object within class methods. This variable */
 /* is 'self' in python and 'this' in java / C++. Note, making this variable */
 /* 'this' will prevent compatibility with C++ code. */
-#define OBJECT_REFERENCE_NAME 		self
+#define OBJECT_REFERENCE	 		self
 
 /* Used as an intermediate variable name while casting to the */
 /* OBJECT_REFERENCE_NAME. */
 #define OBJECT_PRE_REFERENCE_NAME	self_
 
-/* Used to posfix/prefix to a function name. */
-#define VIRTUAL_METHOD_NAME_POSFIX
-#define VIRTUAL_METHOD_NAME_PREFIX	_
-#define TO_VIRTUAL_METHOD_NAME( name ) \
-	VIRTUAL_METHOD_NAME_PREFIX##name##VIRTUAL_METHOD_NAME_POSFIX
+/* Used at the beginning of all functions to pass in the object. */
+#define self( C )					C* OBJECT_PRE_REFERENCE_NAME
+
 
 /****************************************************************************/
 /* Memory Management 														*/
 /****************************************************************************/
-static inline void* OOMalloc( size_t size )
+typedef void* (*OOMallocType)( size_t );
+typedef void (*OOFreeType)( void* );
+static OOMallocType OOMalloc = malloc;
+static OOFreeType OOFree = free;
+static inline void suppressOOFreeWarning( ){ (void) OOFree( NULL ); }
+
+
+/****************************************************************************/
+/* Base object																*/
+/****************************************************************************/
+typedef struct CLASS_OBJECT CLASS_OBJECT;
+struct CLASS_OBJECT
 {
-	return malloc( size );
-}
-static inline void OOFree( void* mem )
+	struct
+	{
+		void (*virtualDestroy)( CLASS_OBJECT* );
+	} VIRTUAL_TABLE_HIDER_NAME;
+	char IS_DYNAMIC_OBJECT;
+};
+extern void OOCreateObject( CLASS_OBJECT* );
+
+
+/******************************************************************************/
+/* Used to create and destroy objects. */
+/******************************************************************************/
+#include <stdio.h>
+static void* newObjectMemLocation_;
+static inline void* createNewInline( size_t size )
 {
-	free( mem );
+	void* object = (void*) OOMalloc( size );
+	newObjectMemLocation_ = object;
+	return object;
 }
+static inline void* createInline( void* mem )
+{
+	newObjectMemLocation_ = mem;
+	return mem;
+}
+
+#define createNew( class, constructor )													\
+	createNewInline( sizeof( class ) );													\
+	if( newObjectMemLocation_ != NULL ){ 												\
+		((CLASS_OBJECT*) newObjectMemLocation_)->IS_DYNAMIC_OBJECT = DYNAMIC_OBJECT; 	\
+	}																					\
+	OOCreateObject( (CLASS_OBJECT*) newObjectMemLocation_ );							\
+	constructor
+
+
+#define create( class, constructor, mem )										\
+	createInline( &mem );														\
+	((CLASS_OBJECT*) &mem)->IS_DYNAMIC_OBJECT = STATIC_OBJECT;					\
+	createObject( (CLASS_OBJECT*) &mem );										\
+	constructor
+
+#define destroy( mem )																	\
+	do {																				\
+	objASSERT( mem );																	\
+	CLASS_OBJECT* object = mem->CLASS_OBJECT_NAME;										\
+	objASSERT( object->VIRTUAL_TABLE_HIDER_NAME.virtualDestroy );						\
+	object->VIRTUAL_TABLE_HIDER_NAME. virtualDestroy( object );							\
+	if( object->IS_DYNAMIC_OBJECT == DYNAMIC_OBJECT ){									\
+		OOFree( (void*) object );														\
+		printf( "delete dynamic\n" );\
+	}																					\
+	} while( 0 )
 
 
 /******************************************************************************/
 /* Class Declaration */
 /******************************************************************************/
-/* Start the definition of a class. */
-#define CLASS(D)															\
-	typedef struct D D;														\
-	typedef struct TO_VTABLE_TYPE_NAME( D ) TO_VTABLE_TYPE_NAME( D );		\
-	struct D																\
-	{
+/* The two macros below select one of two possible class declaration. */
+#define CLASS_DECLARE_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define CLASS( ... ) \
+	CLASS_DECLARE_SELECTION( __VA_ARGS__, CLASS_EXTENDS_SELECT, CLASS_EXTENDS_OBJECT)( __VA_ARGS__ )
 
-/* Optionally inherit after the Class() declaration. */					
-#define EXTENDS(S) \
+/* Start a class declaration with manually selected inheritance. */
+#define CLASS_EXTENDS_SELECT( D, S )										\
+	typedef struct D D;														\
+	struct D																\
+	{																		\
 		S SUPER_NAME;
 
+/* Start a class declaration with automatic inheritance, ie, the base object. */
+#define CLASS_EXTENDS_OBJECT( D )											\
+	typedef struct D D;														\
+	struct D																\
+	{																		\
+		CLASS_OBJECT SUPER_NAME;
+
 /* Declare all virtual methods. */
-#define VIRTUAL( D, ... )													\
+#define VIRTUAL( ... )														\
 		struct																\
 		{																	\
-			struct TO_VTABLE_TYPE_NAME( D )									\
-			{																\
-				__VA_ARGS__													\
-			} const *CLASS_VIRTUAL_TABLE_NAME;								\
-			TO_VTABLE_TYPE_NAME( D ) OBJECT_VIRTUAL_TABLE_NAME;				\
+			__VA_ARGS__														\
 		} VIRTUAL_TABLE_HIDER_NAME;
+
+/* Used to override super class / interface methods. */
+#define OVERRIDE( ... )														\
+		struct																\
+		{																	\
+			__VA_ARGS__														\
+		} OVERRIDE_TABLE_HIDER_NAME;
 
 /* End the definition of a class. */
 #define END_CLASS															\
-		DESTRUCTOR CLASS_DESTRUCTOR_NAME;									\
-		DESTRUCTOR OBJECT_DESTRUCTOR_NAME;									\
+		CLASS_OBJECT* CLASS_OBJECT_NAME;									\
 	};
 
 
@@ -143,12 +204,9 @@ static inline void OOFree( void* mem )
 	{
 
 /* Close a interface declaration. */
-#define END_INTERFACE 														\
-		struct																\
-		{																	\
-			void* INTERFACE_OFFSET_NAME;									\
-			CLASS_OBJECT* CLASS_OBJECT_NAME;								\
-		} INTERFACE_META_DATA_NAME;											\
+#define END_INTERFACE 														\															\
+		void* INTERFACE_OFFSET_NAME;										\									\
+		CLASS_OBJECT* CLASS_OBJECT_NAME;									\
 	}
 
 
@@ -159,173 +217,63 @@ static inline void OOFree( void* mem )
 #define IMPLEMENTS( iface )	\
 	iface TO_IFACE_VAR_NAME( iface );
 
-
-/******************************************************************************/
-/* Put a class' virtual table into memory. */
-/******************************************************************************/
-/* Used when putting the virtual table into memory. */
-#define VIRTUAL_METHOD( name ) \
-	.name = TO_VIRTUAL_METHOD_NAME( name )
-
-/* Used to put a classes virtual table into memory. */
-#define CLASS_VIRTUAL_TABLE( C, ... )										\
-	static const TO_VTABLE_TYPE_NAME( C ) VIRTUAL_TABLE_DEFINE_NAME = 		\
-	{ __VA_ARGS__ };
+/* Bind the interface data at run time. Use in constructor */
+#define CREATE_INTERFACE(t) \
+	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ).INTERFACE_OFFSET_NAME = \
+	(void *) (((char *) &(OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ))) - (char *) OBJECT_REFERENCE); \
+	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ).CLASS_OBJECT_NAME = (CLASS_OBJECT*) OBJECT_REFERENCE
 
 
 /******************************************************************************/
-/* Used in a class' destructor. */
+/* Used to dynamically link methods at run time. */
 /******************************************************************************/
-#define DESTRUCTOR( class )													\
-	static void class##Destructor( self(void*) )
+#define LINK_VIRTUAL_METHOD( method ) \
+	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME. method = method
 
-
-/******************************************************************************/
-/* Used in a class' constructor. */
-/******************************************************************************/
-#define CONSTRUCTOR_OF( class ) \
-	class * OBJECT_REFERENCE = OBJECT_PRE_REFERENCE;						\
-	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.CLASS_VIRTUAL_TABLE = & VIRTUAL_TABLE_DEFINE_NAME; \
-	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE = VIRTUAL_TABLE_DEFINE_NAME; \
-
+#define LINK_INTERFACE_METHOD( iface, method ) \
+	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME. method = method
 
 /******************************************************************************/
-/* Used to override methods in super class. */
+/* Used to override methods in super class / interface. */
 /******************************************************************************/
 #define OVERRIDE_VIRTUAL_METHOD( class, method )							\
-	(class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE_NAME.method = method
+	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = (class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method; \
+	(class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method = method
 
-#define OVERRIDE_INTERFACE_METHOD( iface, class, method )					\
-	(class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).OBJECT_VIRTUAL_TABLE_NAME.method = method
+#define OVERRIDE_INTERFACE_METHOD( class, iface, method )					\
+	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = (class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME. method; \
+	(class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME.method = method
 
 
 /******************************************************************************/
 /* Used to access super class' implementation of a method. */
 /******************************************************************************/
-#define SUPER_CLASS( ) \
-	OBJECT_REFERENCE_NAME->SUPER_NAME.VIRTUAL_TABLE_HIDER_NAME.CLASS_VIRTUAL_TABLE_NAME
-
-#define SUPER_INTERFACE( iface ) \
-	(&(OBJECT_REFERENCE_NAME->SUPER_NAME.TO_IFACE_VAR_NAME( iface ).CLASS_VIRTUAL_TABLE_NAME))
+#define SUPER( ) \
+	(&(OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME))
 
 
 /******************************************************************************/
 /* Used to implement virtual methods and interface methods. */
 /******************************************************************************/
-#define VIRTUAL_METHOD_DEFINE( ret, name, arg )								\
-	ret name args															\
-	{																		\
-		objASSERT( OBJECT_PRE_REFERENCE_NAME );								\
-		objASSERT( OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE. name );						\
-		return OBJECT_PRE_REFERENCE->VIRTUAL_TABLE_HIDER_NAME.OBJECT_VIRTUAL_TABLE. name ( OBJECT_PRE_REFERENCE, arg );	\
-	}																		\
-	static ret TO_VIRTUAL_METHOD_NAME( name ) args
+#define VIRTUAL_METHOD( C, name )												\
+	objASSERT( OBJECT_PRE_REFERENCE_NAME );										\
+	objASSERT( OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME. name ); 	\
+	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME;						\
+	return OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME. name
 
-/******************************************************************************/
-/* Link class methods to an object an construction time */
-/******************************************************************************/
-/* Link a virtual method on a class by class basis. */
-#define LinkMethod(M)		/* Assign function to pointer. */	\
-				OBJ_REFERENCE-> M = & M
-#define LinkMethodConflictingNames( MP, MD ) \
-				OBJ_REFERENCE-> MP = & MD
+#define MEMBER_OF( C )															\
+	objASSERT( OBJECT_PRE_REFERENCE_NAME );										\
+	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME
 
-/* Override a virtual method on a class by class basis. */
-#define HardOverrideMethod(S,M)	/* Reassign function to a pointer */	\
-		/* in super class. */			\
-		((S *) OBJ_REFERENCE)-> M = & M
-#define HardOverrideProtectedMethod(S,M) \
-		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M = & M
-#define HardOverrideMethodConflictingNames(S,MP,MD) \
-		((S*) OBJ_REFERENCE)-> MP = & MD
-#define HardOverrideProtectedMethodConflictingNames(S,MP,MD) \
-		((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP = & MD
+#define CONSTRUCTOR_OF( C )														\
+	if( OBJECT_PRE_REFERENCE == 0 ){ return 0; }								\
+	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME;						\
+	OBJECT_REFERENCE->CLASS_OBJECT_NAME = (CLASS_OBJECT*) OBJECT_REFERENCE
 
-#define SoftOverrideMethod(S,M) \
-  do {										\
-    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)-> M; 	\
-    HardOverrideMethod(S,M);							\
-  } while( 0 )
-#define SoftOverrideProtectedMethod(S,M) \
-  do {										\
-    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. M; 	\
-    HardOverrideProtectedMethod(S,M);							\
-  } while( 0 )
-#define SoftOverrideMethodConflictingNames(S,MP,MD) \
-		do {										\
-		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)-> MP; 	\
-		    HardOverrideMethodConflictingNames(S,MP,MD);							\
-		  } while( 0 )
-#define SoftOverrideProtectedMethodConflictingNames(S,MP,MD) \
-		do {										\
-		    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->PROTECTED_STRUCT_NAME. MP; 	\
-		    HardOverrideProtectedMethodConflictingNames(S,MP,MD);							\
-		  } while( 0 )
-
-/******************************************************************************/
-/* Link interfaces to an object at construction time */
-/******************************************************************************/
-/* Used to call an objects destructor when only a refrence */
-/* to its interface exists. */
-extern void destroyInterface( self( BASE_TRAIT ) );
-
-/* Link a interface to a class, called in constructor. */
-#define LinkInterface(t) \
-	OBJ_REFERENCE->TRAIT_PREFIX##t.DESTRUCTOR_NAME = destroyInterface; \
-	OBJ_REFERENCE->TRAIT_PREFIX##t.TRAIT_OFFSET = \
-	(void *) (((unsigned char *) &(OBJ_REFERENCE->TRAIT_PREFIX##t)) - (unsigned char *) OBJ_REFERENCE)
-
-/* Link a interface method to a class. */
-#define LinkInterfaceMethod(t,M) \
-  OBJ_REFERENCE->TRAIT_PREFIX##t. M = & M
-#define LinkInterfaceMethodConflictingNames(t,MP,MD) \
-	OBJ_REFERENCE->TRAIT_PREFIX##t. MP = & MD
-
-/* Override a interface method defined in a super class. */
-#define HardOverrideInterfaceMethod(S,t,M) \
-  ((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. M = & M
-#define HardOverrideInterfaceMethodConflictingNames(S,t,MP,MD) \
-	((S *) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP = & MD
-
-/* Override a interface method in immediate super class, but retain reference to */
-/* original implementation so that it can be called in the overrode method. */
-#define SoftOverrideInterfaceMethod(S,t,M) \
-  do {												\
-    OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> M = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. M; 	\
-    HardOverrideInterfaceMethod(S,t,M);									\
-  } while( 0 )
-#define SoftOverrideInterfaceMethodConflictingNames(S,t,MP,MD) \
-		do {												\
-			OBJ_REFERENCE->RECURSIVE_STRUCT_NAME-> MP = ((S*) OBJ_REFERENCE)->TRAIT_PREFIX##t. MP; 	\
-			HardOverrideInterfaceMethodConflictingNames(S,t,MP,MD);									\
-		} while( 0 )
-
-
-/******************************************************************************/
-/* Bind a class' implementation to the class implementing the method */
-/******************************************************************************/
-/* Used to register a function with a class, on a function by function basis. */
-#define MemberOf( C ) \
-	C *OBJ_REFERENCE = (C *) PRE_OBJ_REFERENCE; \
-	objASSERT( OBJ_REFERENCE );
-
-
-/******************************************************************************/
-/* Bind a interface's method implementation to the class using it */
-/******************************************************************************/
-/* Cast a pointer to a interface into the class it is a part of. */
-/* Must only be called inside of interface method definitions. */
-#define InterfaceOf(C) \
-	objASSERT( PRE_OBJ_REFERENCE ); \
-	C *OBJ_REFERENCE = (C *) ((unsigned char *)PRE_OBJ_REFERENCE - (unsigned char *)PRE_OBJ_REFERENCE->TRAIT_OFFSET); \
-	objASSERT( OBJ_REFERENCE )
-
-
-/******************************************************************************/
-/* Access super classes methods which are softly overrode. */
-/******************************************************************************/
-#define super( ) \
-  (&(OBJ_REFERENCE->RECURSIVE_STRUCT_NAME))
+#define INTERFACE_OF(C) 															\
+	objASSERT( OBJECT_PRE_REFERENCE_NAME ); 										\
+	C *OBJECT_REFERENCE = (C *) ((char *)OBJECT_PRE_REFERENCE_NAME - 				\
+						(char *)OBJECT_PRE_REFERENCE_NAME->INTERFACE_OFFSET_NAME); 	\
 
 
 /******************************************************************************/
