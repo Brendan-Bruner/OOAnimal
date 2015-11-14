@@ -26,11 +26,10 @@ void PointMove( self(Point_t), int x, int y )
 }
 
 
-Point_t* Point( self(Point_t), int x, int y )
+void Point( self(Point_t), int x, int y )
 {
 	CONSTRUCTOR_OF(Point_t);
 	LINK_VIRTUAL_METHOD( draw );
 	self->x = x;
 	self->y = y;
-	return self;
 }

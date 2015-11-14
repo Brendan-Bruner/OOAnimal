@@ -89,6 +89,7 @@ typedef void* (*OOMallocType)( size_t );
 typedef void (*OOFreeType)( void* );
 static OOMallocType OOMalloc = malloc;
 static OOFreeType OOFree = free;
+static inline void suppressOOMallocWarning( ){ (void) OOMalloc( 0 ); }
 static inline void suppressOOFreeWarning( ){ (void) OOFree( NULL ); }
 
 
@@ -110,34 +111,21 @@ extern void OOCreateObject( CLASS_OBJECT* );
 /******************************************************************************/
 /* Used to create and destroy objects. */
 /******************************************************************************/
-#include <stdio.h>
-static void* newObjectMemLocation_;
-static inline void* createNewInline( size_t size )
-{
-	void* object = (void*) OOMalloc( size );
-	newObjectMemLocation_ = object;
-	return object;
-}
-static inline void* createInline( void* mem )
-{
-	newObjectMemLocation_ = mem;
-	return mem;
-}
-
 #define createNew( object, constructor )												\
 	OOMalloc( sizeof( *(object) ) );													\
+	do {																				\
 	if( (object) != NULL ){ 															\
 		((CLASS_OBJECT*) (object) )->IS_DYNAMIC_OBJECT = DYNAMIC_OBJECT; 				\
+		OOCreateObject( (CLASS_OBJECT*) (object) );										\
+		constructor;																	\
 	}																					\
-	OOCreateObject( (CLASS_OBJECT*) (object) );											\
-	(object) = constructor
+	} while( 0 )
 
-
-#define create( mem, object, constructor )										\
+#define create( mem, constructor )												\
 	&(mem);																		\
 	((CLASS_OBJECT*) &(mem))->IS_DYNAMIC_OBJECT = STATIC_OBJECT;				\
-	createObject( (CLASS_OBJECT*) &(mem) );										\
-	(object) = constructor
+	OOCreateObject( (CLASS_OBJECT*) &(mem) );										\
+	constructor
 
 #define destroy( mem )																	\
 	do {																				\
@@ -147,7 +135,6 @@ static inline void* createInline( void* mem )
 	object->VIRTUAL_TABLE_HIDER_NAME. virtualDestroy( object );							\
 	if( object->IS_DYNAMIC_OBJECT == DYNAMIC_OBJECT ){									\
 		OOFree( (void*) object );														\
-		printf( "delete dynamic\n" );\
 	}																					\
 	} while( 0 )
 
@@ -161,6 +148,7 @@ static inline void* createInline( void* mem )
 	CLASS_DECLARE_SELECTION( __VA_ARGS__, CLASS_EXTENDS_SELECT, CLASS_EXTENDS_OBJECT)( __VA_ARGS__ )
 
 /* Start a class declaration with manually selected inheritance. */
+#define EXTENDS ,
 #define CLASS_EXTENDS_SELECT( D, S )										\
 	typedef struct D D;														\
 	struct D																\
@@ -237,8 +225,8 @@ static inline void* createInline( void* mem )
 /* Used to override methods in super class / interface. */
 /******************************************************************************/
 #define OVERRIDE_VIRTUAL_METHOD( class, method )							\
-	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = (class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method; \
-	(class* OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method = method
+	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = ((class*) OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method; \
+	((class*) OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method = method
 
 #define OVERRIDE_INTERFACE_METHOD( class, iface, method )					\
 	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = (class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME. method; \
@@ -266,7 +254,7 @@ static inline void* createInline( void* mem )
 	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME
 
 #define CONSTRUCTOR_OF( C )														\
-	if( OBJECT_PRE_REFERENCE == 0 ){ return 0; }								\
+	if( OBJECT_PRE_REFERENCE_NAME == 0 ){ return; }								\
 	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME;						\
 	OBJECT_REFERENCE->CLASS_OBJECT_NAME = (CLASS_OBJECT*) OBJECT_REFERENCE
 

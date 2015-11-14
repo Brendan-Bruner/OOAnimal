@@ -13,6 +13,6 @@ void OONullDestroy( CLASS_OBJECT* self )
 }
 void OOCreateObject( CLASS_OBJECT* self )
 {
-	objASSERT( self );
+	if( self == NULL ){ return; }
 	self->_vt.virtualDestroy = OONullDestroy;
 }
