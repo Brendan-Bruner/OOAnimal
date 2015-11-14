@@ -7,6 +7,9 @@
 
 #include "Class.h"
 
+OOMallocType OOMalloc = OO_MALLOC;
+OOFreeType OOFree = OO_FREE;
+
 void OONullDestroy( CLASS_OBJECT* self )
 {
 	objASSERT( self );
