@@ -124,20 +124,20 @@ static inline void* createInline( void* mem )
 	return mem;
 }
 
-#define createNew( class, constructor )													\
-	createNewInline( sizeof( class ) );													\
-	if( newObjectMemLocation_ != NULL ){ 												\
-		((CLASS_OBJECT*) newObjectMemLocation_)->IS_DYNAMIC_OBJECT = DYNAMIC_OBJECT; 	\
+#define createNew( object, constructor )												\
+	OOMalloc( sizeof( *(object) ) );													\
+	if( (object) != NULL ){ 															\
+		((CLASS_OBJECT*) (object) )->IS_DYNAMIC_OBJECT = DYNAMIC_OBJECT; 				\
 	}																					\
-	OOCreateObject( (CLASS_OBJECT*) newObjectMemLocation_ );							\
-	constructor
+	OOCreateObject( (CLASS_OBJECT*) (object) );											\
+	(object) = constructor
 
 
-#define create( class, constructor, mem )										\
-	createInline( &mem );														\
-	((CLASS_OBJECT*) &mem)->IS_DYNAMIC_OBJECT = STATIC_OBJECT;					\
-	createObject( (CLASS_OBJECT*) &mem );										\
-	constructor
+#define create( mem, object, constructor )										\
+	&(mem);																		\
+	((CLASS_OBJECT*) &(mem))->IS_DYNAMIC_OBJECT = STATIC_OBJECT;				\
+	createObject( (CLASS_OBJECT*) &(mem) );										\
+	(object) = constructor
 
 #define destroy( mem )																	\
 	do {																				\
