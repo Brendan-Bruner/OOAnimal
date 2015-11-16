@@ -7,7 +7,8 @@ SOURCEDIR := ./
 
 # Path to all header files used
 INCLUDES := -IClass -Iunit -I.
-SOURCES := $(shell find $(SOURCEDIR) -name '*.c')
+SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '*/Tutorials/**.c')
+SOURCES := $(filter-out /**/Tutorials/**.c, $(SOURCES))
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
 EXEC = bin
