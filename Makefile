@@ -1,29 +1,25 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic
+CFLAGS = -Wall -Wextra
 
-CLASS_SRC = ../../Class/*.c
-# Path to object directories / files
-COREOBJ = obj/
-# Path to the start of all source files
-COREMAIN = main/
+# Build directory
+BUILDDIR := Debug
+SOURCEDIR := ./
 
 # Path to all header files used
-INC = -I../../Class -Imain/Classes/include -Imain/Traits
+INCLUDES := -IClass -Iunit -I.
+SOURCES := $(shell find $(SOURCEDIR) -name '*.c')
+OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
-OBJDIR = obj/Classes/
-OBJ = Dragon.o FlameGuard.o Whelp.o FireElement.o FlameLord.o LivingFlameThrower.o
-OBJECTS = $(addprefix $(OBJDIR),$(OBJ)) obj/main.o
-
-EXEC = OODragon
+EXEC = bin
 
 all : MKDIR $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) $(CLASS_SRC) -o $(EXEC)
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(EXEC)
 
-$(addprefix $(COREOBJ),%.o) : $(addprefix $(COREMAIN),%.c)
-	$(CC) $(CFLAGS) -c $(INC) $< -o $@
+$(BUILDDIR)/%.o : %.c
+	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
 
 MKDIR :
-	mkdir -p $(OBJDIR)
+	mkdir -p $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%))
 
 clean :
-	rm -rf $(COREOBJ) $(EXEC)
+	rm -rf $(EXEC) $(BUILDDIR)
