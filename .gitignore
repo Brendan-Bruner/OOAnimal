@@ -36,6 +36,10 @@ Documentation/latex
 # Emacs backup
 *~
 \#*\#
+
+# Build directory
 /Debug/
+
+# doxygen
 html/
 latex/
