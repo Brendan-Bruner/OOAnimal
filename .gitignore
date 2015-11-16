@@ -36,3 +36,4 @@ Documentation/latex
 # Emacs backup
 *~
 \#*\#
+/Debug/

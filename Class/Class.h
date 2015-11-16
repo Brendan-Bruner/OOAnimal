@@ -1,18 +1,20 @@
-/* Class header
- * Copyright (C) 2014 Brendan Bruner
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+/*
+ * Copyright 2015 Brendan Bruner
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  *
  * bbruner@ualberta.ca
- *
- *  Created on: 2014-11-19
- *      Author: Brendan Bruner
+ * Nov. 2015
  */
 
 #ifndef CLASS_H_
@@ -25,7 +27,7 @@
 /* The pointers asserted with this should never be null. This defines how */
 /* to handle a failed assertion. */
 #include <stdio.h>
-#define objASSERT( O )																\
+#define COT_ASSERT( O )																\
 				do {																\
 				   if( (O) == 0 ) { 												\
 				   	printf("NULL pointer exception:\nfile %s\nline %d\n", 			\
@@ -36,114 +38,112 @@
 
 
 /* Define the memory management functions to use when dynamically allocating. */
-#define OO_MALLOC malloc
-#define OO_FREE free
+#define COT_MALLOC malloc
+#define COT_FREE free
 
 /* Name of a variable indicating allocation scheme. */
-#define IS_DYNAMIC_OBJECT 			_id
-#define DYNAMIC_OBJECT				1
-#define STATIC_OBJECT				2
+#define COT_IS_COT_DYNAMIC_OBJECT 	_id
+#define COT_DYNAMIC_OBJECT			1
+#define COT_STATIC_OBJECT				2
 
 /* Data type of the base object class. */
-#define CLASS_OBJECT 				Object_t
+#define COT_CLASS_OBJECT 				COTObject
 
 /* All classes and interfaces contain a pointer to their highest */
 /* super class, the base object, this is the name of that pointer. */
-#define CLASS_OBJECT_NAME			_co
+#define COT_CLASS_OBJECT_NAME			_co
 
 /* An anonymous struct inside the class is used to help hide the virtual table. */
 /* This is that structs name. */
-#define VIRTUAL_TABLE_HIDER_NAME	_vt
+#define COT_VIRTUAL_TABLE_HIDER_NAME	_vt
 
 /* An anonymous struct inside the class is used to help hide the override table. */
 /* This is that structs name. */
-#define OVERRIDE_TABLE_HIDER_NAME	_ot
+#define COT_OVERRIDE_TABLE_HIDER_NAME	_ot
 
 /* If a class inherits, it will contain an instance of the class it */
 /* is inheriting from. This is the name of that instance. */
-#define SUPER_NAME 					_sp
+#define COT_SUPER_NAME 					_sp
 
 /* When a class implementings an interface, it contains an */
 /* instance of the interface. This is prefixed / posfixed to the data type */
 /* of the interface and used as the variable name. */
-#define INTERFACE_PREFIX 			_if
-#define INTERFACE_POSIFX
-#define TO_IFACE_VAR_NAME( i ) \
-	INTERFACE_PREFIX##i##INTERFACE_POSFIX
+#define COT_INTERFACE_PREFIX 			_if
+#define COT_INTERFACE_POSIFX
+#define COT_TO_IFACE_VAR_NAME( i ) \
+	COT_INTERFACE_PREFIX##i##COT_INTERFACE_POSFIX
 
 /* Interfaces contain a pointer offset from the class implemeting them. */
 /* This is the name of the variable used to save the offset. */
-#define INTERFACE_OFFSET_NAME 		_io
-
-/* In an effort to help hide data, all system variables of an interface */
-/* are put inside an anonymous struct with this name. */
-#define INTERFACE_META_DATA_NAME	_im
+#define COT_INTERFACE_OFFSET_NAME 		_io
 
 /* Name used to reference the object within class methods. This variable */
 /* is 'self' in python and 'this' in java / C++. Note, making this variable */
 /* 'this' will prevent compatibility with C++ code. */
-#define OBJECT_REFERENCE	 		self
+#define COT_OBJECT_REFERENCE	 		self
 
 /* Used as an intermediate variable name while casting to the */
-/* OBJECT_REFERENCE_NAME. */
-#define OBJECT_PRE_REFERENCE_NAME	self_
+/* COT_OBJECT_REFERENCE_NAME. */
+#define COT_OBJECT_PRE_REFERENCE_NAME	self_
 
 /* Used at the beginning of all functions to pass in the object. */
-#define self( C )					C* OBJECT_PRE_REFERENCE_NAME
+#define self( C )					C* COT_OBJECT_PRE_REFERENCE_NAME
 
 
 /****************************************************************************/
 /* Memory Management 														*/
 /****************************************************************************/
-typedef void* (*OOMallocType)( size_t );
-typedef void (*OOFreeType)( void* );
-extern OOMallocType OOMalloc;
-extern OOFreeType OOFree;
+typedef void* (*COTMallocType)( size_t );
+typedef void (*COTFreeType)( void* );
+extern COTMallocType COTMalloc;
+extern COTFreeType COTFree;
 
 
 /****************************************************************************/
 /* Base object																*/
 /****************************************************************************/
-typedef struct CLASS_OBJECT CLASS_OBJECT;
-struct CLASS_OBJECT
+typedef struct COT_CLASS_OBJECT COT_CLASS_OBJECT;
+struct COT_CLASS_OBJECT
 {
 	struct
 	{
-		void (*virtualDestroy)( CLASS_OBJECT* );
-	} VIRTUAL_TABLE_HIDER_NAME;
-	char IS_DYNAMIC_OBJECT;
+		void (*virtualDestructor)( COT_CLASS_OBJECT* );
+	} COT_VIRTUAL_TABLE_HIDER_NAME;
+	char COT_IS_COT_DYNAMIC_OBJECT;
 };
-extern void OOCreateObject( CLASS_OBJECT* );
+extern void COTCreateObject( COT_CLASS_OBJECT* );
 
 
 /******************************************************************************/
 /* Used to create and destroy objects. */
 /******************************************************************************/
-#define createNew( object, constructor )												\
-	OOMalloc( sizeof( *(object) ) );													\
-	do {																				\
-	if( (object) != NULL ){ 															\
-		((CLASS_OBJECT*) (object) )->IS_DYNAMIC_OBJECT = DYNAMIC_OBJECT; 				\
-		OOCreateObject( (CLASS_OBJECT*) (object) );										\
-		constructor;																	\
-	}																					\
+#define COTCreateNew( object, constructor )													\
+	do {																					\
+		(object) = COTMalloc( sizeof(*(object)) );											\
+		if( (object) != NULL ){ 															\
+			((COT_CLASS_OBJECT*) (object) )->COT_IS_COT_DYNAMIC_OBJECT = COT_DYNAMIC_OBJECT;\
+			COTCreateObject( (COT_CLASS_OBJECT*) (object) );								\
+			constructor;																	\
+		}																					\
 	} while( 0 )
 
-#define create( mem, constructor )												\
-	&(mem);																		\
-	((CLASS_OBJECT*) &(mem))->IS_DYNAMIC_OBJECT = STATIC_OBJECT;				\
-	OOCreateObject( (CLASS_OBJECT*) &(mem) );										\
-	constructor
-
-#define destroy( mem )																	\
+#define COTCreate( object, constructor )												\
 	do {																				\
-	objASSERT( mem );																	\
-	CLASS_OBJECT* object = mem->CLASS_OBJECT_NAME;										\
-	objASSERT( object->VIRTUAL_TABLE_HIDER_NAME.virtualDestroy );						\
-	object->VIRTUAL_TABLE_HIDER_NAME. virtualDestroy( object );							\
-	if( object->IS_DYNAMIC_OBJECT == DYNAMIC_OBJECT ){									\
-		OOFree( (void*) object );														\
-	}																					\
+		COT_CLASS_OBJECT* mem = (COT_CLASS_OBJECT*) (object);							\
+		((COT_CLASS_OBJECT*) (mem))->COT_IS_COT_DYNAMIC_OBJECT = COT_STATIC_OBJECT;		\
+		COTCreateObject( (COT_CLASS_OBJECT*) (mem) );									\
+		constructor;																	\
+	} while( 0 )
+
+#define COTDestroy( mem )																	\
+	do {																					\
+		COT_ASSERT( (mem) );																\
+		COT_CLASS_OBJECT* object = (mem)->COT_CLASS_OBJECT_NAME;							\
+		COT_ASSERT( object->COT_VIRTUAL_TABLE_HIDER_NAME.virtualDestructor );				\
+		object->COT_VIRTUAL_TABLE_HIDER_NAME. virtualDestructor( object );					\
+		if( object->COT_IS_COT_DYNAMIC_OBJECT == COT_DYNAMIC_OBJECT ){						\
+			COTFree( (void*) object );														\
+		}																					\
 	} while( 0 )
 
 
@@ -151,42 +151,44 @@ extern void OOCreateObject( CLASS_OBJECT* );
 /* Class Declaration */
 /******************************************************************************/
 /* The two macros below select one of two possible class declaration. */
-#define CLASS_DECLARE_SELECTION( _1, _2, SELECTION, ... ) SELECTION
-#define CLASS( ... ) \
-	CLASS_DECLARE_SELECTION( __VA_ARGS__, CLASS_EXTENDS_SELECT, CLASS_EXTENDS_OBJECT)( __VA_ARGS__ )
+#define COT_CLASS_DECLARE_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define COTClass( ... ) \
+	COT_CLASS_DECLARE_SELECTION( __VA_ARGS__, COT_CLASS_EXTENDS_SELECT, COT_CLASS_EXTENDS_OBJECT)( __VA_ARGS__ )
 
 /* Start a class declaration with manually selected inheritance. */
-#define EXTENDS ,
-#define CLASS_EXTENDS_SELECT( D, S )										\
+#define COT_CLASS_EXTENDS_SELECT( D, S )									\
 	typedef struct D D;														\
 	struct D																\
 	{																		\
-		S SUPER_NAME;
+		S COT_SUPER_NAME;
 
 /* Start a class declaration with automatic inheritance, ie, the base object. */
-#define CLASS_EXTENDS_OBJECT( D )											\
+#define COT_CLASS_EXTENDS_OBJECT( D )										\
 	typedef struct D D;														\
 	struct D																\
 	{																		\
-		CLASS_OBJECT SUPER_NAME;
+		COT_CLASS_OBJECT COT_SUPER_NAME;
 
 /* Declare all virtual methods. */
-#define VIRTUAL( ... )														\
+#define COTVirtual( ... )													\
 		struct																\
 		{																	\
 			__VA_ARGS__														\
-		} VIRTUAL_TABLE_HIDER_NAME;
+		} COT_VIRTUAL_TABLE_HIDER_NAME;
 
 /* Used to override super class / interface methods. */
-#define OVERRIDE( ... )														\
+#define COTOverride( ... )													\
 		struct																\
 		{																	\
 			__VA_ARGS__														\
-		} OVERRIDE_TABLE_HIDER_NAME;
+		} COT_OVERRIDE_TABLE_HIDER_NAME;
+/* Used to override destructor. */
+#define COTDestructor( ) \
+			void (*virtualDestructor)( self(COT_CLASS_OBJECT_NAME) )
 
 /* End the definition of a class. */
-#define END_CLASS															\
-		CLASS_OBJECT* CLASS_OBJECT_NAME;									\
+#define COTClassEnd															\
+		COT_CLASS_OBJECT* COT_CLASS_OBJECT_NAME;							\
 	};
 
 
@@ -194,89 +196,99 @@ extern void OOCreateObject( CLASS_OBJECT* );
 /* Interface Declaration */
 /******************************************************************************/
 /* Open a interface declaration. */
-#define INTERFACE(T) 		\
+#define COTInterface(T) 	\
 	typedef struct T T;		\
 	struct T				\
 	{
 
 /* Close a interface declaration. */
-#define END_INTERFACE 														\															\
-		void* INTERFACE_OFFSET_NAME;										\									\
-		CLASS_OBJECT* CLASS_OBJECT_NAME;									\
-	}
+#define COTInterfaceEnd												\
+		void* COT_INTERFACE_OFFSET_NAME;							\
+		COT_CLASS_OBJECT* COT_CLASS_OBJECT_NAME;					\
+	};
 
 
 /******************************************************************************/
 /* Use a interface within a class */
 /******************************************************************************/
 /* Adds a interface to a class declaration, used after opening a class */
-#define IMPLEMENTS( iface )	\
-	iface TO_IFACE_VAR_NAME( iface );
+#define COTImplemets( iface )	\
+	iface COT_TO_IFACE_VAR_NAME( iface );
 
 /* Bind the interface data at run time. Use in constructor */
-#define CREATE_INTERFACE(t) \
-	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ).INTERFACE_OFFSET_NAME = \
-	(void *) (((char *) &(OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ))) - (char *) OBJECT_REFERENCE); \
-	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( t ).CLASS_OBJECT_NAME = (CLASS_OBJECT*) OBJECT_REFERENCE
+#define COTCreateInterface(t) \
+	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ).COT_INTERFACE_OFFSET_NAME = \
+	(void *) (((char *) &(COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ))) - (char *) COT_OBJECT_REFERENCE); \
+	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ).COT_CLASS_OBJECT_NAME = (COT_CLASS_OBJECT*) COT_OBJECT_REFERENCE
 
 
 /******************************************************************************/
 /* Used to dynamically link methods at run time. */
 /******************************************************************************/
-#define LINK_VIRTUAL_METHOD( method ) \
-	OBJECT_REFERENCE->VIRTUAL_TABLE_HIDER_NAME. method = method
+/* The two macros below select one of two virtual linkage macros. */
+#define COT_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define COTLinkVirtual( ... ) \
+	COT_LINK_VIRTUAL_SELECTION( __VA_ARGS__, COT_LINK_INTERFACE_VIRTUAL, COT_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
 
-#define LINK_INTERFACE_METHOD( iface, method ) \
-	OBJECT_REFERENCE->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME. method = method
+#define COT_LINK_CLASS_VIRTUAL( method ) \
+	COT_OBJECT_REFERENCE->COT_VIRTUAL_TABLE_HIDER_NAME. method = method
+
+#define COT_LINK_INTERFACE_VIRTUAL( iface, method ) \
+	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = method
 
 /******************************************************************************/
 /* Used to override methods in super class / interface. */
 /******************************************************************************/
-#define OVERRIDE_VIRTUAL_METHOD( class, method )							\
-	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = ((class*) OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method; \
-	((class*) OBJECT_REFERENCE)->VIRTUAL_TABLE_HIDER_NAME. method = method
+/* The two macros below select one of two virtual linkage macros. */
+#define COT_OVERRIDE_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
+#define COTOverrideVirtual( ... ) \
+	COT_OVERRIDE_VIRTUAL_SELECTION( __VA_ARGS__, COT_OVERRIDE_INTERFACE_VIRTUAL, COT_OVERRIDE_CLASS_VIRTUAL )( __VA_ARGS__ )
 
-#define OVERRIDE_INTERFACE_METHOD( class, iface, method )					\
-	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method = (class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME. method; \
-	(class* OBJECT_REFERENCE)->TO_IFACE_VAR_NAME( iface ).VIRTUAL_TABLE_HIDER_NAME.method = method
+#define COT_OVERRIDE_CLASS_VIRTUAL( class, method )							\
+	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method = ((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method; \
+	((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method = method
+
+#define COT_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
+	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method = (class* COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method; \
+	(class* COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME.method = method
 
 
 /******************************************************************************/
 /* Used to access super class' implementation of a method. */
 /******************************************************************************/
-#define SUPER( method ) \
-	objASSERT( OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method ); \
-	OBJECT_REFERENCE->OVERRIDE_TABLE_HIDER_NAME. method
+#define COTSuper( method ) \
+	COT_ASSERT( COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method ); \
+	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method
 
 
 /******************************************************************************/
 /* Used to implement virtual methods and interface methods. */
 /******************************************************************************/
-#define VIRTUAL_METHOD( C, name )												\
-	objASSERT( OBJECT_PRE_REFERENCE_NAME );										\
-	objASSERT( OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME. name ); 	\
-	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME;						\
-	return OBJECT_PRE_REFERENCE_NAME->VIRTUAL_TABLE_HIDER_NAME. name
+#define COTCallVirtual( C, name )												\
+	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME );										\
+	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME->COT_VIRTUAL_TABLE_HIDER_NAME. name ); 	\
+	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME;						\
+	return COT_OBJECT_PRE_REFERENCE_NAME->COT_VIRTUAL_TABLE_HIDER_NAME. name
 
-#define MEMBER_OF( C )															\
-	objASSERT( OBJECT_PRE_REFERENCE_NAME );										\
-	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME
+#define COTMemberOf( C )															\
+	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME );										\
+	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME
 
-#define CONSTRUCTOR_OF( C )														\
-	if( OBJECT_PRE_REFERENCE_NAME == 0 ){ return; }								\
-	C* OBJECT_REFERENCE = (C*) OBJECT_PRE_REFERENCE_NAME;						\
-	OBJECT_REFERENCE->CLASS_OBJECT_NAME = (CLASS_OBJECT*) OBJECT_REFERENCE
+#define COTConstructorOf( C )														\
+	if( COT_OBJECT_PRE_REFERENCE_NAME == 0 ){ return; }								\
+	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME;						\
+	COT_OBJECT_REFERENCE->COT_CLASS_OBJECT_NAME = (COT_CLASS_OBJECT*) COT_OBJECT_REFERENCE
 
-#define INTERFACE_OF(C) 															\
-	objASSERT( OBJECT_PRE_REFERENCE_NAME ); 										\
-	C *OBJECT_REFERENCE = (C *) ((char *)OBJECT_PRE_REFERENCE_NAME - 				\
-						(char *)OBJECT_PRE_REFERENCE_NAME->INTERFACE_OFFSET_NAME); 	\
+#define COTInterfaceOf(C) 															\
+	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME ); 										\
+	C *COT_OBJECT_REFERENCE = (C *) ((char *)COT_OBJECT_PRE_REFERENCE_NAME - 				\
+						(char *)COT_OBJECT_PRE_REFERENCE_NAME->COT_INTERFACE_OFFSET_NAME); 	\
 
 
 /******************************************************************************/
 /* Call interface methods on an object using the interface */
 /******************************************************************************/
-#define interface(i,O) \
-	(&(O)->INTERFACE_PREFIX##i)
+#define COTCast(i,O) \
+	(&(O)->COT_TO_IFACE_VAR_NAME( i ))
 
 #endif /* CLASS_H_ */
