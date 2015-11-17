@@ -18,7 +18,7 @@
  */
 
 #include "TestSuites.h"
-#include <Util/Container/LinkedListNode.h>
+#include <Container/LinkedListNode/LinkedListNode.h>
 
 #define TEST_NODES_LENGTH 15
 static COTLinkedListNode nodes[TEST_NODES_LENGTH];

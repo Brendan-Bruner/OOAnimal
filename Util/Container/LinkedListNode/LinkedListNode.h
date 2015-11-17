@@ -25,16 +25,16 @@
 #include <Boolean.h>
 
 /**
- * @struct LinkedListNode
+ * @struct COTLinkedListNode
  * @brief
  * 		A single node in a linked list.
  * @details
  * 		A single node in a linked list.
  */
 COTClass( COTLinkedListNode )
-	void const* data;
-	COTLinkedListNode const* next;
-	COTLinkedListNode const* previous;
+	void* data;
+	COTLinkedListNode* next;
+	COTLinkedListNode* previous;
 COTClassEnd
 
 /**
@@ -49,7 +49,7 @@ COTClassEnd
  * 		will save this pointer. It can then be retrieved with
  * 		a call to COTLinkedListNode_GetData( ).
  */
-void COTLinkedListNode_SetData( self(COTLinkedListNode), void const* data );
+void COTLinkedListNode_SetData( self(COTLinkedListNode), void* data );
 
 /**
  * @memberof COTLinkedListNode
@@ -78,7 +78,7 @@ void* COTLinkedListNode_GetData( self(COTLinkedListNode) );
  * 		will remove the previous node, making this node the first one
  * 		in the list.
  */
-void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode const* previous );
+void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode* previous );
 
 /**
  * @memberof COTLinkedListNode
@@ -92,7 +92,7 @@ void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode c
  * 		will remove the next node, making this node the last one
  * 		in the list.
  */
-void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode const* next );
+void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode* next );
 
 /**
  * @memberof COTLinkedListNode

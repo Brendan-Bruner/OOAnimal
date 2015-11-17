@@ -6,8 +6,8 @@ BUILDDIR := Debug
 SOURCEDIR := ./
 
 # Path to all header files used
-INCLUDES := -IClass -Iunit -I.
-SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '*/Tutorials/**.c')
+INCLUDES := -IClass -Iunit -IUtil -I.
+SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '*/Tutorials/**.c' ! -name '*Queue.*' )
 SOURCES := $(filter-out /**/Tutorials/**.c, $(SOURCES))
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 

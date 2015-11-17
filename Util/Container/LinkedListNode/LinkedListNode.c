@@ -17,7 +17,7 @@
  * Oct. 2, 2015
  */
 
-#include <LinkedListNode.h>
+#include <Container/LinkedListNode/LinkedListNode.h>
 
 
 /****************************************************************************/
@@ -72,7 +72,7 @@ static COTLinkedListNode* COTLinkedListNode_TraverseList( self(COTLinkedListNode
 	return NULL;
 }
 
-void COTLinkedListNode_SetData( self(COTLinkedListNode), void const* data )
+void COTLinkedListNode_SetData( self(COTLinkedListNode), void* data )
 {
 	COTMemberOf(COTLinkedListNode);
 	self->data = data;
@@ -84,13 +84,13 @@ void* COTLinkedListNode_GetData( self(COTLinkedListNode) )
 	return self->data;
 }
 
-void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode const* previous )
+void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode* previous )
 {
 	COTMemberOf(COTLinkedListNode);
 	self->previous = previous;
 }
 
-void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode const* next )
+void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode* next )
 {
 	COTMemberOf(COTLinkedListNode);
 	self->next = next;

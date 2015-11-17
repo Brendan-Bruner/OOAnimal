@@ -22,7 +22,6 @@
 
 #include <unit.h>
 
-TEST_SUITE( LinkedListNode );
-TEST_SUITE( DynamicAllocator );
+TEST_SUITE( COTLinkedListNode );
 
 #endif /* UNIT_TESTSUITES_H_ */

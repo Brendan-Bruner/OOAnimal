@@ -43,3 +43,4 @@ Documentation/latex
 # doxygen
 html/
 latex/
+bin

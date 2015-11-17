@@ -26,6 +26,7 @@ COTFreeType COTFree = COT_FREE;
 static void virtualDestructor( self(COT_CLASS_OBJECT) )
 {
 	COTMemberOf( COT_CLASS_OBJECT );
+	(void) self;
 }
 void COTCreateObject( self(COT_CLASS_OBJECT) )
 {

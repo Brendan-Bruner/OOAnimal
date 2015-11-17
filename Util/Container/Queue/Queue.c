@@ -17,54 +17,58 @@
  * Oct 17, 2015
  */
 
-#include <Queue/Queue.h>
+#include <Container/Queue/Queue.h>
 
 
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
-#if (configUSE_CONTAINER == 1)
-#if (configCONTAINER_ADD == 1)
+#if (configUSE_COTCONTAINER == 1)
+#if (configCOTCONTAINER_ADD == 1)
 /**
- * @memberof Queue
+ * @memberof COTQueue
  * @brief
- * 		Adds an element to the head of the queue.
+ * 		<b>Implements</b> COTContainer_Add( ).
  * @details
+ *		<b>Implements</b> COTContainer_Add( ).
  * 		@code
- * 			interface( Container, self )->add( );
+ *			extern COTQueue* someQueue;
+ * 			COTContainer_Add( COTCast(COTContainer, someQueue), someElement );
  * 		@endcode
  * 		Adds an element to the head of the queue. Has the
- * 		same effect as calling Queue::insert( ).
- * @attention Implementation of Container::add( ).
+ * 		same effect as calling COTQueue_Insert( ).
  */
-static Boolean add( self(Container), void* element )
+static Boolean add( self(COTContainer), void const* element )
 {
-	INTERFACE_OF(Queue);
-	return QueueInsert( self, element );
+	COTInterfaceOf(COTQueue);
+	return COTQueue_Insert( self, element );
 }
 #endif
 
 #if (configCONTAINER_ADD_ALL == 1) && (configCONTAINER_ITERATOR == 1) \
 	&& (configUSE_ITERATOR == 1)
 /**
- * @memberof Queue
+ * @memberof COTQueue
  * @brief
- * 		Adds all elements from the container to the queue.
+ * 		<b>Implements</b> COTContainer_AddAll( ).
  * @details
+ *		<b>Implements</b> COTContainer_AddAll( ).
  * 		@code
- * 			interface( Container, self )->addAll( );
+ *			extern COTQueue* someQueue;
+ *			extern COTContainer* someContainer;
+ * 			COTContainer_AddAll( COTCast(COTContainer, someQueue), someContainer );
  * 		@endcode
  */
-static uint32_t addAll( self(Container), Container* container )
+static size_t addAll( self(COTContainer), COTContainer* container )
 {
-	INTERFACE_OF(Queue);
-	objASSERT(container);
+	COTInterfaceOf(COTQueue);
+	COT_ASSERT(container);
 
-	Iterator* 	iter;
-	uint32_t	count;
+	COTIterator* 	iter;
+	size_t			count;
 
 	/* Get an iterator. */
-	iter = ContainerIterator( container );
+	iter = COTContainer_Iterator( container );
 	if( iter == NULL )
 	{
 		/* Failed to get an iterator. */
@@ -73,17 +77,18 @@ static uint32_t addAll( self(Container), Container* container )
 
 	/* Copy all the elements from the container into self. */
 	count = 0;
-	while( IteratorHasNext( iter ) )
+	while( COTIterator_HasNext( iter ) )
 	{
-		if( !QueueInsert(self, IteratorNext(iter)) )
+		if( !COTQueue_Insert(self, COTIterator_Next(iter)) )
 		{
+			/* Failed to insert element into queue. */
 			break;
 		}
 		++count;
 	}
 
 	/* Destroy the iterator. */
-	destroy( iter );
+	COTDestroy( iter );
 }
 #endif
 
@@ -106,7 +111,8 @@ static uint32_t addAll( self(Container), Container* container )
 #if (configCONTAINER_ADD_CAPACITY == 1)
 	uint32_t (*addCapacity)( self(Container), uint32_t );
 #endif
-#endif
+
+#endif /* configUSE_COTCONTAINER */
 
 Boolean QueueInsert( self(Queue), void* element )
 {
@@ -132,20 +138,12 @@ static void* peek( self(Queue) );
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
-/**
- * @memberof Queue
- * @protected
- * @brief
- * 		Constructor for abstract Queue class.
- * @details
- * 		Constructor for abstract Queue class.
- */
-void createQueue_( self(Queue) )
+void COTQueueCreate_( self(COTQueue) )
 {
-	CONSTRUCTOR_OF(Queue);
+	COTConstructorOf(COTQueue);
 
 	/* Create the interfaces used by this class. */
-	CREATE_INTERFACE( Container );
+	COTCreateInterface( COTContainer );
 
 	/* Link all virtual methods. */
 	LINK_VIRTUAL_METHOD( insert );

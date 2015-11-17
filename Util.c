@@ -21,6 +21,7 @@
 
 int main( int argc, char** argv )
 {
+	(void) argc; (void) argv;
 	INIT_TESTING( );
 
 	RUN_TEST_SUITE( COTLinkedListNode );

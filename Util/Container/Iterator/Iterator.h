@@ -19,7 +19,7 @@
 #ifndef INCLUDE_ITERATOR_ITERATOR_H_
 #define INCLUDE_ITERATOR_ITERATOR_H_
 
-#include <ContainerConfig.h>
+#include "../ContainerConfig.h"
 #include <Class.h>
 #include <Boolean.h>
 

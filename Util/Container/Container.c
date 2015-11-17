@@ -17,13 +17,13 @@
  * Nov 14, 2015
  */
 
-#include <Container.h>
+#include <Util/Container/Container.h>
 
 /****************************************************************************/
 /* Interface Methods														*/
 /****************************************************************************/
 #if (configCOTCONTAINER_ADD == 1)
-Boolean COTContainer_Add( self(COTContainer), void const* element )
+Boolean COTContainer_Add( self(COTContainer), void* element )
 {
 	COTCallVirtual( COTContainer, add )( self, element );
 }

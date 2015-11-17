@@ -24,7 +24,7 @@
 
 #if (configUSE_COTCONTAINER == 1)
 #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-#include <Iterator/Iterator.h>
+#include <Container/Iterator/Iterator.h>
 #endif
 /**
  * @struct COTContainer
@@ -44,7 +44,7 @@ COTInterface( COTContainer )
 	COTVirtual
 	(
 		#if (configCOTCONTAINER_ADD == 1)
-			Boolean (*add)( self(COTContainer), void const* );
+			Boolean (*add)( self(COTContainer), void* );
 		#endif
 		#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
 		&& (configUSE_COTITERATOR == 1)
@@ -86,7 +86,7 @@ COTInterfaceEnd
  * 		<b>true</b> when the element is successfully added
  * 		and <b>false</b> otherwise.
  */
-extern Boolean COTContainer_Add( self(COTContainer), void const* element );
+extern Boolean COTContainer_Add( self(COTContainer), void* element );
 #endif
 
 #if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)

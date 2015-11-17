@@ -19,12 +19,13 @@
 #ifndef INCLUDE_QUEUE_QUEUE_H_
 #define INCLUDE_QUEUE_QUEUE_H_
 
-#include <Class.h>
-#include <Container.h>
-#include <ContainerConfig.h>
+#if (configUSE_COTQUEUE == 1)
 
-#if (configUSE_QUEUE == 1)
-#if (configUSE_CONTAINER == 1)
+#include <Class.h>
+#include <Container/Container.h>
+#include <Container/ContainerConfig.h>
+
+#if (configUSE_COTCONTAINER == 1)
 /**
  * @struct Queue
  * @extends Container
@@ -34,34 +35,83 @@
  * @struct Queue
  * @extends Object
  * @brief
- * 		Abstract class for all FIFO like containers.
+ * 		Abstract class for all FIFO containers.
  * @details
  * 		Abstract class for all FIFO like containers.
  * 		Defines an insert, remove, and peek operation. It uses
- * 		the Container interface if configUSE_CONTAINER is set to 1.
+ * 		the Container interface if configUSE_COTCONTAINER is set to 1.
+ * @attention
+ * 		configUSE_COTQUEUE must be defined as 1 for this class to be included.
+ *		See ContainerConfig.h.
  */
-CLASS( Queue )
-#if (configUSE_CONTAINER == 1)
-IMPLEMENTS( Container )
+COTClass( COTQueue )
+#if (configUSE_COTCONTAINER == 1)
+COTImplements( COTContainer )
 #endif
-	VIRTUAL
+	COTVirtual
 	(
-		Boolean (*insert)( self(Queue), void* );
-		void* (*remove)( self(Queue) );
-		#if (configQUEUE_PEEK == 1)
-			void* (*peek)( self(Queue) );
+		Boolean (*insert)( self(COTQueue), void* );
+		void* (*remove)( self(COTQueue) );
+		#if (configCOTQUEUE_PEEK == 1)
+			void* (*peek)( self(COTQueue) );
 		#endif
 	)
 END_CLASS
 
-Boolean QueueInsert( self(Queue), void* );
-void* QueueRemove( self(Queue) );
-#if (configQUEUE_PEEK == 1)
-void* QueuePeek( self(Queue) );
-#endif
+/**
+ * @memberof COTQueue
+ * @brief
+ *		Insert an element into the queue.
+ * @details
+ *		Insert an element into the queue. 
+ * @param element[in]
+ *		A pointer which is copied into the head of the queue. The data
+ *		pointed to is untouched.
+ * @returns
+ *		<b>true</b> when the element is successfully added to the
+ *		queue, <b>false</b> otherwise. 
+ */
+Boolean COTQueue_Insert( self(COTQueue), void const* element );
 
-void createQueue_( self(Queue) );
+/**
+ * @memberof COTQueue
+ * @brief
+ *		Remove an element from the tail of the queue.
+ * @details
+ *		Remove an element from the tail of the queue.
+ * @returns
+ *		The element removed from the tail of the queue. <b>NULL</b> if
+ *		the queue is empty.
+ */
+void* COTQueue_Remove( self(COTQueue) );
 
-#endif
+#if (configCOTQUEUE_PEEK == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		Peek at the element in the tail of the queue.
+ * @details
+ *		Peek at the element in the tail of the queue. This does not
+ *		remove the element from the queue.
+ * @attention
+ *		configCOTQUEUE_PEEK must be defined as one for this method to be
+ *		included in the build. See ContainerConfig.h.
+ * @returns
+ *		The element in the tail of the queue. <b>NULL</b> if the queue is empty.
+ */
+void* COTQueue_Peek( self(COTQueue) );
+#endif /* configCOTQUEUE_PEEK */
 
+/**
+ * @memberof COTQueue
+ * @protected
+ * @brief
+ *		<b>Constructor.</b>
+ * @details
+ *		<b>Constructor.</b>
+ */
+void COTQueueCreate_( self(Queue) );
+
+
+#endif /* configUSE_COTQUEUE */
 #endif /* INCLUDE_QUEUE_QUEUE_H_ */
