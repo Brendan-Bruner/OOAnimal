@@ -43,7 +43,7 @@ TEST_TEARDOWN( )
 	size_t iter;
 	for( iter = 0; iter < TEST_NODES_LENGTH; ++iter )
 	{
-		COTDestroy( &nodes[iter] );
+		COTDestroy(COTLinkedListNode, &nodes[iter]);
 	}
 }
 

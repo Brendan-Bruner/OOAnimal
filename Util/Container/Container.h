@@ -40,6 +40,7 @@
  * 		configUSE_COTCONTAINER must be defined as 1 for this interface to
  * 		be included in the build. See ContainerConfig.h.
  */
+#define COTContainerCast( object ) COTCast(COTContainer, (object))
 COTInterface( COTContainer )
 	COTVirtual
 	(

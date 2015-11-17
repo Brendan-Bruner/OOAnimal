@@ -19,20 +19,22 @@
 #ifndef INCLUDE_QUEUE_QUEUE_H_
 #define INCLUDE_QUEUE_QUEUE_H_
 
+#include "../ContainerConfig.h"
+
 #if (configUSE_COTQUEUE == 1)
 
 #include <Class.h>
-#include <Container/Container.h>
-#include <Container/ContainerConfig.h>
+#include <Boolean.h>
 
 #if (configUSE_COTCONTAINER == 1)
+#include <Container/Container.h>
 /**
- * @struct Queue
+ * @struct COTQueue
  * @extends Container
  */
 #endif
 /**
- * @struct Queue
+ * @struct COTQueue
  * @extends Object
  * @brief
  * 		Abstract class for all FIFO containers.
@@ -51,12 +53,12 @@ COTImplements( COTContainer )
 	COTVirtual
 	(
 		Boolean (*insert)( self(COTQueue), void* );
-		void* (*remove)( self(COTQueue) );
+		void* (*removeElement)( self(COTQueue) );
 		#if (configCOTQUEUE_PEEK == 1)
 			void* (*peek)( self(COTQueue) );
 		#endif
 	)
-END_CLASS
+COTClassEnd
 
 /**
  * @memberof COTQueue
@@ -71,7 +73,7 @@ END_CLASS
  *		<b>true</b> when the element is successfully added to the
  *		queue, <b>false</b> otherwise. 
  */
-Boolean COTQueue_Insert( self(COTQueue), void const* element );
+Boolean COTQueue_Insert( self(COTQueue), void* element );
 
 /**
  * @memberof COTQueue
@@ -110,7 +112,7 @@ void* COTQueue_Peek( self(COTQueue) );
  * @details
  *		<b>Constructor.</b>
  */
-void COTQueueCreate_( self(Queue) );
+void COTQueueCreate_( self(COTQueue) );
 
 
 #endif /* configUSE_COTQUEUE */

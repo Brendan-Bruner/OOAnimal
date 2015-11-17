@@ -1,17 +1,19 @@
-CC = gcc
-CFLAGS = -Wall -Wextra
+CC := gcc
+CFLAGS := -Wall -Wextra
 
 # Build directory
 BUILDDIR := Debug
-SOURCEDIR := ./
-
-# Path to all header files used
-INCLUDES := -IClass -Iunit -IUtil -I.
-SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '*/Tutorials/**.c' ! -name '*Queue.*' )
-SOURCES := $(filter-out /**/Tutorials/**.c, $(SOURCES))
-OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
-
+# Name of binary executable
 EXEC = bin
+# Source directory start
+SOURCEDIR := ./
+# Path to all header files used
+INCLUDES := -IClass -Iunit -ITests -IUtil -I.
+
+# Path to all source files used
+SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '*/Tutorials/**.c' )
+# Name and location for all object files
+OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
 all : MKDIR $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(EXEC)

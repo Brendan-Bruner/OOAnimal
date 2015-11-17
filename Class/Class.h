@@ -117,13 +117,16 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 /******************************************************************************/
 /* Used to create and destroy objects. */
 /******************************************************************************/
-#define COTCreateNew( object, constructor )													\
+#define COTCreateNew( type, objectP, constructor )											\
 	do {																					\
-		(object) = COTMalloc( sizeof(*(object)) );											\
+		type* object = COTMalloc( sizeof(type) );											\
 		if( (object) != NULL ){ 															\
 			((COT_CLASS_OBJECT*) (object) )->COT_IS_COT_DYNAMIC_OBJECT = COT_DYNAMIC_OBJECT;\
 			COTCreateObject( (COT_CLASS_OBJECT*) (object) );								\
+			(objectP) = object;																\
 			constructor;																	\
+		} else {																			\
+			(objectP) = NULL;																\
 		}																					\
 	} while( 0 )
 
@@ -135,10 +138,11 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 		constructor;																	\
 	} while( 0 )
 
-#define COTDestroy( mem )																	\
+#define COTDestroy( type, mem )																\
 	do {																					\
-		COT_ASSERT( (mem) );																\
-		COT_CLASS_OBJECT* object = (mem)->COT_CLASS_OBJECT_NAME;							\
+		type * COT##type##Object = (mem);													\
+		COT_ASSERT( (COT##type##Object) );													\
+		COT_CLASS_OBJECT* object = (COT##type##Object)->COT_CLASS_OBJECT_NAME;				\
 		COT_ASSERT( object->COT_VIRTUAL_TABLE_HIDER_NAME.virtualDestructor );				\
 		object->COT_VIRTUAL_TABLE_HIDER_NAME. virtualDestructor( object );					\
 		if( object->COT_IS_COT_DYNAMIC_OBJECT == COT_DYNAMIC_OBJECT ){						\
@@ -212,7 +216,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 /* Use a interface within a class */
 /******************************************************************************/
 /* Adds a interface to a class declaration, used after opening a class */
-#define COTImplemets( iface )	\
+#define COTImplements( iface )	\
 	iface COT_TO_IFACE_VAR_NAME( iface );
 
 /* Bind the interface data at run time. Use in constructor */

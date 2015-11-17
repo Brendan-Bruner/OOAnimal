@@ -17,7 +17,7 @@
  * Oct 17, 2015
  */
 
-#include <Container/Queue/Queue.h>
+#include "Queue.h"
 
 
 /****************************************************************************/
@@ -33,20 +33,20 @@
  *		<b>Implements</b> COTContainer_Add( ).
  * 		@code
  *			extern COTQueue* someQueue;
- * 			COTContainer_Add( COTCast(COTContainer, someQueue), someElement );
+ * 			COTContainer_Add( COTContainerCast(someQueue), someElement );
  * 		@endcode
  * 		Adds an element to the head of the queue. Has the
  * 		same effect as calling COTQueue_Insert( ).
  */
-static Boolean add( self(COTContainer), void const* element )
+static Boolean add( self(COTContainer), void* element )
 {
 	COTInterfaceOf(COTQueue);
 	return COTQueue_Insert( self, element );
 }
 #endif
 
-#if (configCONTAINER_ADD_ALL == 1) && (configCONTAINER_ITERATOR == 1) \
-	&& (configUSE_ITERATOR == 1)
+#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
+	&& (configUSE_COTITERATOR == 1)
 /**
  * @memberof COTQueue
  * @brief
@@ -56,7 +56,7 @@ static Boolean add( self(COTContainer), void const* element )
  * 		@code
  *			extern COTQueue* someQueue;
  *			extern COTContainer* someContainer;
- * 			COTContainer_AddAll( COTCast(COTContainer, someQueue), someContainer );
+ * 			COTContainer_AddAll( COTContainerCast(someQueue), someContainer );
  * 		@endcode
  */
 static size_t addAll( self(COTContainer), COTContainer* container )
@@ -68,7 +68,7 @@ static size_t addAll( self(COTContainer), COTContainer* container )
 	size_t			count;
 
 	/* Get an iterator. */
-	iter = COTContainer_Iterator( container );
+	iter = COTContainer_GetIterator( container );
 	if( iter == NULL )
 	{
 		/* Failed to get an iterator. */
@@ -88,50 +88,157 @@ static size_t addAll( self(COTContainer), COTContainer* container )
 	}
 
 	/* Destroy the iterator. */
-	COTDestroy( iter );
+	COTDestroy(COTIterator, iter);
+	return count;
 }
 #endif
 
-#if (configCONTAINER_ITERATOR == 1) && (configUSE_ITERATOR == 1)
-	Iterator* (*iterator)( self(Container) );
+#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		<b>Implements</b> COTContainer_GetIterator( ).
+ * @details
+ *		<b>Implements</b> COTContainer_GetIterator( ).
+ * 		@code
+ *			extern COTQueue* someQueue;
+ * 			COTIterator* iter = COTContainer_GetIterator( COTContainerCast(someQueue) );
+ *		@endcode
+ * @attention
+ *		Subclasses must provide an implementation.
+ */
+static COTIterator* iterator( self(COTContainer) )
+{
+	COTInterfaceOf(COTQueue);
+	(void) self;
+	return NULL;
+}
 #endif
 
-#if (configCONTAINER_SIZE == 1)
-	uint32_t (*size)( self(Container) );
+#if (configCOTCONTAINER_SIZE == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		<b>Implements</b> COTContainer_Size( ).
+ * @details
+ *		<b>Implements</b> COTContainer_Size( ).
+ *		@code
+ *			extern COTQueue* someQueue;
+ * 			size_t queueSize = COTContainer_Size( COTContainerCast(someQueue) );
+ *		@endcode
+ * @attention
+ *		Subclasses must provide an implementation.
+ */
+static size_t size( self(COTContainer) )
+{
+	COTInterfaceOf(COTQueue);
+	(void) self;
+	return 0;
+}
 #endif
 
-#if (configCONTAINER_RESET == 1 )
-	void (*reset)( self(Container) );
+#if (configCOTCONTAINER_RESET == 1 )
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		<b>Implements</b> COTContainer_Reset( ).
+ * @details
+ *		<b>Implements</b> COTContainer_Reset( ).
+ *		@code
+ *			extern COTQueue* someQueue;
+ * 			COTContainer_Reset( COTContainerCast(someQueue) );
+ *		@endcode
+ * @attention
+ *		Subclasses must provide an implementation.
+ */
+static void reset( self(COTContainer) )
+{
+	COTInterfaceOf(COTQueue);
+	(void) self;
+}
 #endif
 
-#if (configCONTAINER_IS_EMPTY == 1)
-	Boolean (*isEmpty)( self(Container) );
+#if (configCOTCONTAINER_IS_EMPTY == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		<b>Implements</b> COTContainer_IsEmpty( ).
+ * @details
+ *		<b>Implements</b> COTContainer_IsEmpty( ).
+ *		@code
+ *			extern COTQueue* someQueue;
+ * 			Boolean isEmpty = COTContainer_IsEmpty( COTContainerCast(someQueue) );
+ *		@endcode
+ * @attention
+ *		Subclasses must provide an implementation.
+ */
+static Boolean isEmpty( self(COTContainer) )
+{
+	COTInterfaceOf(COTQueue);
+	(void) self;
+	return true;
+}
 #endif
 
-#if (configCONTAINER_ADD_CAPACITY == 1)
-	uint32_t (*addCapacity)( self(Container), uint32_t );
+#if (configCOTCONTAINER_ADD_CAPACITY == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		<b>Implements</b> COTContainer_AddCapacity( ).
+ * @details
+ *		<b>Implements</b> COTContainer_AddCapacity( ).
+ *		@code
+ *			extern COTQueue* someQueue;
+ * 			Boolean isEmpty = COTContainer_AddCapacity( COTContainerCast(someQueue) );
+ *		@endcode
+ * @attention
+ *		Subclasses must provide an implementation.
+ */
+static size_t addCapacity( self(COTContainer), size_t capacity )
+{
+	COTInterfaceOf(COTQueue);
+	(void) self;
+	(void) capacity;
+	return 0;
+}
 #endif
 
 #endif /* configUSE_COTCONTAINER */
 
-Boolean QueueInsert( self(Queue), void* element )
+Boolean COTQueue_Insert( self(COTQueue), void* element )
 {
-	VIRTUAL_METHOD( Queue, insert )( self, element );
+	COTCallVirtual(COTQueue, insert)( self, element );
 }
-static Boolean insert( self(Queue), void* );
+static Boolean insert( self(COTQueue), void* element )
+{
+	COTMemberOf(COTQueue);
+	(void) self;
+	(void) element;
+	return false;
+}
 
-void* QueueRemove( self(Queue) )
+void* COTQueue_Remove( self(COTQueue) )
 {
-	VIRTUAL_METHOD( Queue, remove )( self );
+	COTCallVirtual(COTQueue, removeElement)( self );
 }
-static void* remove( self(Queue) );
+static void* removeElement( self(COTQueue) )
+{
+	COTMemberOf(COTQueue);
+	(void) self;
+	return NULL;
+}
 
-#if (configQUEUE_PEEK == 1)
-void* QueuePeek( self(Queue) )
+#if (configCOTQUEUE_PEEK == 1)
+void* COTQueue_Peek( self(COTQueue) )
 {
-	VIRTUAL_METHOD( Queue, peek )( self );
+	COTCallVirtual(COTQueue, peek)( self );
 }
-static void* peek( self(Queue) );
+static void* peek( self(COTQueue) )
+{
+	COTMemberOf(COTQueue);
+	(void) self;
+	return NULL;
+}
 #endif
 
 
@@ -143,15 +250,38 @@ void COTQueueCreate_( self(COTQueue) )
 	COTConstructorOf(COTQueue);
 
 	/* Create the interfaces used by this class. */
-	COTCreateInterface( COTContainer );
+	COTCreateInterface(COTContainer);
 
 	/* Link all virtual methods. */
-	LINK_VIRTUAL_METHOD( insert );
-	LINK_VIRTUAL_METHOD( remove );
-	#if (configQUEUE_PEEK == 1)
-		LINK_VIRTUAL_METHOD( peek );
+	/* Methods gained from COTContainer interface. */
+	#if (configUSE_COTCONTAINER == 1)
+	#if (configCOTCONTAINER_ADD == 1)
+	COTLinkVirtual(COTContainer, add);
 	#endif
+	#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1)	&& (configUSE_COTITERATOR == 1)
+	COTLinkVirtual(COTContainer, addAll);
+	#endif
+	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+	COTLinkVirtual(COTContainer, iterator);
+	#endif
+	#if (configCOTCONTAINER_SIZE == 1)
+	COTLinkVirtual(COTContainer, size);
+	#endif
+	#if (configCOTCONTAINER_RESET == 1)
+	COTLinkVirtual(COTContainer, reset);
+	#endif
+	#if (configCOTCONTAINER_IS_EMPTY == 1)
+	COTLinkVirtual(COTContainer, isEmpty);
+	#endif
+	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
+	COTLinkVirtual(COTContainer, addCapacity);
+	#endif
+	#endif /* configUSE_COTCONTAINER */		
 
-	/* Link all interface methods. */
-
+	/* COTQueue virtual methods. */
+	COTLinkVirtual(insert);
+	COTLinkVirtual(removeElement);
+	#if (configCOTQUEUE_PEEK == 1)
+	COTLinkVirtual(peek);
+	#endif
 }

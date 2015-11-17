@@ -99,6 +99,14 @@
  */
 #define configUSE_COTQUEUE				(1)
 
+ /*
+ * (0) Does not include COTLinkedQueue class in the build.
+ * 	   Any subclasses of COTLinkedQueue will not be included ether.
+ * (1) Includes the COTLinkedQueue class in the build.
+ * 	   Classes extending COTLinkedQueue can be selectively included / excluded
+ */
+#define configUSE_COTLINKEDQUEUE		(1)
+
 /*
  * configUSE_COTQUEUE must be set to (1),
  * The configuration has the following options and effects:

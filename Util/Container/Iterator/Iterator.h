@@ -46,6 +46,7 @@
  * 		Requires configUSE_COTITERATOR is defined as 1 for this interface
  * 		to be included in the build. See ContainerConfig.h.
  */
+#define COTIteratorCast( object ) COTCast(COTIterator, (object) )
 COTInterface( COTIterator )
 	COTVirtual
 	(
