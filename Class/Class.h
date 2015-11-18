@@ -42,8 +42,8 @@
 #define COT_FREE free
 
 /* Name of a variable indicating allocation scheme. */
-#define COT_IS_COT_DYNAMIC_OBJECT 	_id
-#define COT_DYNAMIC_OBJECT			1
+#define COT_IS_COT_DYNAMIC_OBJECT 		_id
+#define COT_DYNAMIC_OBJECT				1
 #define COT_STATIC_OBJECT				2
 
 /* Data type of the base object class. */
