@@ -38,6 +38,9 @@
  static size_t COTLinkedQueue_AddCapacity( self(COTLinkedQueue), size_t capacity )
  {
  	COTMemberOf(COTLinkedQueue);
+ 	(void) capacity;
+ 	(void) self;
+ 	return 0;
  }
 
 /****************************************************************************/
@@ -47,7 +50,7 @@
  #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
 static COTIterator* iterator( self(COTContainer) )
 {
-	COTInterfaceOf(COTQueue);
+	COTInterfaceOf(COTLinkedQueue);
 	(void) self;
 	return NULL;
 }
@@ -56,7 +59,7 @@ static COTIterator* iterator( self(COTContainer) )
 #if (configCOTCONTAINER_SIZE == 1)
 static size_t size( self(COTContainer) )
 {
-	COTInterfaceOf(COTQueue);
+	COTInterfaceOf(COTLinkedQueue);
 	return self->_.size;
 }
 #endif
@@ -64,7 +67,7 @@ static size_t size( self(COTContainer) )
 #if (configCOTCONTAINER_RESET == 1 )
 static void reset( self(COTContainer) )
 {
-	COTInterfaceOf(COTQueue);
+	COTInterfaceOf(COTLinkedQueue);
 	self->_.head = self->_.tail;
 }
 #endif
@@ -72,7 +75,7 @@ static void reset( self(COTContainer) )
 #if (configCOTCONTAINER_IS_EMPTY == 1)
 static Boolean isEmpty( self(COTContainer) )
 {
-	COTInterfaceOf(COTQueue);
+	COTInterfaceOf(COTLinkedQueue);
 	if( self->_.size == 0 )
 	{
 		return true;
@@ -84,13 +87,29 @@ static Boolean isEmpty( self(COTContainer) )
 #if (configCOTCONTAINER_ADD_CAPACITY == 1)
 static size_t addCapacity( self(COTContainer), size_t capacity )
 {
-	COTInterfaceOf(COTQueue);
-	(void) self;
-	(void) capacity;
-	return 0;
+	COTInterfaceOf(COTLinkedQueue);
+	return COTLinkedQueue_AddCapacity( self, capacity );
 }
 #endif /* configUSE_COTCONTAINER */
 
+/**
+ * @memberof COTLinkedQueue
+ * @brief
+ *		<b>Implements</b> COTQueue_Insert( ).
+ * @details
+ *		<b>Implements</b> COTQueue_Insert( ).
+ *		<br>This method always has O(1) insertion time, even if memory
+ *		has to be allocated.
+ *		<br>When the queue is full, space is allocated for one
+ *		additional element. If allocation is successful, the element
+ *		is inserted. To allocate more space at one time, see
+ *		COTContainer_AddCapacity( ).
+ *		@code
+ *			extern COTLinkedQueue* someQueue;
+ *			extern void* someElement;
+ *			COTQueue_Insert( (COTQueue*) someQueue, someElement );
+ *		@endcode
+ */
 static Boolean insert( self(COTQueue), void* element )
 {
 	COTMemberOf(COTLinkedQueue);
@@ -103,45 +122,91 @@ static Boolean insert( self(COTQueue), void* element )
 		return false;
 	}
 
-	/* Get the next link element to put the data into. */
-	next = COTLinkedListNode_GetNext( self->_.head );
-	if( next == NULL )
+	if( self->_.head == NULL )
 	{
-		/* Queue is out of capacity, try to add some. */
-		 if( COTLinkedQueue_AddCapacity( self, ADD_ONE_CAPACITY ) != ADD_ONE_CAPACITY )
+		/* Queue is full. Add capacity */
+		if( COTLinkedQueue_AddCapacity( self, ADD_ONE_CAPACITY ) != ADD_ONE_CAPACITY )
 		 {
 		 	/* Can't add more capacity. */
 		 	return false;
 		 }
-		 /* Try again to get the next link. */
-		 next = COTLinkedListNode_GetNext( self->_.head );
-		 if( next == NULL )
-		 {
-		 	/* This should not have happened. */
-		 	return false;
-		 }
 	}
 
-	/* Insert the element. */
-	COTLinkedListNode_SetData( next, element );
+	/* If capacity was added, head cannot be NULL anymore. */
+	COTLinkedListNode_SetData( self->_.head, element );
+	/* Move head to next node. */
+	self->_.head = COTLinkedListNode_GetNext( self->_.head );
 
-	/* Update the head element. */
-	self->_.head = next;
+	return true;
 }
 
+/**
+ * @memberof COTLinkedQueue
+ * @brief
+ *		<b>Implements</b> COTQueue_Remove( ).
+ * @details
+ *		<b>Implements</b> COTQueue_Remove( ).
+ *		<br>This method always has O(1) removal time.
+ *		@code
+ *			extern COTLinkedQueue* someQueue;
+ *			void* removedElement = COTQueue_Remove( (COTQueue*) someQueue );
+ *		@endcode
+ */
 static void* removeElement( self(COTQueue) )
 {
-	COTMemberOf(COTQueue);
-	(void) self;
-	return NULL;
+	COTMemberOf(COTLinkedQueue);
+
+	void* element;
+
+	if( self->_.tail == NULL )
+	{
+		/* Queue of size 0. */
+		return NULL;
+	}
+
+	/* Get the data to return. */
+	element = COTLinkedListNode_GetData( self->_.tail );
+	if( element == NULL )
+	{
+		/* Queue is empty. */
+		return NULL;
+	}
+	/* Set nodes data to NULL. */
+	COTLinkedListNode_SetData( self->_.tail, NULL );
+
+	/* The tail node needs to be moved, add it to the end of the list. */
+	COTLinkedListNode_SetNext( self->_.endOfList, self->_.tail );
+	/* Update the new end of list. */
+	self->_.endOfList = self->_.tail;
+	/* The new end of list should not have a next node. */
+	COTLinkedListNode_SetNext( self->_.endOfList, NULL );
+
+	return element;
 }
 
 #if (configCOTQUEUE_PEEK == 1)
+/**
+ * @memberof COTLinkedQueue
+ * @brief
+ *		<b>Implements</b> COTQueue_Peek( ).
+ * @details
+ *		<b>Implements</b> COTQueue_Peek( ).
+ *		<br>This method always has O(1) time.
+ *		@code
+ *			extern COTLinkedQueue* someQueue;
+ *			void* tail = COTQueue_Peek( (COTQueue*) someQueue );
+ *		@endcode
+ */
 static void* peek( self(COTQueue) )
 {
-	COTMemberOf(COTQueue);
-	(void) self;
-	return NULL;
+	COTMemberOf(COTLinkedQueue);
+
+	if( self->_.tail == NULL )
+	{
+		/* Queue of size zero. */
+		return NULL;
+	}
+	return COTLinkedListNode_GetData( self->_.tail );
 }
 #endif
 
@@ -149,3 +214,9 @@ static void* peek( self(COTQueue) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
+static void destroy( self(COTObject) )
+{
+	COTMemberOf(COTLinkedQueue);
+
+	COTSuper( destroy )( (COTObject*) self );
+}

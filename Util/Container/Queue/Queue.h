@@ -30,12 +30,12 @@
 #include <Container/Container.h>
 /**
  * @struct COTQueue
- * @extends Container
+ * @extends COTContainer
  */
 #endif
 /**
  * @struct COTQueue
- * @extends Object
+ * @extends COTObject
  * @brief
  * 		Abstract class for all FIFO containers.
  * @details

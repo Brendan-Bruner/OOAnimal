@@ -107,7 +107,7 @@ struct COT_CLASS_OBJECT
 {
 	struct
 	{
-		void (*virtualDestructor)( COT_CLASS_OBJECT* );
+		void (*destroy)( COT_CLASS_OBJECT* );
 	} COT_VIRTUAL_TABLE_HIDER_NAME;
 	char COT_IS_COT_DYNAMIC_OBJECT;
 };
@@ -144,7 +144,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 		COT_ASSERT( (COT##type##Object) );													\
 		COT_CLASS_OBJECT* object = (COT##type##Object)->COT_CLASS_OBJECT_NAME;				\
 		COT_ASSERT( object->COT_VIRTUAL_TABLE_HIDER_NAME.virtualDestructor );				\
-		object->COT_VIRTUAL_TABLE_HIDER_NAME. virtualDestructor( object );					\
+		object->COT_VIRTUAL_TABLE_HIDER_NAME. destroy( object );					\
 		if( object->COT_IS_COT_DYNAMIC_OBJECT == COT_DYNAMIC_OBJECT ){						\
 			COTFree( (void*) object );														\
 		}																					\
@@ -188,7 +188,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 		} COT_OVERRIDE_TABLE_HIDER_NAME;
 /* Used to override destructor. */
 #define COTDestructor( ) \
-			void (*virtualDestructor)( self(COT_CLASS_OBJECT_NAME) )
+			void (*destroy)( self(COT_CLASS_OBJECT_NAME) )
 
 /* End the definition of a class. */
 #define COTClassEnd															\

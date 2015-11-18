@@ -23,7 +23,7 @@
 COTMallocType COTMalloc = COT_MALLOC;
 COTFreeType COTFree = COT_FREE;
 
-static void virtualDestructor( self(COT_CLASS_OBJECT) )
+static void destroy( self(COT_CLASS_OBJECT) )
 {
 	COTMemberOf( COT_CLASS_OBJECT );
 	(void) self;
@@ -31,5 +31,5 @@ static void virtualDestructor( self(COT_CLASS_OBJECT) )
 void COTCreateObject( self(COT_CLASS_OBJECT) )
 {
 	COT_CLASS_OBJECT* self = self_;
-	COTLinkVirtual(virtualDestructor);
+	COTLinkVirtual(destroy);
 }

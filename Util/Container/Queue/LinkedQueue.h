@@ -65,6 +65,15 @@ COTClass(COTLinkedQueue, COTQueue)
 	}_; /* Hide private data in this struct. */
 COTClassEnd
 
-#endif
+/**
+ * @memberof COTLinkedQueue
+ * @brief
+ *		<b>Constructor</b>.
+ * @details
+ *		<b>Constructor</b>.
+ */
+void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize );
+
+#endif /* configUSE_COTLINKEDQUEUE */
 
 #endif /* INCLUDE_QUEUE_LINKED_QUEUE_H_ */
