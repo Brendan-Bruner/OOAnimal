@@ -20,7 +20,7 @@
 #define INCLUDE_CONTAINER_H_
 
 #include <Class.h>
-#include "ContainerConfig.h"
+#include "../ContainerConfig.h"
 
 #if (configUSE_COTCONTAINER == 1)
 #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)

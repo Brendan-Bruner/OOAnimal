@@ -19,11 +19,11 @@
 #ifndef INCLUDE_ITERATOR_ITERATOR_H_
 #define INCLUDE_ITERATOR_ITERATOR_H_
 
-#include "../ContainerConfig.h"
-#include <Class.h>
-#include <Boolean.h>
+#include "../../ContainerConfig.h"
 
 #if (configUSE_COTITERATOR == 1 )
+#include <Class.h>
+#include <Boolean.h>
 /**
  * @struct COTIterator
  * @brief

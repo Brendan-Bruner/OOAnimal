@@ -17,19 +17,12 @@
  * Nov. 2015
  */
 
-#include "Class.h"
-#include <stdlib.h>
 
-COTMallocType COTMalloc = COT_MALLOC;
-COTFreeType COTFree = COT_FREE;
+#ifndef INCLUDE_TYPE_FIXED_POINT_FLOAT_H_
+#define INCLUDE_TYPE_FIXED_POINT_FLOAT_H_
 
-static void destroy( self(COT_CLASS_OBJECT) )
-{
-	COTMemberOf( COT_CLASS_OBJECT );
-	(void) self;
-}
-void COTCreateObject( self(COT_CLASS_OBJECT) )
-{
-	COT_CLASS_OBJECT* self = self_;
-	COTLinkVirtual(COT_CLASS_OBJECT, destroy);
-}
+//COTClass(COTFixedPointFloat)
+//COTClassEnd
+
+ #endif /* INCLUDE_TYPE_FIXED_POINT_FLOAT_H_ */
+

@@ -256,32 +256,32 @@ void COTQueueCreate_( self(COTQueue) )
 	/* Methods gained from COTContainer interface. */
 	#if (configUSE_COTCONTAINER == 1)
 	#if (configCOTCONTAINER_ADD == 1)
-	COTLinkVirtual(COTContainer, add);
+	COTLinkVirtual(COTQueue, COTContainer, add);
 	#endif
 	#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1)	&& (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTContainer, addAll);
+	COTLinkVirtual(COTQueue, COTContainer, addAll);
 	#endif
 	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTContainer, iterator);
+	COTLinkVirtual(COTQueue, COTContainer, iterator);
 	#endif
 	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkVirtual(COTContainer, size);
+	COTLinkVirtual(COTQueue, COTContainer, size);
 	#endif
 	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkVirtual(COTContainer, reset);
+	COTLinkVirtual(COTQueue, COTContainer, reset);
 	#endif
 	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkVirtual(COTContainer, isEmpty);
+	COTLinkVirtual(COTQueue, COTContainer, isEmpty);
 	#endif
 	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkVirtual(COTContainer, addCapacity);
+	COTLinkVirtual(COTQueue, COTContainer, addCapacity);
 	#endif
-	#endif /* configUSE_COTCONTAINER */		
+	#endif /* configUSE_COTCONTAINER */	
 
 	/* COTQueue virtual methods. */
-	COTLinkVirtual(insert);
-	COTLinkVirtual(removeElement);
+	COTLinkVirtual(COTQueue, insert);
+	COTLinkVirtual(COTQueue, removeElement);
 	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkVirtual(peek);
+	COTLinkVirtual(COTQueue, peek);
 	#endif
 }

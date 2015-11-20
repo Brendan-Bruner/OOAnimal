@@ -19,7 +19,7 @@
 #ifndef INCLUDE_QUEUE_QUEUE_H_
 #define INCLUDE_QUEUE_QUEUE_H_
 
-#include "../ContainerConfig.h"
+#include "../../ContainerConfig.h"
 
 #if (configUSE_COTQUEUE == 1)
 

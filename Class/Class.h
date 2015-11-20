@@ -143,7 +143,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 		type * COT##type##Object = (mem);													\
 		COT_ASSERT( (COT##type##Object) );													\
 		COT_CLASS_OBJECT* object = (COT##type##Object)->COT_CLASS_OBJECT_NAME;				\
-		COT_ASSERT( object->COT_VIRTUAL_TABLE_HIDER_NAME.virtualDestructor );				\
+		COT_ASSERT( object->COT_VIRTUAL_TABLE_HIDER_NAME.destroy );				\
 		object->COT_VIRTUAL_TABLE_HIDER_NAME. destroy( object );					\
 		if( object->COT_IS_COT_DYNAMIC_OBJECT == COT_DYNAMIC_OBJECT ){						\
 			COTFree( (void*) object );														\
@@ -188,7 +188,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 		} COT_OVERRIDE_TABLE_HIDER_NAME;
 /* Used to override destructor. */
 #define COTDestructor( ) \
-			void (*destroy)( self(COT_CLASS_OBJECT_NAME) )
+			void (*destroy)( self(COT_CLASS_OBJECT) )
 
 /* End the definition of a class. */
 #define COTClassEnd															\
@@ -230,15 +230,15 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 /* Used to dynamically link methods at run time. */
 /******************************************************************************/
 /* The two macros below select one of two virtual linkage macros. */
-#define COT_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define COT_LINK_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
 #define COTLinkVirtual( ... ) \
 	COT_LINK_VIRTUAL_SELECTION( __VA_ARGS__, COT_LINK_INTERFACE_VIRTUAL, COT_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
 
-#define COT_LINK_CLASS_VIRTUAL( method ) \
-	COT_OBJECT_REFERENCE->COT_VIRTUAL_TABLE_HIDER_NAME. method = method
+#define COT_LINK_CLASS_VIRTUAL( class, method ) \
+	((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method = method
 
-#define COT_LINK_INTERFACE_VIRTUAL( iface, method ) \
-	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = method
+#define COT_LINK_INTERFACE_VIRTUAL( class, iface, method ) \
+	((class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = method
 
 /******************************************************************************/
 /* Used to override methods in super class / interface. */
@@ -253,9 +253,12 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 	((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method = method
 
 #define COT_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
-	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method = (class* COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method; \
-	(class* COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME.method = method
+	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method = ( (class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method; \
+	( (class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME.method = method
 
+/* For overriding destructor. */
+#define COTOverrideDestructor( )\
+	COTOverrideVirtual(COTObject, destroy)
 
 /******************************************************************************/
 /* Used to access super class' implementation of a method. */
@@ -288,6 +291,10 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 	C *COT_OBJECT_REFERENCE = (C *) ((char *)COT_OBJECT_PRE_REFERENCE_NAME - 				\
 						(char *)COT_OBJECT_PRE_REFERENCE_NAME->COT_INTERFACE_OFFSET_NAME); 	\
 
+#define COTVirtualDestructor( )\
+	static void destroy( self(COTObject) )
+#define COTDestructorOf( C )\
+	COTMemberOf(C)
 
 /******************************************************************************/
 /* Call interface methods on an object using the interface */

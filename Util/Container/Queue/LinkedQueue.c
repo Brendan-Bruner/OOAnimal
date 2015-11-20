@@ -90,6 +90,8 @@ static size_t addCapacity( self(COTContainer), size_t capacity )
 	COTInterfaceOf(COTLinkedQueue);
 	return COTLinkedQueue_AddCapacity( self, capacity );
 }
+#endif
+
 #endif /* configUSE_COTCONTAINER */
 
 /**
@@ -114,7 +116,6 @@ static Boolean insert( self(COTQueue), void* element )
 {
 	COTMemberOf(COTLinkedQueue);
 	
-	COTLinkedListNode* next;
 	#define ADD_ONE_CAPACITY 1
 
 	if( element == NULL )
@@ -175,11 +176,11 @@ static void* removeElement( self(COTQueue) )
 	COTLinkedListNode_SetData( self->_.tail, NULL );
 
 	/* The tail node needs to be moved, add it to the end of the list. */
-	COTLinkedListNode_SetNext( self->_.endOfList, self->_.tail );
+	COTLinkedListNode_SetNext( self->_.endOfLinks, self->_.tail );
 	/* Update the new end of list. */
-	self->_.endOfList = self->_.tail;
+	self->_.endOfLinks = self->_.tail;
 	/* The new end of list should not have a next node. */
-	COTLinkedListNode_SetNext( self->_.endOfList, NULL );
+	COTLinkedListNode_SetNext( self->_.endOfLinks, NULL );
 
 	return element;
 }
@@ -214,9 +215,49 @@ static void* peek( self(COTQueue) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
-static void destroy( self(COTObject) )
+COTVirtualDestructor( )
 {
-	COTMemberOf(COTLinkedQueue);
-
+	COTDestructorOf(COTLinkedQueue);
 	COTSuper( destroy )( (COTObject*) self );
+}
+
+void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize )
+{
+	COTConstructorOf(COTLinkedQueue);
+	(void) initSize;
+	(void) actualSize;
+
+	/* Link virtual interface methods. */
+	#if (configUSE_COTCONTAINER == 1)
+	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+	COTLinkVirtual(COTQueue, COTContainer, iterator);
+	#endif
+	#if (configCOTCONTAINER_SIZE == 1)
+	COTLinkVirtual(COTQueue, COTContainer, size);
+	#endif
+	#if (configCOTCONTAINER_RESET == 1)
+	COTLinkVirtual(COTQueue, COTContainer, reset);
+	#endif
+	#if (configCOTCONTAINER_IS_EMPTY == 1)
+	COTLinkVirtual(COTQueue, COTContainer, isEmpty);
+	#endif
+	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
+	COTLinkVirtual(COTQueue, COTContainer, addCapacity);
+	#endif
+	#endif /* configUSE_COTCONTAINER */
+
+	/* Link virtual queue methods. */
+	COTLinkVirtual(COTQueue, insert);
+	COTLinkVirtual(COTQueue, removeElement);
+	#if (configCOTQUEUE_PEEK == 1)
+	COTLinkVirtual(COTQueue, peek);
+	#endif	
+
+	/* Override destructor. */
+	COTOverrideDestructor( );
+
+	/* Set up member data. */
+	self->_.tail = NULL;
+	self->_.head = NULL;
+	self->_.endOfLinks = NULL;
 }

@@ -20,7 +20,7 @@
 #ifndef INCLUDE_QUEUE_LINKED_QUEUE_H_
 #define INCLUDE_QUEUE_LINKED_QUEUE_H_
 
-#include <../ContainerConfig.h>
+#include "../../ContainerConfig.h"
 
 #if (configUSE_COTLINKEDQUEUE == 1)
 #include "Queue.h"
@@ -70,9 +70,17 @@ COTClassEnd
  * @brief
  *		<b>Constructor</b>.
  * @details
- *		<b>Constructor</b>.
+ *		<b>Constructor</b>. The COTLinkedQueue object is constructed to
+ *		use dynamic memory allocation, ie, COTMalloc( ) and COTFree( ).
+ * @param initSize
+ *		The initial size of the queue. This is the initial number of elements
+ *		the queue can hold before having to allocate more space.
+ * @param actualSize[out]
+ *		After construction, dereferencing this pointer will reveal how many
+ *		elements were actually allocated. This must point to valid memory
+ *		when the constructor is called. 
  */
-void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize );
+void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize );
 
 #endif /* configUSE_COTLINKEDQUEUE */
 
