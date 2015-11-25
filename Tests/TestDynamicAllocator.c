@@ -14,15 +14,37 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Nov, 2015
  */
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include "TestSuites.h"
+#include <Util/Memory/DynamicAllocator.h>
 
-#include <unit.h>
+TEST_SETUP( )
+{
+}
+TEST_TEARDOWN( )
+{
+}
 
-TEST_SUITE( COTLinkedListNode );
-TEST_SUITE( COTDynamicAllocator );
+TEST( malloc_and_free )
+{
+	COTAllocator* allocator;
+	void* mem;
 
-#endif /* UNIT_TESTSUITES_H_ */
+	allocator = COTAllocatorCast( COTDynamicAllocator_GetInstance( ) );
+
+	mem = COTAllocator_Malloc( allocator, 0 );
+	ASSERT( "malloc 0 should have returned NULL", mem == NULL );
+
+	mem = COTAllocator_Malloc( allocator, 16 );
+	ASSERT( "malloc did not return valid pointer", mem != NULL );
+
+	COTAllocator_Free( allocator, mem );
+}
+
+
+TEST_SUITE( COTDynamicAllocator )
+{
+	ADD_TEST( malloc_and_free );
+}

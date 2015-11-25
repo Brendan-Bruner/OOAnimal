@@ -25,7 +25,8 @@ int main( int argc, char** argv )
 	INIT_TESTING( );
 
 	RUN_TEST_SUITE( COTLinkedListNode );
-
+	RUN_TEST_SUITE( COTDynamicAllocator );
+	
 	PRINT_DIAG( );
 	return 0;
 }

@@ -18,6 +18,7 @@
  */
 
  #include "LinkedQueue.h"
+ #include <Memory/DynamicAllocator.h>
 
 
 /****************************************************************************/
@@ -165,25 +166,31 @@ static void* removeElement( self(COTQueue) )
 		return NULL;
 	}
 
-	/* Get the data to return. */
-	element = COTLinkedListNode_GetData( self->_.tail );
-	if( element == NULL )
+	if( self->_.tail == self->_.head )
 	{
-		/* Queue is empty. */
+		/* Queue has no data in it. */
 		return NULL;
 	}
-	/* Set nodes data to NULL. */
+
+	/* Get the data to return. */
+	element = COTLinkedListNode_GetData( self->_.tail );
+	/* Set nodes new data to NULL. */
 	COTLinkedListNode_SetData( self->_.tail, NULL );
 
-	/* The tail node needs to be moved, add it to the end of the list. */
+	/* The following code will increment the tail to the next node. It will also */
+	/* recycle the old tail node by appending it to the end of the list and making */
+	/* that the new end of list. */
+	/* The tail node needs to be moved, mode it to the end of the list. */
 	COTLinkedListNode_SetNext( self->_.endOfLinks, self->_.tail );
 	/* Update the new end of list. */
 	self->_.endOfLinks = self->_.tail;
+	/* Update the new tail. */
+	self->_.tail = COTLinkedListNode_GetNext( self->_.tail );
 	/* The new end of list should not have a next node. */
 	COTLinkedListNode_SetNext( self->_.endOfLinks, NULL );
 
 	return element;
-}
+} 
 
 #if (configCOTQUEUE_PEEK == 1)
 /**
@@ -207,6 +214,11 @@ static void* peek( self(COTQueue) )
 		/* Queue of size zero. */
 		return NULL;
 	}
+	if( self->_.tail == self->_.head )
+	{
+		/* Queue is empty. */
+		return NULL;
+	}
 	return COTLinkedListNode_GetData( self->_.tail );
 }
 #endif
@@ -215,17 +227,80 @@ static void* peek( self(COTQueue) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
+/**
+ * @memberof COTLinkedQueue
+ * @private
+ * @brief
+ * 		Internal constructor for linked queue.
+ * @details
+ *		Internal constructor for linked queue. To be called by constructor only.
+ */
+static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t initSize )
+{
+	COTMemberof(COTLinkedQueue);
+
+	COTLinkedListNode* node1;
+	COTLinkedListNode* node2;
+	size_t iter;
+
+	if( initSize == 0 )
+	{
+		return 0;
+	}
+
+	/* Allocate first node. */
+	node1 = COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+	if( node1 == NULL )
+	{
+		return 0;
+	}
+	/* Construct first node. */
+	COTCreate( node1, COTLinkedListNodeCreate( node1 ) );
+	/* Head of the queue is this node. */
+	self->_.head = node1;
+
+	for( iter = 0; iter < initSize; ++iter )
+	{
+		/* Allocate nodes unil desired queue size is reached. */
+		node2 = COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+		if( node == NULL )
+		{
+			/* Failed to allocate node. */
+			break;
+		}
+		COTCreate( node2, COTLinkedListNodeCreate( node2 ) );
+
+		/* Continue to create linked list until desired queue size is reached. */
+		COTLinkedListNode_SetNext( node1, node2 );
+		node1 = node2;
+
+	}
+	
+	/* Keep a reference to the end of the list. */
+	/* For example: */
+	/* nodeA -> nodeB -> nodeC -> nodeD -> ... -> nodeQ */
+	/* the head is nodeA and the end of the list is nodeQ. */
+	self->_.endOfLinks = node1;
+
+	/* There should be no next node after the end of the list. */
+	COTLinkedListNode_SetNext( node1, NULL );
+
+	/* Return the number of nodes created. */
+	return iter;
+}
+
 COTVirtualDestructor( )
 {
 	COTDestructorOf(COTLinkedQueue);
+
+
+
 	COTSuper( destroy )( (COTObject*) self );
 }
 
 void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize )
 {
 	COTConstructorOf(COTLinkedQueue);
-	(void) initSize;
-	(void) actualSize;
 
 	/* Link virtual interface methods. */
 	#if (configUSE_COTCONTAINER == 1)
@@ -257,7 +332,18 @@ void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actua
 	COTOverrideDestructor( );
 
 	/* Set up member data. */
+	self->_.allocator = COTAllocatorCast( COTDynamicAllocator_GetInstance( ) );
 	self->_.tail = NULL;
 	self->_.head = NULL;
 	self->_.endOfLinks = NULL;
+
+	/* Setup linked list. */
+	if( actualSize == NULL )
+	{
+		COTLinkedQueue_InternalConstructor( self, initSize );
+	}
+	else
+	{
+		*actualSize = COTLinkedQueue_InternalConstructor( self, initSize );
+	}
 }

@@ -14,15 +14,20 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Nov. 2015
  */
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#include "Allocator.h"
 
-#include <unit.h>
+/****************************************************************************/
+/* Interface Methods														*/
+/****************************************************************************/
+void* COTAllocator_Malloc( self(COTAllocator), size_t bytes )
+{
+	COTCallVirtual(COTAllocator, memoryAllocate)( self, bytes );
+}
 
-TEST_SUITE( COTLinkedListNode );
-TEST_SUITE( COTDynamicAllocator );
-
-#endif /* UNIT_TESTSUITES_H_ */
+void COTAllocator_Free( self(COTAllocator), void* memory )
+{
+	COTCallVirtual(COTAllocator, memoryFree)( self, memory );
+}

@@ -25,6 +25,7 @@
 #if (configUSE_COTLINKEDQUEUE == 1)
 #include "Queue.h"
 #include <Container/LinkedListNode/LinkedListNode.h>
+#include <Memory/Allocator.h>
 
 /**
  * @struct COTLinkedQueue
@@ -40,13 +41,13 @@
  *		<ul>
  *		<li><b>x * sizeof(void*) + sizeof(size_t) + sizeof(char)</b></li>
  *		<li>x changes depending on how many functions are included (ie, like COTContainer_Add( ), COTQueue_Peek( ),
- *			etc.) As a minimum, <b>x = 7</b> plus 1 for each optional function included and plus an additional
+ *			etc.) As a minimum, <b>x = 8</b> plus 1 for each optional function included and plus an additional
  *			2 if the COTContainer is included in the build. This gives a max
- *			x of <b>x = 16</b>.</li>
- *		<li>On a 32 bit system, this gives <b>33 <= total bytes <= 69</b>.</li>
+ *			x of <b>x = 17</b>.</li>
+ *		<li>On a 32 bit system, this gives <b>37 <= total bytes <= 73</b>.</li>
  *		<li>A queue which can buffer a maximum of 1 element requires an additional 3*sizeof(void*) bytes.</li>
  *		<li>A queue which can buffer a maximum of 13 elements requires an additional 13*3*sizeof(void*) bytes. </li>
- *		<li>On a 32 bit system, this gives <b>12*max_size + 33 <= total bytes <= 12*max_size + 69</b>.</li>
+ *		<li>On a 32 bit system, this gives <b>12*max_size + 37 <= total bytes <= 12*max_size + 73</b>.</li>
  *		</ul>
  * @attention
  *		configUSE_COTLINKEDQUEUE must be defined as 1 for inclusion in the build. See ContainerConfig.h.
@@ -62,6 +63,7 @@ COTClass(COTLinkedQueue, COTQueue)
 		COTLinkedListNode* 	tail;
 		COTLinkedListNode*	endOfLinks;
 		size_t 				size;
+		COTAllocator*		allocator;
 	}_; /* Hide private data in this struct. */
 COTClassEnd
 

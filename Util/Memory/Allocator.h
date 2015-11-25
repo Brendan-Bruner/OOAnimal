@@ -21,10 +21,8 @@
 #ifndef INCLUDE_MEMORY_ALLOCATOR_H_
 #define INCLUDE_MEMORY_ALLOCATOR_H_
 
-#include "../MemoryConfig.h"
+#include <Class.h>
 
-#if (configUSE_COTALLOCATOR == 1)
- #include <Class.h>
 /**
  * @struct COTAllocator
  * @brief
@@ -69,6 +67,4 @@ void* COTAllocator_Malloc( self(COTAllocator), size_t bytes );
  */
 void COTAllocator_Free( self(COTAllocator), void* memory );
 
- #endif /* configUSE_COTALLOCATOR */
- #endif /* INCLUDE_MEMORY_ALLOCATOR_H_ */
-
+#endif /* INCLUDE_MEMORY_ALLOCATOR_H_ */

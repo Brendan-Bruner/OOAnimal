@@ -14,15 +14,19 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Oct. 3, 2015
+ * Nov. 2015
  */
 
-#ifndef UNIT_TESTSUITES_H_
-#define UNIT_TESTSUITES_H_
+#ifndef UTIL_MEMORY_CONFIG_H_
+#define UTIL_MEMORY_CONFIG_H_
 
-#include <unit.h>
+/****************************************************************************/
+/* Allocator Configuration													*/
+/****************************************************************************/
+/*
+ * (0) Does not include COTBlockAllocator class in the build.
+ * (1) Includes the COTBlockAllocator class in the build.
+ */
+#define configUSE_COTBLOCKALLOCATOR				(1)
 
-TEST_SUITE( COTLinkedListNode );
-TEST_SUITE( COTDynamicAllocator );
-
-#endif /* UNIT_TESTSUITES_H_ */
+#endif /* UTIL_MEMORY_CONFIG_H_ */
