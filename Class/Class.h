@@ -240,6 +240,17 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 #define COT_LINK_INTERFACE_VIRTUAL( class, iface, method ) \
 	((class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = method
 
+/* The two macros below link abstract methods. */
+#define COT_LINK_ABSTRACT_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
+#define COTLinkAbstract( ... ) \
+	COT_LINK_ABSTRACT_SELECTION( __VA_ARGS__, COT_LINK_INTERFACE_ABSTRACT, COT_LINK_CLASS_ABSTRACT )( __VA_ARGS__ )
+
+#define COT_LINK_CLASS_ABSTRACT( class, method ) \
+	((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method = NULL
+
+#define COT_LINK_INTERFACE_VIRTUAL( class, iface, method ) \
+	((class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = NULL
+
 /******************************************************************************/
 /* Used to override methods in super class / interface. */
 /******************************************************************************/
@@ -295,6 +306,8 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 	static void destroy( self(COTObject) )
 #define COTDestructorOf( C )\
 	COTMemberOf(C)
+#define COTSuperDestructor( )\
+	COTSuper( destroy )( (COTObject*) self )
 
 /******************************************************************************/
 /* Call interface methods on an object using the interface */

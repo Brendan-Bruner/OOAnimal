@@ -42,6 +42,12 @@
  * 		Abstract class for all FIFO like containers.
  * 		Defines an insert, remove, and peek operation. It uses
  * 		the Container interface if configUSE_COTCONTAINER is set to 1.
+ *
+ *		<b>Overrides</b>
+ *		<ul>
+ *		<li>COTContainer_Add( )</li>
+ *		<li>COTContainer_AddAll( )</li>
+ *		</ul>
  * @attention
  * 		configUSE_COTQUEUE must be defined as 1 for this class to be included.
  *		See ContainerConfig.h.
@@ -56,6 +62,9 @@ COTImplements( COTContainer )
 		void* (*removeElement)( self(COTQueue) );
 		#if (configCOTQUEUE_PEEK == 1)
 			void* (*peek)( self(COTQueue) );
+		#endif
+		#if (configCOTQUEUE_SIZE == 1)
+			size_t (*size)( self(COTQueue) );
 		#endif
 	)
 COTClassEnd
@@ -103,6 +112,20 @@ void* COTQueue_Remove( self(COTQueue) );
  */
 void* COTQueue_Peek( self(COTQueue) );
 #endif /* configCOTQUEUE_PEEK */
+
+#if (configCOTQUEUE_SIZE == 1)
+/**
+ * @memberof COTQueue
+ * @brief
+ * 		Get the current size of the queue.
+ * @details
+ *		Get the current size of the queue, ie, how many elements
+ *		have been inserted in it.
+ * @returns
+ *		The actual size of the queue.
+ */
+size_t COTQueue_Size( self(COTQueue) );
+#endif /* configCOTQUEUE_SIZE */
 
 /**
  * @memberof COTQueue

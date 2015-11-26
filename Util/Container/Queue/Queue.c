@@ -25,19 +25,6 @@
 /****************************************************************************/
 #if (configUSE_COTCONTAINER == 1)
 #if (configCOTCONTAINER_ADD == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_Add( ).
- * @details
- *		<b>Implements</b> COTContainer_Add( ).
- * 		@code
- *			extern COTQueue* someQueue;
- * 			COTContainer_Add( COTContainerCast(someQueue), someElement );
- * 		@endcode
- * 		Adds an element to the head of the queue. Has the
- * 		same effect as calling COTQueue_Insert( ).
- */
 static Boolean add( self(COTContainer), void* element )
 {
 	COTInterfaceOf(COTQueue);
@@ -47,18 +34,6 @@ static Boolean add( self(COTContainer), void* element )
 
 #if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
 	&& (configUSE_COTITERATOR == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_AddAll( ).
- * @details
- *		<b>Implements</b> COTContainer_AddAll( ).
- * 		@code
- *			extern COTQueue* someQueue;
- *			extern COTContainer* someContainer;
- * 			COTContainer_AddAll( COTContainerCast(someQueue), someContainer );
- * 		@endcode
- */
 static size_t addAll( self(COTContainer), COTContainer* container )
 {
 	COTInterfaceOf(COTQueue);
@@ -93,139 +68,16 @@ static size_t addAll( self(COTContainer), COTContainer* container )
 }
 #endif
 
-#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_GetIterator( ).
- * @details
- *		<b>Implements</b> COTContainer_GetIterator( ).
- * 		@code
- *			extern COTQueue* someQueue;
- * 			COTIterator* iter = COTContainer_GetIterator( COTContainerCast(someQueue) );
- *		@endcode
- * @attention
- *		Subclasses must provide an implementation.
- */
-static COTIterator* iterator( self(COTContainer) )
-{
-	COTInterfaceOf(COTQueue);
-	(void) self;
-	return NULL;
-}
-#endif
-
-#if (configCOTCONTAINER_SIZE == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_Size( ).
- * @details
- *		<b>Implements</b> COTContainer_Size( ).
- *		@code
- *			extern COTQueue* someQueue;
- * 			size_t queueSize = COTContainer_Size( COTContainerCast(someQueue) );
- *		@endcode
- * @attention
- *		Subclasses must provide an implementation.
- */
-static size_t size( self(COTContainer) )
-{
-	COTInterfaceOf(COTQueue);
-	(void) self;
-	return 0;
-}
-#endif
-
-#if (configCOTCONTAINER_RESET == 1 )
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_Reset( ).
- * @details
- *		<b>Implements</b> COTContainer_Reset( ).
- *		@code
- *			extern COTQueue* someQueue;
- * 			COTContainer_Reset( COTContainerCast(someQueue) );
- *		@endcode
- * @attention
- *		Subclasses must provide an implementation.
- */
-static void reset( self(COTContainer) )
-{
-	COTInterfaceOf(COTQueue);
-	(void) self;
-}
-#endif
-
-#if (configCOTCONTAINER_IS_EMPTY == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_IsEmpty( ).
- * @details
- *		<b>Implements</b> COTContainer_IsEmpty( ).
- *		@code
- *			extern COTQueue* someQueue;
- * 			Boolean isEmpty = COTContainer_IsEmpty( COTContainerCast(someQueue) );
- *		@endcode
- * @attention
- *		Subclasses must provide an implementation.
- */
-static Boolean isEmpty( self(COTContainer) )
-{
-	COTInterfaceOf(COTQueue);
-	(void) self;
-	return true;
-}
-#endif
-
-#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-/**
- * @memberof COTQueue
- * @brief
- * 		<b>Implements</b> COTContainer_AddCapacity( ).
- * @details
- *		<b>Implements</b> COTContainer_AddCapacity( ).
- *		@code
- *			extern COTQueue* someQueue;
- * 			Boolean isEmpty = COTContainer_AddCapacity( COTContainerCast(someQueue) );
- *		@endcode
- * @attention
- *		Subclasses must provide an implementation.
- */
-static size_t addCapacity( self(COTContainer), size_t capacity )
-{
-	COTInterfaceOf(COTQueue);
-	(void) self;
-	(void) capacity;
-	return 0;
-}
-#endif
-
 #endif /* configUSE_COTCONTAINER */
 
 Boolean COTQueue_Insert( self(COTQueue), void* element )
 {
 	COTCallVirtual(COTQueue, insert)( self, element );
 }
-static Boolean insert( self(COTQueue), void* element )
-{
-	COTMemberOf(COTQueue);
-	(void) self;
-	(void) element;
-	return false;
-}
 
 void* COTQueue_Remove( self(COTQueue) )
 {
 	COTCallVirtual(COTQueue, removeElement)( self );
-}
-static void* removeElement( self(COTQueue) )
-{
-	COTMemberOf(COTQueue);
-	(void) self;
-	return NULL;
 }
 
 #if (configCOTQUEUE_PEEK == 1)
@@ -233,13 +85,14 @@ void* COTQueue_Peek( self(COTQueue) )
 {
 	COTCallVirtual(COTQueue, peek)( self );
 }
-static void* peek( self(COTQueue) )
-{
-	COTMemberOf(COTQueue);
-	(void) self;
-	return NULL;
-}
 #endif
+
+#if (configCOTQUEUE_SIZE == 1)
+size_t COTQueue_Size( self(COTQueue) )
+{
+	COTCallVirtual(COTQueue, size)( self );
+}
+#endif /* configCOTQUEUE_SIZE */
 
 
 /****************************************************************************/
@@ -262,26 +115,26 @@ void COTQueueCreate_( self(COTQueue) )
 	COTLinkVirtual(COTQueue, COTContainer, addAll);
 	#endif
 	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTQueue, COTContainer, iterator);
+	COTLinkAbstract(COTQueue, COTContainer, iterator);
 	#endif
 	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkVirtual(COTQueue, COTContainer, size);
+	COTLinkAbstract(COTQueue, COTContainer, size);
 	#endif
 	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkVirtual(COTQueue, COTContainer, reset);
+	COTLinkAbstract(COTQueue, COTContainer, reset);
 	#endif
 	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, isEmpty);
+	COTLinkAbstract(COTQueue, COTContainer, isEmpty);
 	#endif
 	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, addCapacity);
+	COTLinkAbstract(COTQueue, COTContainer, addCapacity);
 	#endif
 	#endif /* configUSE_COTCONTAINER */	
 
 	/* COTQueue virtual methods. */
-	COTLinkVirtual(COTQueue, insert);
-	COTLinkVirtual(COTQueue, removeElement);
+	COTLinkAbstract(COTQueue, insert);
+	COTLinkAbstract(COTQueue, removeElement);
 	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkVirtual(COTQueue, peek);
+	COTLinkAbstract(COTQueue, peek);
 	#endif
 }

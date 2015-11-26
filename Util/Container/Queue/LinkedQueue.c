@@ -39,9 +39,44 @@
  static size_t COTLinkedQueue_AddCapacity( self(COTLinkedQueue), size_t capacity )
  {
  	COTMemberOf(COTLinkedQueue);
- 	(void) capacity;
- 	(void) self;
- 	return 0;
+
+ 	COTLinkedListNode* node1;
+ 	COTLinkedListNode* node2;
+ 	size_t iter;
+
+ 	/* Validate the increase in capacity. */
+ 	if( capacity == 0 )
+ 	{
+ 		return 0;
+ 	}
+
+ 	/* If the queue was initially size zero, allocate its first element. */
+ 	iter = capacity;
+ 	if( self->_.endOfLinks == NULL )
+ 	{
+ 		--iter;
+ 		self->_.endOfLinks = (COTLinkedListNode*) COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+ 		if( self->_.endOfLinks == NULL )
+ 		{
+ 			return 0;
+ 		}
+ 		COTCreate(self->_.endOfLinks, COTLinkedListNodeCreate( self->_.endOfLinks ));
+ 		self->_.head = self->_.endOfLinks;
+ 	}	
+
+ 	/* Begin allocating the reset of the requested elements. */
+ 	node1 = self->_.endOfLinks;
+ 	for(; iter > 0; --iter )
+ 	{
+ 		node2 = (COTLinkedListNode*) COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+ 		if( node2 == NULL ){ break; }	
+ 		COTCreate(node2, COTLinkedListNodeCreate( node2 ));
+ 		COTLinkedListNode_SetNext( node1, node2 );
+ 		node1 = node2;	
+ 	}
+ 	self->_.endOfLinks = node1;
+
+ 	return capacity - iter;
  }
 
 /****************************************************************************/
@@ -104,7 +139,8 @@ static size_t addCapacity( self(COTContainer), size_t capacity )
  *		<br>This method always has O(1) insertion time, even if memory
  *		has to be allocated.
  *		<br>When the queue is full, space is allocated for one
- *		additional element. If allocation is successful, the element
+ *		additional element. This operation completes in O(1) time.
+ *		If allocation is successful, the element
  *		is inserted. To allocate more space at one time, see
  *		COTContainer_AddCapacity( ).
  *		@code
@@ -138,6 +174,8 @@ static Boolean insert( self(COTQueue), void* element )
 	COTLinkedListNode_SetData( self->_.head, element );
 	/* Move head to next node. */
 	self->_.head = COTLinkedListNode_GetNext( self->_.head );
+	/* Size of the queue increased. */
+	++self->_.size;
 
 	return true;
 }
@@ -188,6 +226,8 @@ static void* removeElement( self(COTQueue) )
 	self->_.tail = COTLinkedListNode_GetNext( self->_.tail );
 	/* The new end of list should not have a next node. */
 	COTLinkedListNode_SetNext( self->_.endOfLinks, NULL );
+	/* Size of the queue decreased. */
+	--self->_.size;
 
 	return element;
 } 
@@ -237,7 +277,7 @@ static void* peek( self(COTQueue) )
  */
 static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t initSize )
 {
-	COTMemberof(COTLinkedQueue);
+	COTMemberOf(COTLinkedQueue);
 
 	COTLinkedListNode* node1;
 	COTLinkedListNode* node2;
@@ -263,7 +303,7 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	{
 		/* Allocate nodes unil desired queue size is reached. */
 		node2 = COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
-		if( node == NULL )
+		if( node2 == NULL )
 		{
 			/* Failed to allocate node. */
 			break;
@@ -293,9 +333,9 @@ COTVirtualDestructor( )
 {
 	COTDestructorOf(COTLinkedQueue);
 
+	/* TODO: destroy allocated nodes. */
 
-
-	COTSuper( destroy )( (COTObject*) self );
+	COTSuperDestructor( );
 }
 
 void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize )
@@ -336,6 +376,7 @@ void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actua
 	self->_.tail = NULL;
 	self->_.head = NULL;
 	self->_.endOfLinks = NULL;
+	self->_.size = 0;
 
 	/* Setup linked list. */
 	if( actualSize == NULL )
