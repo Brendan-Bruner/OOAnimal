@@ -263,6 +263,13 @@ static void* peek( self(COTQueue) )
 }
 #endif
 
+#if (configCOTQUEUE_SIZE == 1)
+static size_t size( self(COTQueue) )
+{
+	COTMemberof(COTLinkedQueue)
+	return self->_.size;
+}
+#endif /* configCOTQUEUE_SIZE */
 
 /****************************************************************************/
 /* Constructor / Destructor													*/
@@ -367,6 +374,9 @@ void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actua
 	#if (configCOTQUEUE_PEEK == 1)
 	COTLinkVirtual(COTQueue, peek);
 	#endif	
+	#if (configCOTQUEUE_SIZE == 1)
+	COTLinkVirtual(COTQueue, size)
+	#endif
 
 	/* Override destructor. */
 	COTOverrideDestructor( );
