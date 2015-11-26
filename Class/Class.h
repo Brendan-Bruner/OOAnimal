@@ -248,7 +248,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 #define COT_LINK_CLASS_ABSTRACT( class, method ) \
 	((class*) COT_OBJECT_REFERENCE)->COT_VIRTUAL_TABLE_HIDER_NAME. method = NULL
 
-#define COT_LINK_INTERFACE_VIRTUAL( class, iface, method ) \
+#define COT_LINK_INTERFACE_ABSTRACT( class, iface, method ) \
 	((class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method = NULL
 
 /******************************************************************************/
