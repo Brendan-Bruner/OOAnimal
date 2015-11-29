@@ -17,8 +17,8 @@
  * Nov. 2015
  */
 
- #include "LinkedQueue.h"
- #include <Memory/DynamicAllocator.h>
+#include "LinkedQueue.h"
+#include <Memory/DynamicAllocator.h>
 
 
 /****************************************************************************/
@@ -84,7 +84,7 @@
 /****************************************************************************/
  #if (configUSE_COTCONTAINER == 1)
  #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-static COTIterator* iterator( self(COTContainer) )
+static COTIterator* COTContainerVirtual_GetIterator( self(COTContainer) )
 {
 	COTInterfaceOf(COTLinkedQueue);
 	(void) self;
@@ -93,7 +93,7 @@ static COTIterator* iterator( self(COTContainer) )
 #endif
 
 #if (configCOTCONTAINER_SIZE == 1)
-static size_t size( self(COTContainer) )
+static size_t COTContainerVirtual_Size( self(COTContainer) )
 {
 	COTInterfaceOf(COTLinkedQueue);
 	return self->_.size;
@@ -101,7 +101,7 @@ static size_t size( self(COTContainer) )
 #endif
 
 #if (configCOTCONTAINER_RESET == 1 )
-static void reset( self(COTContainer) )
+static void COTContainerVirtual_Reset( self(COTContainer) )
 {
 	COTInterfaceOf(COTLinkedQueue);
 	self->_.head = self->_.tail;
@@ -109,7 +109,7 @@ static void reset( self(COTContainer) )
 #endif
 
 #if (configCOTCONTAINER_IS_EMPTY == 1)
-static Boolean isEmpty( self(COTContainer) )
+static Boolean COTContainerVirtual_IsEmpty( self(COTContainer) )
 {
 	COTInterfaceOf(COTLinkedQueue);
 	if( self->_.size == 0 )
@@ -121,7 +121,7 @@ static Boolean isEmpty( self(COTContainer) )
 #endif
 
 #if (configCOTCONTAINER_ADD_CAPACITY == 1)
-static size_t addCapacity( self(COTContainer), size_t capacity )
+static size_t COTContainerVirtual_AddCapacity( self(COTContainer), size_t capacity )
 {
 	COTInterfaceOf(COTLinkedQueue);
 	return COTLinkedQueue_AddCapacity( self, capacity );
@@ -130,26 +130,7 @@ static size_t addCapacity( self(COTContainer), size_t capacity )
 
 #endif /* configUSE_COTCONTAINER */
 
-/**
- * @memberof COTLinkedQueue
- * @brief
- *		<b>Implements</b> COTQueue_Insert( ).
- * @details
- *		<b>Implements</b> COTQueue_Insert( ).
- *		<br>This method always has O(1) insertion time, even if memory
- *		has to be allocated.
- *		<br>When the queue is full, space is allocated for one
- *		additional element. This operation completes in O(1) time.
- *		If allocation is successful, the element
- *		is inserted. To allocate more space at one time, see
- *		COTContainer_AddCapacity( ).
- *		@code
- *			extern COTLinkedQueue* someQueue;
- *			extern void* someElement;
- *			COTQueue_Insert( (COTQueue*) someQueue, someElement );
- *		@endcode
- */
-static Boolean insert( self(COTQueue), void* element )
+static Boolean COTQueueVirtual_Insert( self(COTQueue), void* element )
 {
 	COTMemberOf(COTLinkedQueue);
 	
@@ -180,19 +161,7 @@ static Boolean insert( self(COTQueue), void* element )
 	return true;
 }
 
-/**
- * @memberof COTLinkedQueue
- * @brief
- *		<b>Implements</b> COTQueue_Remove( ).
- * @details
- *		<b>Implements</b> COTQueue_Remove( ).
- *		<br>This method always has O(1) removal time.
- *		@code
- *			extern COTLinkedQueue* someQueue;
- *			void* removedElement = COTQueue_Remove( (COTQueue*) someQueue );
- *		@endcode
- */
-static void* removeElement( self(COTQueue) )
+static void* COTQueueVirtual_Remove( self(COTQueue) )
 {
 	COTMemberOf(COTLinkedQueue);
 
@@ -233,19 +202,7 @@ static void* removeElement( self(COTQueue) )
 } 
 
 #if (configCOTQUEUE_PEEK == 1)
-/**
- * @memberof COTLinkedQueue
- * @brief
- *		<b>Implements</b> COTQueue_Peek( ).
- * @details
- *		<b>Implements</b> COTQueue_Peek( ).
- *		<br>This method always has O(1) time.
- *		@code
- *			extern COTLinkedQueue* someQueue;
- *			void* tail = COTQueue_Peek( (COTQueue*) someQueue );
- *		@endcode
- */
-static void* peek( self(COTQueue) )
+static void* COTQueueVirtual_Peek( self(COTQueue) )
 {
 	COTMemberOf(COTLinkedQueue);
 
@@ -264,9 +221,9 @@ static void* peek( self(COTQueue) )
 #endif
 
 #if (configCOTQUEUE_SIZE == 1)
-static size_t size( self(COTQueue) )
+static size_t COTQueueVirtual_Size( self(COTQueue) )
 {
-	COTMemberof(COTLinkedQueue)
+	COTMemberOf(COTLinkedQueue);
 	return self->_.size;
 }
 #endif /* configCOTQUEUE_SIZE */
@@ -305,6 +262,8 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	COTCreate( node1, COTLinkedListNodeCreate( node1 ) );
 	/* Head of the queue is this node. */
 	self->_.head = node1;
+	/* Will also be the tail. */
+	self->_.tail = node1;
 
 	for( iter = 0; iter < initSize; ++iter )
 	{
@@ -340,7 +299,24 @@ COTVirtualDestructor( )
 {
 	COTDestructorOf(COTLinkedQueue);
 
-	/* TODO: destroy allocated nodes. */
+	COTLinkedListNode* node;
+	COTLinkedListNode* nextNode;
+
+	node = self->_.tail;
+	if( node == NULL )
+	{
+		/* No nodes to destroy. */
+		COTSuperDestructor( );
+		return;
+	}
+	
+	do
+	{
+		nextNode = COTLinkedListNode_GetNext( node );
+		COTDestroy( COTLinkedListNode, node );
+		node = nextNode;
+	}
+	while( node != NULL );
 
 	COTSuperDestructor( );
 }
@@ -349,33 +325,36 @@ void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actua
 {
 	COTConstructorOf(COTLinkedQueue);
 
+	/* Call super's constructor. */
+	COTQueueCreate_( (COTQueue*) self );
+
 	/* Link virtual interface methods. */
 	#if (configUSE_COTCONTAINER == 1)
 	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTQueue, COTContainer, iterator);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_GetIterator);
 	#endif
 	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkVirtual(COTQueue, COTContainer, size);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Size);
 	#endif
 	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkVirtual(COTQueue, COTContainer, reset);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Reset);
 	#endif
 	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, isEmpty);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_IsEmpty);
 	#endif
 	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, addCapacity);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_AddCapacity);
 	#endif
 	#endif /* configUSE_COTCONTAINER */
 
 	/* Link virtual queue methods. */
-	COTLinkVirtual(COTQueue, insert);
-	COTLinkVirtual(COTQueue, removeElement);
+	COTLinkVirtual(COTQueue, COTQueueVirtual_Insert);
+	COTLinkVirtual(COTQueue, COTQueueVirtual_Remove);
 	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkVirtual(COTQueue, peek);
+	COTLinkVirtual(COTQueue, COTQueueVirtual_Peek);
 	#endif	
 	#if (configCOTQUEUE_SIZE == 1)
-	COTLinkVirtual(COTQueue, size)
+	COTLinkVirtual(COTQueue, COTQueueVirtual_Size);
 	#endif
 
 	/* Override destructor. */

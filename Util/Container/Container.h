@@ -45,26 +45,26 @@ COTInterface( COTContainer )
 	COTVirtual
 	(
 		#if (configCOTCONTAINER_ADD == 1)
-			Boolean (*add)( self(COTContainer), void* );
+			Boolean (*COTContainerVirtual_Add)( self(COTContainer), void* );
 		#endif
 		#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
 		&& (configUSE_COTITERATOR == 1)
-			size_t (*addAll)( self(COTContainer), COTContainer* );
+			size_t (*COTContainerVirtual_AddAll)( self(COTContainer), COTContainer* );
 		#endif
 		#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-			COTIterator* (*iterator)( self(COTContainer) );
+			COTIterator* (*COTContainerVirtual_GetIterator)( self(COTContainer) );
 		#endif
 		#if (configCOTCONTAINER_SIZE == 1)
-			size_t (*size)( self(COTContainer) );
+			size_t (*COTContainerVirtual_Size)( self(COTContainer) );
 		#endif
 		#if (configCOTCONTAINER_RESET == 1 )
-			void (*reset)( self(COTContainer) );
+			void (*COTContainerVirtual_Reset)( self(COTContainer) );
 		#endif
 		#if (configCOTCONTAINER_IS_EMPTY == 1)
-			Boolean (*isEmpty)( self(COTContainer) );
+			Boolean (*COTContainerVirtual_IsEmpty)( self(COTContainer) );
 		#endif
 		#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-			size_t (*addCapacity)( self(COTContainer), size_t );
+			size_t (*COTContainerVirtual_AddCapacity)( self(COTContainer), size_t );
 		#endif
 	)
 COTInterfaceEnd

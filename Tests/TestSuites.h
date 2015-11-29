@@ -24,5 +24,6 @@
 
 TEST_SUITE( COTLinkedListNode );
 TEST_SUITE( COTDynamicAllocator );
+TEST_SUITE( COTLinkedQueue );
 
 #endif /* UNIT_TESTSUITES_H_ */

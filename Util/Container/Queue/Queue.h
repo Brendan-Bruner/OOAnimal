@@ -35,7 +35,6 @@
 #endif
 /**
  * @struct COTQueue
- * @extends COTObject
  * @brief
  * 		Abstract class for all FIFO containers.
  * @details
@@ -43,7 +42,7 @@
  * 		Defines an insert, remove, and peek operation. It uses
  * 		the Container interface if configUSE_COTCONTAINER is set to 1.
  *
- *		<b>Overrides</b>
+ *		<b>Implemented, from COTContainer</b>
  *		<ul>
  *		<li>COTContainer_Add( )</li>
  *		<li>COTContainer_AddAll( )</li>
@@ -58,13 +57,13 @@ COTImplements( COTContainer )
 #endif
 	COTVirtual
 	(
-		Boolean (*insert)( self(COTQueue), void* );
-		void* (*removeElement)( self(COTQueue) );
+		Boolean (*COTQueueVirtual_Insert)( self(COTQueue), void* );
+		void* (*COTQueueVirtual_Remove)( self(COTQueue) );
 		#if (configCOTQUEUE_PEEK == 1)
-			void* (*peek)( self(COTQueue) );
+			void* (*COTQueueVirtual_Peek)( self(COTQueue) );
 		#endif
 		#if (configCOTQUEUE_SIZE == 1)
-			size_t (*size)( self(COTQueue) );
+			size_t (*COTQueueVirtual_Size)( self(COTQueue) );
 		#endif
 	)
 COTClassEnd

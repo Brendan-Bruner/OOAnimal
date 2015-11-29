@@ -265,7 +265,7 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 
 #define COT_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
 	COT_OBJECT_REFERENCE->COT_OVERRIDE_TABLE_HIDER_NAME. method = ( (class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME. method; \
-	( (class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME.method = method
+	((class*) COT_OBJECT_REFERENCE)->COT_TO_IFACE_VAR_NAME( iface ).COT_VIRTUAL_TABLE_HIDER_NAME.method = method
 
 /* For overriding destructor. */
 #define COTOverrideDestructor( )\
@@ -299,8 +299,8 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 
 #define COTInterfaceOf(C) 															\
 	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME ); 										\
-	C *COT_OBJECT_REFERENCE = (C *) ((char *)COT_OBJECT_PRE_REFERENCE_NAME - 				\
-						(char *)COT_OBJECT_PRE_REFERENCE_NAME->COT_INTERFACE_OFFSET_NAME); 	\
+	C *COT_OBJECT_REFERENCE = (C *) (((char*) COT_OBJECT_PRE_REFERENCE_NAME) - 				\
+						((char*) COT_OBJECT_PRE_REFERENCE_NAME->COT_INTERFACE_OFFSET_NAME)); 	\
 
 #define COTVirtualDestructor( )\
 	static void destroy( self(COTObject) )

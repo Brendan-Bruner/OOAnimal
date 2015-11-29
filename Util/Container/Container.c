@@ -25,48 +25,48 @@
 #if (configCOTCONTAINER_ADD == 1)
 Boolean COTContainer_Add( self(COTContainer), void* element )
 {
-	COTCallVirtual( COTContainer, add )( self, element );
+	COTCallVirtual( COTContainer, COTContainerVirtual_Add )( self, element );
 }
 #endif
 
 #if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
 size_t COTContainer_AddAll( self(COTContainer), COTContainer* container )
 {
-	COTCallVirtual( COTContainer, addAll )( self, container );
+	COTCallVirtual( COTContainer, COTContainerVirtual_AddAll )( self, container );
 }
 #endif
 
 #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
 COTIterator* COTContainer_GetIterator( self(COTContainer) )
 {
-	COTCallVirtual( COTContainer, iterator )( self );
+	COTCallVirtual( COTContainer, COTContainerVirtual_GetIterator )( self );
 }
 #endif
 
 #if (configCOTCONTAINER_SIZE == 1)
 size_t COTContainer_Size( self(COTContainer) )
 {
-	COTCallVirtual( COTContainer, size )( self );
+	COTCallVirtual( COTContainer, COTContainerVirtual_Size )( self );
 }
 #endif
 
 #if (configCOTCONTAINER_RESET == 1 )
 void COTContainer_Reset( self(COTContainer) )
 {
-	COTCallVirtual( COTContainer, reset )( self );
+	COTCallVirtual( COTContainer, COTContainerVirtual_Reset )( self );
 }
 #endif
 
 #if (configCOTCONTAINER_IS_EMPTY == 1)
 Boolean COTContainer_IsEmpty( self(COTContainer) )
 {
-	COTCallVirtual( COTContainer, isEmpty )( self );
+	COTCallVirtual( COTContainer, COTContainerVirtual_IsEmpty )( self );
 }
 #endif
 
 #if (configCOTCONTAINER_ADD_CAPACITY == 1)
 size_t COTContainer_AddCapacity( self(COTContainer), size_t capacity )
 {
-	COTCallVirtual( COTContainer, addCapacity )( self, capacity );
+	COTCallVirtual( COTContainer, COTContainerVirtual_AddCapacity )( self, capacity );
 }
 #endif

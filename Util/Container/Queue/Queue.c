@@ -25,7 +25,7 @@
 /****************************************************************************/
 #if (configUSE_COTCONTAINER == 1)
 #if (configCOTCONTAINER_ADD == 1)
-static Boolean add( self(COTContainer), void* element )
+static Boolean COTContainerVirtual_Add( self(COTContainer), void* element )
 {
 	COTInterfaceOf(COTQueue);
 	return COTQueue_Insert( self, element );
@@ -34,7 +34,7 @@ static Boolean add( self(COTContainer), void* element )
 
 #if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
 	&& (configUSE_COTITERATOR == 1)
-static size_t addAll( self(COTContainer), COTContainer* container )
+static size_t COTContainerVirtual_AddAll( self(COTContainer), COTContainer* container )
 {
 	COTInterfaceOf(COTQueue);
 	COT_ASSERT(container);
@@ -72,25 +72,25 @@ static size_t addAll( self(COTContainer), COTContainer* container )
 
 Boolean COTQueue_Insert( self(COTQueue), void* element )
 {
-	COTCallVirtual(COTQueue, insert)( self, element );
+	COTCallVirtual(COTQueue, COTQueueVirtual_Insert)( self, element );
 }
 
 void* COTQueue_Remove( self(COTQueue) )
 {
-	COTCallVirtual(COTQueue, removeElement)( self );
+	COTCallVirtual(COTQueue, COTQueueVirtual_Remove)( self );
 }
 
 #if (configCOTQUEUE_PEEK == 1)
 void* COTQueue_Peek( self(COTQueue) )
 {
-	COTCallVirtual(COTQueue, peek)( self );
+	COTCallVirtual(COTQueue, COTQueueVirtual_Peek)( self );
 }
 #endif
 
 #if (configCOTQUEUE_SIZE == 1)
 size_t COTQueue_Size( self(COTQueue) )
 {
-	COTCallVirtual(COTQueue, size)( self );
+	COTCallVirtual(COTQueue, COTQueueVirtual_Size)( self );
 }
 #endif /* configCOTQUEUE_SIZE */
 
@@ -109,32 +109,35 @@ void COTQueueCreate_( self(COTQueue) )
 	/* Methods gained from COTContainer interface. */
 	#if (configUSE_COTCONTAINER == 1)
 	#if (configCOTCONTAINER_ADD == 1)
-	COTLinkVirtual(COTQueue, COTContainer, add);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Add);
 	#endif
 	#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1)	&& (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTQueue, COTContainer, addAll);
+	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_AddAll);
 	#endif
 	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkAbstract(COTQueue, COTContainer, iterator);
+	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_GetIterator);
 	#endif
 	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkAbstract(COTQueue, COTContainer, size);
+	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_Size);
 	#endif
 	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkAbstract(COTQueue, COTContainer, reset);
+	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_Reset);
 	#endif
 	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkAbstract(COTQueue, COTContainer, isEmpty);
+	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_IsEmpty);
 	#endif
 	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkAbstract(COTQueue, COTContainer, addCapacity);
+	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_AddCapacity);
 	#endif
 	#endif /* configUSE_COTCONTAINER */	
 
 	/* COTQueue virtual methods. */
-	COTLinkAbstract(COTQueue, insert);
-	COTLinkAbstract(COTQueue, removeElement);
+	COTLinkAbstract(COTQueue, COTQueueVirtual_Insert);
+	COTLinkAbstract(COTQueue, COTQueueVirtual_Remove);
 	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkAbstract(COTQueue, peek);
+	COTLinkAbstract(COTQueue, COTQueueVirtual_Peek);
+	#endif
+	#if (configCOTQUEUE_SIZE == 1)
+	COTLinkAbstract(COTQueue, COTQueueVirtual_Size);
 	#endif
 }

@@ -100,20 +100,24 @@
 #define configUSE_COTQUEUE				(1)
 
  /*
+ * For the configurations below, configUSE_COTQUEUE must be set to (1),
+ * otherwise, they are excluded from the build.
+ * The configurations have the following options and effects:
+ * (0) Does not include method in build.
+ * (1) Includes method in build.
+ */
+ /* COTQueue_Peek( ). */
+ #define configCOTQUEUE_PEEK			(1)
+ /* COTQueue_Size( ). */
+ #define configCOTQUEUE_SIZE			(1)
+
+ /*
  * (0) Does not include COTLinkedQueue class in the build.
  * 	   Any subclasses of COTLinkedQueue will not be included ether.
  * (1) Includes the COTLinkedQueue class in the build.
  * 	   Classes extending COTLinkedQueue can be selectively included / excluded
  */
 #define configUSE_COTLINKEDQUEUE		(1)
-
-/*
- * configUSE_COTQUEUE must be set to (1),
- * The configuration has the following options and effects:
- * (0) COTQueue and all COTQueue subclasses do not have this method.
- * (1) COTQueue and all COTQueue subclasses have this method.
- */
-#define configCOTQUEUE_PEEK				(1)
 
 
 #endif /* INCLUDE_STANDARDCONFIG_H_ */
