@@ -68,6 +68,23 @@ COTImplements( COTContainer )
 	)
 COTClassEnd
 
+typedef struct COTQueue
+{
+	COTClass( COTObject );
+	#if (configUSE_COTCONTAINER == 1)
+	COTInterface( COTContainer )
+	#endif
+
+	Boolean (*COTQueueVirtual_Insert)( self(COTQueue), void* );
+	void* (*COTQueueVirtual_Remove)( self(COTQueue) );
+	#if (configCOTQUEUE_PEEK == 1)
+	void* (*COTQueueVirtual_Peek)( self(COTQueue) );
+	#endif
+	#if (configCOTQUEUE_SIZE == 1)
+	size_t (*COTQueueVirtual_Size)( self(COTQueue) );
+	#endif
+} COTQueue;
+
 /**
  * @memberof COTQueue
  * @brief
