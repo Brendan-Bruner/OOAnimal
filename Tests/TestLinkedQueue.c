@@ -30,7 +30,8 @@ TEST_TEARDOWN( )
 }
 
 /* 
- * Creates an empty queue and */
+ * Creates an empty queue and 
+ */
 TEST( null_queue )
 {
 
@@ -49,9 +50,6 @@ TEST( size_one_queue )
  * the queue is empty.
  * This will testing inserting elements into an empty queue, and inserting elements
  * into a queue which was drained to empty.
- * Next, a few elements are added, some of them are drained, more elements added,
- * and the queue is drained to empty.
- * This tests adding elements to a non empty queue after draining a few.
  */
 TEST( insert_remove )
 {
@@ -164,7 +162,7 @@ TEST( is_empty )
 
 TEST( add_capacity )
 {
-	
+
 }
 #endif
 

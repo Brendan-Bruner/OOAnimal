@@ -42,52 +42,32 @@
 #define COT_FREE free
 
 /* Name of a variable indicating allocation scheme. */
-#define COT_IS_COT_DYNAMIC_OBJECT 		_id
-#define COT_DYNAMIC_OBJECT				1
-#define COT_STATIC_OBJECT				2
-
-/* Data type of the base object class. */
-#define COT_CLASS_OBJECT 				COTObject
+#define COT_FREE						_cf
 
 /* All classes and interfaces contain a pointer to their highest */
 /* super class, the base object, this is the name of that pointer. */
-#define COT_CLASS_OBJECT_NAME			_co
-
-/* An anonymous struct inside the class is used to help hide the virtual table. */
-/* This is that structs name. */
-#define COT_VIRTUAL_TABLE_HIDER_NAME	_vt
-
-/* An anonymous struct inside the class is used to help hide the override table. */
-/* This is that structs name. */
-#define COT_OVERRIDE_TABLE_HIDER_NAME	_ot
+#define COT_BASE_CLASS					_co
 
 /* If a class inherits, it will contain an instance of the class it */
 /* is inheriting from. This is the name of that instance. */
-#define COT_SUPER_NAME 					_sp
+#define COT_SUPER	 					_sp
 
 /* When a class implementings an interface, it contains an */
 /* instance of the interface. This is prefixed / posfixed to the data type */
 /* of the interface and used as the variable name. */
 #define COT_INTERFACE_PREFIX 			_if
 #define COT_INTERFACE_POSIFX
-#define COT_TO_IFACE_VAR_NAME( i ) \
+#define COT_IFACE_VAR( i ) \
 	COT_INTERFACE_PREFIX##i##COT_INTERFACE_POSFIX
 
 /* Interfaces contain a pointer offset from the class implemeting them. */
 /* This is the name of the variable used to save the offset. */
-#define COT_INTERFACE_OFFSET_NAME 		_io
+#define COT_INTERFACE_OFFSET	 		_io
 
 /* Name used to reference the object within class methods. This variable */
 /* is 'self' in python and 'this' in java / C++. Note, making this variable */
 /* 'this' will prevent compatibility with C++ code. */
 #define COT_OBJECT_REFERENCE	 		self
-
-/* Used as an intermediate variable name while casting to the */
-/* COT_OBJECT_REFERENCE_NAME. */
-#define COT_OBJECT_PRE_REFERENCE_NAME	self_
-
-/* Used at the beginning of all functions to pass in the object. */
-#define self( C )					C* COT_OBJECT_PRE_REFERENCE_NAME
 
 
 /****************************************************************************/
@@ -102,42 +82,44 @@ extern COTFreeType COTFree;
 /****************************************************************************/
 /* Base object																*/
 /****************************************************************************/
-typedef struct COT_CLASS_OBJECT COT_CLASS_OBJECT;
-struct COT_CLASS_OBJECT
+typedef struct COTObject
 {
-	struct
-	{
-		void (*destroy)( COT_CLASS_OBJECT* );
-	} COT_VIRTUAL_TABLE_HIDER_NAME;
-	char COT_IS_COT_DYNAMIC_OBJECT;
-};
-extern void COTCreateObject( COT_CLASS_OBJECT* );
+	void (*COTObjectVirtual_Destructor)( struct COTObject* );
+	void (*COTObjectVirtual_Free)( void* );
+
+} COTObject;
+extern void COTObjectCreate_( COTObject* );
 
 
 /******************************************************************************/
 /* Used to create and destroy objects. */
 /******************************************************************************/
-#define COTCreateNew( type, objectP, constructor )											\
-	do {																					\
-		type* object = COTMalloc( sizeof(type) );											\
-		if( (object) != NULL ){ 															\
-			((COT_CLASS_OBJECT*) (object) )->COT_IS_COT_DYNAMIC_OBJECT = COT_DYNAMIC_OBJECT;\
-			COTCreateObject( (COT_CLASS_OBJECT*) (object) );								\
-			(objectP) = object;																\
-			constructor;																	\
-		} else {																			\
-			(objectP) = NULL;																\
-		}																					\
-	} while( 0 )
+/* Used to select COT_MALLOC_AND_SETUP_OBJ or COT_SETUP_OBJ */
+#define COT_SETUP_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define COTNew( ... ) \
+	COT_SETUP_SELECTION( __VA_ARGS__, COT_MALLOC_AND_SETUP_OBJ, COT_SETUP_OBJ )( __VA_ARGS__ )
 
-#define COTCreate( object, constructor )												\
-	do {																				\
-		COT_CLASS_OBJECT* mem = (COT_CLASS_OBJECT*) (object);							\
-		((COT_CLASS_OBJECT*) (mem))->COT_IS_COT_DYNAMIC_OBJECT = COT_STATIC_OBJECT;		\
-		COTCreateObject( (COT_CLASS_OBJECT*) (mem) );									\
-		constructor;																	\
-	} while( 0 )
+static inline void* COTNew_( size_t size )
+{
+	void* obj = COTMalloc( size );
+	if( obj == NULL ){ return NULL; }
+	((COT_CLASS_OBJECT*) obj)->COT_IS_COT_DYNAMIC_OBJECT = COT_DYNAMIC_OBJECT;
+	COTCreateObject( (COT_CLASS_OBJECT*) obj );
+	return obj;	
+}
+#define COT_MALLOC_AND_SETUP_OBJ( type ) \
+	(type*) COTNew_( sizeof(type) )
 
+static inline void* COTCreate_( COT_CLASS_OBJECT* obj )
+{
+	obj->COT_IS_COT_DYNAMIC_OBJECT = COT_STATIC_OBJECT;
+	COTCreateObject( obj );
+	return obj;
+}
+#define COT_SETUP_OBJ( type, obj )															\
+	(type*) COTCreate_( (COT_CLASS_OBJECT*) obj )
+
+static inline void COTDestroy_( void* mem, size_t offset )
 #define COTDestroy( type, mem )																\
 	do {																					\
 		type * COT##type##Object = (mem);													\
@@ -151,79 +133,44 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 	} while( 0 )
 
 
-/******************************************************************************/
-/* Class Declaration */
-/******************************************************************************/
-/* The two macros below select one of two possible class declaration. */
-#define COT_CLASS_DECLARE_SELECTION( _1, _2, SELECTION, ... ) SELECTION
-#define COTClass( ... ) \
-	COT_CLASS_DECLARE_SELECTION( __VA_ARGS__, COT_CLASS_EXTENDS_SELECT, COT_CLASS_EXTENDS_OBJECT)( __VA_ARGS__ )
-
-/* Start a class declaration with manually selected inheritance. */
-#define COT_CLASS_EXTENDS_SELECT( D, S )									\
-	typedef struct D D;														\
-	struct D																\
-	{																		\
-		S COT_SUPER_NAME;
-
-/* Start a class declaration with automatic inheritance, ie, the base object. */
-#define COT_CLASS_EXTENDS_OBJECT( D )										\
-	typedef struct D D;														\
-	struct D																\
-	{																		\
-		COT_CLASS_OBJECT COT_SUPER_NAME;
-
-/* Declare all virtual methods. */
-#define COTVirtual( ... )													\
-		struct																\
-		{																	\
-			__VA_ARGS__														\
-		} COT_VIRTUAL_TABLE_HIDER_NAME;
-
-/* Used to override super class / interface methods. */
-#define COTOverride( ... )													\
-		struct																\
-		{																	\
-			__VA_ARGS__														\
-		} COT_OVERRIDE_TABLE_HIDER_NAME;
+/********************************************************************************/
+/* Helper macros for defining a class and interface								*/
+/********************************************************************************/
+/* Must be first in any class. */
+#define COTClass( COTSuper )				\
+	struct {								\
+		struct COTSuper		COT_SUPER;		\
+		struct COTObject*	COT_BASE_CLASS;	\
+	}_
+/* Must be in any interface. */
+#define COTInterface( )								\
+	struct {										\
+		void*				COT_INTERFACE_OFFSET;	\
+		struct COTObject* 	COT_BASE_CLASS;			\
+	}_
 /* Used to override destructor. */
 #define COTDestructor( ) \
-			void (*destroy)( self(COT_CLASS_OBJECT) )
-
-/* End the definition of a class. */
-#define COTClassEnd															\
-		COT_CLASS_OBJECT* COT_CLASS_OBJECT_NAME;							\
-	};
-
-
-/******************************************************************************/
-/* Interface Declaration */
-/******************************************************************************/
-/* Open a interface declaration. */
-#define COTInterface(T) 	\
-	typedef struct T T;		\
-	struct T				\
-	{
-
-/* Close a interface declaration. */
-#define COTInterfaceEnd												\
-		void* COT_INTERFACE_OFFSET_NAME;							\
-		COT_CLASS_OBJECT* COT_CLASS_OBJECT_NAME;					\
-	};
-
-
-/******************************************************************************/
-/* Use a interface within a class */
-/******************************************************************************/
-/* Adds a interface to a class declaration, used after opening a class */
+			void (*COTObjectVirtual_Destructor)( COTObject* )
+/* Used to implement an interface in a class' definition. */
 #define COTImplements( iface )	\
 	iface COT_TO_IFACE_VAR_NAME( iface );
 
+/****************************************************************************/
+/* Constructor specific setup												*/
+/****************************************************************************/
+#define COTConstructorOf( C )														\
+	if( COT_OBJECT_PRE_REFERENCE_NAME == 0 ){ return; }								\
+	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME;						\
+	COT_OBJECT_REFERENCE->COT_CLASS_OBJECT_NAME = (COT_CLASS_OBJECT*) COT_OBJECT_REFERENCE
+
 /* Bind the interface data at run time. Use in constructor */
-#define COTCreateInterface(t) \
-	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ).COT_INTERFACE_OFFSET_NAME = \
-	(void *) (((char *) &(COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ))) - (char *) COT_OBJECT_REFERENCE); \
-	COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR_NAME( t ).COT_CLASS_OBJECT_NAME = (COT_CLASS_OBJECT*) COT_OBJECT_REFERENCE
+#define COTCreateInterface(t) 												\
+	do {																	\
+		COT_OBJECT_REFERENCE->COT_TO_IFACE_VAR(t) = (t) { 0 };				\
+		COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ).COT_INTERFACE_OFFSET = 	\
+		(void *) (((char *) &(COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ))) - (char *) COT_OBJECT_REFERENCE); 	\
+		COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ).COT_CLASS_OBJECT = (COTObject*) COT_OBJECT_REFERENCE		\
+	} while( 0 )
 
 
 /******************************************************************************/
@@ -292,10 +239,6 @@ extern void COTCreateObject( COT_CLASS_OBJECT* );
 	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME );										\
 	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME
 
-#define COTConstructorOf( C )														\
-	if( COT_OBJECT_PRE_REFERENCE_NAME == 0 ){ return; }								\
-	C* COT_OBJECT_REFERENCE = (C*) COT_OBJECT_PRE_REFERENCE_NAME;						\
-	COT_OBJECT_REFERENCE->COT_CLASS_OBJECT_NAME = (COT_CLASS_OBJECT*) COT_OBJECT_REFERENCE
 
 #define COTInterfaceOf(C) 															\
 	COT_ASSERT( COT_OBJECT_PRE_REFERENCE_NAME ); 										\
