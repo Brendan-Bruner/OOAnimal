@@ -20,41 +20,43 @@
 #include "Class.h"
 #include <stdlib.h>
 
-void COTAssert( void* exp, char const* msg, char const* file, int line )
+#if defined( DEBUG )
+void CAssert( void* exp, char const* msg, char const* file, int line )
 {
  	if( exp == NULL ) { 												
- 		COT_PRINT( "In file: %s\nOn line: %d\nCOTClass failure with message:\n%s\n", file, line, msg );									
- 		COT_FAILED_ASSERT_HANDLE( );
+ 		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg );									
+ 		C_FAILED_ASSERT_HANDLE( );
  	}												
 }
+#endif
 
-void COTObject_Destroy( COTObject* self )
+void CObject_Destroy( CObject* self )
 {
-	COTCallVirtual( COTObject, self, COTObjectVirtual_Destructor )( self );
+	CCallVirtual(CObjectVirtual_Destructor)( self );
 }
 
-void COTObject_IsDynamic( COTObject* self )
+void CObject_IsDynamic( CObject* self )
 {
-	COT_ASSERT_OBJECT( self );
-	self->COTObject_Free = COTDefaultFree;
+	C_ASSERT_OBJECT( self );
+	self->CObject_Free = CDefaultFree;
 }
 
-void COTObject_SetFree( COTObject* self, COTFreeType objectFree )
+void CObject_SetFree( CObject* self, CFreeType objectFree )
 {
-	COT_ASSERT_OBJECT( self );
-	self->COTObject_Free = objectFree;
+	C_ASSERT_OBJECT( self );
+	self->CObject_Free = objectFree;
 }
 
-static void COTObjectVirtual_Destructor( COTObject* self )
+static void CObjectVirtual_Destructor( CObject* self )
 {
-	if( self->COTObject_Free != NULL )
+	if( self->CObject_Free != NULL )
 	{
-		self->COTObject_Free( (void*) self );
+		self->CObject_Free( (void*) self );
 	}
 }
 
-void COTObjectCreate_( COTObject* self )
+void newCObject( CObject* self )
 {
-	self->COTObjectVirtual_Destructor = COTObjectVirtual_Destructor;
-	self->COTObject_Free = NULL;
+	self->CObjectVirtual_Destructor = CObjectVirtual_Destructor;
+	self->CObject_Free = NULL;
 }

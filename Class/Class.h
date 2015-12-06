@@ -23,140 +23,149 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+/* The variable name used to reference an object, this is */
+/* 'this' in C++/Java and 'self' in Python. */
+#define C_OBJ_REF 				self
+
 /*
  * The assert macros are used to trap user errors. 
+ * These defined how to print formatted strings and what to
+ * do when an assertion fails.
  */
 #include <stdio.h>
-#define COT_PRINT( ... ) printf( __VA_ARGS__ )
-#define COT_FAILED_ASSERT_HANDLE( ) for( ;; )
-extern void COTAssert( void* exp, char const* msg, char const* line, int lineNumber );
+#define C_PRINT( ... ) printf( __VA_ARGS__ )
+#define C_FAILED_ASSERT_HANDLE( ) for( ;; )
 
-#define COT_ASSERT_VIRTUAL_MESSAGE \
-	"Virtual method not linked. Possible causes:\n"\
-	"\t* Class constructor did not call COTLinkVirtual( ) for the method\n"\
-	"\t* If the method is from an interface, class constructor did not\n\t  call COTLinkInterface( )\n"\
-	"\t* Constructor was never called on object\n"
-#define COT_ASSERT_VIRTUAL( method )\
-	COTAssert( (void*) (method), COT_ASSERT_VIRTUAL_MESSAGE, __FILE__, __LINE__ )
+#if defined( DEBUG )
+extern void CAssert( void* exp, char const* msg, char const* line, int lineNumber );
+#else
+#define CAssert( exp, msg, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
+#endif
 
-#define COT_ASSERT_SUPER_METHOD_MESSAGE \
-	"Super method not linked: Possible causes:\n"\
-	"\t* Class constructor did not call COTOverrideVirtual( ) for\n\t  the method\n"
-#define COT_ASSERT_SUPER_METHOD( method )\
-	COTAssert( (void*) (method), COT_ASSERT_SUPER_METHOD_MESSAGE, __FILE__, __LINE__ )
-
-#define COT_ASSERT_OBJECT_MESSAGE \
-	"Attempt to call class method on NULL object\n"
-#define COT_ASSERT_OBJECT( object )\
-	COTAssert( (void*) (object), COT_ASSERT_OBJECT_MESSAGE, __FILE__, __LINE__ )
-
-/* All classes and interfaces contain a pointer to their highest */
+/* All classes and interfaces contain a pointer to their  */
 /* super class, the base object, this is the name of that pointer. */
-#define COT_BASE_CLASS					_co
+#define C_ROOT						_rt
 
 /* If a class inherits, it will contain an instance of the class it */
 /* is inheriting from. This is the name of that instance. */
-#define COT_SUPER	 					_sp
+#define C_SUPER	 					_sp
 
 /* When a class implementings an interface, it contains an */
 /* instance of the interface. This is prefixed / posfixed to the data type */
 /* of the interface and used as the variable name. */
-#define COT_INTERFACE_PREFIX 			_if
-#define COT_INTERFACE_POSIFX
-#define COT_IFACE_VAR( i ) \
-	COT_INTERFACE_PREFIX##i##COT_INTERFACE_POSFIX
-
-/* Interfaces contain a pointer offset from the class implemeting them. */
-/* This is the name of the variable used to save the offset. */
-#define COT_OBJECT_OFFSET	 			_io
-
-/* Name used to reference the object within class methods. This variable */
-/* is 'self' in python and 'this' in java / C++. Note, making this variable */
-/* 'this' will prevent compatibility with C++ code. */
-#define COT_OBJECT_REFERENCE	 		self
+#define C_INTERFACE_PREFIX 			_if
+#define C_INTERFACE_POSIFX
+#define C_IFACE_VAR( i ) \
+	C_INTERFACE_PREFIX##i##C_INTERFACE_POSFIX
 
 /* Used to zero out a structure. */
 /* This assumes that NULL resolves to 0, which is requried by C standard. */
+/* If your C library doesn't have memset, you will have to write your own, */
+/* or opt not use it. */
+#if defined( DEBUG )
 #include <string.h>
-#define COT_INIT_OBJECT( object )						\
+#define C_INIT_OBJECT( object )							\
 	do {												\
 		memset( (void*) (object), 0, sizeof(*object) );	\
 	} while( 0 )
+#else
+#define C_INIT_OBJECT( object ) (void) object
+#endif
 
 /* Default memory clean up method used. */
-/* Calling COTObject_IsDynamic( ) on an object will invoke this free method */
+/* Calling CObject_IsDynamic( ) on an object will invoke this free method */
 /* being called after destruction. */
-#define COTDefaultFree free
+#define CDefaultFree free
+
+
+/****************************************************************************/
+/* Assert Messages															*/
+/****************************************************************************/
+/* Different reasons for asserting. */
+#define C_ASSERT_VIRTUAL_MESSAGE \
+	"Virtual method not linked. Possible causes:\n"\
+	"\t* Class constructor did not call CLinkVirtual( ) for the method\n"\
+	"\t* If the method is from an interface, class constructor did not\n"\
+	"\t  call CLinkInterface( )\n"\
+	"\t* Constructor was never called on object\n"\
+	"\t* Constructor was called, but CConstructor( ) was not called by\n"\
+	"\t  constructor\n"\
+	"\t* Constructor was called, but super constructor was not called\n"\
+	"\t  For example, say B extends A, and an instance of B was created,\n"\
+	"\t  the constructor for B was called, but within B's constructor, the\n"\
+	"\t  constructor for A was not called.\n"
+#define C_ASSERT_VIRTUAL( method )\
+	CAssert( (void*) (method), C_ASSERT_VIRTUAL_MESSAGE, __FILE__, __LINE__ )
+
+#define C_ASSERT_SUPER_METHOD_MESSAGE \
+	"Super method not linked: Possible causes:\n"\
+	"\t* Class constructor did not call COverrideVirtual( ) for\n\t  the method\n"
+#define C_ASSERT_SUPER_METHOD( method )\
+	CAssert( (void*) (method), C_ASSERT_SUPER_METHOD_MESSAGE, __FILE__, __LINE__ )
+
+#define C_ASSERT_OBJECT_MESSAGE \
+	"Attempt to call class method on NULL object\n"
+#define C_ASSERT_OBJECT( object )\
+	CAssert( (void*) (object), C_ASSERT_OBJECT_MESSAGE, __FILE__, __LINE__ )
+
 
 /****************************************************************************/
 /* Base object																*/
 /****************************************************************************/
-typedef void (*COTFreeType)( void* );
-typedef struct COTObject COTObject;
-struct COTObject
+typedef void (*CFreeType)( void* );
+typedef struct CObject CObject;
+struct CObject
 {
-	void (*COTObjectVirtual_Destructor)( COTObject* );
-	COTFreeType COTObject_Free;
+	void (*CObjectVirtual_Destructor)( CObject* );
+	CFreeType CObject_Free;
 
 };
-extern void COTObjectCreate_( COTObject* );
-extern void COTObject_Destroy( COTObject* );
-extern void COTObject_IsDynamic( COTObject* );
-extern void COTObject_SetFree( COTObject*, COTFreeType );
+extern void newCObject( CObject* );
+extern void CObject_Destroy( CObject* );
+extern void CObject_IsDynamic( CObject* );
+extern void CObject_SetFree( CObject*, CFreeType );
 
 
 /****************************************************************************/
 /* Used destroy objects. 													*/
 /****************************************************************************/
-static inline void COTDestroy_( COTObject** object )
-{
-	COTAssert( (void*) (object), COT_ASSERT_OBJECT_MESSAGE, __FILE__, __LINE__ );
-	COTObject_Destroy( *object );
-}
-#define COTDestroy( mem )	\
-	COTDestroy_ ( &((mem)->_.COT_BASE_CLASS) )
+#define CDestroy( mem )	\
+	CObject_Destroy( (CObject*) mem->_.C_ROOT );
 
 
 /********************************************************************************/
 /* Helper macros for defining a class and interface								*/
 /********************************************************************************/
 /* Must be first in any class. */
-#define COTClass( COTSuper )					\
-	struct {									\
-		COTSuper			COT_SUPER;			\
-		COTObject*			COT_BASE_CLASS;		\
-		void*				COT_OBJECT_OFFSET;	\
+#define CClass( CSuper )				\
+	struct {							\
+		CSuper			C_SUPER;		\
+		void*			C_ROOT;			\
 	}_
 
 /* Must be in any interface. */
-#define COTInterface( )						\
-	struct {								\
-		COTObject* 	COT_BASE_CLASS;			\
-		void*		COT_OBJECT_OFFSET;		\
+#define CInterface( )					\
+	struct {							\
+		void*		C_ROOT;				\
 	}_
 /* Used to implement an interface in a class' definition. */
-#define COTImplements( iface )	\
-	iface COT_TO_IFACE_VAR_NAME( iface );
+#define CImplements( iface )	\
+	iface C_IFACE_VAR( iface );
 
 /****************************************************************************/
 /* Constructor specific setup												*/
 /****************************************************************************/
-#define COTConstructor( C, self_ )														\
-	C* COT_OBJECT_REFERENCE = NULL;														\
-	do {																				\
-		COT_ASSERT_OBJECT( self_ );														\
-		COT_INIT_OBJECT( self_ );														\
-		COTObjectCreate_( (COTObject*) self_ );											\
-		COT_OBJECT_REFERENCE = (C*) self_;												\
-		COT_OBJECT_REFERENCE->_.COT_BASE_CLASS = (COTObject*) COT_OBJECT_REFERENCE;		\
+#define CConstructor( )							\
+	do {										\
+		C_ASSERT_OBJECT( C_OBJ_REF );			\
+		C_INIT_OBJECT( C_OBJ_REF );				\
+		C_OBJ_REF->_.C_ROOT = (void*) C_OBJ_REF;\	
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
-#define COTLinkInterface(t) 												\
-	do {																	\
-		COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ).COT_OBJECT_OFFSET = 		\
-		(void *) (((char *) &(COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ))) - ((char *) COT_OBJECT_REFERENCE));\
-		COT_OBJECT_REFERENCE->COT_IFACE_VAR( t ).COT_CLASS_OBJECT = (COTObject*) COT_OBJECT_REFERENCE		\
+#define CLinkInterface( iface )								\
+	do {													\
+		C_OBJ_REF->C_IFACE_VAR( iface ).C_ROOT = (void*) C_OBJ_REF;	 \
 	} while( 0 )
 
 
@@ -164,84 +173,84 @@ static inline void COTDestroy_( COTObject** object )
 /* Used to dynamically link methods at run time. */
 /******************************************************************************/
 /* The two macros below select one of two virtual linkage macros. */
-#define COT_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
-#define COTLinkVirtual( ... ) \
-	COT_LINK_VIRTUAL_SELECTION( __VA_ARGS__, COT_LINK_INTERFACE_VIRTUAL, COT_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
-#define COT_LINK_CLASS_VIRTUAL( method ) \
-	do { COT_OBJECT_REFERENCE-> method = method; } while( 0 )
-#define COT_LINK_INTERFACE_VIRTUAL( iface, method ) \
-	do { COT_OBJECT_REFERENCE->COT_IFACE_VAR( iface ). method = method; } while( 0 )
+#define C_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
+#define CLinkVirtual( ... ) \
+	C_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_LINK_INTERFACE_VIRTUAL, C_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
+#define C_LINK_CLASS_VIRTUAL( method ) \
+	do { C_OBJ_REF-> method = method; } while( 0 )
+#define C_LINK_INTERFACE_VIRTUAL( iface, method ) \
+	do { C_OBJ_REF->C_IFACE_VAR( iface ). method = method; } while( 0 )
 
 /* The two macros below are used to override a virtual method. */
-/* They can be used in lue of COTOverrideVirtual( ) when the super class' implementation */
+/* They can be used in lue of COverrideVirtual( ) when the super class' implementation */
 /* will never be call within the subclass class. */
-#define COT_RE_LINK_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
-#define COTReLinkVirtual( ... ) \
-	COT_RE_LINK_VIRTUAL_SELECTION( __VA_ARGS__, COT_RE_LINK_INTERFACE_VIRTUAL, COT_RE_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
-#define COT_RE_LINK_CLASS_VIRTUAL( class, method ) \
-	do { ((class*) COT_OBJECT_REFERENCE)-> method = method; } while( 0 )
-#define COT_RE_LINK_INTERFACE_VIRTUAL( iface, class, method ) \
-	do { ((class*) COT_OBJECT_REFERENCE)->COT_IFACE_VAR( iface ). method = method; } while( 0 )
+#define C_RE_LINK_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
+#define CReLinkVirtual( ... ) \
+	C_RE_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_RE_LINK_INTERFACE_VIRTUAL, C_RE_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
+#define C_RE_LINK_CLASS_VIRTUAL( class, method ) \
+	do { ((class*) C_OBJ_REF)-> method = method; } while( 0 )
+#define C_RE_LINK_INTERFACE_VIRTUAL( iface, class, method ) \
+	do { ((class*) C_OBJ_REF)->C_IFACE_VAR( iface ). method = method; } while( 0 )
 
 /* The two macros below select one of two virtual linkage macros for overriding methods. */
-/* Use this in lue of COTReLinkVirtual( ) when the subclass must use the super classes */
+/* Use this in lue of CReLinkVirtual( ) when the subclass must use the super classes */
 /* implementation of the overriden method. */
-#define COT_OVERRIDE_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
-#define COTOverrideVirtual( ... ) \
-	COT_OVERRIDE_VIRTUAL_SELECTION( __VA_ARGS__, COT_OVERRIDE_INTERFACE_VIRTUAL, COT_OVERRIDE_CLASS_VIRTUAL )( __VA_ARGS__ )
-#define COT_OVERRIDE_CLASS_VIRTUAL( class, method )									\
+#define C_OVERRIDE_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
+#define COverrideVirtual( ... ) \
+	C_OVERRIDE_VIRTUAL_SELECTION( __VA_ARGS__, C_OVERRIDE_INTERFACE_VIRTUAL, C_OVERRIDE_CLASS_VIRTUAL )( __VA_ARGS__ )
+#define C_OVERRIDE_CLASS_VIRTUAL( class, method )									\
 	do {																			\
-		COT_OBJECT_REFERENCE-> method = ((class*) COT_OBJECT_REFERENCE)-> method; 	\
-		((class*) COT_OBJECT_REFERENCE)-> method = method;							\
+		C_OBJ_REF-> method = ((class*) C_OBJ_REF)-> method; 	\
+		((class*) C_OBJ_REF)-> method = method;							\
 	} while( 0 )
-#define COT_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
+#define C_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
 	do {																		\
-		COT_OBJECT_REFERENCE-> method = ( (class*) COT_OBJECT_REFERENCE)->COT_IFACE_VAR( iface ). method; \
-		((class*) COT_OBJECT_REFERENCE)->COT_IFACE_VAR( iface ).method = method;\
+		C_OBJ_REF-> method = ((class*) C_OBJ_REF)->C_IFACE_VAR( iface ). method; \
+		((class*) C_OBJ_REF)->C_IFACE_VAR( iface ).method = method;\
 	} while( 0 )
 
 /* Helper macros for overriding destructor. */
 /* Call this one in constructor to setup linkage. */
-#define COTOverrideDestructor( )\
-	COTOverrideVirtual(COTObject, COTObjectVirtual_Destroy)
+#define COverrideDestructor( )\
+	COverrideVirtual(CObject, CObjectVirtual_Destroy)
 /* Put this in class definition. */
-#define COTDestructor( ) \
-			void (*COTObjectVirtual_Destructor)( COTObject* )
+#define CDestructor( ) \
+			void (*CObjectVirtual_Destructor)( CObject* )
 
 /******************************************************************************/
 /* Used to access super class' implementation of a method. */
 /******************************************************************************/
-#define COTSuper( class, method ) \
-	COT_ASSERT_SUPER_METHOD( ((class*) COT_OBJECT_REFERENCE)-> method ); \
-	((class*) COT_OBJECT_REFERENCE)->COT_OVERRIDE_TABLE_HIDER_NAME. method
+#define CSuper( method ) \
+	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method ); \
+	C_OBJ_REF-> method
 
 
 /****************************************************************************/
-/* Helper macros for calling and setting up virtual methods					*/
+/* Helper macros for calling and setting up virtual methods					*		/
 /****************************************************************************/
 /* Asserts and then calls the virtual method. */
-#define COTCallVirtual( self_, name )		\
-	COT_ASSERT_OBJECT( self_ );				\
-	COT_ASSERT_VIRTUAL( self_-> name ); 	\
-	return self_-> name
+#define CCallVirtual( name )				\
+	C_ASSERT_OBJECT( C_OBJ_REF );			\
+	C_ASSERT_VIRTUAL( C_OBJ_REF-> name ); 	\
+	return C_OBJ_REF-> name
 
 /* Sets up the 'self' variable in a class method. */
-#define COTMethod( C, self_ ) 															\
-	C* COT_OBJECT_REFERENCE;															\
-	do {																				\
-		COT_ASSERT_OBJECT( self_ );				 										\
-		COT_OBJECT_REFERENCE = (C*) (((char*) self_) - ((char*) self_->_.COT_OBJECT_OFFSET)); 	\
+#define CVirtualMethod( C, self_ ) 				\
+	C* C_OBJ_REF;							\
+	do {									\
+		C_ASSERT_OBJECT( self_ );			\
+		C_OBJ_REF = (C*) self_->_.COT_ROOT;	\
 	} while( 0 )
 
-#define COTVirtualDestructor( )\
-	static void COTObjectVirtual_Destroy( COTObject* self_ )
-#define COTSuperDestructor( class )\
-	COTSuper( class, destroy )( (COTObject*) COT_OBJECT_REFERENCE )
+#define CVirtualDestructor( )\
+	static void CObjectVirtual_Destroy( CObject* self_ )
+#define CSuperDestructor( class )\
+	CSuper( class, destroy )( (CObject*) C_OBJ_REF )
 
 /******************************************************************************/
 /* Call interface methods on an object using the interface */
 /******************************************************************************/
-#define COTCast(i,O) \
-	(&(O)->COT_IFACE_VAR( i ))
+#define CCast(i,O) \
+	(&(O)->C_IFACE_VAR( i ))
 
 #endif /* CLASS_H_ */
