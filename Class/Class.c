@@ -20,6 +20,8 @@
 #include "Class.h"
 #include <stdlib.h>
 
+CFreeType CFree_ = CDefaultFree;
+
 #if defined( DEBUG )
 void CAssert( void* exp, char const* msg, char const* file, int line )
 {
@@ -28,17 +30,25 @@ void CAssert( void* exp, char const* msg, char const* file, int line )
  		C_FAILED_ASSERT_HANDLE( );
  	}												
 }
+
+void CAssert2( void* exp, char const* msg1, char const* msg2, char const* file, int line )
+{
+ 	if( exp == NULL ) { 												
+ 		C_PRINT( "In file: %s\nOn line: %d (function %s)\nCClass failure with message:\n%s\n", file, line, msg2, msg1 );									
+ 		C_FAILED_ASSERT_HANDLE( );
+ 	}												
+}
 #endif
 
 void CObject_Destroy( CObject* self )
 {
-	CCallVirtual(CObjectVirtual_Destructor)( self );
+	CCallVirtual(CDestructor)( self );
 }
 
 void CObject_IsDynamic( CObject* self )
 {
 	C_ASSERT_OBJECT( self );
-	self->CObject_Free = CDefaultFree;
+	self->CObject_Free = CFree_;
 }
 
 void CObject_SetFree( CObject* self, CFreeType objectFree )
@@ -47,7 +57,7 @@ void CObject_SetFree( CObject* self, CFreeType objectFree )
 	self->CObject_Free = objectFree;
 }
 
-static void CObjectVirtual_Destructor( CObject* self )
+static void CDestructor( CObject* self )
 {
 	if( self->CObject_Free != NULL )
 	{
@@ -57,6 +67,7 @@ static void CObjectVirtual_Destructor( CObject* self )
 
 void newCObject( CObject* self )
 {
-	self->CObjectVirtual_Destructor = CObjectVirtual_Destructor;
+	self->_.C_ROOT = (void*) self;
+	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;
 }

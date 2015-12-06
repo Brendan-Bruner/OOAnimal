@@ -38,8 +38,10 @@
 
 #if defined( DEBUG )
 extern void CAssert( void* exp, char const* msg, char const* line, int lineNumber );
+extern void CAssert2( void* exp, char const* msg1, char const* msg2, char const* line, int lineNumber );
 #else
 #define CAssert( exp, msg, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
+#define CAssert2( exp, msg1, msg2, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
 #endif
 
 /* All classes and interfaces contain a pointer to their  */
@@ -94,14 +96,17 @@ extern void CAssert( void* exp, char const* msg, char const* line, int lineNumbe
 	"\t  For example, say B extends A, and an instance of B was created,\n"\
 	"\t  the constructor for B was called, but within B's constructor, the\n"\
 	"\t  constructor for A was not called.\n"
-#define C_ASSERT_VIRTUAL( method )\
-	CAssert( (void*) (method), C_ASSERT_VIRTUAL_MESSAGE, __FILE__, __LINE__ )
+#define C_ASSERT_VIRTUAL( method, funcName )\
+	CAssert2( (void*) (method), C_ASSERT_VIRTUAL_MESSAGE, funcName, __FILE__, __LINE__ )
 
 #define C_ASSERT_SUPER_METHOD_MESSAGE \
 	"Super method not linked: Possible causes:\n"\
-	"\t* Class constructor did not call COverrideVirtual( ) for\n\t  the method\n"
-#define C_ASSERT_SUPER_METHOD( method )\
-	CAssert( (void*) (method), C_ASSERT_SUPER_METHOD_MESSAGE, __FILE__, __LINE__ )
+	"\t* This failure is hard to get. I have not been able to get it\n"\
+	"\t  to fire through normal use. Likely, there is stack stomping at\n"\
+	"\t  play. The error is due to a method pointer for overriding a\n"\
+	"\t  virtual method being NULL\n"
+#define C_ASSERT_SUPER_METHOD( method, name )\
+	CAssert2( (void*) (method), C_ASSERT_SUPER_METHOD_MESSAGE, name, __FILE__, __LINE__ )
 
 #define C_ASSERT_OBJECT_MESSAGE \
 	"Attempt to call class method on NULL object\n"
@@ -113,12 +118,16 @@ extern void CAssert( void* exp, char const* msg, char const* line, int lineNumbe
 /* Base object																*/
 /****************************************************************************/
 typedef void (*CFreeType)( void* );
+extern CFreeType CFree_;
 typedef struct CObject CObject;
 struct CObject
 {
-	void (*CObjectVirtual_Destructor)( CObject* );
+	void (*CDestructor)( CObject* );
 	CFreeType CObject_Free;
-
+	struct
+	{
+		void* C_ROOT;
+	}_;
 };
 extern void newCObject( CObject* );
 extern void CObject_Destroy( CObject* );
@@ -130,7 +139,7 @@ extern void CObject_SetFree( CObject*, CFreeType );
 /* Used destroy objects. 													*/
 /****************************************************************************/
 #define CDestroy( mem )	\
-	CObject_Destroy( (CObject*) mem->_.C_ROOT );
+	CObject_Destroy( (CObject*) (mem)->_.C_ROOT );
 
 
 /********************************************************************************/
@@ -143,7 +152,7 @@ extern void CObject_SetFree( CObject*, CFreeType );
 		void*			C_ROOT;			\
 	}_
 
-/* Must be in any interface. */
+/* Can be put anywhere in an interface. */
 #define CInterface( )					\
 	struct {							\
 		void*		C_ROOT;				\
@@ -159,7 +168,7 @@ extern void CObject_SetFree( CObject*, CFreeType );
 	do {										\
 		C_ASSERT_OBJECT( C_OBJ_REF );			\
 		C_INIT_OBJECT( C_OBJ_REF );				\
-		C_OBJ_REF->_.C_ROOT = (void*) C_OBJ_REF;\	
+		C_OBJ_REF->_.C_ROOT = (void*) C_OBJ_REF;\
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
@@ -188,9 +197,9 @@ extern void CObject_SetFree( CObject*, CFreeType );
 #define CReLinkVirtual( ... ) \
 	C_RE_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_RE_LINK_INTERFACE_VIRTUAL, C_RE_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
 #define C_RE_LINK_CLASS_VIRTUAL( class, method ) \
-	do { ((class*) C_OBJ_REF)-> method = method; } while( 0 )
+	do { ((class) C_OBJ_REF)-> method = method; } while( 0 )
 #define C_RE_LINK_INTERFACE_VIRTUAL( iface, class, method ) \
-	do { ((class*) C_OBJ_REF)->C_IFACE_VAR( iface ). method = method; } while( 0 )
+	do { ((class) C_OBJ_REF)->C_IFACE_VAR( iface ). method = method; } while( 0 )
 
 /* The two macros below select one of two virtual linkage macros for overriding methods. */
 /* Use this in lue of CReLinkVirtual( ) when the subclass must use the super classes */
@@ -200,52 +209,41 @@ extern void CObject_SetFree( CObject*, CFreeType );
 	C_OVERRIDE_VIRTUAL_SELECTION( __VA_ARGS__, C_OVERRIDE_INTERFACE_VIRTUAL, C_OVERRIDE_CLASS_VIRTUAL )( __VA_ARGS__ )
 #define C_OVERRIDE_CLASS_VIRTUAL( class, method )									\
 	do {																			\
-		C_OBJ_REF-> method = ((class*) C_OBJ_REF)-> method; 	\
-		((class*) C_OBJ_REF)-> method = method;							\
+		C_OBJ_REF-> method = ((class) C_OBJ_REF)-> method; 	\
+		((class) C_OBJ_REF)-> method = method;							\
 	} while( 0 )
 #define C_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
 	do {																		\
-		C_OBJ_REF-> method = ((class*) C_OBJ_REF)->C_IFACE_VAR( iface ). method; \
-		((class*) C_OBJ_REF)->C_IFACE_VAR( iface ).method = method;\
+		C_OBJ_REF-> method = ((class) C_OBJ_REF)->C_IFACE_VAR( iface ). method; \
+		((class) C_OBJ_REF)->C_IFACE_VAR( iface ).method = method;\
 	} while( 0 )
 
-/* Helper macros for overriding destructor. */
-/* Call this one in constructor to setup linkage. */
-#define COverrideDestructor( )\
-	COverrideVirtual(CObject, CObjectVirtual_Destroy)
-/* Put this in class definition. */
-#define CDestructor( ) \
-			void (*CObjectVirtual_Destructor)( CObject* )
 
-/******************************************************************************/
-/* Used to access super class' implementation of a method. */
-/******************************************************************************/
+/****************************************************************************/
+/* Used to access super class' implementation of a method. 					*/
+/****************************************************************************/
 #define CSuper( method ) \
-	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method ); \
+	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method, #method ); \
 	C_OBJ_REF-> method
 
 
 /****************************************************************************/
-/* Helper macros for calling and setting up virtual methods					*		/
+/* Helper macros for calling and setting up virtual methods					*/
 /****************************************************************************/
 /* Asserts and then calls the virtual method. */
 #define CCallVirtual( name )				\
 	C_ASSERT_OBJECT( C_OBJ_REF );			\
-	C_ASSERT_VIRTUAL( C_OBJ_REF-> name ); 	\
+	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
 	return C_OBJ_REF-> name
 
 /* Sets up the 'self' variable in a class method. */
+#define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
 #define CVirtualMethod( C, self_ ) 				\
-	C* C_OBJ_REF;							\
+	C C_OBJ_REF;							\
 	do {									\
 		C_ASSERT_OBJECT( self_ );			\
-		C_OBJ_REF = (C*) self_->_.COT_ROOT;	\
+		C_OBJ_REF = (C) self_->_.C_ROOT;	\
 	} while( 0 )
-
-#define CVirtualDestructor( )\
-	static void CObjectVirtual_Destroy( CObject* self_ )
-#define CSuperDestructor( class )\
-	CSuper( class, destroy )( (CObject*) C_OBJ_REF )
 
 /******************************************************************************/
 /* Call interface methods on an object using the interface */
