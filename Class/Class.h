@@ -41,7 +41,7 @@ extern void CAssert( void* exp, char const* msg, char const* line, int lineNumbe
 extern void CAssert2( void* exp, char const* msg1, char const* msg2, char const* line, int lineNumber );
 #else
 #define CAssert( exp, msg, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
-#define CAssert2( exp, msg1, msg2, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
+#define CAssert2( exp, msg1, msg2, line, lineNumber ) (void)exp; (void)msg1; (void)msg2; (void)line; (void) lineNumber;
 #endif
 
 /* All classes and interfaces contain a pointer to their  */
