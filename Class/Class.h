@@ -160,6 +160,7 @@ struct CInterface
 	void* C_ROOT;
 };
 
+
 /****************************************************************************/
 /* Constructor specific setup												*/
 /****************************************************************************/
@@ -210,9 +211,10 @@ struct CInterface
 #define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
 
 /* Cast object pointer to desired class. */
-extern void* CVirtualMethod_( void* );
+struct CRoot{ void* C_ROOT; };
 #define CVirtualMethod( self_ )\
-	CVirtualMethod_( self_ )
+	((struct CRoot*) self_)->C_ROOT
+//	CVirtualMethod_( self_ )
 
 
 #endif /* CLASS_H_ */
