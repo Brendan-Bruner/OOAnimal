@@ -21,20 +21,33 @@
 #include <stdlib.h>
 
 CFreeType CFree_ = CDefaultFree;
+const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
+const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
+const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
 
 #if defined( DEBUG )
-void CAssert( void* exp, char const* msg, char const* file, int line )
+void CAssert( char exp, char const* msg, char const* file, int line )
 {
- 	if( exp == NULL ) { 												
- 		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg );									
+ 	if( exp ) { 	
+#if defined( C_MINIMAL_DEBUG )
+ 		(void) msg;
+ 		C_PRINT( "In file: %s\nOn line: %d\n", file, line );									
+#else
+ 		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg );
+#endif
  		C_FAILED_ASSERT_HANDLE( );
  	}												
 }
 
-void CAssert2( void* exp, char const* msg1, char const* msg2, char const* file, int line )
+void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, int line )
 {
- 	if( exp == NULL ) { 												
+ 	if( exp ) { 												
+ #if defined( C_MINIMAL_DEBUG )
+ 		(void) msg1; (void) msg2;
+ 		C_PRINT( "In file: %s\nOn line: %d\n", file, line );									
+#else
  		C_PRINT( "In file: %s\nOn line: %d (function %s)\nCClass failure with message:\n%s\n", file, line, msg2, msg1 );									
+#endif
  		C_FAILED_ASSERT_HANDLE( );
  	}												
 }

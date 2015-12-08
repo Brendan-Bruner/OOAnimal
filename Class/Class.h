@@ -23,67 +23,68 @@
 #include <stddef.h>
 #include <stdlib.h>
 
+/****************************************************************************/
+/* Configuration options													*/
+/****************************************************************************/
+/* Define this to reduce the memory footprint used in .bss */
+/* for error messages. Error messages will be much smaller, */
+/* but less descriptive. */
+//#define C_MINIMAL_DEBUG
+
 /* The variable name used to reference an object, this is */
 /* 'this' in C++/Java and 'self' in Python. */
+/* Some helper macros assume the object reference has this name. */
+/* In class method definitions. */
 #define C_OBJ_REF 				self
 
-/*
- * The assert macros are used to trap user errors. 
- * These defined how to print formatted strings and what to
- * do when an assertion fails.
- */
+/* Default memory clean up method used. */
+/* Calling CDynamic( ) on an object will invoke this free method */
+/* being called after destruction. */
+/* Note, this must resolve to a method with an address in memory. */
+/* ie, the default free method cannot be a macro function. */
+#define CDefaultFree 			free
+
+/* All classes and interfaces contain a pointer to their highest */
+/* super class, the base object, this is the name of that pointer. */
+#define C_ROOT					_rt
+
+/* These define how to print formatted strings and what to */
+/* do when an assertion fails. */
 #include <stdio.h>
 #define C_PRINT( ... ) printf( __VA_ARGS__ )
 #define C_FAILED_ASSERT_HANDLE( ) for( ;; )
 
-#if defined( DEBUG )
-extern void CAssert( void* exp, char const* msg, char const* line, int lineNumber );
-extern void CAssert2( void* exp, char const* msg1, char const* msg2, char const* line, int lineNumber );
-#else
-#define CAssert( exp, msg, line, lineNumber ) (void)exp; (void)msg; (void)line; (void) lineNumber;
-#define CAssert2( exp, msg1, msg2, line, lineNumber ) (void)exp; (void)msg1; (void)msg2; (void)line; (void) lineNumber;
-#endif
-
-/* All classes and interfaces contain a pointer to their  */
-/* super class, the base object, this is the name of that pointer. */
-#define C_ROOT						_rt
-
-/* If a class inherits, it will contain an instance of the class it */
-/* is inheriting from. This is the name of that instance. */
-#define C_SUPER	 					_sp
-
-/* When a class implementings an interface, it contains an */
-/* instance of the interface. This is prefixed / posfixed to the data type */
-/* of the interface and used as the variable name. */
-#define C_INTERFACE_PREFIX 			_if
-#define C_INTERFACE_POSIFX
-#define C_IFACE_VAR( i ) \
-	C_INTERFACE_PREFIX##i##C_INTERFACE_POSFIX
-
 /* Used to zero out a structure. */
 /* This assumes that NULL resolves to 0, which is requried by C standard. */
 /* If your C library doesn't have memset, you will have to write your own, */
-/* or opt not use it. */
+/* or opt not use it; however, the debuging features won't work without it. */
 #if defined( DEBUG )
 #include <string.h>
 #define C_INIT_OBJECT( object )							\
 	do {												\
-		memset( (void*) (object), 0, sizeof(*object) );	\
+		memset( (object), 0, sizeof(*object) );			\
 	} while( 0 )
 #else
 #define C_INIT_OBJECT( object ) (void) object
 #endif
 
-/* Default memory clean up method used. */
-/* Calling CObject_IsDynamic( ) on an object will invoke this free method */
-/* being called after destruction. */
-#define CDefaultFree free
-
+/* End of configuration options. */
 
 /****************************************************************************/
 /* Assert Messages															*/
 /****************************************************************************/
+#if defined( DEBUG )
+extern void CAssert( char exp, char const* msg, char const* line, int lineNumber );
+extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* line, int lineNumber );
+#else
+#define CAssert( exp, msg, line, lineNumber ) 
+#define CAssert2( exp, msg1, msg2, line, lineNumber )
+#endif
+
 /* Different reasons for asserting. */
+#if defined( C_MINIMAL_DEBUG )
+#define C_ASSERT_VIRTUAL_MESSAGE NULL
+#else
 #define C_ASSERT_VIRTUAL_MESSAGE \
 	"Virtual method not linked. Possible causes:\n"\
 	"\t* Class constructor did not call CLinkVirtual( ) for the method\n"\
@@ -96,39 +97,44 @@ extern void CAssert2( void* exp, char const* msg1, char const* msg2, char const*
 	"\t  For example, say B extends A, and an instance of B was created,\n"\
 	"\t  the constructor for B was called, but within B's constructor, the\n"\
 	"\t  constructor for A was not called.\n"
+#endif
+extern const char* CAssertVirtualMessage_;
 #define C_ASSERT_VIRTUAL( method, funcName )\
-	CAssert2( (void*) (method), C_ASSERT_VIRTUAL_MESSAGE, funcName, __FILE__, __LINE__ )
+	CAssert2( ((method)==NULL), CAssertVirtualMessage_, funcName, __FILE__, __LINE__ )
 
+#if defined( C_MINIMAL_DEBUG )
+#define C_ASSERT_SUPER_METHOD_MESSAGE NULL
+#else
 #define C_ASSERT_SUPER_METHOD_MESSAGE \
 	"Super method not linked: Possible causes:\n"\
 	"\t* This failure is hard to get. I have not been able to get it\n"\
 	"\t  to fire through normal use. Likely, there is stack stomping at\n"\
 	"\t  play. The error is due to a method pointer for overriding a\n"\
 	"\t  virtual method being NULL\n"
+#endif
+extern const char* CAssertSuperMethodMessage_;
 #define C_ASSERT_SUPER_METHOD( method, name )\
-	CAssert2( (void*) (method), C_ASSERT_SUPER_METHOD_MESSAGE, name, __FILE__, __LINE__ )
+	CAssert2( ((method)==NULL), CAssertSuperMethodMessage_, name, __FILE__, __LINE__ )
 
+#if defined( C_MINIMAL_DEBUG )
+#define C_ASSERT_OBJECT_MESSAGE NULL
+#else
 #define C_ASSERT_OBJECT_MESSAGE \
 	"Attempt to call class method on NULL object\n"
+#endif
+extern const char* CAssertObjectMessage_;
 #define C_ASSERT_OBJECT( object )\
-	CAssert( (void*) (object), C_ASSERT_OBJECT_MESSAGE, __FILE__, __LINE__ )
+	CAssert( ((object)==NULL), CAssertObjectMessage_, __FILE__, __LINE__ )
 
 
 /****************************************************************************/
 /* Base object																*/
 /****************************************************************************/
-struct CClass
-{
-	void* interface;
-	size_t offset;
-	const char* name;
-};
-
 typedef void (*CFreeType)( void* );
 extern CFreeType CFree_;
 struct CObject
 {
-	void* C_ROOT; /* MUST be first. */
+	void* C_ROOT;
 	void (*CDestructor)( struct CObject* );
 	CFreeType CObject_Free;
 };
@@ -138,7 +144,10 @@ extern void CObject_IsDynamic( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Must be put at beginning of an interface. */
-typedef void* CInterface;
+struct CInterface
+{
+	void* C_ROOT;
+};
 
 /* Helper macro for object destruction. */
 #define CDestroy( mem )	\
@@ -149,7 +158,7 @@ typedef void* CInterface;
 	CObject_IsDynamic( (struct CObject*) (obj) )
 
 /* Helper macro for declaring free method for object. */
-	#define CFreeWith( obj, freep ) \
+#define CFreeWith( obj, freep ) \
 	CObject_SetFree( (struct CObject*) (obj), (freep) )
 
 
@@ -164,51 +173,30 @@ typedef void* CInterface;
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
-#define CLinkInterface( iface )								\
-	do {													\
-		((struct CObject*) &C_OBJ_REF->iface)->C_ROOT = C_OBJ_REF;	 \
+#define CInterface( iface )											\
+	do {															\
+		((struct CInterface*) (iface))->C_ROOT = C_OBJ_REF;	\
 	} while( 0 )
 
 
 /************************************************************************/
 /* Used to dynamically link methods at run time. 						*/
 /************************************************************************/
-/* The two macros below select one of two virtual linkage macros. */
-#define C_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
-#define CLinkVirtual( ... ) \
-	C_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_LINK_INTERFACE_VIRTUAL, C_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
+/* Helper macro for linking virtual methods. */
+#define CLinkVirtual( self, method ) \
+	do { (self)-> method = method; } while( 0 )
 
-#define C_LINK_CLASS_VIRTUAL( method ) \
-	do { C_OBJ_REF-> method = method; } while( 0 )
-#define C_LINK_INTERFACE_VIRTUAL( iface, method ) \
-	do { C_OBJ_REF-> iface . method = method; } while( 0 )
+/* Helper macro for overwriting virtual methods. Unlike overriding, the */
+/* reference to the super's method is lost. */
+#define COverwriteVirtual( self, method ) \
+	do { (self)-> method = method; } while( 0 )
 
-/* The two macros below are used to override a virtual method. */
-/* They can be used in lue of COverrideVirtual( ) when the super class' implementation */
-/* will never be call within the subclass class. */
-#define C_RE_LINK_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
-#define CReLinkVirtual( ... ) \
-	C_RE_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_RE_LINK_INTERFACE_VIRTUAL, C_RE_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
-#define C_RE_LINK_CLASS_VIRTUAL( class, method ) \
-	do { ((class) C_OBJ_REF)-> method = method; } while( 0 )
-#define C_RE_LINK_INTERFACE_VIRTUAL( iface, class, method ) \
-	do { ((class) C_OBJ_REF)->iface. method = method; } while( 0 )
-
-/* The two macros below select one of two virtual linkage macros for overriding methods. */
-/* Use this in lue of CReLinkVirtual( ) when the subclass must use the super classes */
-/* implementation of the overriden method. */
-#define C_OVERRIDE_VIRTUAL_SELECTION( _1, _2, _3, SELECTION, ... ) SELECTION
-#define COverrideVirtual( ... ) \
-	C_OVERRIDE_VIRTUAL_SELECTION( __VA_ARGS__, C_OVERRIDE_INTERFACE_VIRTUAL, C_OVERRIDE_CLASS_VIRTUAL )( __VA_ARGS__ )
-#define C_OVERRIDE_CLASS_VIRTUAL( class, method )									\
-	do {																			\
-		C_OBJ_REF-> method = ((class) C_OBJ_REF)-> method; 	\
-		((class) C_OBJ_REF)-> method = method;							\
-	} while( 0 )
-#define C_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
-	do {																		\
-		C_OBJ_REF-> method = ((class) C_OBJ_REF)->iface. method; \
-		((class) C_OBJ_REF)->iface. method = method;\
+/* Helper macro for overriding virtual methods. Unlike overwriting, a */
+/* reference to the super's method is retained. */
+#define COverrideVirtual( self, method ) 		\
+	do {										\
+		C_OBJ_REF-> method = (self)-> method; 	\
+		(self)-> method = method;				\
 	} while( 0 )
 
 
