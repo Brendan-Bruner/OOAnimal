@@ -75,11 +75,11 @@
 /* Assert Messages															*/
 /****************************************************************************/
 #if defined( DEBUG )
-extern void CAssert( char exp, char const* msg, char const* line, int lineNumber );
-extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* line, int lineNumber );
+extern void CAssert( char exp, char const* msg, char const* file, int line );
+extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, int line );
 #else
-#define CAssert( exp, msg, line, lineNumber ) 
-#define CAssert2( exp, msg1, msg2, line, lineNumber )
+#define CAssert( exp, msg, file, line ) (void)file; (void) line;
+#define CAssert2( exp, msg1, msg2, file, line ) (void)file; (void)line;
 #endif
 
 /* Different reasons for asserting. */
@@ -157,7 +157,7 @@ struct CObject
 	void (*CDestructor)( struct CObject* );
 	CFreeType CObject_Free;
 };
-extern void CObject( struct CObject* );
+extern struct CObject* CObject( struct CObject* );
 extern void CObject_Destroy( struct CObject* );
 extern void CObject_IsDynamic( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );

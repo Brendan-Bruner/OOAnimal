@@ -17,28 +17,32 @@
  * Oct. 2, 2015
  */
 
-#ifndef INCLUDE_LINKEDLISTNODE_H_
-#define INCLUDE_LINKEDLISTNODE_H_
+#ifndef UTIL_CONTAINER_LINKEDNODE_LINKEDNODE_H_
+#define UTIL_CONTAINER_LINKEDNODE_LINKEDNODE_H_
 
 #include <Class.h>
 #include <stdint.h>
 #include <Boolean.h>
 
 /**
- * @struct COTLinkedListNode
+ * @struct CLinkedNode
  * @brief
  * 		A single node in a linked list.
  * @details
  * 		A single node in a linked list.
  */
-COTClass( COTLinkedListNode )
+struct CLinkedNode
+{
+	/* Super class. */
+	struct CObject super;
+
+	/* Class data members. */
+	struct CLinkedNode* next;
 	void* data;
-	COTLinkedListNode* next;
-	COTLinkedListNode* previous;
-COTClassEnd
+};
 
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Save a pointer to a location in memory.
@@ -47,12 +51,12 @@ COTClassEnd
  * @param data[in]
  * 		A pointer to a location in memory. The node
  * 		will save this pointer. It can then be retrieved with
- * 		a call to COTLinkedListNode_GetData( ).
+ * 		a call to CLinkedNode_GetData( ).
  */
-void COTLinkedListNode_SetData( self(COTLinkedListNode), void* data );
+void CLinkedNode_SetData( struct CLinkedNode*, void* data );
 
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Get the data saved in node.
@@ -60,28 +64,14 @@ void COTLinkedListNode_SetData( self(COTLinkedListNode), void* data );
  * 		Get the data saved in node.
  * @returns
  * 		A void pointer to a location in memory set by
- * 		COTLinkedListNode_SetData( ). If the set function was
+ * 		CLinkedNode_SetData( ). If the set function was
  * 		has never been called then this will default to return
  * 		NULL.
  */
-void* COTLinkedListNode_GetData( self(COTLinkedListNode) );
+void* CLinkedNode_GetData( struct CLinkedNode* );
 
 /**
- * @memberof COTLinkedListNode
- * @public
- * @brief
- * 		Set the previous node in the list.
- * @details
- * 		Set the previous node in the list.
- * @param previous[in]
- * 		A pointer to the previous node in the list. Passing in NULL
- * 		will remove the previous node, making this node the first one
- * 		in the list.
- */
-void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode* previous );
-
-/**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Set the next node in the list.
@@ -92,10 +82,10 @@ void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode* 
  * 		will remove the next node, making this node the last one
  * 		in the list.
  */
-void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode* next );
+void CLinkedNode_SetNext( struct CLinkedNode*, struct CLinkedNode* next );
 
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Get the next node in the list.
@@ -105,23 +95,10 @@ void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode* next
  * 		The next node in the list. If NULL is returned then there
  * 		is no next node and this is the last node.
  */
-COTLinkedListNode* COTLinkedListNode_GetNext( self(COTLinkedListNode) );
+struct CLinkedNode* CLinkedNode_GetNext( struct CLinkedNode* );
 
 /**
- * @memberof COTLinkedListNode
- * @public
- * @brief
- * 		Get the previous node in the list.
- * @details
- * 		Get the previous node in the list.
- * @returns
- * 		The previous node in the list. If NULL is returned then there
- * 		is no previous node and this is the first node.
- */
-COTLinkedListNode* COTLinkedListNode_GetPrevious( self(COTLinkedListNode) );
-
-/**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  *		Traverse the linked list <b>depth</b> nodes deep.
@@ -137,10 +114,10 @@ COTLinkedListNode* COTLinkedListNode_GetPrevious( self(COTLinkedListNode) );
  * 		next node to be returned, etc. However, if there are not
  * 		<b>depth</b> nodes in the list, NULL will be returned.
  */
-COTLinkedListNode* COTLinkedListNode_GetAt( self(COTLinkedListNode), size_t depth );
+struct CLinkedNode* CLinkedNode_GetAt( struct CLinkedNode*, size_t depth );
 
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Search for the last node in the linked list.
@@ -152,10 +129,10 @@ COTLinkedListNode* COTLinkedListNode_GetAt( self(COTLinkedListNode), size_t dept
  * 		A pointer to the last node in the list. NULL if there is
  * 		no last node due to a circular list.
  */
-COTLinkedListNode* COTLinkedListNode_GetLast( self(COTLinkedListNode) );
+struct CLinkedNode* CLinkedNode_GetLast( struct CLinkedNode* );
 
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @public
  * @brief
  * 		Traverse the linked list to find out if it is circular.
@@ -165,16 +142,16 @@ COTLinkedListNode* COTLinkedListNode_GetLast( self(COTLinkedListNode) );
  * 		<b>true</b> if the list is circular.
  * 		<br><b>false</b> if the list is not circular.
  */
-Boolean COTLinkedListNode_IsCircular( self(COTLinkedListNode ) );
+Boolean CLinkedNode_IsCircular( struct CLinkedNode* );
 
 /**
- * @memberof LinkedListNode
+ * @memberof LinkedNode
  * @public
  * @brief
  * 		<b>Constructor</b>
  * @details
  * 		<b>Constructor</b>
  */
-void COTLinkedListNodeCreate( self(COTLinkedListNode) );
+struct CLinkedNode* CLinkedNode( struct CLinkedNode* );
 
-#endif /* INCLUDE_LINKEDLISTNODE_H_ */
+#endif /* UTIL_CONTAINER_LINKEDNODE_LINKEDNODE_H_ */

@@ -16,18 +16,20 @@
  * bbruner@ualberta.ca
  * Oct 23, 2015
  */
-#ifndef INCLUDE_CONTAINER_H_
-#define INCLUDE_CONTAINER_H_
+#ifndef UTIL_CONTAINER_CONTAINER_H_
+#define UTIL_CONTAINER_CONTAINER_H_
 
-#include <Class.h>
 #include "../ContainerConfig.h"
 
-#if (configUSE_COTCONTAINER == 1)
-#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+#if (configUSE_CCONTAINER == 1)
+#include <Class.h>
+
+#if (configUSE_CITERATOR == 1)
 #include <Container/Iterator/Iterator.h>
 #endif
+
 /**
- * @struct COTContainer
+ * @struct CContainer
  * @brief
  * 		Defines an interface for containing pointers.
  * @details
@@ -37,48 +39,38 @@
  * 		queues and lists.
  * 		added.
  * @attention
- * 		configUSE_COTCONTAINER must be defined as 1 for this interface to
+ * 		configUSE_CCONTAINER must be defined as 1 for this interface to
  * 		be included in the build. See ContainerConfig.h.
  */
-#define COTContainerCast( object ) COTCast(COTContainer, (object))
-COTInterface( COTContainer )
-	COTVirtual
-	(
-		#if (configCOTCONTAINER_ADD == 1)
-			Boolean (*COTContainerVirtual_Add)( self(COTContainer), void* );
-		#endif
-		#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
-		&& (configUSE_COTITERATOR == 1)
-			size_t (*COTContainerVirtual_AddAll)( self(COTContainer), COTContainer* );
-		#endif
-		#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-			COTIterator* (*COTContainerVirtual_GetIterator)( self(COTContainer) );
-		#endif
-		#if (configCOTCONTAINER_SIZE == 1)
-			size_t (*COTContainerVirtual_Size)( self(COTContainer) );
-		#endif
-		#if (configCOTCONTAINER_RESET == 1 )
-			void (*COTContainerVirtual_Reset)( self(COTContainer) );
-		#endif
-		#if (configCOTCONTAINER_IS_EMPTY == 1)
-			Boolean (*COTContainerVirtual_IsEmpty)( self(COTContainer) );
-		#endif
-		#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-			size_t (*COTContainerVirtual_AddCapacity)( self(COTContainer), size_t );
-		#endif
-	)
-COTInterfaceEnd
+struct CContainer
+{
+	/* Super Interface. */
+	struct CInterface super_;
 
-#if (configCOTCONTAINER_ADD == 1)
+	Boolean (*CContainerVirtual_Add)( struct CContainer*, void* );
+
+	#if (configUSE_CITERATOR == 1)
+	size_t (*CContainerVirtual_AddAll)( struct CContainer*, struct CContainer* );
+	struct CIterator* (*CContainerVirtual_GetIterator)( struct CContainer* );
+	#endif
+
+	#if (configCCONTAINER_EXTRA == 1)
+	size_t (*CContainerVirtual_Size)( struct CContainer* );
+	void (*CContainerVirtual_Reset)( struct CContainer* );
+	size_t (*CContainerVirtual_AddCapacity)( struct CContainer*, size_t );
+	#endif
+};
+
+#if (configCCONTAINER_ADD == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Add an element to the container.
  * @details
  * 		Adds an element to the container. See implementing classes
  * 		for details on where the element is added.
  * @attention
- * 		configCOTCONTAINER_ADD must be defined as 1 for this method
+ * 		configCCONTAINER_ADD must be defined as 1 for this method
  * 		to be included in the interface. See ContainerConfig.h.
  * @param element[in]
  * 		The element to add to the container. The container will save
@@ -87,68 +79,68 @@ COTInterfaceEnd
  * 		<b>true</b> when the element is successfully added
  * 		and <b>false</b> otherwise.
  */
-extern Boolean COTContainer_Add( self(COTContainer), void* element );
+extern Boolean CContainer_Add( self(CContainer), void* element );
 #endif
 
-#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+#if (configCCONTAINER_ADD_ALL == 1) && (configCCONTAINER_ITERATOR == 1) && (configUSE_CITERATOR == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Adds all the elements of <b>container</b> into self.
  * @details
  * 		Adds all the elements of <b>container</b> into self without
  * 		removing the elements.
  * @attention
- * 		configCOTCONTAINER_ADD_ALL, configCOTCONTAINER_ITERATOR, and
- * 		configUSE_COTITERATOR must be defined as 1 for this method
+ * 		configCCONTAINER_ADD_ALL, configCCONTAINER_ITERATOR, and
+ * 		configUSE_CITERATOR must be defined as 1 for this method
  * 		to be included. See ContainerConfig.h.
  * @param container
  * 		The container object to copy all the elements from.
  * @returns
  * 		The number of elements actually copied.
  */
-extern size_t COTContainer_AddAll( self(COTContainer), COTContainer* container );
+extern size_t CContainer_AddAll( self(CContainer), CContainer* container );
 #endif
 
-#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
+#if (configCCONTAINER_ITERATOR == 1) && (configUSE_CITERATOR == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
- * 		Get a COTIterator pointer for the container.
+ * 		Get a CIterator pointer for the container.
  * @details
- * 		Get a COTIterator pointer for the container. The iterator
+ * 		Get a CIterator pointer for the container. The iterator
  * 		is dynamically allocated and must be destroyed with
- * 		COTDestroy( ) to free memory.
+ * 		CDestroy( ) to free memory.
  * @attention
- * 		configCOTCONTAINER_ITERATOR and configUSE_COTITERATOR must
+ * 		configCCONTAINER_ITERATOR and configUSE_CITERATOR must
  * 		be defined as 1 for this method to be included. See
  * 		ContainerConfig.h.
  * @returns
  * 		A pointer to an iterator for the container. Returns <b>NULL</b>
  * 		if there is a failure to allocate the iterator.
  */
-extern COTIterator* COTContainer_GetIterator( self(COTContainer) );
+extern CIterator* CContainer_GetIterator( self(CContainer) );
 #endif
 
-#if (configCOTCONTAINER_SIZE == 1)
+#if (configCCONTAINER_SIZE == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Gets the number of elements in the container.
  * @details
  * 		Gets the number of elements in the container.
  * @attention
- * 		configCOTCONTAINER_SIZE must be defined as 1 for
+ * 		configCCONTAINER_SIZE must be defined as 1 for
  * 		this method to be included. See ContainerConfig.h.
  * @returns
  * 		The number of elements in the container.
  */
-extern size_t COTContainer_Size( self(COTContainer) );
+extern size_t CContainer_Size( self(CContainer) );
 #endif
 
-#if (configCOTCONTAINER_RESET == 1 )
+#if (configCCONTAINER_RESET == 1 )
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Empties all elements of the container.
  * @details
@@ -156,32 +148,32 @@ extern size_t COTContainer_Size( self(COTContainer) );
  * 		size to zero. Memory clean up must be done before
  * 		calling this method.
  * @attention
- * 		configCOTCONTAINER_RESET must be defined as for this
+ * 		configCCONTAINER_RESET must be defined as for this
  * 		method to be included. See ContainerConfig.h.
  */
-extern void COTContainer_Reset( self(COTContainer) );
+extern void CContainer_Reset( self(CContainer) );
 #endif
 
-#if (configCOTCONTAINER_IS_EMPTY == 1)
+#if (configCCONTAINER_IS_EMPTY == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Query if the container is empty.
  * @details
  * 		Query if the container is empty.
  * @attention
- * 		configCOTCONTAINER_IS_EMPTY must be defined as 1 for this
+ * 		configCCONTAINER_IS_EMPTY must be defined as 1 for this
  * 		method to be included. See ContainerConfig.h.
  * @returns
  * 		<b>true</b> when the container is emtpy, <b>false</b>
  * 		if the container has one or more elements in it.
  */
-extern Boolean COTContainer_IsEmpty( self(COTContainer) );
+extern Boolean CContainer_IsEmpty( self(CContainer) );
 #endif
 
-#if (configCOTCONTAINER_ADD_CAPACITY == 1)
+#if (configCCONTAINER_ADD_CAPACITY == 1)
 /**
- * @memberof COTContainer
+ * @memberof CContainer
  * @brief
  * 		Attempts to increase the maximum capacity.
  * @details
@@ -192,26 +184,26 @@ extern Boolean COTContainer_IsEmpty( self(COTContainer) );
  * 		number of elements the container was actually increased to hold.
  * 		For example:
  * 		@code
- * 		extern COTContainer* someContainer;
+ * 		extern CContainer* someContainer;
  * 		size_t increase;
  *
  * 		// Try to increase max size by 100 elements.
- * 		increase = COTContainer_AddCapacity( someContainer, 100 );
+ * 		increase = CContainer_AddCapacity( someContainer, 100 );
  *
  * 		// Actual increase in maximum capacity.
  * 		printf( "Increase = %d", increase );
  * 		@endcode
  * @attention
- * 		configCOTCONTAINER_ADD_CAPACITY must be defined as 1 for
+ * 		configCCONTAINER_ADD_CAPACITY must be defined as 1 for
  * 		this method to be included. See ContainerConfig.h.
  * @param capacity
  * 		The amount of capacity to add.
  * @returns
  * 		The amount of capcity actually added.
  */
-extern size_t COTContainer_AddCapacity( self(COTContainer), size_t );
+extern size_t CContainer_AddCapacity( self(CContainer), size_t );
 #endif
 
 #endif
 
-#endif /* INCLUDE_CONTAINER_H_ */
+#endif /* UTIL_CONTAINER_CONTAINER_H_ */

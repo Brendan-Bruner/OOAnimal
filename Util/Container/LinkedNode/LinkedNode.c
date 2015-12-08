@@ -17,14 +17,14 @@
  * Oct. 2, 2015
  */
 
-#include <Container/LinkedListNode/LinkedListNode.h>
+#include <Container/LinkedNode/LinkedNode.h>
 
 
 /****************************************************************************/
 /* Methods																	*/
 /****************************************************************************/
 /**
- * @memberof COTLinkedListNode
+ * @memberof CLinkedNode
  * @private
  * @brief
  * 		Traverse a list to find the last node or if its circular.
@@ -34,25 +34,25 @@
  * 		NULL if the list is circular, otherwise it will return a
  * 		pointer to the last node in the list.
  */
-static COTLinkedListNode* COTLinkedListNode_TraverseList( self(COTLinkedListNode) )
+static struct CLinkedNode* CLinkedNode_TraverseList( struct CLinkedNode* self )
 {
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 
-	COTLinkedListNode* turtle;
-	COTLinkedListNode* hare;
-	COTLinkedListNode* harePrevious;
+	struct CLinkedNode* turtle;
+	struct CLinkedNode* hare;
+	struct CLinkedNode* harePrevious;
 
 	turtle = self;
 	hare = self;
 	for( ;; )
 	{
-		turtle = COTLinkedListNode_GetNext( turtle );
+		turtle = CLinkedNode_GetNext( turtle );
 		harePrevious = hare;
-		hare = COTLinkedListNode_GetNext( hare );
+		hare = CLinkedNode_GetNext( hare );
 		if( hare != NULL )
 		{
 			harePrevious = hare;
-			hare = COTLinkedListNode_GetNext( hare );
+			hare = CLinkedNode_GetNext( hare );
 		}
 
 		if( hare == NULL )
@@ -72,54 +72,41 @@ static COTLinkedListNode* COTLinkedListNode_TraverseList( self(COTLinkedListNode
 	return NULL;
 }
 
-void COTLinkedListNode_SetData( self(COTLinkedListNode), void* data )
+void CLinkedNode_SetData( struct CLinkedNode* self, void* data )
 {
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 	self->data = data;
 }
 
-void* COTLinkedListNode_GetData( self(COTLinkedListNode) )
+void* CLinkedNode_GetData( struct CLinkedNode* self)
 {
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 	return self->data;
 }
 
-void COTLinkedListNode_SetPrevious( self(COTLinkedListNode), COTLinkedListNode* previous )
+void CLinkedNode_SetNext( struct CLinkedNode* self, struct CLinkedNode* next )
 {
-	COTMemberOf(COTLinkedListNode);
-	self->previous = previous;
-}
-
-void COTLinkedListNode_SetNext( self(COTLinkedListNode), COTLinkedListNode* next )
-{
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 	self->next = next;
 }
 
 
-COTLinkedListNode* COTLinkedListNode_GetNext( self(COTLinkedListNode) )
+struct CLinkedNode* CLinkedNode_GetNext( struct CLinkedNode* self )
 {
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 	return self->next;
 }
 
-
-COTLinkedListNode* COTLinkedListNode_GetPrevious( self(COTLinkedListNode) )
+struct CLinkedNode* CLinkedNode_GetAt( struct CLinkedNode* self, size_t depth )
 {
-	COTMemberOf(COTLinkedListNode);
-	return self->previous;
-}
-
-COTLinkedListNode* COTLinkedListNode_GetAt( self(COTLinkedListNode), size_t depth )
-{
-	COTMemberOf(COTLinkedListNode);
-	COTLinkedListNode* nextNode;
+	CMethod( );
+	struct CLinkedNode* nextNode;
 	size_t iter;
 
 	nextNode = self;
 	for( iter = 0; iter < depth; ++iter )
 	{
-		nextNode = COTLinkedListNode_GetNext( nextNode );
+		nextNode = CLinkedNode_GetNext( nextNode );
 		if( nextNode == NULL )
 		{
 			/* List does not go 'depth' nodes deep. */
@@ -129,37 +116,35 @@ COTLinkedListNode* COTLinkedListNode_GetAt( self(COTLinkedListNode), size_t dept
 	return nextNode;
 }
 
-COTLinkedListNode* COTLinkedListNode_GetLast( self(COTLinkedListNode) )
+struct CLinkedNode* CLinkedNode_GetLast( struct CLinkedNode* self )
 {
-	COTMemberOf(COTLinkedListNode);
-	return COTLinkedListNode_TraverseList( self );
+	CMethod( );
+	return CLinkedNode_TraverseList( self );
 }
 
-Boolean COTLinkedListNode_IsCircular( self(COTLinkedListNode ) )
+Boolean CLinkedNode_IsCircular( struct CLinkedNode* self )
 {
-	COTMemberOf(COTLinkedListNode);
+	CMethod( );
 
-	if( COTLinkedListNode_TraverseList( self ) == NULL )
-	{
-		/* Circular list. */
-		return true;
-	}
+	if( CLinkedNode_TraverseList( self ) == NULL )
+		return true; /* Circular list. */
 	else
-	{
-		/* Not circular. */
-		return false;
-	}
+		return false; /* Not circular. */
 }
 
 
 /****************************************************************************/
 /* Constructor																*/
 /****************************************************************************/
-void COTLinkedListNodeCreate( self(COTLinkedListNode) )
+struct CLinkedNode* CLinkedNode( struct CLinkedNode* self )
 {
-	COTConstructorOf(COTLinkedListNode);
+	CConstructor( );
+	/* Create super class. */
+	if( CObject((struct CObject*) self) == NULL )
+		return NULL;
 
 	self->data = NULL;
 	self->next = NULL;
-	self->previous = NULL;
+
+	return self;
 }

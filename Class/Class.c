@@ -85,9 +85,10 @@ static void CDestructor( struct  CObject* self )
 	}
 }
 
-void CObject( struct CObject* self )
+struct CObject* CObject( struct CObject* self )
 {
 	self->C_ROOT = (void*) self;
 	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;
+	return self;
 }

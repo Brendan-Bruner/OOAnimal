@@ -83,9 +83,9 @@ COTClass(COTLinkedQueue, COTQueue)
 	)
 	struct
 	{
-		COTLinkedListNode* 	head;
-		COTLinkedListNode* 	tail;
-		COTLinkedListNode*	endOfLinks;
+		CLinkedNode* 	head;
+		CLinkedNode* 	tail;
+		CLinkedNode*	endOfLinks;
 		size_t 				size;
 		COTAllocator*		allocator;
 	}_; /* Hide private data in this struct. */

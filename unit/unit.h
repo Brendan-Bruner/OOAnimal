@@ -36,18 +36,18 @@ unsigned int unit_tests_run;
 
 #define TEST_SUITE(suite) 		void all_tests_##suite (void)
 
-#define ABORT_TEST(message,...)		do {										\
-										UNIT_PRINT( "\t\tABORTED: " );				\
-										UNIT_PRINT( message, ##__VA_ARGS__ );		\
-										UNIT_PRINT( "\n" );							\
+#define ABORT_TEST(...)				do {										\
+										UNIT_PRINT( "\t\tABORTED: " );			\
+										UNIT_PRINT( __VA_ARGS__ );				\
+										UNIT_PRINT( "\n" );						\
 										return;									\
 									} while( 0 )
 
-#define ASSERT(message, test,...)	do {										\
+#define ASSERT(test,...)			do {										\
 									if( !(test) ) { 							\
-										UNIT_PRINT( "\t\tFAILURE: " );				\
-										UNIT_PRINT( message, ##__VA_ARGS__ );		\
-										UNIT_PRINT( "\n" );							\
+										UNIT_PRINT( "\t\tFAILURE: " );			\
+										UNIT_PRINT(__VA_ARGS__ );				\
+										UNIT_PRINT( "\n" );						\
 										fflush( stdout );						\
 										++unit_asserts_failed;					\
 										}										\

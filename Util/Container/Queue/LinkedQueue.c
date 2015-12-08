@@ -40,8 +40,8 @@
  {
  	COTMemberOf(COTLinkedQueue);
 
- 	COTLinkedListNode* node1;
- 	COTLinkedListNode* node2;
+ 	CLinkedNode* node1;
+ 	CLinkedNode* node2;
  	size_t iter;
 
  	/* Validate the increase in capacity. */
@@ -55,12 +55,12 @@
  	if( self->_.endOfLinks == NULL )
  	{
  		--iter;
- 		self->_.endOfLinks = (COTLinkedListNode*) COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+ 		self->_.endOfLinks = (CLinkedNode*) COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
  		if( self->_.endOfLinks == NULL )
  		{
  			return 0;
  		}
- 		COTCreate(self->_.endOfLinks, COTLinkedListNodeCreate( self->_.endOfLinks ));
+ 		COTCreate(self->_.endOfLinks, CLinkedNodeCreate( self->_.endOfLinks ));
  		self->_.head = self->_.endOfLinks;
  	}	
 
@@ -68,10 +68,10 @@
  	node1 = self->_.endOfLinks;
  	for(; iter > 0; --iter )
  	{
- 		node2 = (COTLinkedListNode*) COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+ 		node2 = (CLinkedNode*) COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
  		if( node2 == NULL ){ break; }	
- 		COTCreate(node2, COTLinkedListNodeCreate( node2 ));
- 		COTLinkedListNode_SetNext( node1, node2 );
+ 		COTCreate(node2, CLinkedNodeCreate( node2 ));
+ 		CLinkedNode_SetNext( node1, node2 );
  		node1 = node2;	
  	}
  	self->_.endOfLinks = node1;
@@ -152,9 +152,9 @@ static Boolean COTQueueVirtual_Insert( self(COTQueue), void* element )
 	}
 
 	/* If capacity was added, head cannot be NULL anymore. */
-	COTLinkedListNode_SetData( self->_.head, element );
+	CLinkedNode_SetData( self->_.head, element );
 	/* Move head to next node. */
-	self->_.head = COTLinkedListNode_GetNext( self->_.head );
+	self->_.head = CLinkedNode_GetNext( self->_.head );
 	/* Size of the queue increased. */
 	++self->_.size;
 
@@ -180,21 +180,21 @@ static void* COTQueueVirtual_Remove( self(COTQueue) )
 	}
 
 	/* Get the data to return. */
-	element = COTLinkedListNode_GetData( self->_.tail );
+	element = CLinkedNode_GetData( self->_.tail );
 	/* Set nodes new data to NULL. */
-	COTLinkedListNode_SetData( self->_.tail, NULL );
+	CLinkedNode_SetData( self->_.tail, NULL );
 
 	/* The following code will increment the tail to the next node. It will also */
 	/* recycle the old tail node by appending it to the end of the list and making */
 	/* that the new end of list. */
 	/* The tail node needs to be moved, mode it to the end of the list. */
-	COTLinkedListNode_SetNext( self->_.endOfLinks, self->_.tail );
+	CLinkedNode_SetNext( self->_.endOfLinks, self->_.tail );
 	/* Update the new end of list. */
 	self->_.endOfLinks = self->_.tail;
 	/* Update the new tail. */
-	self->_.tail = COTLinkedListNode_GetNext( self->_.tail );
+	self->_.tail = CLinkedNode_GetNext( self->_.tail );
 	/* The new end of list should not have a next node. */
-	COTLinkedListNode_SetNext( self->_.endOfLinks, NULL );
+	CLinkedNode_SetNext( self->_.endOfLinks, NULL );
 	/* Size of the queue decreased. */
 	--self->_.size;
 
@@ -216,7 +216,7 @@ static void* COTQueueVirtual_Peek( self(COTQueue) )
 		/* Queue is empty. */
 		return NULL;
 	}
-	return COTLinkedListNode_GetData( self->_.tail );
+	return CLinkedNode_GetData( self->_.tail );
 }
 #endif
 
@@ -243,8 +243,8 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 {
 	COTMemberOf(COTLinkedQueue);
 
-	COTLinkedListNode* node1;
-	COTLinkedListNode* node2;
+	CLinkedNode* node1;
+	CLinkedNode* node2;
 	size_t iter;
 
 	if( initSize == 0 )
@@ -253,13 +253,13 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	}
 
 	/* Allocate first node. */
-	node1 = COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+	node1 = COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
 	if( node1 == NULL )
 	{
 		return 0;
 	}
 	/* Construct first node. */
-	COTCreate( node1, COTLinkedListNodeCreate( node1 ) );
+	COTCreate( node1, CLinkedNodeCreate( node1 ) );
 	/* Head of the queue is this node. */
 	self->_.head = node1;
 	/* Will also be the tail. */
@@ -268,16 +268,16 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	for( iter = 0; iter < initSize; ++iter )
 	{
 		/* Allocate nodes unil desired queue size is reached. */
-		node2 = COTAllocator_Malloc( self->_.allocator, sizeof(COTLinkedListNode) );
+		node2 = COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
 		if( node2 == NULL )
 		{
 			/* Failed to allocate node. */
 			break;
 		}
-		COTCreate( node2, COTLinkedListNodeCreate( node2 ) );
+		COTCreate( node2, CLinkedNodeCreate( node2 ) );
 
 		/* Continue to create linked list until desired queue size is reached. */
-		COTLinkedListNode_SetNext( node1, node2 );
+		CLinkedNode_SetNext( node1, node2 );
 		node1 = node2;
 
 	}
@@ -289,7 +289,7 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	self->_.endOfLinks = node1;
 
 	/* There should be no next node after the end of the list. */
-	COTLinkedListNode_SetNext( node1, NULL );
+	CLinkedNode_SetNext( node1, NULL );
 
 	/* Return the number of nodes created. */
 	return iter;
@@ -299,8 +299,8 @@ COTVirtualDestructor( )
 {
 	COTDestructorOf(COTLinkedQueue);
 
-	COTLinkedListNode* node;
-	COTLinkedListNode* nextNode;
+	CLinkedNode* node;
+	CLinkedNode* nextNode;
 
 	node = self->_.tail;
 	if( node == NULL )
@@ -312,8 +312,8 @@ COTVirtualDestructor( )
 	
 	do
 	{
-		nextNode = COTLinkedListNode_GetNext( node );
-		COTDestroy( COTLinkedListNode, node );
+		nextNode = CLinkedNode_GetNext( node );
+		COTDestroy( CLinkedNode, node );
 		node = nextNode;
 	}
 	while( node != NULL );

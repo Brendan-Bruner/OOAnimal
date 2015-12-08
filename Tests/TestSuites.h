@@ -22,7 +22,7 @@
 
 #include <unit.h>
 
-TEST_SUITE( COTLinkedListNode );
+TEST_SUITE( CLinkedNode );
 TEST_SUITE( COTDynamicAllocator );
 TEST_SUITE( COTLinkedQueue );
 
