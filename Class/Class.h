@@ -128,13 +128,12 @@ extern const char* CAssertObjectMessage_;
 
 
 /****************************************************************************/
-/* Base object																*/
+/* Base object and interface structures										*/
 /****************************************************************************/
 typedef void (*CFreeType)( void* );
-extern CFreeType CFree_;
 struct CObject
 {
-	void* C_ROOT;
+	void* C_ROOT; /* MUST be first variable in this struct. */
 	void (*CDestructor)( struct CObject* );
 	CFreeType CObject_Free;
 };
@@ -142,12 +141,6 @@ extern void CObject( struct CObject* );
 extern void CObject_Destroy( struct CObject* );
 extern void CObject_IsDynamic( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );
-
-/* Must be put at beginning of an interface. */
-struct CInterface
-{
-	void* C_ROOT;
-};
 
 /* Helper macro for object destruction. */
 #define CDestroy( mem )	\
@@ -161,6 +154,11 @@ struct CInterface
 #define CFreeWith( obj, freep ) \
 	CObject_SetFree( (struct CObject*) (obj), (freep) )
 
+/* Must be put at beginning of an interface. */
+struct CInterface
+{
+	void* C_ROOT;
+};
 
 /****************************************************************************/
 /* Constructor specific setup												*/
@@ -178,10 +176,6 @@ struct CInterface
 		((struct CInterface*) (iface))->C_ROOT = C_OBJ_REF;	\
 	} while( 0 )
 
-
-/************************************************************************/
-/* Used to dynamically link methods at run time. 						*/
-/************************************************************************/
 /* Helper macro for linking virtual methods. */
 #define CLinkVirtual( self, method ) \
 	do { (self)-> method = method; } while( 0 )
@@ -201,23 +195,21 @@ struct CInterface
 
 
 /****************************************************************************/
-/* Used to access super class' implementation of a method. 					*/
+/* Helper macros for asserting and using defining class methods				*/
 /****************************************************************************/
+/* Assert a super class method before calling it. */
 #define CAssertSuper( method ) \
 	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method, #method ); \
 
-
-/****************************************************************************/
-/* Helper macros for calling and setting up virtual methods					*/
-/****************************************************************************/
-/* Asserts and then calls the virtual method. */
+/* Asserts virtual method before calling it. */
 #define CAssertVirtual( name )				\
 	C_ASSERT_OBJECT( C_OBJ_REF );			\
 	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
 
-/* Sets up the 'self' variable in a class method. */
+/* Asserts an object point in a non virtual method. */
 #define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
 
+/* Cast object pointer to desired class. */
 extern void* CVirtualMethod_( void* );
 #define CVirtualMethod( self_ )\
 	CVirtualMethod_( self_ )

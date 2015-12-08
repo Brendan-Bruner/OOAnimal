@@ -20,7 +20,6 @@
 #include "Class.h"
 #include <stdlib.h>
 
-CFreeType CFree_ = CDefaultFree;
 const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
 const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
 const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
@@ -68,7 +67,7 @@ void CObject_Destroy( struct CObject* self )
 void CObject_IsDynamic( struct CObject* self )
 {
 	C_ASSERT_OBJECT( self );
-	self->CObject_Free = CFree_;
+	self->CObject_Free = CDefaultFree;
 }
 
 void CObject_SetFree( struct CObject* self, CFreeType objectFree )
