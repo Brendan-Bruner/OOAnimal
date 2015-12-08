@@ -117,49 +117,41 @@ extern void CAssert2( void* exp, char const* msg1, char const* msg2, char const*
 /****************************************************************************/
 /* Base object																*/
 /****************************************************************************/
+struct CClass
+{
+	void* interface;
+	size_t offset;
+	const char* name;
+};
+
 typedef void (*CFreeType)( void* );
 extern CFreeType CFree_;
-typedef struct CObject CObject;
 struct CObject
 {
-	void (*CDestructor)( CObject* );
+	void* C_ROOT; /* MUST be first. */
+	void (*CDestructor)( struct CObject* );
 	CFreeType CObject_Free;
-	struct
-	{
-		void* C_ROOT;
-	}_;
 };
-extern void newCObject( CObject* );
-extern void CObject_Destroy( CObject* );
-extern void CObject_IsDynamic( CObject* );
-extern void CObject_SetFree( CObject*, CFreeType );
+extern void CObject( struct CObject* );
+extern void CObject_Destroy( struct CObject* );
+extern void CObject_IsDynamic( struct CObject* );
+extern void CObject_SetFree( struct CObject*, CFreeType );
 
+/* Must be put at beginning of an interface. */
+typedef void* CInterface;
 
-/****************************************************************************/
-/* Used destroy objects. 													*/
-/****************************************************************************/
+/* Helper macro for object destruction. */
 #define CDestroy( mem )	\
-	CObject_Destroy( (CObject*) (mem)->_.C_ROOT );
+	CObject_Destroy( ((struct CObject*) (mem))->C_ROOT )
 
+/* Helper macro for declaring object dynamic. */
+#define CDynamic( obj ) \
+	CObject_IsDynamic( (struct CObject*) (obj) )
 
-/********************************************************************************/
-/* Helper macros for defining a class and interface								*/
-/********************************************************************************/
-/* Must be first in any class. */
-#define CClass( CSuper )				\
-	struct {							\
-		CSuper			C_SUPER;		\
-		void*			C_ROOT;			\
-	}_
+/* Helper macro for declaring free method for object. */
+	#define CFreeWith( obj, freep ) \
+	CObject_SetFree( (struct CObject*) (obj), (freep) )
 
-/* Can be put anywhere in an interface. */
-#define CInterface( )					\
-	struct {							\
-		void*		C_ROOT;				\
-	}_
-/* Used to implement an interface in a class' definition. */
-#define CImplements( iface )	\
-	iface C_IFACE_VAR( iface );
 
 /****************************************************************************/
 /* Constructor specific setup												*/
@@ -168,27 +160,28 @@ extern void CObject_SetFree( CObject*, CFreeType );
 	do {										\
 		C_ASSERT_OBJECT( C_OBJ_REF );			\
 		C_INIT_OBJECT( C_OBJ_REF );				\
-		C_OBJ_REF->_.C_ROOT = (void*) C_OBJ_REF;\
+		((struct CObject*) C_OBJ_REF)->C_ROOT = C_OBJ_REF;\
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
 #define CLinkInterface( iface )								\
 	do {													\
-		C_OBJ_REF->C_IFACE_VAR( iface ).C_ROOT = (void*) C_OBJ_REF;	 \
+		((struct CObject*) &C_OBJ_REF->iface)->C_ROOT = C_OBJ_REF;	 \
 	} while( 0 )
 
 
-/******************************************************************************/
-/* Used to dynamically link methods at run time. */
-/******************************************************************************/
+/************************************************************************/
+/* Used to dynamically link methods at run time. 						*/
+/************************************************************************/
 /* The two macros below select one of two virtual linkage macros. */
 #define C_LINK_VIRTUAL_SELECTION( _1, _2, SELECTION, ... ) SELECTION
 #define CLinkVirtual( ... ) \
 	C_LINK_VIRTUAL_SELECTION( __VA_ARGS__, C_LINK_INTERFACE_VIRTUAL, C_LINK_CLASS_VIRTUAL )( __VA_ARGS__ )
+
 #define C_LINK_CLASS_VIRTUAL( method ) \
 	do { C_OBJ_REF-> method = method; } while( 0 )
 #define C_LINK_INTERFACE_VIRTUAL( iface, method ) \
-	do { C_OBJ_REF->C_IFACE_VAR( iface ). method = method; } while( 0 )
+	do { C_OBJ_REF-> iface . method = method; } while( 0 )
 
 /* The two macros below are used to override a virtual method. */
 /* They can be used in lue of COverrideVirtual( ) when the super class' implementation */
@@ -199,7 +192,7 @@ extern void CObject_SetFree( CObject*, CFreeType );
 #define C_RE_LINK_CLASS_VIRTUAL( class, method ) \
 	do { ((class) C_OBJ_REF)-> method = method; } while( 0 )
 #define C_RE_LINK_INTERFACE_VIRTUAL( iface, class, method ) \
-	do { ((class) C_OBJ_REF)->C_IFACE_VAR( iface ). method = method; } while( 0 )
+	do { ((class) C_OBJ_REF)->iface. method = method; } while( 0 )
 
 /* The two macros below select one of two virtual linkage macros for overriding methods. */
 /* Use this in lue of CReLinkVirtual( ) when the subclass must use the super classes */
@@ -214,41 +207,32 @@ extern void CObject_SetFree( CObject*, CFreeType );
 	} while( 0 )
 #define C_OVERRIDE_INTERFACE_VIRTUAL( class, iface, method )					\
 	do {																		\
-		C_OBJ_REF-> method = ((class) C_OBJ_REF)->C_IFACE_VAR( iface ). method; \
-		((class) C_OBJ_REF)->C_IFACE_VAR( iface ).method = method;\
+		C_OBJ_REF-> method = ((class) C_OBJ_REF)->iface. method; \
+		((class) C_OBJ_REF)->iface. method = method;\
 	} while( 0 )
 
 
 /****************************************************************************/
 /* Used to access super class' implementation of a method. 					*/
 /****************************************************************************/
-#define CSuper( method ) \
+#define CAssertSuper( method ) \
 	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method, #method ); \
-	C_OBJ_REF-> method
 
 
 /****************************************************************************/
 /* Helper macros for calling and setting up virtual methods					*/
 /****************************************************************************/
 /* Asserts and then calls the virtual method. */
-#define CCallVirtual( name )				\
+#define CAssertVirtual( name )				\
 	C_ASSERT_OBJECT( C_OBJ_REF );			\
 	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
-	return C_OBJ_REF-> name
 
 /* Sets up the 'self' variable in a class method. */
 #define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
-#define CVirtualMethod( C, self_ ) 				\
-	C C_OBJ_REF;							\
-	do {									\
-		C_ASSERT_OBJECT( self_ );			\
-		C_OBJ_REF = (C) self_->_.C_ROOT;	\
-	} while( 0 )
 
-/******************************************************************************/
-/* Call interface methods on an object using the interface */
-/******************************************************************************/
-#define CCast(i,O) \
-	(&(O)->C_IFACE_VAR( i ))
+extern void* CVirtualMethod_( void* );
+#define CVirtualMethod( self_ )\
+	CVirtualMethod_( self_ )
+
 
 #endif /* CLASS_H_ */

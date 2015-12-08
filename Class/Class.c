@@ -40,24 +40,31 @@ void CAssert2( void* exp, char const* msg1, char const* msg2, char const* file, 
 }
 #endif
 
-void CObject_Destroy( CObject* self )
+void* CVirtualMethod_( void* self )
 {
-	CCallVirtual(CDestructor)( self );
+	C_ASSERT_OBJECT( self );
+	return ((struct CObject*) self)->C_ROOT;	
 }
 
-void CObject_IsDynamic( CObject* self )
+void CObject_Destroy( struct CObject* self )
+{
+	CAssertVirtual(CDestructor);
+	self->CDestructor(self);
+}
+
+void CObject_IsDynamic( struct CObject* self )
 {
 	C_ASSERT_OBJECT( self );
 	self->CObject_Free = CFree_;
 }
 
-void CObject_SetFree( CObject* self, CFreeType objectFree )
+void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 {
 	C_ASSERT_OBJECT( self );
 	self->CObject_Free = objectFree;
 }
 
-static void CDestructor( CObject* self )
+static void CDestructor( struct  CObject* self )
 {
 	if( self->CObject_Free != NULL )
 	{
@@ -65,9 +72,9 @@ static void CDestructor( CObject* self )
 	}
 }
 
-void newCObject( CObject* self )
+void CObject( struct CObject* self )
 {
-	self->_.C_ROOT = (void*) self;
+	self->C_ROOT = (void*) self;
 	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;
 }
