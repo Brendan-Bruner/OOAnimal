@@ -23,6 +23,7 @@
 const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
 const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
 const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
+const char* CAssertInterfaceMessage_ = C_ASSERT_INTERFACE_MESSAGE;
 
 #if defined( DEBUG )
 void CAssert( char exp, char const* msg, char const* file, int line )
@@ -52,10 +53,10 @@ void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, i
 }
 #endif
 
-void* CVirtualMethod_( void* self )
+void* CVirtualMethod_( void* self, const char* file, int line )
 {
-	C_ASSERT_OBJECT( self );
-	return ((struct CObject*) self)->C_ROOT;	
+	C_ASSERT_INTERFACE( ((struct CRoot*) self)->C_ROOT, file, line );
+	return ((struct CRoot*) self)->C_ROOT;	
 }
 
 void CObject_Destroy( struct CObject* self )

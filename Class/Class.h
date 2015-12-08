@@ -29,12 +29,13 @@
 /* Define this to reduce the memory footprint used in .bss */
 /* for error messages. Error messages will be much smaller, */
 /* but less descriptive. */
+/* The .bss footprint when this is not defined is: 	~1400 bytes. */
+/* The .bss footprint when this is defined is:		~16 bytes.   */
 //#define C_MINIMAL_DEBUG
 
 /* The variable name used to reference an object, this is */
 /* 'this' in C++/Java and 'self' in Python. */
 /* Some helper macros assume the object reference has this name. */
-/* In class method definitions. */
 #define C_OBJ_REF 				self
 
 /* Default memory clean up method used. */
@@ -51,8 +52,8 @@
 /* These define how to print formatted strings and what to */
 /* do when an assertion fails. */
 #include <stdio.h>
-#define C_PRINT( ... ) printf( __VA_ARGS__ )
-#define C_FAILED_ASSERT_HANDLE( ) for( ;; )
+#define C_PRINT( ... ) 				printf( __VA_ARGS__ )
+#define C_FAILED_ASSERT_HANDLE( ) 	for( ;; )
 
 /* Used to zero out a structure. */
 /* This assumes that NULL resolves to 0, which is requried by C standard. */
@@ -65,7 +66,7 @@
 		memset( (object), 0, sizeof(*object) );			\
 	} while( 0 )
 #else
-#define C_INIT_OBJECT( object ) (void) object
+#define C_INIT_OBJECT( object )
 #endif
 
 /* End of configuration options. */
@@ -94,9 +95,10 @@ extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* 
 	"\t* Constructor was called, but CConstructor( ) was not called by\n"\
 	"\t  constructor\n"\
 	"\t* Constructor was called, but super constructor was not called\n"\
-	"\t  For example, say B extends A, and an instance of B was created,\n"\
-	"\t  the constructor for B was called, but within B's constructor, the\n"\
-	"\t  constructor for A was not called.\n"
+	"\t  For example, say B extends A, and an instance of B was created.\n"\
+	"\t  The error is reported to have happened in the source file for A.\n"\
+	"\t  Then, the constructor for B was called, but within B's constructor,\n"\
+	"\t  the constructor for A was not called.\n"
 #endif
 extern const char* CAssertVirtualMessage_;
 #define C_ASSERT_VIRTUAL( method, funcName )\
@@ -106,11 +108,10 @@ extern const char* CAssertVirtualMessage_;
 #define C_ASSERT_SUPER_METHOD_MESSAGE NULL
 #else
 #define C_ASSERT_SUPER_METHOD_MESSAGE \
-	"Super method not linked: Possible causes:\n"\
-	"\t* This failure is hard to get. I have not been able to get it\n"\
-	"\t  to fire through normal use. Likely, there is stack stomping at\n"\
-	"\t  play. The error is due to a method pointer for overriding a\n"\
-	"\t  virtual method being NULL\n"
+	"Super method not linked. Possible causes:\n"\
+	"\t* Did not call super class constructor. ie, if B inherits\n"\
+	"\t  from A and the failure happened in B, then B's constructor\n"\
+	"\t  did not call its super constructor, that is, A's constructor.\n"
 #endif
 extern const char* CAssertSuperMethodMessage_;
 #define C_ASSERT_SUPER_METHOD( method, name )\
@@ -120,11 +121,30 @@ extern const char* CAssertSuperMethodMessage_;
 #define C_ASSERT_OBJECT_MESSAGE NULL
 #else
 #define C_ASSERT_OBJECT_MESSAGE \
-	"Attempt to call class method on NULL object\n"
+	"Class method called on NULL object.\n"\
+	"For example, CDestroy( NULL ).\n"
 #endif
 extern const char* CAssertObjectMessage_;
 #define C_ASSERT_OBJECT( object )\
 	CAssert( ((object)==NULL), CAssertObjectMessage_, __FILE__, __LINE__ )
+
+#if defined( C_MINIMAL_DEBUG )
+#define C_ASSERT_INTERFACE_MESSAGE NULL
+#else
+#define C_ASSERT_INTERFACE_MESSAGE \
+	"Class method called on NULL object. Possible causes:\n"\
+	"\t* If this error occurred in an interface method, then the\n"\
+	"\t* constructor did not call CInterface( ) to construct the\n"\
+	"\t  interface.\n"\
+	"\t* It this error occurred in an interface method. Say B extends\n"\
+	"\t  A and implements I. The error occurred in source file A for\n"\
+	"\t  a method defined in I, and the method was called on an instance\n"\
+	"\t  of B. Then, B's constructor did not call it's super constructor,\n"\
+	"\t  ie, A's constructor.\n"
+#endif
+extern const char* CAssertInterfaceMessage_;
+#define C_ASSERT_INTERFACE( object, file, line )\
+	CAssert( (object) == NULL, CAssertInterfaceMessage_, file, line )
 
 
 /****************************************************************************/
@@ -183,11 +203,13 @@ struct CInterface
 
 /* Helper macro for overwriting virtual methods. Unlike overriding, the */
 /* reference to the super's method is lost. */
+/* Note, never overwrite CDestructor( ). Always override it. */
 #define COverwriteVirtual( self, method ) \
 	do { (self)-> method = method; } while( 0 )
 
 /* Helper macro for overriding virtual methods. Unlike overwriting, a */
 /* reference to the super's method is retained. */
+/* Expects a variable C_OBJ_REF is defined. */
 #define COverrideVirtual( self, method ) 		\
 	do {										\
 		C_OBJ_REF-> method = (self)-> method; 	\
@@ -196,7 +218,7 @@ struct CInterface
 
 
 /****************************************************************************/
-/* Helper macros for asserting and using defining class methods				*/
+/* Helper macros for asserting and defining class methods					*/
 /****************************************************************************/
 /* Assert a super class method before calling it. */
 #define CAssertSuper( method ) \
@@ -207,13 +229,17 @@ struct CInterface
 	C_ASSERT_OBJECT( C_OBJ_REF );			\
 	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
 
+/* Assert interface before calling virtual method. */
+#define CAssertInterface( )
+
 /* Asserts an object point in a non virtual method. */
 #define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
 
 /* Cast object pointer to desired class. */
 struct CRoot{ void* C_ROOT; };
+extern void* CVirtualMethod_( void*, const char*, int );
 #define CVirtualMethod( self_ )\
-	((struct CRoot*) self_)->C_ROOT
+	CVirtualMethod_( self_, __FILE__, __LINE__ )
 //	CVirtualMethod_( self_ )
 
 
