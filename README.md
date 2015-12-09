@@ -27,9 +27,10 @@ A class must have a header and source file. For example, take a class Point. Poi
 |+ move( x: int, y: int ): void
 |+ draw( ): void 
 
-For now, lets treat move( ) and draw( ) as non virtual methods. The header file would look like this:
+For now, lets treat move( ) and draw( ) as non virtual methods. 
 
-**Point.h**
+###Header
+
 ```C
 #ifndef POINT_H_
 #define POINT_H_
@@ -60,13 +61,14 @@ extern void Point_Draw( struct Point* self );
 #endif /* POINT_H_
 ```
 
-* First, and most important rule, **the first structure member must be the super class**. In the case of Point, it super class is ```struct CObject```. 
-* Next rule, all class methods have their **first argument as a pointer to the class they operate on**. In the case of the Point class, all methods have ```struct Point*``` as their first argument.
-* Finally, class **constructors are just regular C functions**. 
+* The most important rule is: **the first structure member must be the super class**. In the case of Point, its super class is ```struct CObject```. 
+* All class methods have their **first argument as a pointer to the class they operate on**. In the case of the Point class, all methods have ```struct Point*``` as their first argument.
+* The **constructors are just regular C functions**. 
 
 On to the source file:
 
-**Point.c**
+##Source
+
 ```C
 #include <Point.h>
 #include <stdio.h>
@@ -103,5 +105,52 @@ void Point_Draw( struct Point* self )
     
     printf( "point at (%d,%d)\n", self->x, self->y );
 }
+```
 
+###Constructor definition
+
+* The first line of code in a constructor is CConstructor( ). Nothing is allowed to be done before calling it. Although it's a macro (with side effects), it will be refered to as method. It accomplishes two objectives:
+    * Initialize object data so that virtual methods and interfaces can be used
+    * Initialize object data to enable run time checking
+* Call the super class constructor. This can be done anywhere in the constructor's definition. There are two exceptions, though, which will be discussed in the overriding and overwriting virtual methods section. In addition, there are two valid ways to call the super's constructor:
+    * First: ```CObject(&self->super);```. Here, we explicitly give the address of the super class to construct.
+    * Second, the way shown in Point.c:  ```CObject((struct CObject*) self);```. A pointer can always be safetly cast to a pointer to its super class (and the super class' super class, and so on). This has the advantage of making the super class variable name irrelevant.
+
+###Method Definition
+
+* The first line of code in a non virtual methods definition should be CMethod( ). This is a macro which asserts the object pointer is non NULL.
+
+###Creating an Instance of Point
+
+```C
+#include <Point.h>
+
+int main( int argc, char** argv )
+{
+    struct Point stackPoint;
+    struct Point* heapPoint;
+    
+    /* We will work with two instances of Point, one on the function's stack, */
+    /* the other put on heap with malloc. */
+    
+    /* First, the stack point. */
+    Point(&stackPoint, 0, 0); /* Create the point, and put it at (0,0). */
+    Point_Draw(&stackPoint);  /* Print the point's location to console. */
+    Point_Move(&stackPoint, 3, 2); /* Move the point to (3,2). */
+    Point_Draw(&stackPoint);  /* Print the points new location to console. */
+    CDestroy(&stackPoint);    /* Call destructor on the object. */
+    
+    /* Next, the heap point. */
+    heapPoint = malloc(sizeof(*heapPoint));
+    if( heapPoint == NULL )
+        return 0;
+    Point(heapPoint, 0, 0);  /* Create the point, and put it at (0,0). */
+    CDynamic(heapPoint);     /* Declare the object as being dynamically allocated. */
+    Point_Draw(heapPoint);   /* Print the points location to console. */
+    Point_Move(heapPoint, 3, 2); /* Move the point to (3,2). */
+    Point_Draw(heapPoint);   /* Print the points location to console. */
+    CDestroy(heapPoint);     /* Call destructor on object, this will also free the memory. */
+    
+    return 1;
+}
 ```
