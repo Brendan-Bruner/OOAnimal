@@ -5,7 +5,9 @@ CObject is a small set of macros and functions that enable fundamental object or
 
 ##Compile Time and Run Time Checks
 
-Since C is not an OO language, compile time checks are very limited. For example, the compiler can't know if a class has forgot to implement a method inherited from an interface. To remedy this, run time checks are (optionally) done. When compiling, if the symbol DEBUG is defined, run time checking will be compiled into the program, otherwise, it isn't done. When a run time check fails, an error will be printed to console and the program execution halted. The printed message will explain the most likely cause of failure and common solutions. Since different systems have different requirements, hooks are provided to changed the behaviour when checks fail, and information is printed to console. For example, on an embedded system, the print hook can be used to power on an LED instead or print over a UART connection.
+Since C is not an OO language, compile time checks are very limited. For example, the compiler can't know if a class has forgot to implement a method inherited from an interface. To remedy this, run time checks are (optionally) done. When compiling, if the symbol DEBUG is defined, run time checking will be compiled into the program, otherwise, it isn't done. 
+
+When a run time check fails, an error will be printed to console and the program execution halted. The printed message will explain the most likely cause of failure and common solutions. Since different systems have different requirements, hooks are provided to changed the behaviour when checks fail, and information is printed to console. For example, on an embedded system, the print hook can be used to power on an LED instead or print over a UART connection.
 
 Some of the run time checks will catch the following errors:
 
@@ -13,10 +15,6 @@ Some of the run time checks will catch the following errors:
 * Failing to implement an inherited interface or pure virtual method
 
 More information on this will be provided later.
-
-##A Note on Coding Style
-
-I prefer not to typedef structs, so I will follow that style through this README. It is entirely up to the developer and not required by CObject to do this.
 
 ##A Simple Class
 
@@ -61,4 +59,6 @@ void Point_Draw( struct Point* self );
 #endif /* POINT_H_
 ```
 
-First, and most important rule, **the first structure member must be the super class**. In the case of Point, it super class is ```struct CObject```. 
+* First, and most important rule, **the first structure member must be the super class**. In the case of Point, it super class is ```struct CObject```. 
+* Next rule, all class methods have their **first argument as a pointer to the class they operate on**. In the case of the Point class, all methods have ```struct Point*``` as their first argument.
+* Finally, class constructors are just regular C functions. 
