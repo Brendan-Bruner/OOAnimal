@@ -37,7 +37,6 @@
  * 		Containers are data structures like queues and lists. This interface
  * 		defines an opaque way of interacting with concrete containers like
  * 		queues and lists.
- * 		added.
  * @attention
  * 		configUSE_CCONTAINER must be defined as 1 for this interface to
  * 		be included in the build. See ContainerConfig.h.
@@ -61,7 +60,6 @@ struct CContainer
 	#endif
 };
 
-#if (configCCONTAINER_ADD == 1)
 /**
  * @memberof CContainer
  * @brief
@@ -69,9 +67,6 @@ struct CContainer
  * @details
  * 		Adds an element to the container. See implementing classes
  * 		for details on where the element is added.
- * @attention
- * 		configCCONTAINER_ADD must be defined as 1 for this method
- * 		to be included in the interface. See ContainerConfig.h.
  * @param element[in]
  * 		The element to add to the container. The container will save
  * 		a copy of the pointer.
@@ -79,10 +74,10 @@ struct CContainer
  * 		<b>true</b> when the element is successfully added
  * 		and <b>false</b> otherwise.
  */
-extern Boolean CContainer_Add( self(CContainer), void* element );
-#endif
+extern Boolean CContainer_Add( struct CContainer*, void* element );
 
-#if (configCCONTAINER_ADD_ALL == 1) && (configCCONTAINER_ITERATOR == 1) && (configUSE_CITERATOR == 1)
+#if (configUSE_CITERATOR == 1)
+
 /**
  * @memberof CContainer
  * @brief
@@ -99,10 +94,8 @@ extern Boolean CContainer_Add( self(CContainer), void* element );
  * @returns
  * 		The number of elements actually copied.
  */
-extern size_t CContainer_AddAll( self(CContainer), CContainer* container );
-#endif
+extern size_t CContainer_AddAll( struct CContainer*, struct CContainer* container );
 
-#if (configCCONTAINER_ITERATOR == 1) && (configUSE_CITERATOR == 1)
 /**
  * @memberof CContainer
  * @brief
@@ -119,10 +112,12 @@ extern size_t CContainer_AddAll( self(CContainer), CContainer* container );
  * 		A pointer to an iterator for the container. Returns <b>NULL</b>
  * 		if there is a failure to allocate the iterator.
  */
-extern CIterator* CContainer_GetIterator( self(CContainer) );
-#endif
+extern struct CIterator* CContainer_GetIterator( struct CContainer* );
 
-#if (configCCONTAINER_SIZE == 1)
+#endif /* configUSE_CITERATOR */
+
+#if (configCCONTAINER_EXTRA == 1)
+
 /**
  * @memberof CContainer
  * @brief
@@ -135,10 +130,8 @@ extern CIterator* CContainer_GetIterator( self(CContainer) );
  * @returns
  * 		The number of elements in the container.
  */
-extern size_t CContainer_Size( self(CContainer) );
-#endif
+extern size_t CContainer_Size( struct CContainer* );
 
-#if (configCCONTAINER_RESET == 1 )
 /**
  * @memberof CContainer
  * @brief
@@ -151,27 +144,8 @@ extern size_t CContainer_Size( self(CContainer) );
  * 		configCCONTAINER_RESET must be defined as for this
  * 		method to be included. See ContainerConfig.h.
  */
-extern void CContainer_Reset( self(CContainer) );
-#endif
+extern void CContainer_Reset( struct CContainer* );
 
-#if (configCCONTAINER_IS_EMPTY == 1)
-/**
- * @memberof CContainer
- * @brief
- * 		Query if the container is empty.
- * @details
- * 		Query if the container is empty.
- * @attention
- * 		configCCONTAINER_IS_EMPTY must be defined as 1 for this
- * 		method to be included. See ContainerConfig.h.
- * @returns
- * 		<b>true</b> when the container is emtpy, <b>false</b>
- * 		if the container has one or more elements in it.
- */
-extern Boolean CContainer_IsEmpty( self(CContainer) );
-#endif
-
-#if (configCCONTAINER_ADD_CAPACITY == 1)
 /**
  * @memberof CContainer
  * @brief
@@ -201,9 +175,8 @@ extern Boolean CContainer_IsEmpty( self(CContainer) );
  * @returns
  * 		The amount of capcity actually added.
  */
-extern size_t CContainer_AddCapacity( self(CContainer), size_t );
-#endif
+extern size_t CContainer_AddCapacity( struct CContainer*, size_t );
 
-#endif
-
+#endif /* configCCONTAINER_EXTRA */
+#endif /* configUSE_CCONTAINER */
 #endif /* UTIL_CONTAINER_CONTAINER_H_ */

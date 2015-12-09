@@ -16,12 +16,12 @@
  * bbruner@ualberta.ca
  * Oct 23, 2015
  */
-#ifndef INCLUDE_ITERATOR_ITERATOR_H_
-#define INCLUDE_ITERATOR_ITERATOR_H_
+#ifndef UTIL_CONTAINER_ITERATOR_ITERATOR_H_
+#define UTIL_CONTAINER_ITERATOR_ITERATOR_H_
 
 #include "../../ContainerConfig.h"
 
-#if (configUSE_COTITERATOR == 1 )
+#if (configUSE_CITERATOR == 1 )
 #include <Class.h>
 #include <Boolean.h>
 /**
@@ -31,34 +31,32 @@
  * @details
  * 		Defines an interface to iterate something. For example:
  * 		@code
- * 		void printContainerElements( Container* container )
+ * 		void printContainerElements( struct CContainer* container )
  * 		{
- * 			COTIterator* iter = COTContainer_Iterator( container );
- *				while( COTIterator_HasNext( iter ) )
+ * 			struct CIterator* iter = CContainer_GetIterator(container);
+ *				while( CIterator_HasNext(iter) )
  *				{
- *					printf( "element = %p\n", COTIterator_Next(iter) );
+ *					printf("element = %p\n", CIterator_Next(iter));
  *				}
  * 		}
  * 		@endcode
  * 		The above function takes a container pointer and prints the addresses
  * 		of all elements in the container.
  * @attention
- * 		Requires configUSE_COTITERATOR is defined as 1 for this interface
+ * 		Requires configUSE_CITERATOR is defined as 1 for this interface
  * 		to be included in the build. See ContainerConfig.h.
  */
-#define COTIteratorCast( object ) COTCast(COTIterator, (object) )
-COTInterface( COTIterator )
-	COTVirtual
-	(
-#if (configCOTITERATOR_RESET == 1)
-		void (*reset)( self(COTIterator) );
-	#endif
-	Boolean (*hasNext)( self(COTIterator) );
-	void* (*next)( self(COTIterator) );
-	)
-COTInterfaceEnd
+struct CIterator
+{
+	/* Super interface.*/
+	struct CInterface super;
 
-#if (configCOTITERATOR_RESET == 1)
+	/* virtual methods. */
+	void (*CIteratorVirtual_Reset)( struct CIterator* );
+	Boolean (*CIteratorVirtual_HasNext)( struct CIterator* );
+	void* (*CIteratorVirtual_Next)( struct CIterator* );
+};
+
 /**
  * @memberof COTIterator
  * @brief
@@ -71,8 +69,8 @@ COTInterfaceEnd
  * 		configCOTITERATOR_RESET must be defined as 1 for this method to be
  * 		included in the build.
  */
-extern void COTIterator_Reset( self(COTIterator) );
-#endif
+extern void CIterator_Reset( struct CIterator* );
+
 /**
  * @memberof COTIterator
  * @brief
@@ -86,7 +84,7 @@ extern void COTIterator_Reset( self(COTIterator) );
  * 		<b>false</b> when the iterator is empty. COTIterator_Next( )
  * 		will return <b>NULL</b> if this method returns <b>false</b>.
  */
-extern Boolean COTIterator_HasNext( self(COTIterator) );
+extern Boolean CIterator_HasNext( struct CIterator* );
 
 /**
  * @memberof COTIterator
@@ -102,23 +100,23 @@ extern Boolean COTIterator_HasNext( self(COTIterator) );
  * 		<b>true</b> then this method will never return <b>NULL</b>.
  * 		For example:
  * 		@code
- * 		extern COTIterator* someIter;
- * 		if( COTIterator_HasNext( someIter ) )
+ * 		extern CIterator* someIter;
+ * 		if( CIterator_HasNext( someIter ) )
  * 		{
  * 			// Will never return NULL.
- * 			COTIterator_Next( someIter );
+ * 			CIterator_Next( someIter );
  *
  * 			// May or may not return NULL. Can check return value or
- * 			// call COTIterator_HasNext( ) again to check.
- * 			COTIterator_Next( someIter );
+ * 			// call CIterator_HasNext( ) again to check.
+ * 			CIterator_Next( someIter );
  * 		}
  * 		@endcode
  * @returns
- * 		The next element in the IteratorI, or <b>NULL</b> if there are
+ * 		The next element in the iterator, or <b>NULL</b> if there are
  * 		no more elements.
  */
-extern void* COTIterator_Next( self(COTIterator) );
+extern void* CIterator_Next( struct CIterator* );
 
-#endif
+#endif /* configUSE_CITERATOR */
 
 #endif /* INCLUDE_ITERATOR_H_ */

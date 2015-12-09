@@ -22,51 +22,42 @@
 /****************************************************************************/
 /* Interface Methods														*/
 /****************************************************************************/
-#if (configCOTCONTAINER_ADD == 1)
-Boolean COTContainer_Add( self(COTContainer), void* element )
+Boolean CContainer_Add( struct CContainer* self, void* element )
 {
-	COTCallVirtual( COTContainer, COTContainerVirtual_Add )( self, element );
+	CAssertVirtual(CContainerVirtual_Add);
+	return self->CContainerVirtual_Add(self, element);
+}
+
+#if (configUSE_CITERATOR == 1)
+size_t CContainer_AddAll( struct CContainer* self, struct CContainer* container )
+{
+	CAssertVirtual(CContainerVirtual_AddAll);
+	return self->CContainerVirtual_AddAll(self, container);
+}
+
+struct CIterator* CContainer_GetIterator( struct CContainer* self )
+{
+	CAssertVirtual(CContainerVirtual_GetIterator);
+	return self->CContainerVirtual_GetIterator(self);
 }
 #endif
 
-#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-size_t COTContainer_AddAll( self(COTContainer), COTContainer* container )
+#if (configCCONTAINER_EXTRA == 1)
+size_t CContainer_Size( struct CContainer* self )
 {
-	COTCallVirtual( COTContainer, COTContainerVirtual_AddAll )( self, container );
+	CAssertVirtual(CContainerVirtual_Size);
+	return self->CContainerVirtual_Size(self);
 }
-#endif
 
-#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-COTIterator* COTContainer_GetIterator( self(COTContainer) )
+void CContainer_Reset( struct CContainer* self )
 {
-	COTCallVirtual( COTContainer, COTContainerVirtual_GetIterator )( self );
+	CAssertVirtual(CContainerVirtual_Reset);
+	self->CContainerVirtual_Reset(self);
 }
-#endif
 
-#if (configCOTCONTAINER_SIZE == 1)
-size_t COTContainer_Size( self(COTContainer) )
+size_t CContainer_AddCapacity( struct CContainer* self, size_t capacity )
 {
-	COTCallVirtual( COTContainer, COTContainerVirtual_Size )( self );
+	CAssertVirtual(CContainer_AddCapacity)
+	return self->CContainerVirtual_AddCapacity(self, capacity);
 }
-#endif
-
-#if (configCOTCONTAINER_RESET == 1 )
-void COTContainer_Reset( self(COTContainer) )
-{
-	COTCallVirtual( COTContainer, COTContainerVirtual_Reset )( self );
-}
-#endif
-
-#if (configCOTCONTAINER_IS_EMPTY == 1)
-Boolean COTContainer_IsEmpty( self(COTContainer) )
-{
-	COTCallVirtual( COTContainer, COTContainerVirtual_IsEmpty )( self );
-}
-#endif
-
-#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-size_t COTContainer_AddCapacity( self(COTContainer), size_t capacity )
-{
-	COTCallVirtual( COTContainer, COTContainerVirtual_AddCapacity )( self, capacity );
-}
-#endif
+#endif /* configCCONTAINER_EXTRA */

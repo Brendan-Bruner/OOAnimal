@@ -16,77 +16,71 @@
  * bbruner@ualberta.ca
  * Oct 23, 2015
  */
-#ifndef INCLUDE_QUEUE_QUEUE_H_
-#define INCLUDE_QUEUE_QUEUE_H_
+#ifndef UTIL_CONTAINER_QUEUE_QUEUE_H_
+#define UTIL_CONTAINER_QUEUE_QUEUE_H_
 
 #include "../../ContainerConfig.h"
 
-#if (configUSE_COTQUEUE == 1)
+#if (configUSE_CQUEUE == 1)
 
 #include <Class.h>
 #include <Boolean.h>
 
-#if (configUSE_COTCONTAINER == 1)
+#if (configUSE_CCONTAINER == 1)
 #include <Container/Container.h>
 /**
- * @struct COTQueue
- * @extends COTContainer
+ * @struct CQueue
+ * @implements CContainer
  */
 #endif
 /**
- * @struct COTQueue
+ * @struct CQueue
+ * @extends CObject
  * @brief
  * 		Abstract class for all FIFO containers.
  * @details
  * 		Abstract class for all FIFO like containers.
  * 		Defines an insert, remove, and peek operation. It uses
- * 		the Container interface if configUSE_COTCONTAINER is set to 1.
+ * 		the Container interface if configUSE_CCONTAINER is set to 1.
  *
- *		<b>Implemented, from COTContainer</b>
+ *		<b>Implemented, from CContainer</b>
  *		<ul>
- *		<li>COTContainer_Add( )</li>
- *		<li>COTContainer_AddAll( )</li>
+ *		<li>CContainer_Add( )</li>
+ *		<li>CContainer_AddAll( )</li>
+ *		</ul>
+ *
+ *		<b>Pure Virtual Methods</b>
+ *		<ul>
+ *		<li>CQueue_Insert( )</li>
+ *		<li>CQueue_Remove( )</li>
+ *		<li>CQueue_Peek( )</li>
+ *		<li>CQueue_Size( )</li>
  *		</ul>
  * @attention
- * 		configUSE_COTQUEUE must be defined as 1 for this class to be included.
+ * 		configUSE_CQUEUE must be defined as 1 for this class to be included.
  *		See ContainerConfig.h.
  */
-COTClass( COTQueue )
-#if (configUSE_COTCONTAINER == 1)
-COTImplements( COTContainer )
-#endif
-	COTVirtual
-	(
-		Boolean (*COTQueueVirtual_Insert)( self(COTQueue), void* );
-		void* (*COTQueueVirtual_Remove)( self(COTQueue) );
-		#if (configCOTQUEUE_PEEK == 1)
-			void* (*COTQueueVirtual_Peek)( self(COTQueue) );
-		#endif
-		#if (configCOTQUEUE_SIZE == 1)
-			size_t (*COTQueueVirtual_Size)( self(COTQueue) );
-		#endif
-	)
-COTClassEnd
-
-typedef struct COTQueue
+struct CQueue
 {
-	COTClass( COTObject );
-	#if (configUSE_COTCONTAINER == 1)
-	COTInterface( COTContainer )
+	/* Super class. */
+	struct CObject super;
+
+	/* Interfaces. */
+	#if (configUSE_CCONTAINER == 1)
+	struct CContainer container;
 	#endif
 
-	Boolean (*COTQueueVirtual_Insert)( self(COTQueue), void* );
-	void* (*COTQueueVirtual_Remove)( self(COTQueue) );
-	#if (configCOTQUEUE_PEEK == 1)
-	void* (*COTQueueVirtual_Peek)( self(COTQueue) );
+	/* Virtual Methods. */
+	Boolean (*CQueueVirtual_Insert)( struct CQueue*, void* );
+	void* (*CQueueVirtual_Remove)( struct CQueue* );
+	void* (*CQueueVirtual_Peek)( struct CQueue* );
+	#if (configCQUEUE_SIZE == 1)
+	size_t (*CQueueVirtual_Size)( struct CQueue* );
 	#endif
-	#if (configCOTQUEUE_SIZE == 1)
-	size_t (*COTQueueVirtual_Size)( self(COTQueue) );
-	#endif
-} COTQueue;
+};
 
 /**
- * @memberof COTQueue
+ * @memberof CQueue
  * @brief
  *		Insert an element into the queue.
  * @details
@@ -98,10 +92,10 @@ typedef struct COTQueue
  *		<b>true</b> when the element is successfully added to the
  *		queue, <b>false</b> otherwise. 
  */
-Boolean COTQueue_Insert( self(COTQueue), void* element );
+Boolean CQueue_Insert( struct CQueue*, void* element );
 
 /**
- * @memberof COTQueue
+ * @memberof CQueue
  * @brief
  *		Remove an element from the tail of the queue.
  * @details
@@ -110,28 +104,26 @@ Boolean COTQueue_Insert( self(COTQueue), void* element );
  *		The element removed from the tail of the queue. <b>NULL</b> if
  *		the queue is empty.
  */
-void* COTQueue_Remove( self(COTQueue) );
+void* CQueue_Remove( struct CQueue* );
 
-#if (configCOTQUEUE_PEEK == 1)
 /**
- * @memberof COTQueue
+ * @memberof CQueue
  * @brief
  * 		Peek at the element in the tail of the queue.
  * @details
  *		Peek at the element in the tail of the queue. This does not
  *		remove the element from the queue.
  * @attention
- *		configCOTQUEUE_PEEK must be defined as one for this method to be
+ *		configCQUEUE_PEEK must be defined as one for this method to be
  *		included in the build. See ContainerConfig.h.
  * @returns
  *		The element in the tail of the queue. <b>NULL</b> if the queue is empty.
  */
-void* COTQueue_Peek( self(COTQueue) );
-#endif /* configCOTQUEUE_PEEK */
+void* CQueue_Peek( struct CQueue* );
 
-#if (configCOTQUEUE_SIZE == 1)
+#if (configCQUEUE_SIZE == 1)
 /**
- * @memberof COTQueue
+ * @memberof CQueue
  * @brief
  * 		Get the current size of the queue.
  * @details
@@ -140,19 +132,18 @@ void* COTQueue_Peek( self(COTQueue) );
  * @returns
  *		The actual size of the queue.
  */
-size_t COTQueue_Size( self(COTQueue) );
-#endif /* configCOTQUEUE_SIZE */
+size_t CQueue_Size( struct CQueue* );
+#endif /* configCQUEUE_SIZE */
 
 /**
- * @memberof COTQueue
+ * @memberof CQueue
  * @protected
  * @brief
  *		<b>Constructor.</b>
  * @details
  *		<b>Constructor.</b>
  */
-void COTQueueCreate_( self(COTQueue) );
+struct CQueue* CQueue_( struct CQueue* );
 
-
-#endif /* configUSE_COTQUEUE */
-#endif /* INCLUDE_QUEUE_QUEUE_H_ */
+#endif /* configUSE_CQUEUE */
+#endif /* UTIL_CONTAINER_QUEUE_QUEUE_H_ */

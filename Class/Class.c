@@ -55,7 +55,7 @@ void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, i
 
 void* CVirtualMethod_( void* self, const char* file, int line )
 {
-	C_ASSERT_INTERFACE( ((struct CRoot*) self)->C_ROOT, file, line );
+	C_ASSERT_CAST( ((struct CRoot*) self)->C_ROOT, file, line );
 	return ((struct CRoot*) self)->C_ROOT;	
 }
 

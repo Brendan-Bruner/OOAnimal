@@ -20,7 +20,7 @@
 #define INCLUDE_TRAITS_TLIST_H_
 
 #include <Class.h>
-
+/*
 Interface( TList )
 	Boolean (*insert)( self(TList), void*, uint32_t );
 	Boolean (*add)( self(TList), void* );
@@ -33,7 +33,7 @@ Interface( TList )
 	Boolean (*isEmpty)( self(TList ) );
 	Boolean (*isFull)( self(TList) );
 EndInterface;
-
+*/
 /**
  * @struct TList
  * @brief

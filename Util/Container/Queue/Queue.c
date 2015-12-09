@@ -98,46 +98,17 @@ size_t COTQueue_Size( self(COTQueue) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
-void COTQueueCreate_( self(COTQueue) )
+struct CQueue* CQueue_( struct CQueue* self )
 {
-	COTConstructorOf(COTQueue);
+	CConstructor( );
+	CObject((struct CObject*) self);
+	CInterface(&self->container);
 
-	/* Create the interfaces used by this class. */
-	COTCreateInterface(COTContainer);
-
-	/* Link all virtual methods. */
-	/* Methods gained from COTContainer interface. */
-	#if (configUSE_COTCONTAINER == 1)
-	#if (configCOTCONTAINER_ADD == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Add);
+	/* Link all implemented methods. */
+	#if (configUSE_CCONTAINER == 1)
+	CLinkVirtual(&self->container, CContainerVirtual_Add);
+	#if (configUSE_CITERATOR == 1)
+	CLinkVirtual(&self->container, CContainerVirtual_AddAll);
 	#endif
-	#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1)	&& (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_AddAll);
-	#endif
-	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_GetIterator);
-	#endif
-	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_Size);
-	#endif
-	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_Reset);
-	#endif
-	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_IsEmpty);
-	#endif
-	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkAbstract(COTQueue, COTContainer, COTContainerVirtual_AddCapacity);
-	#endif
-	#endif /* configUSE_COTCONTAINER */	
-
-	/* COTQueue virtual methods. */
-	COTLinkAbstract(COTQueue, COTQueueVirtual_Insert);
-	COTLinkAbstract(COTQueue, COTQueueVirtual_Remove);
-	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkAbstract(COTQueue, COTQueueVirtual_Peek);
-	#endif
-	#if (configCOTQUEUE_SIZE == 1)
-	COTLinkAbstract(COTQueue, COTQueueVirtual_Size);
-	#endif
+	#endif /* configUSE_CCONTAINER */	
 }

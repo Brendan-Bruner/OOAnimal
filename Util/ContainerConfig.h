@@ -82,17 +82,11 @@
   * otherwise, it has no effect.
   * Setting this to (1) will include a size method with the queue class.
   * Note, if using CContainer and using the extra, this method is redundent.
-  * By default, it is only set to (1) when CContainer_Size( self ): size_t
-  * is excluded from the build.
   * (0) Does not include method in build.
   * (1) Includes method in build.
   * CQueue_Size( self ): size_t.
   */
-#if (configUSE_CCONTAINER == 1 && configCCONTAINER_EXTRA == 1)
-#define configCQUEUE_SIZE			(0)
-#else
 #define configCQUEUE_SIZE			(1)
-#endif
 
  /*
  * (0) Does not include CLinkedQueue class in the build.

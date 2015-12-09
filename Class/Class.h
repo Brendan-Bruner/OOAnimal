@@ -129,22 +129,24 @@ extern const char* CAssertObjectMessage_;
 	CAssert( ((object)==NULL), CAssertObjectMessage_, __FILE__, __LINE__ )
 
 #if defined( C_MINIMAL_DEBUG )
-#define C_ASSERT_INTERFACE_MESSAGE NULL
+#define C_ASSERT_CAST_MESSAGE NULL
 #else
-#define C_ASSERT_INTERFACE_MESSAGE \
+#define C_ASSERT_CAST_MESSAGE \
 	"Class method called on NULL object. Possible causes:\n"\
 	"\t* If this error occurred in an interface method, then the\n"\
 	"\t* constructor did not call CInterface( ) to construct the\n"\
 	"\t  interface.\n"\
 	"\t* It this error occurred in an interface method. Say B extends\n"\
-	"\t  A and implements I. The error occurred in source file A for\n"\
+	"\t  A and A implements I. The error occurred in source file A for\n"\
 	"\t  a method defined in I, and the method was called on an instance\n"\
 	"\t  of B. Then, B's constructor did not call it's super constructor,\n"\
-	"\t  ie, A's constructor.\n"
+	"\t  ie, A's constructor.\n"\
+	"\t* If this error occured in a class method, then the constructor for\n"\
+	"\t  that class did not call CConstructor( ) as the FIRST thing it does\n"
 #endif
-extern const char* CAssertInterfaceMessage_;
-#define C_ASSERT_INTERFACE( object, file, line )\
-	CAssert( (object) == NULL, CAssertInterfaceMessage_, file, line )
+extern const char* CAssertCastMessage_;
+#define C_ASSERT_CAST( object, file, line )\
+	CAssert( (object) == NULL, CAssertCastMessage_, file, line )
 
 
 /****************************************************************************/

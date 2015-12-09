@@ -22,19 +22,20 @@
 /****************************************************************************/
 /* Interface Methods														*/
 /****************************************************************************/
-#if (configCOTITERATOR_RESET == 1)
-void COTIterator_Reset( self(COTIterator) )
+void CIterator_Reset( struct CIterator* self )
 {
-	COTCallVirtual( COTIterator, reset )( self );
-}
-#endif
-
-Boolean COTIterator_HasNext( self(COTIterator) )
-{
-	COTCallVirtual( COTIterator, hasNext )( self );
+	CAssertVirtual(CIteratorVirtual_Reset);
+	self->CIteratorVirtual_Reset(self);
 }
 
-void* COTIterator_Next( self(COTIterator) )
+Boolean CIterator_HasNext( struct CIterator* self )
 {
-	COTCallVirtual( COTIterator, next )( self );
+	CAssertVirtual(CIteratorVirtual_HasNext);
+	self->CIteratorVirtual_HasNext(self);
+}
+
+void* CIterator_Next( struct CIterator* self )
+{
+	CAssertVirtual(CIteratorVirtual_Next);
+	self->CIteratorVirtual_Next(self);
 }
