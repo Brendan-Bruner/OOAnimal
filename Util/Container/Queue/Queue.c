@@ -23,76 +23,72 @@
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
-#if (configUSE_COTCONTAINER == 1)
-#if (configCOTCONTAINER_ADD == 1)
-static Boolean COTContainerVirtual_Add( self(COTContainer), void* element )
+#if (configUSE_CCONTAINER == 1)
+static Boolean CContainerVirtual_Add( struct CContainer* self_, void* element )
 {
-	COTInterfaceOf(COTQueue);
-	return COTQueue_Insert( self, element );
+	struct CQueue* self = CCast(self_);
+
+	return CQueue_Insert( self, element );
 }
-#endif
 
-#if (configCOTCONTAINER_ADD_ALL == 1) && (configCOTCONTAINER_ITERATOR == 1) \
-	&& (configUSE_COTITERATOR == 1)
-static size_t COTContainerVirtual_AddAll( self(COTContainer), COTContainer* container )
+#if (configUSE_CITERATOR == 1)
+static size_t CContainerVirtual_AddAll( struct CContainer* self_, CContainer* container )
 {
-	COTInterfaceOf(COTQueue);
-	COT_ASSERT(container);
+	struct CQueue* self = CCast(self_);
+	CAssertObject(container);
 
-	COTIterator* 	iter;
-	size_t			count;
+	struct CIterator* 	iter;
+	size_t				count;
 
 	/* Get an iterator. */
-	iter = COTContainer_GetIterator( container );
+	iter = CContainer_GetIterator(container);
 	if( iter == NULL )
-	{
-		/* Failed to get an iterator. */
-		return 0;
-	}
+		return 0; /* Failed to get an iterator. */
 
 	/* Copy all the elements from the container into self. */
 	count = 0;
-	while( COTIterator_HasNext( iter ) )
+	while( CIterator_HasNext(iter) )
 	{
-		if( !COTQueue_Insert(self, COTIterator_Next(iter)) )
-		{
-			/* Failed to insert element into queue. */
-			break;
-		}
-		++count;
+		if( !CQueue_Insert(self, CIterator_Next(iter)) )
+			break; /* Failed to insert element into queue. */
+
+		/* Element successfully added. */
+		++count; /* Increment number of elements successfully added. */
 	}
 
 	/* Destroy the iterator. */
-	COTDestroy(COTIterator, iter);
+	CDestroy(iter);
 	return count;
 }
-#endif
 
-#endif /* configUSE_COTCONTAINER */
+#endif /* configUSE_CITERATOR */
+#endif /* configUSE_CCONTAINER */
 
-Boolean COTQueue_Insert( self(COTQueue), void* element )
+Boolean CQueue_Insert( struct CQueue* self, void* element )
 {
-	COTCallVirtual(COTQueue, COTQueueVirtual_Insert)( self, element );
+	CAssertVirtual(CQueueVirtual_Insert)
+	return self->CQueueVirtual_Insert(self, element);
 }
 
-void* COTQueue_Remove( self(COTQueue) )
+void* CQueue_Remove( struct CQueue* self )
 {
-	COTCallVirtual(COTQueue, COTQueueVirtual_Remove)( self );
+	CAssertVirtual(CQueueVirtual_Remove);
+	return self->CQueueVirtual_Remove(self);
 }
 
-#if (configCOTQUEUE_PEEK == 1)
-void* COTQueue_Peek( self(COTQueue) )
+void* CQueue_Peek( struct CQueue* self )
 {
-	COTCallVirtual(COTQueue, COTQueueVirtual_Peek)( self );
+	CAssertVirtual(CQueueVirtual_Peek);
+	return self->CQueueVirtual_Peek(self);
 }
-#endif
 
-#if (configCOTQUEUE_SIZE == 1)
-size_t COTQueue_Size( self(COTQueue) )
+#if (configCQUEUE_SIZE == 1)
+size_t CQueue_Size( struct CQueue* self )
 {
-	COTCallVirtual(COTQueue, COTQueueVirtual_Size)( self );
+	CAssertVirtual(CQueueVirtual_Size);
+	return self->CQueueVirtual_Size(self);
 }
-#endif /* configCOTQUEUE_SIZE */
+#endif /* configCQUEUE_SIZE */
 
 
 /****************************************************************************/
@@ -111,4 +107,6 @@ struct CQueue* CQueue_( struct CQueue* self )
 	CLinkVirtual(&self->container, CContainerVirtual_AddAll);
 	#endif
 	#endif /* configUSE_CCONTAINER */	
+
+	return self;
 }

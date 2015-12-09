@@ -121,8 +121,7 @@ extern const char* CAssertSuperMethodMessage_;
 #define C_ASSERT_OBJECT_MESSAGE NULL
 #else
 #define C_ASSERT_OBJECT_MESSAGE \
-	"Class method called on NULL object.\n"\
-	"For example, CDestroy( NULL ).\n"
+	"NULL pointer used as input\n"
 #endif
 extern const char* CAssertObjectMessage_;
 #define C_ASSERT_OBJECT( object )\
@@ -231,8 +230,9 @@ struct CInterface
 	C_ASSERT_OBJECT( C_OBJ_REF );			\
 	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
 
-/* Assert interface before calling virtual method. */
-#define CAssertInterface( )
+/* Helper macro for asserting pointers. */
+#define CAssertObject( object ) \
+	C_ASSERT_OBJECT( (object) )
 
 /* Asserts an object point in a non virtual method. */
 #define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
@@ -240,7 +240,7 @@ struct CInterface
 /* Cast object pointer to desired class. */
 struct CRoot{ void* C_ROOT; };
 extern void* CVirtualMethod_( void*, const char*, int );
-#define CVirtualMethod( self_ )\
+#define CCast( self_ )\
 	CVirtualMethod_( self_, __FILE__, __LINE__ )
 //	CVirtualMethod_( self_ )
 
