@@ -29,6 +29,7 @@ A class must have a header and source file. For example, take a class Point. Poi
 
 For now, lets treat move( ) and draw( ) as non virtual methods. The header file would look like this:
 
+**Point.h**
 ```C
 #ifndef POINT_H_
 #define POINT_H_
@@ -48,17 +49,30 @@ struct Point
 /* Constructor. */
 /* Note, struct name space is seperate from function name space. */
 /* It is valid to have 'struct Point' and function 'Point( )'. */
-void Point( struct Point* self );
+extern void Point( struct Point* self );
 
 /* move( ) method. */
-void Point_Move( struct Point* self, int x, int y );
+extern void Point_Move( struct Point* self, int x, int y );
 
 /* draw( ) method. */
-void Point_Draw( struct Point* self );
+extern void Point_Draw( struct Point* self );
 
 #endif /* POINT_H_
 ```
 
 * First, and most important rule, **the first structure member must be the super class**. In the case of Point, it super class is ```struct CObject```. 
 * Next rule, all class methods have their **first argument as a pointer to the class they operate on**. In the case of the Point class, all methods have ```struct Point*``` as their first argument.
-* Finally, class constructors are just regular C functions. 
+* Finally, class **constructors are just regular C functions**. 
+
+On to the source file:
+
+**Point.c**
+```C
+#include <Point.h>
+
+void Point( struct Point* self )
+{
+    /* Must call generic constructor as first operation in any class' constructor. */
+}
+
+```
