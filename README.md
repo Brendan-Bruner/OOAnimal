@@ -49,7 +49,7 @@ struct Point
 /* Constructor. */
 /* Note, struct name space is seperate from function name space. */
 /* It is valid to have 'struct Point' and function 'Point( )'. */
-extern void Point( struct Point* self );
+extern void Point( struct Point* self, int x, int y );
 
 /* move( ) method. */
 extern void Point_Move( struct Point* self, int x, int y );
@@ -69,10 +69,39 @@ On to the source file:
 **Point.c**
 ```C
 #include <Point.h>
+#include <stdio.h>
 
-void Point( struct Point* self )
+/* Constructor. */
+void Point( struct Point* self, int x, int y )
 {
     /* Must call generic constructor as first operation in any class' constructor. */
+    CConstructor(self);
+    
+    /* Must call super classes constructor next. */
+    CObject((struct CObject*) self);
+    
+    /* Set up member data. */
+    self->x = x;
+    self->y = y;
+}
+
+/* Point_Move( ). */
+void Point_Move( struct Point* self, int x, int y )
+{
+    /* Must call this as first thing in any non virtual method. */
+    CMethod(self);
+    
+    self->x = x;
+    self->y = y;
+}
+
+/* Point_Draw( ). */
+void Point_Draw( struct Point* self )
+{
+    /* Must call this as first thing in any non virtual method. */
+    CMethod(self);
+    
+    printf( "point at (%d,%d)\n", self->x, self->y );
 }
 
 ```
