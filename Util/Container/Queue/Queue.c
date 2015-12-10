@@ -66,26 +66,26 @@ static size_t CContainerVirtual_AddAll( struct CContainer* self_, CContainer* co
 
 Boolean CQueue_Insert( struct CQueue* self, void* element )
 {
-	CAssertVirtual(CQueueVirtual_Insert)
+	CAssertVirtual(self, CQueueVirtual_Insert)
 	return self->CQueueVirtual_Insert(self, element);
 }
 
 void* CQueue_Remove( struct CQueue* self )
 {
-	CAssertVirtual(CQueueVirtual_Remove);
+	CAssertVirtual(self, CQueueVirtual_Remove);
 	return self->CQueueVirtual_Remove(self);
 }
 
 void* CQueue_Peek( struct CQueue* self )
 {
-	CAssertVirtual(CQueueVirtual_Peek);
+	CAssertVirtual(self, CQueueVirtual_Peek);
 	return self->CQueueVirtual_Peek(self);
 }
 
 #if (configCQUEUE_SIZE == 1)
 size_t CQueue_Size( struct CQueue* self )
 {
-	CAssertVirtual(CQueueVirtual_Size);
+	CAssertVirtual(self, CQueueVirtual_Size);
 	return self->CQueueVirtual_Size(self);
 }
 #endif /* configCQUEUE_SIZE */
@@ -96,7 +96,7 @@ size_t CQueue_Size( struct CQueue* self )
 /****************************************************************************/
 struct CQueue* CQueue_( struct CQueue* self )
 {
-	CConstructor( );
+	CConstructor(self);
 	CObject((struct CObject*) self);
 	CInterface(&self->container);
 

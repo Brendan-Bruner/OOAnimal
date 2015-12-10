@@ -17,19 +17,19 @@
  * Nov. 2015
  */
 
-#ifndef INCLUDE_QUEUE_LINKED_QUEUE_H_
-#define INCLUDE_QUEUE_LINKED_QUEUE_H_
+#ifndef UTIL_CONTAINER_QUEUE_LINKEDQUEUE_H_
+#define UTIL_CONTAINER_QUEUE_LINKEDQUEUE_H_
 
 #include "../../ContainerConfig.h"
 
-#if (configUSE_COTLINKEDQUEUE == 1)
+#if (configUSE_CLINKEDQUEUE == 1)
 #include "Queue.h"
-#include <Container/LinkedListNode/LinkedListNode.h>
+#include <Container/LinkedNode/LinkedNode.h>
 #include <Memory/Allocator.h>
 
 /**
- * @struct COTLinkedQueue
- * @extends COTQueue
+ * @struct CLinkedQueue
+ * @extends CQueue
  * @brief
  *		Implements a queue backed by a linked list.
  * @details
@@ -37,15 +37,7 @@
  *
  *		<b>Memory Usage</b>
  *		<ul>
- *		<li>RAM footprint:<br><b>x * sizeof(void*) + sizeof(size_t) + sizeof(char)</b></li>
- *		<li>x changes depending on how many functions are included (ie, like COTContainer_Add( ), COTQueue_Peek( ),
- *			etc.) As a minimum, <b>x = 8</b> plus 1 for each optional function included and plus an additional
- *			2 if the COTContainer is included in the build. This gives a max
- *			x of <b>x = 17</b>.</li>
- *		<li>On a 32 bit system, this gives <b>37 <= total bytes <= 73</b>.</li>
- *		<li>A queue which can buffer a maximum of 1 element requires an additional 3*sizeof(void*) bytes.</li>
- *		<li>A queue which can buffer a maximum of 13 elements requires an additional 13*3*sizeof(void*) bytes. </li>
- *		<li>On a 32 bit system, this gives <b>12*max_size + 37 <= total bytes <= 12*max_size + 73</b>.</li>
+ *		<li>RAM footprint:</li>
  *		</ul>
  *
  *		<b>Execution Time</b>
@@ -57,47 +49,49 @@
  *		<li>Capacity Increase: O(n), where n = increase in size</li>
  *		</ul>
  *
- *		<b>Implemented, from COTContainer</b>
+ *		<b>Implemented, from CContainer</b>
  *		<ul>
- *		<li>COTContainer_GetIterator( )</li>
- *		<li>COTContainer_Size( )</li>
- *		<li>COTContainer_Reset( )</li>
- *		<li>COTContainer_IsEmpty( )</li>
- *		<li>COTContainer_AddCapacity( )</li>
+ *		<li>CContainer_GetIterator( )</li>
+ *		<li>CContainer_Size( )</li>
+ *		<li>CContainer_Reset( )</li>
+ *		<li>CContainer_AddCapacity( )</li>
  *		</ul>
  *
- *		<b>Implemented, from COTQueue</b>
+ *		<b>Implemented, from CQueue</b>
  *		<ul>
- *		<li>COTQueue_Insert( )</li>
- *		<li>COTQueue_Remove( )</li>
- *		<li>COTQueue_Peek( )</li>
- *		<li>COTQueue_Size( )</li>
+ *		<li>CQueue_Insert( )</li>
+ *		<li>CQueue_Remove( )</li>
+ *		<li>CQueue_Peek( )</li>
+ *		<li>CQueue_Size( )</li>
  *		</ul>
  * @attention
- *		configUSE_COTLINKEDQUEUE must be defined as 1 for inclusion in the build. See ContainerConfig.h.
+ *		configUSE_CLINKEDQUEUE must be defined as 1 for inclusion in the build. See ContainerConfig.h.
  */
-COTClass(COTLinkedQueue, COTQueue)
-	COTOverride
-	(
-		COTDestructor( );
-	)
-	struct
-	{
-		CLinkedNode* 	head;
-		CLinkedNode* 	tail;
-		CLinkedNode*	endOfLinks;
-		size_t 				size;
-		COTAllocator*		allocator;
-	}_; /* Hide private data in this struct. */
-COTClassEnd
+struct CLinkedQueue
+{
+	/* Super class. */
+	struct CQueue super;
+
+	/* Overriding these methods: */
+	void (*CDestructor)( struct CObject* );
+
+	/* Member data. */
+	struct CLinkedNode* 	head;
+	struct CLinkedNode* 	tail;
+	struct CLinkedNode*		endOfLinks;
+	size_t 					size;
+	struct CAllocator*		allocator;
+
+};
 
 /**
- * @memberof COTLinkedQueue
+ * @memberof CLinkedQueue
  * @brief
  *		<b>Constructor</b>.
  * @details
- *		<b>Constructor</b>. The COTLinkedQueue object is constructed to
- *		use dynamic memory allocation, ie, COTMalloc( ) and COTFree( ).
+ *		<b>Constructor</b>.
+ *		The CLinkedQueue object is constructed to
+ *		use dynamic memory allocation, ie, CMalloc( ) and CFree( ).
  * @param initSize
  *		The initial size of the queue. This is the initial number of elements
  *		the queue can hold before having to allocate more space.
@@ -106,8 +100,7 @@ COTClassEnd
  *		elements were actually allocated. This must point to valid memory
  *		when the constructor is called. 
  */
-void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize );
+struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue*, size_t initSize, CAllocator* allocator );
 
-#endif /* configUSE_COTLINKEDQUEUE */
-
-#endif /* INCLUDE_QUEUE_LINKED_QUEUE_H_ */
+#endif /* configUSE_CLINKEDQUEUE */
+#endif /* UTIL_CONTAINER_QUEUE_LINKEDQUEUE_H_ */

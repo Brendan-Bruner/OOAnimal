@@ -24,20 +24,20 @@
 /****************************************************************************/
 Boolean CContainer_Add( struct CContainer* self, void* element )
 {
-	CAssertVirtual(CContainerVirtual_Add);
+	CAssertVirtual(self, CContainerVirtual_Add);
 	return self->CContainerVirtual_Add(self, element);
 }
 
 #if (configUSE_CITERATOR == 1)
 size_t CContainer_AddAll( struct CContainer* self, struct CContainer* container )
 {
-	CAssertVirtual(CContainerVirtual_AddAll);
+	CAssertVirtual(self, CContainerVirtual_AddAll);
 	return self->CContainerVirtual_AddAll(self, container);
 }
 
 struct CIterator* CContainer_GetIterator( struct CContainer* self )
 {
-	CAssertVirtual(CContainerVirtual_GetIterator);
+	CAssertVirtual(self, CContainerVirtual_GetIterator);
 	return self->CContainerVirtual_GetIterator(self);
 }
 #endif
@@ -45,19 +45,19 @@ struct CIterator* CContainer_GetIterator( struct CContainer* self )
 #if (configCCONTAINER_EXTRA == 1)
 size_t CContainer_Size( struct CContainer* self )
 {
-	CAssertVirtual(CContainerVirtual_Size);
+	CAssertVirtual(self, CContainerVirtual_Size);
 	return self->CContainerVirtual_Size(self);
 }
 
 void CContainer_Reset( struct CContainer* self )
 {
-	CAssertVirtual(CContainerVirtual_Reset);
+	CAssertVirtual(self, CContainerVirtual_Reset);
 	self->CContainerVirtual_Reset(self);
 }
 
 size_t CContainer_AddCapacity( struct CContainer* self, size_t capacity )
 {
-	CAssertVirtual(CContainer_AddCapacity)
+	CAssertVirtual(self, CContainer_AddCapacity)
 	return self->CContainerVirtual_AddCapacity(self, capacity);
 }
 #endif /* configCCONTAINER_EXTRA */

@@ -185,11 +185,11 @@ struct CInterface
 /****************************************************************************/
 /* Constructor specific setup												*/
 /****************************************************************************/
-#define CConstructor( )							\
+#define CConstructor( self )					\
 	do {										\
-		C_ASSERT_OBJECT( C_OBJ_REF );			\
-		C_INIT_OBJECT( C_OBJ_REF );				\
-		((struct CObject*) C_OBJ_REF)->C_ROOT = C_OBJ_REF;\
+		C_ASSERT_OBJECT( self );				\
+		C_INIT_OBJECT( self );					\
+		((struct CObject*) self)->C_ROOT = self;\
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
@@ -211,10 +211,10 @@ struct CInterface
 /* Helper macro for overriding virtual methods. Unlike overwriting, a */
 /* reference to the super's method is retained. */
 /* Expects a variable C_OBJ_REF is defined. */
-#define COverrideVirtual( self, method ) 		\
+#define COverrideVirtual( self, super, method ) \
 	do {										\
-		C_OBJ_REF-> method = (self)-> method; 	\
-		(self)-> method = method;				\
+		self-> method = (super)-> method; 		\
+		(super)-> method = method;				\
 	} while( 0 )
 
 
@@ -222,20 +222,20 @@ struct CInterface
 /* Helper macros for asserting and defining class methods					*/
 /****************************************************************************/
 /* Assert a super class method before calling it. */
-#define CAssertSuper( method ) \
-	C_ASSERT_SUPER_METHOD( C_OBJ_REF-> method, #method ); \
+#define CAssertSuper( self, method ) \
+	C_ASSERT_SUPER_METHOD( self->method, #method ); \
 
 /* Asserts virtual method before calling it. */
-#define CAssertVirtual( name )				\
-	C_ASSERT_OBJECT( C_OBJ_REF );			\
-	C_ASSERT_VIRTUAL( C_OBJ_REF-> name, #name ); 	\
+#define CAssertVirtual( self, name )				\
+	C_ASSERT_OBJECT( self );			\
+	C_ASSERT_VIRTUAL( self-> name, #name ); 	\
 
 /* Helper macro for asserting pointers. */
 #define CAssertObject( object ) \
 	C_ASSERT_OBJECT( (object) )
 
 /* Asserts an object point in a non virtual method. */
-#define CMethod( ) C_ASSERT_OBJECT( C_OBJ_REF )
+#define CMethod( self ) C_ASSERT_OBJECT( self )
 
 /* Cast object pointer to desired class. */
 struct CRoot{ void* C_ROOT; };
