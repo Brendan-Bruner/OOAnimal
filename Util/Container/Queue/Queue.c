@@ -97,7 +97,7 @@ size_t CQueue_Size( struct CQueue* self )
 struct CQueue* CQueue_( struct CQueue* self )
 {
 	CConstructor(self);
-	CObject((struct CObject*) self);
+	CObject(&self->object);
 	CInterface(&self->container);
 
 	/* Link all implemented methods. */

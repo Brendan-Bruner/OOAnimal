@@ -22,7 +22,7 @@
 
 #include "../../ContainerConfig.h"
 
-#if (configUSE_CLINKEDQUEUE == 1)
+#if (configUSE_CLINKEDQUEUE == 1 && configUSE_CQUEUE == 1)
 #include "Queue.h"
 #include <Container/LinkedNode/LinkedNode.h>
 #include <Memory/Allocator.h>
@@ -64,13 +64,18 @@
  *		<li>CQueue_Peek( )</li>
  *		<li>CQueue_Size( )</li>
  *		</ul>
+ *
+ *		<b>Overriden, from CObject</b>
+ *		<ul>
+ *		<li>CDestructor( )</li>
+ *		</ul>
  * @attention
  *		configUSE_CLINKEDQUEUE must be defined as 1 for inclusion in the build. See ContainerConfig.h.
  */
 struct CLinkedQueue
 {
 	/* Super class. */
-	struct CQueue super;
+	struct CQueue queue;
 
 	/* Overriding these methods: */
 	void (*CDestructor)( struct CObject* );
@@ -80,8 +85,7 @@ struct CLinkedQueue
 	struct CLinkedNode* 	tail;
 	struct CLinkedNode*		endOfLinks;
 	size_t 					size;
-	struct CAllocator*		allocator;
-
+	Boolean					usingDynamicNodes;
 };
 
 /**
@@ -91,16 +95,38 @@ struct CLinkedQueue
  * @details
  *		<b>Constructor</b>.
  *		The CLinkedQueue object is constructed to
- *		use dynamic memory allocation, ie, CMalloc( ) and CFree( ).
- * @param initSize
- *		The initial size of the queue. This is the initial number of elements
- *		the queue can hold before having to allocate more space.
- * @param actualSize[out]
- *		After construction, dereferencing this pointer will reveal how many
- *		elements were actually allocated. This must point to valid memory
- *		when the constructor is called. 
+ *		use dynamic memory allocation, ie, CUtilMalloc( ) and CUtilFree( ) defined in
+ *		UtilConfig.h.
+ * @param size
+ *		The size of the queue.
+ * @returns
+ *		The constructed object, NULL on failure.
  */
-struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue*, size_t initSize, CAllocator* allocator );
+struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue*, size_t size );
+
+/**
+ * @memberof CLinkedQueue
+ * @brief
+ *		<b>Constructor</b>.
+ * @details
+ *		<b>Constructor</b>.
+ * @param initSize
+ *		The size of the queue and the length of the <b>memory</b> array. Do not specify a
+ *		size larger than the length of the <b>memory</b> array, this will result in stack
+ *		stomping. 
+ * @param memory[in]
+ *		A continuous region of memory to use for the queue, instead of using dynamic 
+ *		memory allocation. For example:
+ *		@code
+ *			struct CLinkedNode 	queueMemory[25];
+ *			struct CLinkedQueue	queue;
+ *			CLinkedQueueStatic( &queue, 25, queueMemory ); //Queue with max space of 25 elements.
+ *		@endcode
+ *		Note, the linked nodes were not constructed.
+ * @returns
+ *		The constructed object, NULL on failure.
+ */
+struct CLinkedQueue* CLinkedQueueStatic( struct CLinkedQueue*, size_t size, struct CLinkedNode* memory );
 
 #endif /* configUSE_CLINKEDQUEUE */
 #endif /* UTIL_CONTAINER_QUEUE_LINKEDQUEUE_H_ */

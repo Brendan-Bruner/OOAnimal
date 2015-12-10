@@ -18,14 +18,13 @@
  */
 
 #include "LinkedQueue.h"
-#include <Memory/DynamicAllocator.h>
 
-
+#if (configUSE_CLINKEDQUEUE == 1 && configUSE_CQUEUE == 1)
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
  /**
-  * @memberof COTLinkedQueue
+  * @memberof CLinkedQueue
   * @private
   * @brief
   *		Add capacity to the linked queue.
@@ -36,41 +35,41 @@
   * @returns
   *		The amount of capacity actually added.
   */
- static size_t COTLinkedQueue_AddCapacity( self(COTLinkedQueue), size_t capacity )
- {
- 	COTMemberOf(COTLinkedQueue);
+static size_t CLinkedQueue_AddCapacity( struct CLinkedQueue* self, size_t capacity )
+{
+	CMethod(self);
 
- 	CLinkedNode* node1;
- 	CLinkedNode* node2;
+	struct CLinkedNode* node1;
+ 	struct CLinkedNode* node2;
  	size_t iter;
 
  	/* Validate the increase in capacity. */
  	if( capacity == 0 )
- 	{
  		return 0;
- 	}
 
  	/* If the queue was initially size zero, allocate its first element. */
  	iter = capacity;
- 	if( self->_.endOfLinks == NULL )
+ 	if( self->endOfLinks == NULL )
  	{
  		--iter;
- 		self->_.endOfLinks = (CLinkedNode*) COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
- 		if( self->_.endOfLinks == NULL )
- 		{
+ 		self->endOfLinks = self->nodeMalloc(sizeof(*self->endOfLinks));
+ 		if( self->endOfLinks == NULL )
+ 			return 0;
+ 		if( CLinkedNode( self->endOfLinks ) == NULL ) { /* If construction failed. */
+ 			self->nodeFree(self->endOfLinks);
  			return 0;
  		}
- 		COTCreate(self->_.endOfLinks, CLinkedNodeCreate( self->_.endOfLinks ));
- 		self->_.head = self->_.endOfLinks;
+ 		CFreeWith(self->endOfLinks, self->nodeFree);
+ 		self->head = self->endOfLinks;
  	}	
 
  	/* Begin allocating the reset of the requested elements. */
  	node1 = self->_.endOfLinks;
  	for(; iter > 0; --iter )
  	{
- 		node2 = (CLinkedNode*) COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
+ 		node2 = (CLinkedNode*) CAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
  		if( node2 == NULL ){ break; }	
- 		COTCreate(node2, CLinkedNodeCreate( node2 ));
+ 		CCreate(node2, CLinkedNodeCreate( node2 ));
  		CLinkedNode_SetNext( node1, node2 );
  		node1 = node2;	
  	}
@@ -82,36 +81,36 @@
 /****************************************************************************/
 /* Virtual Methods															*/
 /****************************************************************************/
- #if (configUSE_COTCONTAINER == 1)
- #if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-static COTIterator* COTContainerVirtual_GetIterator( self(COTContainer) )
+ #if (configUSE_CCONTAINER == 1)
+ #if (configCCONTAINER_ITERATOR == 1) && (configUSE_CITERATOR == 1)
+static CIterator* CContainerVirtual_GetIterator( self(CContainer) )
 {
-	COTInterfaceOf(COTLinkedQueue);
+	CInterfaceOf(CLinkedQueue);
 	(void) self;
 	return NULL;
 }
 #endif
 
-#if (configCOTCONTAINER_SIZE == 1)
-static size_t COTContainerVirtual_Size( self(COTContainer) )
+#if (configCCONTAINER_SIZE == 1)
+static size_t CContainerVirtual_Size( self(CContainer) )
 {
-	COTInterfaceOf(COTLinkedQueue);
+	CInterfaceOf(CLinkedQueue);
 	return self->_.size;
 }
 #endif
 
-#if (configCOTCONTAINER_RESET == 1 )
-static void COTContainerVirtual_Reset( self(COTContainer) )
+#if (configCCONTAINER_RESET == 1 )
+static void CContainerVirtual_Reset( self(CContainer) )
 {
-	COTInterfaceOf(COTLinkedQueue);
+	CInterfaceOf(CLinkedQueue);
 	self->_.head = self->_.tail;
 }
 #endif
 
-#if (configCOTCONTAINER_IS_EMPTY == 1)
-static Boolean COTContainerVirtual_IsEmpty( self(COTContainer) )
+#if (configCCONTAINER_IS_EMPTY == 1)
+static Boolean CContainerVirtual_IsEmpty( self(CContainer) )
 {
-	COTInterfaceOf(COTLinkedQueue);
+	CInterfaceOf(CLinkedQueue);
 	if( self->_.size == 0 )
 	{
 		return true;
@@ -120,19 +119,19 @@ static Boolean COTContainerVirtual_IsEmpty( self(COTContainer) )
 }
 #endif
 
-#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-static size_t COTContainerVirtual_AddCapacity( self(COTContainer), size_t capacity )
+#if (configCCONTAINER_ADD_CAPACITY == 1)
+static size_t CContainerVirtual_AddCapacity( self(CContainer), size_t capacity )
 {
-	COTInterfaceOf(COTLinkedQueue);
-	return COTLinkedQueue_AddCapacity( self, capacity );
+	CInterfaceOf(CLinkedQueue);
+	return CLinkedQueue_AddCapacity( self, capacity );
 }
 #endif
 
-#endif /* configUSE_COTCONTAINER */
+#endif /* configUSE_CCONTAINER */
 
-static Boolean COTQueueVirtual_Insert( self(COTQueue), void* element )
+static Boolean CQueueVirtual_Insert( self(CQueue), void* element )
 {
-	COTMemberOf(COTLinkedQueue);
+	CMemberOf(CLinkedQueue);
 	
 	#define ADD_ONE_CAPACITY 1
 
@@ -144,7 +143,7 @@ static Boolean COTQueueVirtual_Insert( self(COTQueue), void* element )
 	if( self->_.head == NULL )
 	{
 		/* Queue is full. Add capacity */
-		if( COTLinkedQueue_AddCapacity( self, ADD_ONE_CAPACITY ) != ADD_ONE_CAPACITY )
+		if( CLinkedQueue_AddCapacity( self, ADD_ONE_CAPACITY ) != ADD_ONE_CAPACITY )
 		 {
 		 	/* Can't add more capacity. */
 		 	return false;
@@ -161,9 +160,9 @@ static Boolean COTQueueVirtual_Insert( self(COTQueue), void* element )
 	return true;
 }
 
-static void* COTQueueVirtual_Remove( self(COTQueue) )
+static void* CQueueVirtual_Remove( self(CQueue) )
 {
-	COTMemberOf(COTLinkedQueue);
+	CMemberOf(CLinkedQueue);
 
 	void* element;
 
@@ -201,10 +200,10 @@ static void* COTQueueVirtual_Remove( self(COTQueue) )
 	return element;
 } 
 
-#if (configCOTQUEUE_PEEK == 1)
-static void* COTQueueVirtual_Peek( self(COTQueue) )
+#if (configCQUEUE_PEEK == 1)
+static void* CQueueVirtual_Peek( self(CQueue) )
 {
-	COTMemberOf(COTLinkedQueue);
+	CMemberOf(CLinkedQueue);
 
 	if( self->_.tail == NULL )
 	{
@@ -220,28 +219,28 @@ static void* COTQueueVirtual_Peek( self(COTQueue) )
 }
 #endif
 
-#if (configCOTQUEUE_SIZE == 1)
-static size_t COTQueueVirtual_Size( self(COTQueue) )
+#if (configCQUEUE_SIZE == 1)
+static size_t CQueueVirtual_Size( self(CQueue) )
 {
-	COTMemberOf(COTLinkedQueue);
+	CMemberOf(CLinkedQueue);
 	return self->_.size;
 }
-#endif /* configCOTQUEUE_SIZE */
+#endif /* configCQUEUE_SIZE */
 
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
 /**
- * @memberof COTLinkedQueue
+ * @memberof CLinkedQueue
  * @private
  * @brief
  * 		Internal constructor for linked queue.
  * @details
  *		Internal constructor for linked queue. To be called by constructor only.
  */
-static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t initSize )
+static size_t CLinkedQueue_InternalConstructor( struct CLinkedQueue* self, size_t initSize )
 {
-	COTMemberOf(COTLinkedQueue);
+	CMemberOf(CLinkedQueue);
 
 	CLinkedNode* node1;
 	CLinkedNode* node2;
@@ -253,13 +252,13 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	}
 
 	/* Allocate first node. */
-	node1 = COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
+	node1 = CAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
 	if( node1 == NULL )
 	{
 		return 0;
 	}
 	/* Construct first node. */
-	COTCreate( node1, CLinkedNodeCreate( node1 ) );
+	CCreate( node1, CLinkedNodeCreate( node1 ) );
 	/* Head of the queue is this node. */
 	self->_.head = node1;
 	/* Will also be the tail. */
@@ -268,13 +267,13 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	for( iter = 0; iter < initSize; ++iter )
 	{
 		/* Allocate nodes unil desired queue size is reached. */
-		node2 = COTAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
+		node2 = CAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
 		if( node2 == NULL )
 		{
 			/* Failed to allocate node. */
 			break;
 		}
-		COTCreate( node2, CLinkedNodeCreate( node2 ) );
+		CCreate( node2, CLinkedNodeCreate( node2 ) );
 
 		/* Continue to create linked list until desired queue size is reached. */
 		CLinkedNode_SetNext( node1, node2 );
@@ -295,9 +294,9 @@ static size_t COTLinkedQueue_InternalConstructor( self(COTLinkedQueue), size_t i
 	return iter;
 }
 
-COTVirtualDestructor( )
+CVirtualDestructor( )
 {
-	COTDestructorOf(COTLinkedQueue);
+	CDestructorOf(CLinkedQueue);
 
 	CLinkedNode* node;
 	CLinkedNode* nextNode;
@@ -306,74 +305,55 @@ COTVirtualDestructor( )
 	if( node == NULL )
 	{
 		/* No nodes to destroy. */
-		COTSuperDestructor( );
+		CqueueDestructor( );
 		return;
 	}
 	
 	do
 	{
 		nextNode = CLinkedNode_GetNext( node );
-		COTDestroy( CLinkedNode, node );
+		CDestroy( CLinkedNode, node );
 		node = nextNode;
 	}
 	while( node != NULL );
 
-	COTSuperDestructor( );
+	CSuperDestructor( );
 }
 
-void COTLinkedQueueDynamic( self(COTLinkedQueue), size_t initSize, size_t* actualSize )
+void CLinkedQueueDynamic( struct CLinkedQueue* self, size_t size )
 {
-	COTConstructorOf(COTLinkedQueue);
-
-	/* Call super's constructor. */
-	COTQueueCreate_( (COTQueue*) self );
+	CConstructor(self);
+	CQueue_(&self->queue.object);
 
 	/* Link virtual interface methods. */
-	#if (configUSE_COTCONTAINER == 1)
-	#if (configCOTCONTAINER_ITERATOR == 1) && (configUSE_COTITERATOR == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_GetIterator);
+	#if (configUSE_CCONTAINER == 1)
+	#if (configUSE_CITERATOR == 1)
+	CLinkVirtual(&self->queue.container, CContainerVirtual_GetIterator);
 	#endif
-	#if (configCOTCONTAINER_SIZE == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Size);
-	#endif
-	#if (configCOTCONTAINER_RESET == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_Reset);
-	#endif
-	#if (configCOTCONTAINER_IS_EMPTY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_IsEmpty);
-	#endif
-	#if (configCOTCONTAINER_ADD_CAPACITY == 1)
-	COTLinkVirtual(COTQueue, COTContainer, COTContainerVirtual_AddCapacity);
-	#endif
-	#endif /* configUSE_COTCONTAINER */
+	#if (configCCONTAINER_EXTRA == 1)
+	CLinkVirtual(&self->queue.container, CContainerVirtual_Size);
+	CLinkVirtual(&self->queue.container, CContainerVirtual_Reset);
+	CLinkVirtual(&self->queue.container, CContainerVirtual_AddCapacity);
+	#endif /* configCCONTAINER_EXTRA */
+	#endif /* configUSE_CCONTAINER */
 
 	/* Link virtual queue methods. */
-	COTLinkVirtual(COTQueue, COTQueueVirtual_Insert);
-	COTLinkVirtual(COTQueue, COTQueueVirtual_Remove);
-	#if (configCOTQUEUE_PEEK == 1)
-	COTLinkVirtual(COTQueue, COTQueueVirtual_Peek);
-	#endif	
-	#if (configCOTQUEUE_SIZE == 1)
-	COTLinkVirtual(COTQueue, COTQueueVirtual_Size);
+	CLinkVirtual(&self->queue, CQueueVirtual_Insert);
+	CLinkVirtual(&self->queue, CQueueVirtual_Remove);
+	CLinkVirtual(&self->queue, CQueueVirtual_Peek)
+	#if (configCQUEUE_SIZE == 1)
+	CLinkVirtual(&self->queue, CQueueVirtual_Size);
 	#endif
 
 	/* Override destructor. */
-	COTOverrideDestructor( );
+	COverrideVirtual(self, &self->queue.object, CDestructor);
 
 	/* Set up member data. */
-	self->_.allocator = COTAllocatorCast( COTDynamicAllocator_GetInstance( ) );
-	self->_.tail = NULL;
-	self->_.head = NULL;
-	self->_.endOfLinks = NULL;
-	self->_.size = 0;
-
-	/* Setup linked list. */
-	if( actualSize == NULL )
-	{
-		COTLinkedQueue_InternalConstructor( self, initSize );
-	}
-	else
-	{
-		*actualSize = COTLinkedQueue_InternalConstructor( self, initSize );
-	}
+	self->usingDynamicNodes = true;
+	self->tail = NULL;
+	self->head = NULL;
+	self->endOfLinks = NULL;
+	self->size = 0;
 }
+
+#endif /* configUSE_CLINKEDQUEUE && configUSE_CQUEUE */

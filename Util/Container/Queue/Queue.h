@@ -63,7 +63,7 @@
 struct CQueue
 {
 	/* Super class. */
-	struct CObject super;
+	struct CObject object;
 
 	/* Interfaces. */
 	#if (configUSE_CCONTAINER == 1)
