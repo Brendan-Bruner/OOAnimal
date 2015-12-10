@@ -39,13 +39,16 @@ For now, lets treat move( ) and draw( ) as non virtual methods.
 
 struct Point
 {
-    /* Super class. Must always be first member of a class' struct. */
+    /* Super class. Must ALWAYS be first member of a class' struct. */
     struct CObject super;
     
     /* Member data. */
     int x;
     int y;
 };
+
+/* NOTE, class methods always take a pointer to themselves as their */
+/* (preferably) first argument. */
 
 /* Constructor. */
 /* Note, struct name space is seperate from function name space. */
@@ -60,10 +63,6 @@ extern void Point_Draw( struct Point* self );
 
 #endif /* POINT_H_
 ```
-
-* The most important rule is: **the first structure member must be the super class**. In the case of Point, its super class is ```struct CObject```. 
-* All class methods have their **first argument as a pointer to the class they operate on**. In the case of the Point class, all methods have ```struct Point*``` as their first argument.
-* The **constructors are just regular C functions**. 
 
 On to the source file:
 
@@ -154,3 +153,9 @@ int main( int argc, char** argv )
     return 1;
 }
 ```
+
+##Virtual and Pure Virtual Methods
+---
+
+To demonstrate virtual methods, lets take the class Point, and make ```Point_Draw( )``` virtual. In addition, lets add
+a method, ```Point_Clone( )```, and make it pure virtual. As will become evident, there is no way to stop compilation when application code attempts to instantiate a class with a pure virtual method. This can only be caught at run time when the application calls the pure virtual method. 
