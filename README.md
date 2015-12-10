@@ -75,10 +75,14 @@ On to the source file:
 /* Constructor. */
 void Point( struct Point* self, int x, int y )
 {
-    /* Must call generic constructor as first operation in any class' constructor. */
+    /* IMPORTANT */
+    /* Must always call generic constructor as FIRST operation in any class' constructor. */
+    /* This initializes object data and, if DEBUG is defined, sets up object data to */
+    /* catch errors at run time. */
     CConstructor(self);
     
-    /* Must call super classes constructor next. */
+    /* IMPORTANT */
+    /* Must call super classes constructor at some point. */
     CObject((struct CObject*) self);
     
     /* Set up member data. */
@@ -89,7 +93,9 @@ void Point( struct Point* self, int x, int y )
 /* Point_Move( ). */
 void Point_Move( struct Point* self, int x, int y )
 {
+    /* IMPORTANT */
     /* Must call this as first thing in any non virtual method. */
+    /* It checks for a NULL object pointer. */
     CMethod(self);
     
     self->x = x;
@@ -99,25 +105,14 @@ void Point_Move( struct Point* self, int x, int y )
 /* Point_Draw( ). */
 void Point_Draw( struct Point* self )
 {
+    /* IMPORTANT */
     /* Must call this as first thing in any non virtual method. */
+    /* It checks for a NULL object pointer. */
     CMethod(self);
     
     printf( "point at (%d,%d)\n", self->x, self->y );
 }
 ```
-
-###Constructor definition
-
-* The first line of code in a constructor is CConstructor( ). Nothing is allowed to be done before calling it. Although it's a macro (with side effects), it will be refered to as method. It accomplishes two objectives:
-    * Initialize object data so that virtual methods and interfaces can be used
-    * Initialize object data to enable run time checking
-* Call the super class constructor. This can be done anywhere in the constructor's definition. There are two exceptions, though, which will be discussed in the overriding and overwriting virtual methods section. In addition, there are two valid ways to call the super's constructor:
-    * First: ```CObject(&self->super);```. Here, we explicitly give the address of the super class to construct.
-    * Second, the way shown in Point.c:  ```CObject((struct CObject*) self);```. A pointer can always be safetly cast to a pointer to its super class (and the super class' super class, and so on). This has the advantage of making the super class variable name irrelevant.
-
-###Method Definition
-
-* The first line of code in a non virtual methods definition should be CMethod( ). This is a macro which asserts the object pointer is non NULL.
 
 ###Creating an Instance of Point
 
@@ -159,3 +154,49 @@ int main( int argc, char** argv )
 
 To demonstrate virtual methods, lets take the class Point, and make ```Point_Draw( )``` virtual. In addition, lets add
 a method, ```Point_Clone( )```, and make it pure virtual. As will become evident, there is no way to stop compilation when application code attempts to instantiate a class with a pure virtual method. This can only be caught at run time when the application calls the pure virtual method. 
+
+###Header
+
+```C
+#ifndef POINT_H_
+#define POINT_H_
+
+#include <Class.h>
+
+struct Point
+{
+    /* Super class. Must ALWAYS be first member of a class' struct. */
+    struct CObject super;
+    
+    /* IMPORTANT */
+    /* Virtual and pure virtual methods must be added as function pointers to the class' struct */
+    /* definition. */
+    
+    /* Virtual method. */
+    void (*PointVirtual_Draw)( struct Point* );
+    /* Pure virtual method. */
+    struct Point* (*PointVirtual_Clone)( struct Point* );
+    
+    /* Member data. */
+    int x;
+    int y;
+};
+
+/* Constructor. */
+extern void Point( struct Point* self, int x, int y );
+
+/* move( ) method. */
+extern void Point_Move( struct Point* self, int x, int y );
+
+/* IMPORTANT */
+/* Even though the draw and clone methods are added as function pointers to the class' */
+/* struct definition, they still require a method definition. */
+
+/* clone( ) method. */
+extern struct Point* Point_Clone( struct Point* self );
+
+/* draw( ) method. */
+extern void Point_Draw( struct Point* self );
+
+#endif /* POINT_H_
+```
