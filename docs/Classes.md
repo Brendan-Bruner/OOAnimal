@@ -3,7 +3,7 @@
 
 A class must have a header and source file. For example, take a class Point. Point has two methods, draw and move, and two member variables, x and y location.
 
-![](https://raw.githubusercontent.com/Brendan-Bruner/Cobject/docs/Point.svg)
+![](https://raw.githubusercontent.com/Brendan-Bruner/Cobject/docs/Point.jpg)
 
 For now, lets treat move( ) and draw( ) as non virtual methods. Important points will be labelled with ```/* IMPORTANT */```.
 
