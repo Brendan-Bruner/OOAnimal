@@ -3,6 +3,8 @@
 
 To demonstrate virtual methods, lets take the class Point, and make ```Point_Draw( )``` virtual. In addition, lets add a method, ```Point_Clone( )```, and make it pure virtual. As will become evident, there is no way to stop compilation when application code attempts to instantiate a class with a pure virtual method. This can only be caught at run time when the application calls the pure virtual method. 
 
+![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/VirtualMethods.jpg)
+
 ###Header
 
 ```C
