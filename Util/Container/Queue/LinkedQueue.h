@@ -22,7 +22,9 @@
 
 #include "../../ContainerConfig.h"
 
-#if (configUSE_CLINKEDQUEUE == 1 && configUSE_CQUEUE == 1)
+#if !(configUSE_CLINKEDQUEUE == 1 && configUSE_CQUEUE == 1)
+#error "configUSE_CLINKEDQUEUE and configUSE_CQUEUE need to be one to include LinkedQueue.h"
+#else
 #include "Queue.h"
 #include <Container/LinkedNode/LinkedNode.h>
 #include <Memory/Allocator.h>
@@ -83,8 +85,9 @@ struct CLinkedQueue
 	/* Member data. */
 	struct CLinkedNode* 	head;
 	struct CLinkedNode* 	tail;
-	struct CLinkedNode*		endOfLinks;
+	struct CLinkedNode*		nodes;
 	size_t 					size;
+	size_t					maxSize;
 	Boolean					usingDynamicNodes;
 };
 

@@ -230,102 +230,32 @@ static size_t CQueueVirtual_Size( self(CQueue) )
 /****************************************************************************/
 /* Constructor / Destructor													*/
 /****************************************************************************/
+static void CDestructor( struct CObject* self_ )
+{
+	struct CLinkedQueue* self = CCast(self_);
+
+	if( self->usingDynamicNodes ) {
+		/* Using dynamicn nodes, need to free them. */
+		/* TODO */
+	}
+
+	CAssertSuper(self, CDestructor);
+	self->CDestructor(self);
+}
+
 /**
  * @memberof CLinkedQueue
  * @private
  * @brief
- * 		Internal constructor for linked queue.
+ * 		Link the methods used by CLinkedQueue.
  * @details
- *		Internal constructor for linked queue. To be called by constructor only.
+ *		Link the methods used by CLinkedQueue.
  */
-static size_t CLinkedQueue_InternalConstructor( struct CLinkedQueue* self, size_t initSize )
+static void CLinkedQueue_LinkMethod( struct CLinkedQueue* self )
 {
-	CMemberOf(CLinkedQueue);
+	CMethod(self);
 
-	CLinkedNode* node1;
-	CLinkedNode* node2;
-	size_t iter;
-
-	if( initSize == 0 )
-	{
-		return 0;
-	}
-
-	/* Allocate first node. */
-	node1 = CAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
-	if( node1 == NULL )
-	{
-		return 0;
-	}
-	/* Construct first node. */
-	CCreate( node1, CLinkedNodeCreate( node1 ) );
-	/* Head of the queue is this node. */
-	self->_.head = node1;
-	/* Will also be the tail. */
-	self->_.tail = node1;
-
-	for( iter = 0; iter < initSize; ++iter )
-	{
-		/* Allocate nodes unil desired queue size is reached. */
-		node2 = CAllocator_Malloc( self->_.allocator, sizeof(CLinkedNode) );
-		if( node2 == NULL )
-		{
-			/* Failed to allocate node. */
-			break;
-		}
-		CCreate( node2, CLinkedNodeCreate( node2 ) );
-
-		/* Continue to create linked list until desired queue size is reached. */
-		CLinkedNode_SetNext( node1, node2 );
-		node1 = node2;
-
-	}
-	
-	/* Keep a reference to the end of the list. */
-	/* For example: */
-	/* nodeA -> nodeB -> nodeC -> nodeD -> ... -> nodeQ */
-	/* the head is nodeA and the end of the list is nodeQ. */
-	self->_.endOfLinks = node1;
-
-	/* There should be no next node after the end of the list. */
-	CLinkedNode_SetNext( node1, NULL );
-
-	/* Return the number of nodes created. */
-	return iter;
-}
-
-CVirtualDestructor( )
-{
-	CDestructorOf(CLinkedQueue);
-
-	CLinkedNode* node;
-	CLinkedNode* nextNode;
-
-	node = self->_.tail;
-	if( node == NULL )
-	{
-		/* No nodes to destroy. */
-		CqueueDestructor( );
-		return;
-	}
-	
-	do
-	{
-		nextNode = CLinkedNode_GetNext( node );
-		CDestroy( CLinkedNode, node );
-		node = nextNode;
-	}
-	while( node != NULL );
-
-	CSuperDestructor( );
-}
-
-void CLinkedQueueDynamic( struct CLinkedQueue* self, size_t size )
-{
-	CConstructor(self);
-	CQueue_(&self->queue.object);
-
-	/* Link virtual interface methods. */
+		/* Link virtual interface methods. */
 	#if (configUSE_CCONTAINER == 1)
 	#if (configUSE_CITERATOR == 1)
 	CLinkVirtual(&self->queue.container, CContainerVirtual_GetIterator);
@@ -347,6 +277,20 @@ void CLinkedQueueDynamic( struct CLinkedQueue* self, size_t size )
 
 	/* Override destructor. */
 	COverrideVirtual(self, &self->queue.object, CDestructor);
+}
+
+static void CLinkedQueue_InitNodes( struct CLinkedQueue* self, size_t size, struct CLinkedNode* nodes )
+{
+	CMethod(self);
+	CAssertObject(nodes);
+}
+
+struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue* self, size_t size )
+{
+	CConstructor(self);
+	CQueue_(&self->queue.object);
+
+	struct CLinkedNode* nodes;
 
 	/* Set up member data. */
 	self->usingDynamicNodes = true;
@@ -354,6 +298,30 @@ void CLinkedQueueDynamic( struct CLinkedQueue* self, size_t size )
 	self->head = NULL;
 	self->endOfLinks = NULL;
 	self->size = 0;
+
+	/* Allocate nodes. */
+	nodes = CUtilMalloc(size * sizeof(*nodes));
+	if( nodes == NULL )
+		return NULL;
+
+	CLinkedQueue_InitNodes(self, size, nodes);
+	return self;
+}
+
+struct CLinkedQueue* CLinkedQueueStatic( struct CLinkedQueue*, size_t size, struct CLinkedNode* nodes)
+{
+	CConstructor(self);
+	CQueue_(&self->queue.object);
+
+	/* Set up member data. */
+	self->usingDynamicNodes = false;
+	self->tail = NULL;
+	self->head = NULL;
+	self->endOfLinks = NULL;
+	self->size = 0;
+
+	CLinkedQueue_InitNodes(self, size, nodes);
+	return self;
 }
 
 #endif /* configUSE_CLINKEDQUEUE && configUSE_CQUEUE */
