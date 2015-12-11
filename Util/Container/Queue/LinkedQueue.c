@@ -235,7 +235,7 @@ static void CDestructor( struct CObject* self_ )
 	struct CLinkedQueue* self = CCast(self_);
 
 	if( self->usingDynamicNodes ) {
-		/* Using dynamicn nodes, need to free them. */
+		/* Using dynamic nodes, need to free them. */
 		/* TODO */
 	}
 
