@@ -11,7 +11,7 @@ To demonstrate virtual methods, lets take the class Point, and make ```Point_Dra
 #ifndef POINT_H_
 #define POINT_H_
 
-#include <Class.h>
+#include <Class/Class.h>
 
 struct Point
 {
@@ -129,7 +129,7 @@ static void PointVirtual_Draw( struct Point* self_ )
 /* Pure virtual methods have only the public wrapper method. An implementation has to be written */
 /* and linked in the an inheriting  class. */
 /* Point_Clone( ) wrapper method. */
-struct Point* Point_Clone( struct Point* )
+struct Point* Point_Clone( struct Point* self )
 {
     /* IMPORTANT */
     /* Must call this as first thing in any virtual method wrapper. */
@@ -141,11 +141,11 @@ struct Point* Point_Clone( struct Point* )
     /* instantiated an object with a pure virtual method. */
     /* The assert will only pass for inheriting classes which implement */
     /* this method. */
-    CAssertVirtual(self, PointVirtual_Draw);
+    CAssertVirtual(self, PointPureVirtual_Clone);
     
     /* IMPORTANT */
     /* Must then call the virtual method using the function pointer. */
-    self->PointVirtual_Draw(self);
+    return self->PointPureVirtual_Clone(self);
 }
 ```
 
@@ -189,7 +189,7 @@ int main( int argc, char** argv )
     Point_Move(heapPoint, 3, 2); /* Move the point to (3,2). */
     Point_Draw(heapPoint);   /* Print the points location to console. */
     
-    clonedPoint = Point_Clone(&stackPoint); /* Pretend the previous Point_Clone( ) call was commented out, and */
+    clonedPoint = Point_Clone(&heapPoint); /* Pretend the previous Point_Clone( ) call was commented out, and */
                                             /* the program got to this point. */
                                             /* This will fail, execution will stop and console have a message */
                                             /* printed to it, explaining this is a pure virtual method with */

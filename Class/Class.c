@@ -23,7 +23,7 @@
 const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
 const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
 const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
-const char* CAssertInterfaceMessage_ = C_ASSERT_INTERFACE_MESSAGE;
+const char* CAssertCastMessage_ = C_ASSERT_CAST_MESSAGE;
 
 #if defined( DEBUG )
 void CAssert( char exp, char const* msg, char const* file, int line )
@@ -61,19 +61,20 @@ void* CVirtualMethod_( void* self, const char* file, int line )
 
 void CObject_Destroy( struct CObject* self )
 {
-	CAssertVirtual(CDestructor);
+	CAssertVirtual(self, CDestructor);
 	self->CDestructor(self);
 }
 
 void CObject_IsDynamic( struct CObject* self )
 {
-	C_ASSERT_OBJECT( self );
+	CAssertObject(self);
 	self->CObject_Free = CDefaultFree;
 }
 
 void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 {
-	C_ASSERT_OBJECT( self );
+	CAssertObject(self);
+	CAssertObject(objectFree);
 	self->CObject_Free = objectFree;
 }
 
@@ -81,7 +82,7 @@ static void CDestructor( struct  CObject* self )
 {
 	if( self->CObject_Free != NULL )
 	{
-		self->CObject_Free( (void*) self );
+		self->CObject_Free((void*) self);
 	}
 }
 

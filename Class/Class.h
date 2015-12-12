@@ -92,13 +92,13 @@ extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* 
 	"\t* If the method is from an interface, class constructor did not\n"\
 	"\t  call CLinkInterface( )\n"\
 	"\t* Constructor was never called on object\n"\
-	"\t* Constructor was called, but CConstructor( ) was not called by\n"\
-	"\t  constructor\n"\
 	"\t* Constructor was called, but super constructor was not called\n"\
 	"\t  For example, say B extends A, and an instance of B was created.\n"\
 	"\t  The error is reported to have happened in the source file for A.\n"\
 	"\t  Then, the constructor for B was called, but within B's constructor,\n"\
-	"\t  the constructor for A was not called.\n"
+	"\t  the constructor for A was not called.\n"\
+	"\t* The method is ment to be pure virtual, an object of this class\n"\
+	"\t  should never be instantiated\n"
 #endif
 extern const char* CAssertVirtualMessage_;
 #define C_ASSERT_VIRTUAL( method, funcName )\

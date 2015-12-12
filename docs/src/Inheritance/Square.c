@@ -1,42 +1,3 @@
-#Inheritance and Implementing Pure Virtual Methods
----
-
-Continuing the example from the last section, we will create a Square class which inherits from point. It will provide a new method, Square_Scale( ), and implement the pure virtual method, Point_Clone( ).
-
-![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/Inheritance.jpg)
-
-###Header
-
-```C
-#ifndef SQUARE_H_
-#define SQUARE_H_
-
-#include <Point.h>
-
-struct Square
-{
-	/* IMPORTANT */
-	/* Super class must be first variable in struct. */
-	/* Since we are inheriting from Point, we make this */
-	/* an instance of struct Point. */
-	struct Point super;
-
-	/* Member variables. */
-	int length;
-};
-
-/* Constructor. */
-extern struct Square* Square( struct Square* self, int x, int y, int length );
-
-/* Non virtual method, Square_Scale( ). */
-extern void Square_Scale( struct Square* self, int factor );
-
-#endif /* SQUARE_H_ */
-```
-
-###Source
-
-```C
 #include <Square.h>
 
 /* Implementation declare for Point_Clone( ). */
@@ -65,7 +26,7 @@ struct Square* Square( struct Square* self, int x, int y, int length )
 	/* After doing this, the assert discussed in the last section will stop failing. */
 	/* When someone calls Point_Clone( ), the assert passes, then this */
 	/* method gets called. */
-	CLinkMethod(&self->super, PointPureVirtual_Clone);
+	CLinkVirtual(&self->super, PointPureVirtual_Clone);
 
 	/* Set up member variables. */
 	self->length = length;
@@ -116,29 +77,3 @@ void Square_Scale( struct Square* self, int factor )
 	else
 	    self->length = self->length * factor;
 }
-```
-
-###Main
-
-```C
-#include <Square.h>
-
-int main( int argv, char** argc )
-{
-	struct Square square;
-
-	Square(&square, 0, 0, 5); /* Make a square at (0,0) with sides of lenght 5. */
-	Point_Draw((struct Point*) &square); /* Will print to console the squares */
-	                                     /* location, that is, (0,0). */
-    Point_Move((struct Point*) &square, 3, 3); /* Move the point to (3,3). */
-    Point_Draw((struct Point*) &square); /* Will print to console the squares */
-	                                     /* location, that is, (3,3). */    
-        /* Clone will make an exact copy of square, and return it */
-    struct Point* clone = Point_Clone((struct Point*) &square);
-    Point_Draw(clone); /* Will print the clones location to console, that is, (3,3). */
-    CDestroy(clone);
-
-    Square_Scale(&square, 2); /* Double the length of the squares sides. */
-    CDestroy(&square);
-}
-```
