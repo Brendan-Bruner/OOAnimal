@@ -142,3 +142,22 @@ int main( int argv, char** argc )
     CDestroy(&square);
 }
 ```
+
+### Compiling
+
+Assuming a directory structures like this:
+
+./
+<br>|-> Class
+<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-> Class.h
+<br>|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-> Class.c
+<br>|-> Square.h
+<br>|-> Square.c
+<br>|-> Point.h
+<br>|-> Point.c
+<br>|-> main.c
+
+```
+gcc -I. -DDEBUG -Wall Class/Class.c Point.c Square.c main.c -o main
+./main
+```

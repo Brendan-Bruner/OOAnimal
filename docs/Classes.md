@@ -148,6 +148,6 @@ Assuming a directory structures like this:
 <br>|-> main.c
 
 ```
-gcc -I. -Wall Class/Class.c Point.c main.c -o main
+gcc -I. -DDEBUG -Wall Class/Class.c Point.c main.c -o main
 ./main
 ```

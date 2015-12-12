@@ -10,7 +10,7 @@ CObject is a small set of macros and functions that enable fundamental object or
 
 ###Compile Time and Run Time Checks
 
-Since C is not an OO language, compile time checks are very limited. For example, the compiler can't know if a class has forgot to implement a method inherited from an interface. To remedy this, run time checks are (optionally) done. When compiling, the symbol DEBUG must be defined for run time checks to be used.
+Since C is not an OO language, compile time checks are very limited. For example, the compiler can't know if a class has forgot to implement a method inherited from an interface or if application code is using private variables. To remedy this, run time checks are (optionally) done. When compiling, the symbol DEBUG must be defined for run time checks to be used.
 
 When a run time check fails, an error will be printed to console and the program execution halted. The printed message will explain the most likely cause of failure and common solutions. Since different systems have different requirements, hooks are provided to changed the behaviour when asserts fail, and information is printed to console. For example, on an embedded system, the print hook can be used to power on an LED instead or print over a UART connection.
 

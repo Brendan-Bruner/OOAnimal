@@ -21,7 +21,7 @@ struct Square* Square( struct Square* self, int x, int y, int length )
 	/* a method. */
 	/* The first argument is a pointer to the object being constructed. */
 	/* The second argument is a pointer to the super class where the */
-	/* method being overrode was last defined. */
+	/* method being overrode is defined. */
 	/* The last argument is the name of method pointer being overrode. */
 	/* This resolves to exactly: */
 	/* 		self->PointVirtual_Draw = &(self->super)->PointVirtual_Draw; */
