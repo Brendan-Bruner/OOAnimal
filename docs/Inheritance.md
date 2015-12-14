@@ -3,7 +3,7 @@
 
 Continuing the example from the last section, we will create a Square class which inherits from point. It will provide a new method, Square_Scale( ), and implement the pure virtual method, Point_Clone( ).
 
-![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/Inheritance.jpg)
+![](https://raw.githubusercontent.com/bandren/CObject/master/docs/Inheritance.jpg)
 
 ###Header
 
