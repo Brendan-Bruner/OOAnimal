@@ -3,7 +3,7 @@
 
 An interface is the equivelent of a C++ class with only pure virtual methods, or a Java interface. This section will show how to write an interface and implement it. We will use the Point class from the **Classes** section and implement a Printable interface which has a method ```Printable_Print( )``` instead of declaring a class method, ```Point_Draw( )```.
 
-![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/Interfaces.jpg)
+![](https://raw.githubusercontent.com/bandren/CObject/master/docs/Interfaces.jpg)
 
 An interface needs a source and a header file. However, for the sake of simplicity, we will inline a method and only use a header file for the interface. We will revist the header and source file of Point and then write a new main to demonstrate usage. The example main contains an important point on destruction. 
 
