@@ -7,7 +7,7 @@ In the previous section we overrode the Point_Draw( ) method, then used the supe
 
 This is useful when you want to override a virtual method, but have no desire to reference the super's implementation.
 
-We will use the same header file for Square as we did in the **Virtual and Pure Virtual Methods** section, and modify Square's source file from the **Overriding** section.
+We will use the same header file for Square as we did in the [Virtual and Pure Virtual Methods](https://github.com/bandren/CObject/blob/master/docs/VirtualMethods.md) section, and modify Square's source file from the [Overriding](https://github.com/bandren/CObject/blob/master/docs/Overriding.md) section.
 
 ###Source
 
