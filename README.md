@@ -18,11 +18,11 @@ When a run time check fails, an error will be printed to console and the program
 
 These tutorials provide a brief overview of how to use CObject by example. 
 
-1. Classes
-2. Virtual and Pure Virtual Methods
-3. Inheritance and Implementing Pure Virtual Methods
-4. Overriding
-5. Overwriting
-6. The Destructor
-7. Interfaces
-8. Overriding and Overwriting Inherited Interface Methods
+1. [Classes](https://github.com/bandren/CObject/blob/master/docs/Classes.md)
+2. [Virtual and Pure Virtual Methods](https://github.com/bandren/CObject/blob/master/docs/VirtualMethods.md)
+3. [Inheritance and Implementing Pure Virtual Methods](https://github.com/bandren/CObject/blob/master/docs/Inheritance.md)
+4. [Overriding](https://github.com/bandren/CObject/blob/master/docs/Overriding.md)
+5. [Overwriting](https://github.com/bandren/CObject/blob/master/docs/Overwriting.md)
+6. [The Destructor](https://github.com/bandren/CObject/blob/master/docs/TheDestructor.md)
+7. [Interfaces](https://github.com/bandren/CObject/blob/master/docs/Interfaces.md)
+8. [Overriding and Overwriting Inherited Interface Methods](https://github.com/bandren/CObject/blob/master/docs/OverridingInterfaceMethods.md)
