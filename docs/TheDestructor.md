@@ -7,7 +7,7 @@ With CObject, it is the duty of the programmer to ensure they call the parent's 
 
 This will be demonstrated with a String class. It is an immutable object with one method, ```String_Print( )```. For simplicitly, we assume strings are null terminated.
 
-![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/TheDestructor.jpg)
+![](https://raw.githubusercontent.com/bandren/CObject/master/docs/TheDestructor.jpg)
 
 ###Header
 
