@@ -26,18 +26,3 @@ These tutorials provide a brief overview of how to use CObject by example.
 6. The Destructor
 7. Interfaces
 8. Overriding and Overwriting Inherited Interface Methods
-9. Interfaces Implementing Interfaces
-
-###Implementation
-
-Follows the tutorials in parallel to describe the memory layout of objects and how CObject is implemented.
-
-1. Classes
-2. Virtual and Pure Virtual Methods
-3. Inheritance and Implementing Pure Virtual Methods
-4. Overriding
-5. Overwriting
-6. The Destructor
-7. Interfaces
-8. Overriding and Overwriting Inherited Interface Methods
-9. Interfaces Implementing Interfaces

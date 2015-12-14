@@ -1,7 +1,5 @@
-# Doxygen
-doxygen_sqlite3.db
-Documentation/html
-Documentation/latex
+# Main executable
+main
 
 # Object files
 *.o
@@ -44,3 +42,4 @@ Documentation/latex
 html/
 latex/
 bin
+doxygen_sqlite3.db

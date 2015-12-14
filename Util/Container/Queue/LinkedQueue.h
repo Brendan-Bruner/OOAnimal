@@ -85,9 +85,9 @@ struct CLinkedQueue
 	/* Member data. */
 	struct CLinkedNode* 	head;
 	struct CLinkedNode* 	tail;
-	struct CLinkedNode*		nodes;
+	struct CLinkedNode*		freeListHead;
+	struct CLinkedNode*		freeListTail;
 	size_t 					size;
-	size_t					maxSize;
 	Boolean					usingDynamicNodes;
 };
 

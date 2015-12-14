@@ -281,8 +281,21 @@ static void CLinkedQueue_LinkMethod( struct CLinkedQueue* self )
 
 static void CLinkedQueue_InitNodes( struct CLinkedQueue* self, size_t size, struct CLinkedNode* nodes )
 {
-	CMethod(self);
+	CAssertObject(self);
 	CAssertObject(nodes);
+
+	struct CLinkedNode* runningNode;
+
+	if( size > 0 ) {
+		runningNode = &nodes[0];
+
+		for( int i = 0; i < size; ++i ) {
+			if( CLinkedNode(&nodes[i]) == NULL )
+				break;
+			CLinkedNode_SetNext(runningNode, &nodes[i]);
+			runningNode = &nodes[i];
+		}
+	}
 }
 
 struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue* self, size_t size )
@@ -296,7 +309,8 @@ struct CLinkedQueue* CLinkedQueue( struct CLinkedQueue* self, size_t size )
 	self->usingDynamicNodes = true;
 	self->tail = NULL;
 	self->head = NULL;
-	self->endOfLinks = NULL;
+	self->freeListTail = NULL;
+	self->freeListHeaad = NULL;
 	self->size = 0;
 
 	/* Allocate nodes. */
@@ -317,6 +331,8 @@ struct CLinkedQueue* CLinkedQueueStatic( struct CLinkedQueue*, size_t size, stru
 	self->usingDynamicNodes = false;
 	self->tail = NULL;
 	self->head = NULL;
+	self->freeListTail = NULL;
+	self->freeListHeaad = NULL;
 	self->endOfLinks = NULL;
 	self->size = 0;
 
