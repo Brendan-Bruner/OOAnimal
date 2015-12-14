@@ -8,7 +8,7 @@ In this section, we're going to continue with the Square class by overriding the
 
 Both these concepts will be demonstrated by overriding the original Point_Draw( ), and calling the original Point_Draw( ) in the new implementation.
 
-![](https://raw.githubusercontent.com/Brendan-Bruner/CObject/docs/Inheritance.jpg)
+![](https://raw.githubusercontent.com/bandren/CObject/master/docs/Overriding.jpg)
 
 ###Header
 
