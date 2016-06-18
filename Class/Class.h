@@ -33,11 +33,6 @@
 /* The .bss footprint when this is defined is:		~16 bytes.   */
 //#define C_MINIMAL_DEBUG
 
-/* The variable name used to reference an object, this is */
-/* 'this' in C++/Java and 'self' in Python. */
-/* Some helper macros assume the object reference has this name. */
-#define C_OBJ_REF 				self
-
 /* Default memory clean up method used. */
 /* Calling CDynamic( ) on an object will invoke this free method */
 /* being called after destruction. */
@@ -58,7 +53,7 @@
 /* Used to zero out a structure. */
 /* This assumes that NULL resolves to 0, which is requried by C standard. */
 /* If your C library doesn't have memset, you will have to write your own, */
-/* or opt not use it; however, the debuging features won't work without it. */
+/* or opt not use it; the debugging features won't work without it. */
 #if defined( DEBUG )
 #include <string.h>
 #define C_INIT_OBJECT( object )							\
@@ -193,9 +188,9 @@ struct CInterface
 	} while( 0 )
 
 /* Bind the interface data at run time. Use in constructor */
-#define CInterface( iface )											\
+#define CInterface( self, iface )									\
 	do {															\
-		((struct CInterface*) (iface))->C_ROOT = C_OBJ_REF;	\
+		((struct CInterface*) (iface))->C_ROOT = self;				\
 	} while( 0 )
 
 /* Helper macro for linking virtual methods. */

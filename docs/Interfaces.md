@@ -78,7 +78,7 @@ extern void Point_Move( struct Point* self, int x, int y );
 #endif /* POINT_H_ */
 ```
 
-###Header Source
+###Point Source
 
 ```C
 #include <Point.h>
@@ -102,7 +102,7 @@ void Point( struct Point* self, int x, int y )
     /* If the interface implemented an interface, we would call this */
     /* twice, once for the interface implemented by the interface, and */
     /* a second time for the interface implemented by the class. */
-    CInterface(&self->printable);
+    CInterface(self, &self->printable);
 
     /* IMPORTANT */
     /* Must link implemented interface method. */

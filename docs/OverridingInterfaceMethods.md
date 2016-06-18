@@ -1,11 +1,7 @@
 #Overriding and Overwriting Interface Methods
 ---
 
-This is done in the exact same way it was done with virtual methods. Continueing from last time, [Interfaces](https://github.com/bandren/CObject/blob/master/docs/Interfaces.md), we will rewrite the Square class to override Printable_Print( ). Overwriting won't be explicitly shown since it follows almost the same procedure as overriding.
-
-It will be revealed here, using interfaces comes at a cost:
-
-* The application developer must be away of class hierchy. Using Java as an example, the developer must know the ```add( )``` method he uses on an ArrayList object is inherited from the List interface. 
+This is done in the exact same way it was done with virtual methods. Continueing from last time, [Interfaces](https://github.com/bandren/CObject/blob/master/docs/Interfaces.md), we will rewrite the Square class to override Printable_Print( ).
 
 ###Header
 
