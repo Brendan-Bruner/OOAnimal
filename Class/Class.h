@@ -64,17 +64,16 @@
 #define C_INIT_OBJECT( object )
 #endif
 
-/* End of configuration options. */
 
 /****************************************************************************/
 /* Assert Messages															*/
 /****************************************************************************/
 #if defined( DEBUG )
 extern void CAssert( char exp, char const* msg, char const* file, int line );
-extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, int line );
+extern void CAssert2( char exp, char const* msg1, char const* file, int line );
 #else
 #define CAssert( exp, msg, file, line ) (void)file; (void) line;
-#define CAssert2( exp, msg1, msg2, file, line ) (void)file; (void)line;
+#define CAssert2( exp, msg1, file, line ) (void)file; (void)line;
 #endif
 
 /* Different reasons for asserting. */
@@ -96,8 +95,8 @@ extern void CAssert2( char exp, char const* msg1, char const* msg2, char const* 
 	"\t  should never be instantiated\n"
 #endif
 extern const char* CAssertVirtualMessage_;
-#define C_ASSERT_VIRTUAL( method, funcName )\
-	CAssert2( ((method)==NULL), CAssertVirtualMessage_, funcName, __FILE__, __LINE__ )
+#define C_ASSERT_VIRTUAL( method, method_name )\
+	CAssert2( ((method)==NULL), CAssertVirtualMessage_, __FILE__, __LINE__ )
 
 #if defined( C_MINIMAL_DEBUG )
 #define C_ASSERT_SUPER_METHOD_MESSAGE NULL
@@ -109,8 +108,8 @@ extern const char* CAssertVirtualMessage_;
 	"\t  did not call its super constructor, that is, A's constructor.\n"
 #endif
 extern const char* CAssertSuperMethodMessage_;
-#define C_ASSERT_SUPER_METHOD( method, name )\
-	CAssert2( ((method)==NULL), CAssertSuperMethodMessage_, name, __FILE__, __LINE__ )
+#define C_ASSERT_SUPER_METHOD( method )\
+	CAssert2( ((method)==NULL), CAssertSuperMethodMessage_, __FILE__, __LINE__ )
 
 #if defined( C_MINIMAL_DEBUG )
 #define C_ASSERT_OBJECT_MESSAGE NULL
@@ -155,7 +154,6 @@ struct CObject
 };
 extern struct CObject* CObject( struct CObject* );
 extern void CObject_Destroy( struct CObject* );
-extern void CObject_IsDynamic( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Helper macro for object destruction. */
@@ -164,11 +162,11 @@ extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Helper macro for declaring object dynamic. */
 #define CDynamic( obj ) \
-	CObject_IsDynamic( (struct CObject*) (obj) )
+	CObject_SetFree((struct CObject*) (obj), CDefaultFree)
 
 /* Helper macro for declaring free method for object. */
 #define CFreeWith( obj, freep ) \
-	CObject_SetFree( (struct CObject*) (obj), (freep) )
+	CObject_SetFree((struct CObject*) (obj), (freep))
 
 /* Must be put at beginning of an interface. */
 struct CInterface
@@ -180,13 +178,6 @@ struct CInterface
 /****************************************************************************/
 /* Constructor specific setup												*/
 /****************************************************************************/
-#define CConstructor( self )					\
-	do {										\
-		C_ASSERT_OBJECT( self );				\
-		C_INIT_OBJECT( self );					\
-		((struct CObject*) self)->C_ROOT = self;\
-	} while( 0 )
-
 /* Bind the interface data at run time. Use in constructor */
 #define CInterface( self, iface )									\
 	do {															\
@@ -217,8 +208,8 @@ struct CInterface
 /* Helper macros for asserting and defining class methods					*/
 /****************************************************************************/
 /* Assert a super class method before calling it. */
-#define CAssertSuper( self, method ) \
-	C_ASSERT_SUPER_METHOD( self->method, #method ); \
+#define CAssertSuper( method ) \
+	C_ASSERT_SUPER_METHOD( method ); \
 
 /* Asserts virtual method before calling it. */
 #define CAssertVirtual( self, name )				\
@@ -234,10 +225,9 @@ struct CInterface
 
 /* Cast object pointer to desired class. */
 struct CRoot{ void* C_ROOT; };
-extern void* CVirtualMethod_( void*, const char*, int );
+extern void* CObjectCast_( void*, const char*, int );
 #define CCast( self_ )\
-	CVirtualMethod_( self_, __FILE__, __LINE__ )
-//	CVirtualMethod_( self_ )
+	CObjectCast_( self_, __FILE__, __LINE__ )
 
 
 #endif /* CLASS_H_ */

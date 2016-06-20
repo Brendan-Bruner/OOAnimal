@@ -39,21 +39,21 @@ void CAssert( char exp, char const* msg, char const* file, int line )
  	}												
 }
 
-void CAssert2( char exp, char const* msg1, char const* msg2, char const* file, int line )
+void CAssert2( char exp, char const* msg1, char const* file, int line )
 {
  	if( exp ) { 												
  #if defined( C_MINIMAL_DEBUG )
  		(void) msg1; (void) msg2;
  		C_PRINT( "In file: %s\nOn line: %d\n", file, line );									
 #else
- 		C_PRINT( "In file: %s\nOn line: %d (function %s)\nCClass failure with message:\n%s\n", file, line, msg2, msg1 );									
+ 		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg1 );
 #endif
  		C_FAILED_ASSERT_HANDLE( );
  	}												
 }
 #endif
 
-void* CVirtualMethod_( void* self, const char* file, int line )
+void* CObjectCast_( void* self, const char* file, int line )
 {
 	C_ASSERT_CAST( ((struct CRoot*) self)->C_ROOT, file, line );
 	return ((struct CRoot*) self)->C_ROOT;	
@@ -63,12 +63,6 @@ void CObject_Destroy( struct CObject* self )
 {
 	CAssertVirtual(self, CDestructor);
 	self->CDestructor(self);
-}
-
-void CObject_IsDynamic( struct CObject* self )
-{
-	CAssertObject(self);
-	self->CObject_Free = CDefaultFree;
 }
 
 void CObject_SetFree( struct CObject* self, CFreeType objectFree )
@@ -82,13 +76,15 @@ static void CDestructor( struct  CObject* self )
 {
 	if( self->CObject_Free != NULL )
 	{
-		self->CObject_Free((void*) self);
+		self->CObject_Free(self);
 	}
 }
 
 struct CObject* CObject( struct CObject* self )
 {
-	self->C_ROOT = (void*) self;
+	C_ASSERT_OBJECT(self);
+	C_INIT_OBJECT(self);
+	self->C_ROOT = self;
 	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;
 	return self;
