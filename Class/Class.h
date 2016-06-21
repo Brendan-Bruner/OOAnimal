@@ -95,7 +95,7 @@ extern void CAssert2( char exp, char const* msg1, char const* file, int line );
 	"\t  should never be instantiated\n"
 #endif
 extern const char* CAssertVirtualMessage_;
-#define C_ASSERT_VIRTUAL( method, method_name )\
+#define C_ASSERT_VIRTUAL( method )\
 	CAssert2( ((method)==NULL), CAssertVirtualMessage_, __FILE__, __LINE__ )
 
 #if defined( C_MINIMAL_DEBUG )
@@ -208,16 +208,15 @@ struct CInterface
 /* Helper macros for asserting and defining class methods					*/
 /****************************************************************************/
 /* Assert a super class method before calling it. */
-#define CAssertSuper( method ) \
-	C_ASSERT_SUPER_METHOD( method ); \
+#define CAssertSuper( method ) 						\
+	C_ASSERT_SUPER_METHOD( method ); 				\
 
 /* Asserts virtual method before calling it. */
-#define CAssertVirtual( self, name )				\
-	C_ASSERT_OBJECT( self );			\
-	C_ASSERT_VIRTUAL( self-> name, #name ); 	\
+#define CAssertVirtual( func )				\
+	C_ASSERT_VIRTUAL( func );
 
 /* Helper macro for asserting pointers. */
-#define CAssertObject( object ) \
+#define CAssertObject( object ) 					\
 	C_ASSERT_OBJECT( (object) )
 
 /* Asserts an object point in a non virtual method. */

@@ -61,7 +61,8 @@ void* CObjectCast_( void* self, const char* file, int line )
 
 void CObject_Destroy( struct CObject* self )
 {
-	CAssertVirtual(self, CDestructor);
+	CAssertObject(self);
+	CAssertVirtual(self->CDestructor);
 	self->CDestructor(self);
 }
 
