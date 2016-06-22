@@ -21,7 +21,7 @@
 
 #include <stdio.h>
 
-#define UNIT_PRINT( msg, ... ) 	printf( msg, ##__VA_ARGS__ )
+#define UNIT_PRINT( ... ) 	printf( __VA_ARGS__ )
 
 extern unsigned int unit_asserts_passed, delta_unit_asserts_passed;
 extern unsigned int unit_asserts_failed, delta_unit_asserts_failed;

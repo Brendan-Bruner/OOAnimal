@@ -162,7 +162,7 @@ static int ITInterface1_ClassC_Method0( struct ITInterface1* self_ )
 
 	/* Return sum of this macro plus value returned by super's implementation. */
 	CAssertSuper(self->i2method0);
-	return IT_CLASSC_I1_METHOD0 + self->i1method0(&self->classB.classA.itInterface2);
+	return IT_CLASSC_I1_METHOD0 + self->i1method0(&self->classB.classA.itInterface1);
 }
 
 /* Override this inherited method. */

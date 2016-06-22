@@ -38,6 +38,7 @@ static int freeUsed = FREE_UNUSED;
 
 static void testFree( void* size )
 {
+	(void) size;
 	freeUsed = FREE_USED;
 }
 

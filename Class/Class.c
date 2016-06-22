@@ -18,47 +18,44 @@
  */
 
 #include "Class.h"
-#include <stdlib.h>
 
+/* This puts large diag messages in .bss instead of on function stack */
+/* when called in the CAssert( ) function. */
+#if C_DEBUG_DIAG_LEVEL == 2
 const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
 const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
 const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
 const char* CAssertCastMessage_ = C_ASSERT_CAST_MESSAGE;
+#endif
 
+/* Assert method. */
 #if defined( DEBUG )
 void CAssert( char exp, char const* msg, char const* file, int line )
 {
  	if( exp ) { 	
-#if defined( C_MINIMAL_DEBUG )
+#if C_DEBUG_DIAG_LEVEL == 1
  		(void) msg;
  		C_PRINT( "In file: %s\nOn line: %d\n", file, line );									
-#else
+#elif C_DEBUG_DIAG_LEVEL == 2
  		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg );
-#endif
- 		C_FAILED_ASSERT_HANDLE( );
- 	}												
-}
-
-void CAssert2( char exp, char const* msg1, char const* file, int line )
-{
- 	if( exp ) { 												
- #if defined( C_MINIMAL_DEBUG )
- 		(void) msg1; (void) msg2;
- 		C_PRINT( "In file: %s\nOn line: %d\n", file, line );									
-#else
- 		C_PRINT( "In file: %s\nOn line: %d\nCClass failure with message:\n%s\n", file, line, msg1 );
+#elif C_DEBUG_DIAG_LEVEL == 0
+ 		(void) msg;
+ 		(void) file;
+ 		(void) line;
 #endif
  		C_FAILED_ASSERT_HANDLE( );
  	}												
 }
 #endif
 
+/* Cast object back to its original class type. */
 void* CObjectCast_( void* self, const char* file, int line )
 {
 	C_ASSERT_CAST( ((struct CRoot*) self)->C_ROOT, file, line );
 	return ((struct CRoot*) self)->C_ROOT;	
 }
 
+/* Wrapper for calling destructor. */
 void CObject_Destroy( struct CObject* self )
 {
 	CAssertObject(self);
@@ -66,6 +63,7 @@ void CObject_Destroy( struct CObject* self )
 	self->CDestructor(self);
 }
 
+/* Set memory free method called in destructor. */
 void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 {
 	CAssertObject(self);
@@ -73,6 +71,7 @@ void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 	self->CObject_Free = objectFree;
 }
 
+/* Destructor. */
 static void CDestructor( struct  CObject* self )
 {
 	if( self->CObject_Free != NULL )
@@ -81,10 +80,16 @@ static void CDestructor( struct  CObject* self )
 	}
 }
 
-struct CObject* CObject( struct CObject* self )
+/* Constructor for base object. */
+struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
 {
+	/* Assert non NULL pointer. */
 	C_ASSERT_OBJECT(self);
-	C_INIT_OBJECT(self);
+
+	/* Set entire object to 0. */
+	C_INIT_OBJECT(self, objectSize);
+
+	/* Setup object data. */
 	self->C_ROOT = self;
 	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;

@@ -25,6 +25,7 @@ extern TEST_SUITE(interface_suite);
 
 int main( int argc, char** argv )
 {
+	(void) argc; (void) argv;
 	RUN_TEST_SUITE(destructor_suite);
 	RUN_TEST_SUITE(virtual_suite);
 	RUN_TEST_SUITE(interface_suite);

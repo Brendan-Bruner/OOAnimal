@@ -89,7 +89,7 @@ static int classBMethod3( struct VTClassA* self )
 
 static int classBMethod4( struct VTClassA* self_ )
 {
-	CAssertObject(self);
+	CAssertObject(self_);
 	struct VTClassB* self = CCast(self_);
 
 	CAssertSuper(self->method4);
