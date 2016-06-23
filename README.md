@@ -8,7 +8,7 @@ CObject is a small set of macros and functions for using fundamental object orie
 * Interfaces
 * Virtual methods
 
-It's implementation is designed to be as simple as possible. With a transparent implementation, application code using CObject is more intuitive to develop and easier to debug. 
+It's implementation is designed to be as simple as possible, making application code intuitive to develop and easier to debug. 
 
 The memory footprint of objects are:
 
