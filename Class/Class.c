@@ -51,6 +51,7 @@ void CAssert( char exp, char const* msg, char const* file, int line )
 /* Cast object back to its original class type. */
 void* CObjectCast_( void* self, const char* file, int line )
 {
+	CAssert( self == NULL, CAssertObjectMessage_, file, line);
 	C_ASSERT_CAST( ((struct CRoot*) self)->C_ROOT, file, line );
 	return ((struct CRoot*) self)->C_ROOT;	
 }

@@ -25,8 +25,13 @@
 /****************************************************************************/
 void newDTClassA( struct DTClassA* self, int* testVar )
 {
+	CAssertObject(self);
+	CAssertObject(testVar);
+
+	/* Call super's constructor. */
 	CObject(&self->object);
 
+	/* Set test var to zero. */
 	*testVar = 0;
 	self->destructorTestVar = testVar;
 }
@@ -37,6 +42,10 @@ void newDTClassA( struct DTClassA* self, int* testVar )
 /****************************************************************************/
 void newDTClassB( struct DTClassB* self, int* testVar )
 {
+	CAssertObject(self);
+	CAssertObject(testVar);
+
+	/* Call super's constructor. */
 	newDTClassA(&self->dtClassA, testVar);
 }
 
@@ -46,7 +55,7 @@ void newDTClassB( struct DTClassB* self, int* testVar )
 /****************************************************************************/
 static void dtClassCDestroy( struct CObject* self_ )
 {
-	/* Cast back to class we are working with. */
+	/* This is DTClassC's implementation, so cast object to type DTClassC. */
 	struct DTClassC* self = CCast(self_);
 
 	/* Increment test var */
@@ -54,15 +63,18 @@ static void dtClassCDestroy( struct CObject* self_ )
 
 	/* Call super's destructor. */
 	CAssertSuper(self->CDestructorDTC);
-	self->CDestructorDTC((struct CObject*) self);
+	self->CDestructorDTC(&self->dtClassA.object);
 }
 void newDTClassC( struct DTClassC* self, int* testVar )
 {
+	CAssertObject(self);
+	CAssertObject(testVar);
+
+	/* Call super's constructor. */
 	newDTClassA(&self->dtClassA, testVar);
 
 	/* Override destructor. */
-	self->CDestructorDTC = ((struct CObject*) self)->CDestructor;	/* Keep reference to super's implementation */
-	((struct CObject*) self)->CDestructor = dtClassCDestroy;		/* Override with new implementation			*/
+	COverrideVirtual(self->CDestructorDTC, self->dtClassA.object.CDestructor, dtClassCDestroy);
 }
 
 
@@ -71,7 +83,7 @@ void newDTClassC( struct DTClassC* self, int* testVar )
 /****************************************************************************/
 static void dtClassDDestroy( struct CObject* self_ )
 {
-	/* Cast back to class we're working with. */
+	/* This is DTClassD's implementation, so cast object to type DTClassD. */
 	struct DTClassD* self = CCast(self_);
 
 	/* Increment test var. */
@@ -79,15 +91,18 @@ static void dtClassDDestroy( struct CObject* self_ )
 
 	/* Call super's destructor. */
 	CAssertSuper(self->CDestructorDTD);
-	self->CDestructorDTD((struct CObject*) self);
+	self->CDestructorDTD(&self->dtClassB.dtClassA.object);
 }
 void newDTClassD( struct DTClassD* self, int* testVar )
 {
+	CAssertObject(self);
+	CAssertObject(testVar);
+
+	/* Call super's constructor. */
 	newDTClassB(&self->dtClassB, testVar);
 
 	/* Override destructor. */
-	self->CDestructorDTD = ((struct CObject*) self)->CDestructor;	/* Keep reference to super's implementation */
-	((struct CObject*) self)->CDestructor = dtClassDDestroy;		/* Override with new implementation			*/
+	COverrideVirtual(self->CDestructorDTD, self->dtClassB.dtClassA.object.CDestructor, dtClassDDestroy);
 }
 
 
@@ -96,21 +111,24 @@ void newDTClassD( struct DTClassD* self, int* testVar )
 /****************************************************************************/
 static void dtClassEDestroy( struct CObject* self_ )
 {
-	/* Cast back to class we're working with. */
-		struct DTClassE* self = CCast(self_);
+	/* This is DTClassE's implementation, so cast object to type DTClassE. */
+	struct DTClassE* self = CCast(self_);
 
 	/* Set test var. */
 	*(self->dtClassC.dtClassA).destructorTestVar = DT_CLASS_E_VAL;
 
 	/* Call super's destructor. */
 	CAssertSuper(self->CDestructorDTE);
-	self->CDestructorDTE((struct CObject*) self);
+	self->CDestructorDTE(&self->dtClassC.dtClassA.object);
 }
 void newDTClassE( struct DTClassE* self, int* testVar )
 {
+	CAssertObject(self);
+	CAssertObject(testVar);
+
+	/* Call super's constructor. */
 	newDTClassC(&self->dtClassC, testVar);
 
 	/* Override destructor. */
-	self->CDestructorDTE = ((struct CObject*) self)->CDestructor;		/* Keep reference to super's implementation */
-	((struct CObject*) self)->CDestructor = dtClassEDestroy;			/* Override with new implementation			*/
+	COverrideVirtual(self->CDestructorDTE, self->dtClassC.dtClassA.object.CDestructor, dtClassEDestroy);
 }

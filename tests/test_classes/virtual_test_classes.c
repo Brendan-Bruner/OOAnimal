@@ -54,13 +54,16 @@ static int method4( struct VTClassA* self )
 
 void newVTClassA( struct VTClassA* self )
 {
+	CAssertObject(self);
+
+	/* Call super's constructor. */
 	CObject(&self->cobject);
 
-	self->method0 = method0;
-	self->method1 = method1;
-	self->method2 = method2;
-	self->method3 = method3;
-	self->method4 = method4;
+	CLinkVirtual(self->method0, method0);
+	CLinkVirtual(self->method1, method1);
+	CLinkVirtual(self->method2, method2);
+	CLinkVirtual(self->method3, method3);
+	CLinkVirtual(self->method4, method4);
 }
 
 /****************************************************************************/
@@ -74,11 +77,12 @@ static int classBMethod1( struct VTClassA* self )
 
 static int classBMethod2( struct VTClassA* self_ )
 {
-	CAssertObject(self_);
+	/* This is VTClassB's implementation, so cast object back to type VTClassB. */
 	struct VTClassB* self = CCast(self_);
 
 	CAssertSuper(self->method2);
-	return VT_CLASSB_METHOD2 + self->method2((struct VTClassA*) self);
+	/* Call super's (VTClassA)  implementation of this method. */
+	return VT_CLASSB_METHOD2 + self->method2(&self->classA);
 }
 
 static int classBMethod3( struct VTClassA* self )
@@ -89,30 +93,32 @@ static int classBMethod3( struct VTClassA* self )
 
 static int classBMethod4( struct VTClassA* self_ )
 {
-	CAssertObject(self_);
+	/* This is VTClassB's implementation, so cast object back to type VTClassB. */
 	struct VTClassB* self = CCast(self_);
 
 	CAssertSuper(self->method4);
-	return VT_CLASSB_METHOD4 + self->method4((struct VTClassA*) self);
+	/* Call super's (VTClassA) implementation of this method. */
+	return VT_CLASSB_METHOD4 + self->method4(&self->classA);
 }
 
 void newVTClassB( struct VTClassB* self )
 {
+	CAssertObject(self);
+
+	/* Call super's constructor. */
 	newVTClassA(&self->classA);
 
 	/* Relink method 1, loosing the super's implementation. */
-	((struct VTClassA*) self)->method1 = classBMethod1;
+	CLinkVirtual(self->classA.method1, classBMethod1);
 
 	/* Relink method 3, loosing the super's implementation. */
-	((struct VTClassA*) self)->method3 = classBMethod3;
+	CLinkVirtual(((struct VTClassA*) self)->method3, classBMethod3);
 
 	/* Override method 2. */
-	self->method2 = ((struct VTClassA*) self)->method2;
-	((struct VTClassA*) self)->method2 = classBMethod2;
+	COverrideVirtual(self->method2, self->classA.method2, classBMethod2);
 
 	/* Override method 4. */
-	self->method4 = ((struct VTClassA*) self)->method4;
-	((struct VTClassA*) self)->method4 = classBMethod4;
+	COverrideVirtual(self->method4, self->classA.method4, classBMethod4);
 
 }
 
@@ -121,29 +127,34 @@ void newVTClassB( struct VTClassB* self )
 /****************************************************************************/
 static int classCMethod3( struct VTClassA* self_ )
 {
+	/* This is VTClassC's implementation, so cast object back to type VTClassC. */
 	struct VTClassC* self = CCast(self_);
 
 	CAssertSuper(self->method3);
+	/* Calls super's (VTClassB) implementation of this method. */
 	return VT_CLASSC_METHOD3 + self->method3((struct VTClassA*) self);
 }
 
 static int classCMethod4( struct VTClassA* self_ )
 {
+	/* This is VTClassC's implementation, so cast object back to type VTClassC. */
 	struct VTClassC* self = CCast(self_);
 
 	CAssertSuper(self->method3);
+	/* Calls super's (VTClassB) implementation of this method. */
 	return VT_CLASSC_METHOD4 + self->method4((struct VTClassA*) self);
 }
 
 void newVTClassC( struct VTClassC* self )
 {
+	CAssertObject(self);
+
+	/* Call super's constructor. */
 	newVTClassB(&self->classB);
 
 	/* Override method3. */
-	self->method3 = ((struct VTClassA*) self)->method3;
-	((struct VTClassA*) self)->method3 = classCMethod3;
+	COverrideVirtual(self->method3, self->classB.classA.method3, classCMethod3);
 
 	/* Override method4. */
-	self->method4 = ((struct VTClassA*) self)->method4;
-	((struct VTClassA*) self)->method4 = classCMethod4;
+	COverrideVirtual(self->method4, self->classB.classA.method4, classCMethod4);
 }

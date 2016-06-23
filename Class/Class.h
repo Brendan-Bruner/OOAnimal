@@ -198,7 +198,7 @@ struct CInterface
 
 /* Asserts virtual method before calling it. */
 #define CAssertVirtual( func )				\
-	C_ASSERT_VIRTUAL( func );
+	C_ASSERT_VIRTUAL( func )
 
 /* Helper macro for asserting pointers. */
 #define CAssertObject( object ) 					\
@@ -209,6 +209,19 @@ struct CRoot{ void* C_ROOT; };
 extern void* CObjectCast_( void*, const char*, int );
 #define CCast( self_ )\
 	CObjectCast_( self_, __FILE__, __LINE__ )
+
+/* Link a virtual function. */
+#define CLinkVirtual(virtual_method, method_define)	\
+	do {											\
+		virtual_method = method_define;				\
+	} while( 0 )
+
+/* Override a virtual function. */
+#define COverrideVirtual(method_reference, virtual_method, method_define)	\
+	do {																	\
+		method_reference = virtual_method;									\
+		virtual_method = method_define;										\
+	} while( 0 )
 
 
 #endif /* CLASS_H_ */
