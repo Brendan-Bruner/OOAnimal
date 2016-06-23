@@ -1,32 +1,26 @@
 #CObject
 ---
 
-CObject is a small set of macros and functions that enable fundamental object oriented concepts (OO) in the C language. it was designed to use minimal boiler plate code and use as simple an implementation as possible. With a transparent implementation, CObject is easier to debug and more intuitive to develop with. However, this comes at a cost: the developer must be more aware of the back bone enabling object oriented programming.
-
-CObject is c99 compliant. 
-
-###What it Can do
+CObject is a small set of macros and functions for using fundamental object oriented concepts (OO) in the C language. 
 
 * Classes
 * Single inheritance
 * Interfaces
-* Virtual and pure virtual methods
+* Virtual methods
+
+It's implementation is designed to be as simple as possible. With a transparent implementation, application code using CObject is more intuitive to develop and easier to debug. 
+
+The memory footprint of objects are:
+
+| Data Type | Minimum |
+|:---|:---|
+| Class | sizeof(void\*) + 2\*sizeof(void(\*)(void)) |
+| Interface | sizeof(void\*) |
+
+CObject is c99 compliant. 
 
 ###Compile Time and Run Time Checks
 
-The compiler can't know if a class has forgot to implement a method inherited from an interface or if application code is instantiating virtual classes. To remedy this, run time checks are (optionally) done. **When compiling, the symbol DEBUG must be defined for run time checks to be used**.
+Run time checks are (optionally) done to catch errors the compiler can't. **When compiling, the symbol DEBUG must be defined for run time checks to be used**.
 
 When a run time check fails, an error will be printed to console and the program execution halted. The printed message will explain the most likely cause of failure and common solutions. Since different systems have different requirements, hooks are provided to changed the behaviour when asserts fail, and information is printed to console. For example, on an embedded system, the print hook can be used to power on an LED instead or print over a UART connection.
-
-###Tutorials
-
-These tutorials provide a brief overview of how to use CObject by example. 
-
-1. [Classes](https://github.com/bandren/CObject/blob/master/docs/Classes.md)
-2. [Virtual and Pure Virtual Methods](https://github.com/bandren/CObject/blob/master/docs/VirtualMethods.md)
-3. [Inheritance and Implementing Pure Virtual Methods](https://github.com/bandren/CObject/blob/master/docs/Inheritance.md)
-4. [Overriding](https://github.com/bandren/CObject/blob/master/docs/Overriding.md)
-5. [Overwriting](https://github.com/bandren/CObject/blob/master/docs/Overwriting.md)
-6. [The Destructor](https://github.com/bandren/CObject/blob/master/docs/TheDestructor.md)
-7. [Interfaces](https://github.com/bandren/CObject/blob/master/docs/Interfaces.md)
-8. [Overriding and Overwriting Inherited Interface Methods](https://github.com/bandren/CObject/blob/master/docs/OverridingInterfaceMethods.md)
