@@ -36,9 +36,8 @@
 #define DT_CLASS_E_VAL -4
 
 /****************************************************************************/
-/* Test classes																*/
+/* Test classes A															*/
 /****************************************************************************/
-
 struct DTClassA
 {
 	struct CObject object;
@@ -46,19 +45,35 @@ struct DTClassA
 	int* destructorTestVar;
 };
 
+/****************************************************************************/
+/* Test class B																*/
+/****************************************************************************/
 struct DTClassB
 {
 	struct DTClassA dtClassA;
 };
 
+/****************************************************************************/
+/* Test class C																*/
+/****************************************************************************/
+struct DTClassC_VTable;
 struct DTClassC
 {
 	struct DTClassA dtClassA;
 
 	/* Overriding */
-	void (*CDestructorDTC)( struct CObject* );
+	struct DTClassC_VTable* vtable;
 };
 
+struct DTClassC_VTable
+{
+	struct CObject_VTable* CObject_OrigVTable;
+	struct CObject_VTable CObject_OvrrdVTable;
+};
+
+/****************************************************************************/
+/* Test class D																*/
+/****************************************************************************/
 struct DTClassD
 {
 	struct DTClassB dtClassB;
@@ -67,6 +82,9 @@ struct DTClassD
 	void (*CDestructorDTD)( struct CObject* );
 };
 
+/****************************************************************************/
+/* Test class E																*/
+/****************************************************************************/
 struct DTClassE
 {
 	struct DTClassC dtClassC;
@@ -75,6 +93,9 @@ struct DTClassE
 	void (*CDestructorDTE)( struct CObject* );
 };
 
+/****************************************************************************/
+/* Constructors																*/
+/****************************************************************************/
 extern void newDTClassA( struct DTClassA*, int* );
 extern void newDTClassB( struct DTClassB*, int* );
 extern void newDTClassC( struct DTClassC*, int* );

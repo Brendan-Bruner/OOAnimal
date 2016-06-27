@@ -81,6 +81,12 @@ static void CDestructor( struct  CObject* self )
 	}
 }
 
+/* vtable */
+struct CObject_VTable CObject_VTable =
+	{
+		.CDestructor = CDestructor
+	};
+
 /* Constructor for base object. */
 struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
 {
@@ -90,9 +96,11 @@ struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
 	/* Set entire object to 0. */
 	C_INIT_OBJECT(self, objectSize);
 
+	/* Setup vtable. */
+	self->CObject_VTable = &CObject_VTable;
+
 	/* Setup object data. */
 	self->C_ROOT = self;
-	self->CDestructor = CDestructor;
 	self->CObject_Free = NULL;
 	return self;
 }

@@ -62,9 +62,19 @@ static void dtClassCDestroy( struct CObject* self_ )
 	++*(self->dtClassA).destructorTestVar;
 
 	/* Call super's destructor. */
-	CAssertSuper(self->CDestructorDTC);
-	self->CDestructorDTC(&self->dtClassA.object);
+	CAssertSuper(self->vtable->CObject_OvrrdVTable.CDestructor);
+	self->vtable->CObject_OvrrdVTable.CDestructor(&self->dtClassA.object);
 }
+
+struct DTClassC_VTable DTClassC_VTable =
+	{
+		.CObject_OrigVTable = &CObject_VTable,
+		.CObject_OvrrdVTable =
+		{
+			.CDestructor = dtClassCDestroy
+		}
+	};
+
 void newDTClassC( struct DTClassC* self, int* testVar )
 {
 	CAssertObject(self);
@@ -73,8 +83,9 @@ void newDTClassC( struct DTClassC* self, int* testVar )
 	/* Call super's constructor. */
 	newDTClassA(&self->dtClassA, testVar);
 
-	/* Override destructor. */
-	COverrideVirtual(self->CDestructorDTC, self->dtClassA.object.CDestructor, dtClassCDestroy);
+	/* Remap super's vtable and assign self's vtable. */
+	self->dtClassA.object.CObject_VTable = &DTClassC_VTable.CObject_OvrrdVTable;
+	self->vtable = &DTClassC_VTable;
 }
 
 

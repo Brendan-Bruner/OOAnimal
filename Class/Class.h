@@ -52,9 +52,16 @@
 /* ie, the default free method cannot be a macro function. */
 #define CDefaultFree 			free
 
+/* Default memory allocation method to use. */
+#define CMalloc					malloc
+
 /* All classes and interfaces contain a pointer to their highest */
 /* super class, the base object, this is the name of that pointer. */
 #define C_ROOT					_rt
+
+/* All classes and interfaces contain a pointer to their virtual table, */
+/* this is the name of that pointer. */
+#define C_VTABLE				_vt
 
 /* These define how to print formatted strings and what to */
 /* do when an assertion fails. */
@@ -149,20 +156,31 @@ extern void CAssert( char exp, char const* msg, char const* file, int line );
 /****************************************************************************/
 /* Base object and interface structures										*/
 /****************************************************************************/
+struct CRoot
+{
+	void* C_ROOT;
+	void* C_VTABLE;
+};
 typedef void (*CFreeType)( void* );
+struct CObject;
+struct CObject_VTable
+{
+	void (*CDestructor)( struct CObject* );
+};
 struct CObject
 {
 	void* C_ROOT; /* MUST be first variable in this struct. */
-	void (*CDestructor)( struct CObject* );
+	void* C_VTABLE;
 	CFreeType CObject_Free;
 };
+extern struct CObject_VTable CObject_VTable;
 extern struct CObject* CObject_Constructor( struct CObject*, size_t );
 extern void CObject_Destroy( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Help macro for object construction. Macro has side effects. */
 #define CObject( self )	\
-	CObject_Constructor(self, sizeof(*self))
+	CObject_Constructor(self, sizeof(*(self)))
 
 /* Helper macro for object destruction. */
 #define CDestroy( mem )	\
@@ -205,7 +223,6 @@ struct CInterface
 	C_ASSERT_OBJECT( (object) )
 
 /* Cast object pointer to desired class. */
-struct CRoot{ void* C_ROOT; };
 extern void* CObjectCast_( void*, const char*, int );
 #define CCast( self_ )\
 	CObjectCast_( self_, __FILE__, __LINE__ )
@@ -220,8 +237,14 @@ extern void* CObjectCast_( void*, const char*, int );
 #define COverrideVirtual(method_reference, virtual_method, method_define)	\
 	do {																	\
 		method_reference = virtual_method;									\
-		virtual_method = method_define;										\
+		virtual_method = method_define;								 		\
 	} while( 0 )
+
+#define CLinkVTable(self, vtable)											\
+	((struct CObject*) (self))-> C_VTABLE = (vtable)
+
+#define CVirtual(type, self)												\
+	(((type)*) ((struct CObject*) (self))-> C_VTABLE)
 
 
 #endif /* CLASS_H_ */
