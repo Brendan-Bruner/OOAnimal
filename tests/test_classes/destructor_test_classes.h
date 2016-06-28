@@ -38,20 +38,31 @@
 /****************************************************************************/
 /* Test classes A															*/
 /****************************************************************************/
+struct DTClassA_VTable;
 struct DTClassA
 {
-	struct CObject object;
+	struct CObject cobject;
 
 	int* destructorTestVar;
+};
+struct DTClassA_VTable
+{
+	struct CObject_VTable CObject_VTable;
 };
 
 /****************************************************************************/
 /* Test class B																*/
 /****************************************************************************/
+struct DTClassB_VTable;
 struct DTClassB
 {
 	struct DTClassA dtClassA;
 };
+struct DTClassB_VTable
+{
+	struct DTClassA_VTable DTClassA_VTable;
+};
+
 
 /****************************************************************************/
 /* Test class C																*/
@@ -60,46 +71,57 @@ struct DTClassC_VTable;
 struct DTClassC
 {
 	struct DTClassA dtClassA;
-
-	/* Overriding */
-	struct DTClassC_VTable* vtable;
 };
 
 struct DTClassC_VTable
 {
-	struct CObject_VTable* CObject_OrigVTable;
-	struct CObject_VTable CObject_OvrrdVTable;
+	struct DTClassA_VTable DTClassA_VTable;
+	const struct DTClassA_VTable* Supers_DTClassA_VTable;
 };
 
 /****************************************************************************/
 /* Test class D																*/
 /****************************************************************************/
+struct DTClassD_VTable;
 struct DTClassD
 {
 	struct DTClassB dtClassB;
+};
 
-	/* Overriding */
-	void (*CDestructorDTD)( struct CObject* );
+struct DTClassD_VTable
+{
+	struct DTClassB_VTable DTClassB_VTable;
+	const struct DTClassB_VTable* Supers_DTClassB_VTable;
 };
 
 /****************************************************************************/
 /* Test class E																*/
 /****************************************************************************/
+struct DTClassE_VTable;
 struct DTClassE
 {
 	struct DTClassC dtClassC;
-
-	/* Overriding */
-	void (*CDestructorDTE)( struct CObject* );
 };
+struct DTClassE_VTable
+{
+	struct DTClassC_VTable DTClassC_VTable;
+	const struct DTClassC_VTable* Supers_DTClassC_VTable;
+};
+
 
 /****************************************************************************/
 /* Constructors																*/
 /****************************************************************************/
+extern const struct DTClassA_VTable* DTClassA_VTable_Create( );
 extern void newDTClassA( struct DTClassA*, int* );
+extern const struct DTClassB_VTable* DTClassB_VTable_Create( );
 extern void newDTClassB( struct DTClassB*, int* );
+extern const struct DTClassC_VTable* DTClassC_VTable_Create( );
 extern void newDTClassC( struct DTClassC*, int* );
+extern const struct DTClassD_VTable* DTClassD_VTable_Create( );
 extern void newDTClassD( struct DTClassD*, int* );
+extern const struct DTClassE_VTable* DTClassE_VTable_Create( );
 extern void newDTClassE( struct DTClassE*, int* );
+
 
 #endif /* TESTS_TEST_CLASSES_H_ */

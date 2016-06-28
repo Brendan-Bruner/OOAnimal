@@ -55,6 +55,10 @@
 /* Default memory allocation method to use. */
 #define CMalloc					malloc
 
+/* All classes and interfaces contain a pointer to their class */
+/* this is the name of that pointer. */
+#define C_CLASS					_cc
+
 /* All classes and interfaces contain a pointer to their highest */
 /* super class, the base object, this is the name of that pointer. */
 #define C_ROOT					_rt
@@ -156,24 +160,29 @@ extern void CAssert( char exp, char const* msg, char const* file, int line );
 /****************************************************************************/
 /* Base object and interface structures										*/
 /****************************************************************************/
-struct CRoot
+/* Class Definition - ie - class class. */
+struct CClass
 {
 	void* C_ROOT;
-	void* C_VTABLE;
+	const void* C_VTABLE;
 };
+
+/* Class object. */
 typedef void (*CFreeType)( void* );
-struct CObject;
-struct CObject_VTable
-{
-	void (*CDestructor)( struct CObject* );
-};
 struct CObject
 {
-	void* C_ROOT; /* MUST be first variable in this struct. */
-	void* C_VTABLE;
+	struct CClass C_CLASS; /* MUST be first variable in this struct. */
 	CFreeType CObject_Free;
 };
-extern struct CObject_VTable CObject_VTable;
+
+/* Virtual function pointer table for class object. */
+struct CObject_VTable
+{
+	void (*CDestructor)( void* );
+};
+
+/* Public functions for class object. */
+extern const struct CObject_VTable* CObject_VTable_Create( );
 extern struct CObject* CObject_Constructor( struct CObject*, size_t );
 extern void CObject_Destroy( struct CObject* );
 extern void CObject_SetFree( struct CObject*, CFreeType );
@@ -184,26 +193,26 @@ extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Helper macro for object destruction. */
 #define CDestroy( mem )	\
-	CObject_Destroy( ((struct CObject*) (mem))->C_ROOT )
+	CObject_Destroy(((struct CClass*) (mem))->C_ROOT)
 
 /* Helper macro for declaring object dynamic. */
 #define CDynamic( obj ) \
-	CObject_SetFree((struct CObject*) (obj), CDefaultFree)
+	CObject_SetFree(((struct CClass*) (obj))->C_ROOT, CDefaultFree)
 
 /* Helper macro for declaring free method for object. */
 #define CFreeWith( obj, freep ) \
-	CObject_SetFree((struct CObject*) (obj), (freep))
+	CObject_SetFree(((struct CClass*) (obj))->C_ROOT, (freep))
 
-/* Must be put at beginning of an interface. */
+/* Class interface definition. */
 struct CInterface
 {
-	void* C_ROOT;
+	struct CClass C_CLASS; /* Must be put at beginning of an interface. */
 };
 
 /* Interface constructor. */
 #define CInterface( self, iface )									\
 	do {															\
-		((struct CInterface*) (iface))->C_ROOT = self;				\
+		((struct CClass*) (iface))->C_ROOT = self;				\
 	} while( 0 )
 
 
@@ -240,11 +249,11 @@ extern void* CObjectCast_( void*, const char*, int );
 		virtual_method = method_define;								 		\
 	} while( 0 )
 
-#define CLinkVTable(self, vtable)											\
-	((struct CObject*) (self))-> C_VTABLE = (vtable)
+#define CVTable(self, vtable)											\
+	((struct CClass*) (self))-> C_VTABLE = (vtable)
 
-#define CVirtual(type, self)												\
-	(((type)*) ((struct CObject*) (self))-> C_VTABLE)
+#define CGetVTable(self, type)											\
+	((type*) ((struct CClass*) (self))-> C_VTABLE)
 
 
 #endif /* CLASS_H_ */

@@ -52,16 +52,15 @@ void CAssert( char exp, char const* msg, char const* file, int line )
 void* CObjectCast_( void* self, const char* file, int line )
 {
 	CAssert( self == NULL, CAssertObjectMessage_, file, line);
-	C_ASSERT_CAST( ((struct CRoot*) self)->C_ROOT, file, line );
-	return ((struct CRoot*) self)->C_ROOT;	
+	C_ASSERT_CAST( ((struct CClass*) self)->C_ROOT, file, line );
+	return ((struct CClass*) self)->C_ROOT;
 }
 
 /* Wrapper for calling destructor. */
 void CObject_Destroy( struct CObject* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->CDestructor);
-	self->CDestructor(self);
+	CGetVTable(self, struct CObject_VTable)->CDestructor(self);
 }
 
 /* Set memory free method called in destructor. */
@@ -73,19 +72,25 @@ void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 }
 
 /* Destructor. */
-static void CDestructor( struct  CObject* self )
+static void CDestructor( void* self_ )
 {
+	struct CObject* self = self_;
+
 	if( self->CObject_Free != NULL )
 	{
 		self->CObject_Free(self);
 	}
 }
 
-/* vtable */
-struct CObject_VTable CObject_VTable =
+/* Create vtable. */
+const struct CObject_VTable* CObject_VTable_Create( )
+{
+	static const struct CObject_VTable CObject_VTable =
 	{
 		.CDestructor = CDestructor
 	};
+	return &CObject_VTable;
+}
 
 /* Constructor for base object. */
 struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
@@ -93,14 +98,14 @@ struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
 	/* Assert non NULL pointer. */
 	C_ASSERT_OBJECT(self);
 
-	/* Set entire object to 0. */
+	/* Set entire object to 0 for run time checks. */
 	C_INIT_OBJECT(self, objectSize);
 
-	/* Setup vtable. */
-	self->CObject_VTable = &CObject_VTable;
+	/* Map vtable. */
+	CVTable(self, CObject_VTable_Create( ));
 
 	/* Setup object data. */
-	self->C_ROOT = self;
+	self->_cc._rt = self;
 	self->CObject_Free = NULL;
 	return self;
 }
