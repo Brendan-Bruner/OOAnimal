@@ -25,8 +25,13 @@
 /****************************************************************************/
 const struct DTClassA_VTable* DTClassA_VTable_Create( )
 {
+	/* Only one vtable for all instances of DTClassB. */
 	static struct DTClassA_VTable vtable;
+
+	/* Not changing the super's vtable, so just copy it in. */
 	vtable.CObject_VTable = *CObject_VTable_Create( );
+
+	/* Return pointer. */
 	return &vtable;
 }
 void newDTClassA( struct DTClassA* self, int* testVar )
@@ -51,8 +56,13 @@ void newDTClassA( struct DTClassA* self, int* testVar )
 /****************************************************************************/
 const struct DTClassB_VTable* DTClassB_VTable_Create( )
 {
+	/* Only one vtable for all instances of DTClassB. */
 	static struct DTClassB_VTable vtable;
+
+	/* Not changing super's vtable, so just copy it. */
 	vtable.DTClassA_VTable = *DTClassA_VTable_Create( );
+
+	/* return pointer. */
 	return &vtable;
 }
 void newDTClassB( struct DTClassB* self, int* testVar )
@@ -89,17 +99,21 @@ static void dtClassCDestroy( void* self_ )
 
 const struct DTClassC_VTable* DTClassC_VTable_Create( )
 {
-	static struct DTClassC_VTable vtable =
-	{	   
-		.DTClassA_VTable =
-		{
-			.CObject_VTable =
-			{
-				.CDestructor = dtClassCDestroy
-			}
-		},
-	};
+	/* Only one vtable for all instances of DTClassB. */
+	static struct DTClassC_VTable vtable;
+
+	/* Going to override destructor, but before we do that, */
+	/* Start with a clean copy of super's vtable. */
+	vtable.DTClassA_VTable = *DTClassA_VTable_Create( );
+
+	/* Override destructor. */
+	vtable.DTClassA_VTable.CObject_VTable.CDestructor = dtClassCDestroy;
+
+	/* Since we need to call the super's destructor in our destructor, */
+	/* keep a reference to the super's vtable. */
 	vtable.Supers_DTClassA_VTable = DTClassA_VTable_Create( );
+
+	/* Return pointer. */
 	return &vtable;
 }
 void newDTClassC( struct DTClassC* self, int* testVar )
@@ -132,22 +146,24 @@ static void dtClassDDestroy( void* self_ )
 
 const struct DTClassD_VTable* DTClassD_VTable_Create( )
 {
-	static struct DTClassD_VTable vtable =
-	{
-		.DTClassB_VTable =
-		{
-			.DTClassA_VTable =
-			{
-				.CObject_VTable =
-				{
-					.CDestructor = dtClassDDestroy
-				}
-			}
-		},
-	};
+	/* Only one vtable for all instances of DTClassB. */
+	static struct DTClassD_VTable vtable;
+
+	/* Going to override destructor, but before we do that, */
+	/* Start with a clean copy of super's vtable. */
+	vtable.DTClassB_VTable = *DTClassB_VTable_Create( );
+
+	/* Override destructor. */
+	vtable.DTClassB_VTable.DTClassA_VTable.CObject_VTable.CDestructor = dtClassDDestroy;
+
+	/* Since we need to call the super's destructor in our destructor, */
+	/* keep a reference to the super's vtable. */
 	vtable.Supers_DTClassB_VTable = DTClassB_VTable_Create( );
+
+	/* Return pointer. */
 	return &vtable;
 }
+
 void newDTClassD( struct DTClassD* self, int* testVar )
 {
 	CAssertObject(self);
@@ -178,12 +194,21 @@ static void dtClassEDestroy( void* self_ )
 
 const struct DTClassE_VTable* DTClassE_VTable_Create( )
 {
+	/* Only one vtable for all instances of DTClassB. */
 	static struct DTClassE_VTable vtable;
+
+	/* Going to override destructor, but before we do that, */
+	/* Start with a clean copy of super's vtable. */
 	vtable.DTClassC_VTable = *DTClassC_VTable_Create( );
+
+	/* Override destructor. */
+	((struct CObject_VTable*) &vtable)->CDestructor = dtClassEDestroy;
+
+	/* Since we need to call the super's destructor in our destructor, */
+	/* keep a reference to the super's vtable. */
 	vtable.Supers_DTClassC_VTable = DTClassC_VTable_Create( );
 
-	((struct CObject_VTable*) &vtable)->CDestructor = dtClassEDestroy;
-//	vtable.DTClassC_VTable.DTClassA_VTable.CObject_VTable.CDestructor = dtClassEDestroy;
+	/* Return pointer. */
 	return &vtable;
 }
 
