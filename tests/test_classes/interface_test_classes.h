@@ -65,8 +65,10 @@ struct ITInterface0
 {
 	/* Must be first member of an interface. */
 	struct CInterface interface;
+};
 
-	/* Inheriting classes must implement these methods. */
+struct ITInterface0_VTable
+{
 	int (*i0method0)( struct ITInterface0* );
 	int (*i0method1)( struct ITInterface0* );
 };
@@ -75,16 +77,16 @@ struct ITInterface0
 static inline int ITInterface0_Method0( struct ITInterface0* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->i0method0);
-	return self->i0method0(self);
+	CAssertVirtual(CGetVTable(self, struct ITInterface0_VTable)->i0method0);
+	return CGetVTable(self, struct ITInterface0_VTable)->i0method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface0_Method1( struct ITInterface0* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->i0method1);
-	return self->i0method1(self);
+	CAssertVirtual(CGetVTable(self, struct ITInterface0_VTable)->i0method1);
+	return CGetVTable(self, struct ITInterface0_VTable)->i0method1(self);
 }
 
 
@@ -98,8 +100,12 @@ struct ITInterface1
 
 	/* Inherit from interface0. */
 	struct ITInterface0 itInterface0;
+};
 
-	/* Inheriting classes must implement these methods. */
+struct ITInterface1_VTable
+{
+	struct ITInterface0_VTable ITInterface0_VTable;
+       
 	int (*i1method0)( struct ITInterface1* );
 };
 
@@ -107,8 +113,8 @@ struct ITInterface1
 static inline int ITInterface1_Method0( struct ITInterface1* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->i1method0);
-	return self->i1method0(self);
+	CAssertVirtual(CGetVTable(self, struct ITInterface1_VTable)->i1method0);
+	return CGetVTable(self, struct ITInterface1_VTable)->i1method0(self);
 }
 
 
@@ -119,7 +125,10 @@ struct ITInterface2
 {
 	/* Must be first member of an interface. */
 	struct CInterface interface;
+};
 
+struct ITInterface2_VTable
+{
 	/* Inheriting classes must implement these methods. */
 	int (*i2method0)( struct ITInterface2* );
 	int (*i2method1)( struct ITInterface2* );
@@ -129,16 +138,16 @@ struct ITInterface2
 static inline int ITInterface2_Method0( struct ITInterface2* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->i2method0);
-	return self->i2method0(self);
+	CAssertVirtual(CGetVTable(self, struct ITInterface2_VTable)->i2method0);
+	return CGetVTable(self, struct ITInterface2_VTable)->i2method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface2_Method1( struct ITInterface2* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->i2method1);
-	return self->i2method1(self);
+	CAssertVirtual(CGetVTable(self, struct ITInterface2_VTable)->i2method1);
+	return CGetVTable(self, struct ITInterface2_VTable)->i2method1(self);
 }
 
 
@@ -155,6 +164,17 @@ struct ITClassA
 	struct ITInterface1 itInterface1;
 };
 
+struct ITClassA_VTable
+{
+	/* Inherit super's vtable. */
+	struct CObject_VTable CObject_VTable;
+
+	/* vtable of inherited interfaces. */
+	struct ITInterface1_VTable ITInterface1_VTable;
+	struct ITInterface2_VTable ITInterface2_VTable;
+};
+
+const struct ITClassA_VTable* ITClassA_VTable_Create( );
 /* Constructor. */
 void newITClassA( struct ITClassA* );
 
@@ -166,12 +186,16 @@ struct ITClassB
 {
 	/* Inherit from this class. */
 	struct ITClassA classA;
-
-	/* Override this methods inherited from ITClassA. */
-	int (*i0method0)( struct ITInterface0* );
-	int (*i2method0)( struct ITInterface2* );
 };
 
+struct ITClassB_VTable
+{
+	struct ITClassA_VTable ITClassA_VTable;
+	const struct ITClassA_VTable* Supers_ITClassA_VTable;
+};
+
+const struct ITClassB_VTable* ITClassB_VTable_Create( );
+	
 /* Constructor. */
 void newITClassB( struct ITClassB* );
 
@@ -183,12 +207,15 @@ struct ITClassC
 {
 	/* Inherit from this class. */
 	struct ITClassB classB;
-
-	/* Override these methods. */
-	int (*i0method0)( struct ITInterface0* );
-	int (*i1method0)( struct ITInterface1* );
-	int (*i2method0)( struct ITInterface2* );
 };
+
+struct ITClassC_VTable
+{
+	struct ITClassB_VTable ITClassB_VTable;
+	const struct ITClassB_VTable* Supers_ITClassB_VTable;
+};
+
+const struct ITClassC_VTable* ITClassC_VTable_Create( );
 
 /* Constructor. */
 void newITClassC( struct ITClassC* );

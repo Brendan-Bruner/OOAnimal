@@ -17,7 +17,7 @@ INCLUDES := -IClass -I. -Itests -Itests/test_classes
 
 # Path to all source files used
 # use ' ! -wholename '*/Tutorials/**.c' )' to exclude files
-SOURCES := $(shell find $(SOURCEDIR) -name '*.c' ! -wholename '**/interface*')
+SOURCES := $(shell find $(SOURCEDIR) -name '*.c')
 # Name and location for all object files
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
@@ -38,7 +38,7 @@ run:
 
 crun: clean all run
 
-debug:
-	gdb $(BUILDDIR)/$(EXEC)
+debug :
+	gdb ./$(BUILDDIR)/$(EXEC)
 
 cdebug: clean all debug
