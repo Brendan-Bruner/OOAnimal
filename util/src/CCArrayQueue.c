@@ -30,7 +30,7 @@ static inline void CCArrayQueue_IncrementTail( struct CCArrayQueue* self )
 	CAssertObject(self);
 
 	/* Move pointer to next element in queue. */
-	self->_.tail += self->_.element_size % (self->_.element_size * self->_.max_size);
+	self->_.tail = (self->_.tail + self->_.element_size) % (self->_.element_size * self->_.max_size);
 }
 
 static inline void CCArrayQueue_IncrementHead( struct CCArrayQueue* self )
@@ -38,7 +38,7 @@ static inline void CCArrayQueue_IncrementHead( struct CCArrayQueue* self )
 	CAssertObject(self);
 
 	/* Move pointer to next element in queue. */
-	self->_.head += self->_.element_size % (self->_.element_size * self->_.max_size);
+	self->_.head = (self->_.head + self->_.element_size) % (self->_.element_size * self->_.max_size);
 }
 
 /************************************************************************/
@@ -54,7 +54,7 @@ static CIQueueError CIQueue_Insert_Def( struct CIQueue* self_, const void* eleme
 	}
 
 	/* Queue is not full, insert element. */
-	memcpy(self->_.queueBase + self->_.head, element, self->_.element_size);
+	memcpy(&self->_.queueBase[self->_.head], element, self->_.element_size);
 
 	/* Increment head to next queue element. */
 	CCArrayQueue_IncrementHead(self);
@@ -76,7 +76,7 @@ static CIQueueError CIQueue_Remove_Def( struct CIQueue* self_, void* element )
 
 	/* Queue is not full, copy element. */
 	if( element != NULL ) {
-		memcpy(element, self->_.queueBase + self->_.tail, self->_.element_size);
+		memcpy(element, &self->_.queueBase[self->_.tail], self->_.element_size);
 	}
 
 	/* Increment tail to next element. */
@@ -98,7 +98,7 @@ static CIQueueError CIQueue_Peek_Def( struct CIQueue* self_, void* element )
 	}
 
 	/* Queue is not full, peek at element. */
-	memcpy(element, self->_.queueBase + self->_.tail, self->_.element_size);
+	memcpy(element, &self->_.queueBase[self->_.tail], self->_.element_size);
 
 	return CIQUEUE_OK;
 }
@@ -126,11 +126,11 @@ static void CDestructor( void* self_ )
 	struct CCArrayQueue* self = CCast(self_);
 
 	if( !self->_.is_static ) {
-		free(self->_.queueBase);
+		CFree(self->_.queueBase);
 	}
 
 	/* Call super's destructor. */
-	((struct CObject_VTable*) CGetVTable(self))->CDestructor(self);
+	((struct CCArrayQueue_VTable*) CGetVTable(self))->CObject_VTable_Ref->CDestructor(self);
 }
 	
 

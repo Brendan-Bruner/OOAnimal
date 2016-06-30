@@ -24,3 +24,10 @@ CObject is c99 compliant.
 Run time checks are (optionally) done to catch errors the compiler can't. **When compiling, the symbol DEBUG must be defined for run time checks to be used**.
 
 When a run time check fails, an error will be printed to console and the program execution halted. The printed message will explain the most likely cause of failure and common solutions. Since different systems have different requirements, hooks are provided to changed the behaviour when asserts fail, and information is printed to console. For example, on an embedded system, the print hook can be used to power on an LED instead or print over a UART connection.
+
+#Common Errors
+---
+
+###Infinite recursion in a method which calls the super class' implementation
+
+This is almost always due to incorrectly calling the super's implementation. Make sure you are using the reference to the super's virtual table, and not the classes virtual table.
