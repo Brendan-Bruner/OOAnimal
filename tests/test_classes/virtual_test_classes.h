@@ -79,36 +79,36 @@ void newVTClassA( struct VTClassA* );
 static inline int VTClassA_Method0( struct VTClassA* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct VTClassA_VTable)->method0);
-	return CGetVTable(self, struct VTClassA_VTable)->method0(self);
+	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method0);
+	return ((struct VTClassA_VTable*) CGetVTable(self))->method0(self);
 }
 
 static inline int VTClassA_Method1( struct VTClassA* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct VTClassA_VTable)->method1);
-	return CGetVTable(self, struct VTClassA_VTable)->method1(self);
+	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method1);
+	return ((struct VTClassA_VTable*) CGetVTable(self))->method1(self);
 }
 
 static inline int VTClassA_Method2( struct VTClassA* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct VTClassA_VTable)->method2);
-	return CGetVTable(self, struct VTClassA_VTable)->method2(self);
+	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method2);
+	return ((struct VTClassA_VTable*) CGetVTable(self))->method2(self);
 }
 
 static inline int VTClassA_Method3( struct VTClassA* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct VTClassA_VTable)->method3);
-	return CGetVTable(self, struct VTClassA_VTable)->method3(self);
+	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method3);
+	return ((struct VTClassA_VTable*) CGetVTable(self))->method3(self);
 }
 
 static inline int VTClassA_Method4( struct VTClassA* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct VTClassA_VTable)->method4);
-	return CGetVTable(self, struct VTClassA_VTable)->method4(self);
+	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method4);
+	return ((struct VTClassA_VTable*) CGetVTable(self))->method4(self);
 }
 
 

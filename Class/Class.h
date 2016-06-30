@@ -23,9 +23,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-/****************************************************************************/
-/* Configuration options													*/
-/****************************************************************************/
+/************************************************************************/
+/* Configuration options						*/
+/************************************************************************/
 /*
  * Define this to reduce the memory footprint used in .bss
  * for error messages when an assert fails. Error messages will be much smaller,
@@ -53,24 +53,26 @@
 #define CDefaultFree 			free
 
 /* Default memory allocation method to use. */
-#define CMalloc					malloc
+#define CMalloc				malloc
 
 /* All classes and interfaces contain a pointer to their class */
 /* this is the name of that pointer. */
-#define C_CLASS					_cc
+#define C_CLASS				_cc
 
 /* All classes and interfaces contain a pointer to their highest */
 /* super class, the base object, this is the name of that pointer. */
-#define C_ROOT					_rt
+#define C_ROOT				_rt
 
 /* All classes and interfaces contain a pointer to their virtual table, */
 /* this is the name of that pointer. */
-#define C_VTABLE				_vt
+#define C_VTABLE			_vt
+
+#define C_VTABLE_OFFSET			_vo
 
 /* These define how to print formatted strings and what to */
 /* do when an assertion fails. */
 #include <stdio.h>
-#define C_PRINT( ... ) 				printf( __VA_ARGS__ )
+#define C_PRINT( ... ) 			printf( __VA_ARGS__ )
 #define C_FAILED_ASSERT_HANDLE( ) 	for( ;; )
 
 /* Used to zero out a structure. */
@@ -92,9 +94,9 @@
 #endif
 
 
-/****************************************************************************/
-/* Assert Messages															*/
-/****************************************************************************/
+/************************************************************************/
+/* Assert Messages							*/
+/************************************************************************/
 /* Different reasons for asserting. */
 #if C_DEBUG_DIAG_LEVEL == 2
 
@@ -140,10 +142,10 @@ extern const char* CAssertCastMessage_;
 extern void CAssert( char exp, char const* msg, char const* file, int line );
 #else
 #define CAssert( exp, msg, file, line ) \
-	do {								\
-		(void) (exp);					\
-		(void) (file);					\
-		(void) (line);					\
+	do {				\
+		(void) (exp);		\
+		(void) (file);		\
+		(void) (line);		\
 	} while( 0 )
 #endif
 
@@ -157,14 +159,14 @@ extern void CAssert( char exp, char const* msg, char const* file, int line );
 #define C_ASSERT_CAST( object, file, line )\
 	CAssert( (object) == NULL, CAssertCastMessage_, file, line )
 
-/****************************************************************************/
-/* Base object and interface structures										*/
-/****************************************************************************/
+/************************************************************************/
+/* Base object structures						*/
+/************************************************************************/
 /* Class Definition - ie - class class. */
 struct CClass
 {
 	void* C_ROOT;
-	const void* C_VTABLE;
+	size_t C_VTABLE_OFFSET;
 };
 
 /* Class object. */
@@ -172,6 +174,7 @@ typedef void (*CFreeType)( void* );
 struct CObject
 {
 	struct CClass C_CLASS; /* MUST be first variable in this struct. */
+	const void* C_VTABLE;
 	CFreeType CObject_Free;
 };
 
@@ -193,7 +196,8 @@ extern void CObject_SetFree( struct CObject*, CFreeType );
 
 /* Helper macro for object destruction. */
 #define CDestroy( mem )	\
-	CObject_Destroy(((struct CClass*) (mem))->C_ROOT)
+	CObject_Destroy((void*) (mem))
+//CObject_Destroy(((struct CClass*) (mem))->C_ROOT)
 
 /* Helper macro for declaring object dynamic. */
 #define CDynamic( obj ) \
@@ -203,22 +207,32 @@ extern void CObject_SetFree( struct CObject*, CFreeType );
 #define CFreeWith( obj, freep ) \
 	CObject_SetFree(((struct CClass*) (obj))->C_ROOT, (freep))
 
+
+/************************************************************************/
+/* Base interface structures						*/
+/************************************************************************/
 /* Class interface definition. */
 struct CInterface
 {
-	struct CClass C_CLASS; /* Must be put at beginning of an interface. */
+	struct CClass C_CLASS;
 };
 
 /* Interface constructor. */
-#define CInterface( self, iface )									\
-	do {															\
-		((struct CClass*) (iface))->C_ROOT = self;				\
-	} while( 0 )
+static inline void CInterface( void* self, void* iface, const void* vtable )
+{
+	/* Point this to base of object, that way we can get a pointer to */
+	/* the object from a pointer to the interface. */
+	((struct CClass*) iface)->C_ROOT = self;
+
+	/* Get the offset into the vtable for the location of this interface's */
+	/* methods. */
+	((struct CClass*) iface)->C_VTABLE_OFFSET = ((char*) vtable) - ((char*) ((struct CObject*) self)->C_VTABLE);
+}
 
 
-/****************************************************************************/
-/* Helper macros for asserting and defining class methods					*/
-/****************************************************************************/
+/************************************************************************/
+/* Helper macros for asserting and defining class methods		*/
+/************************************************************************/
 /* Assert a super class method before calling it. */
 #define CAssertSuper( method ) 						\
 	C_ASSERT_SUPER_METHOD( method ); 				\
@@ -249,11 +263,39 @@ extern void* CObjectCast_( void*, const char*, int );
 		virtual_method = method_define;								 		\
 	} while( 0 )
 
-#define CVTable(self, vtable)											\
-	((struct CClass*) (self))-> C_VTABLE = (vtable)
+#define CVTable(self, vtable) \
+	((struct CObject*) (self))-> C_VTABLE = (vtable)
 
-#define CGetVTable(self, type)											\
-	((type*) ((struct CClass*) (self))-> C_VTABLE)
+static inline const void* CGetVTable( void* self_ )
+{
+	size_t offset;
+	struct CObject* self;
+	const void* vtable;
 
+	CAssertObject(self_);
+
+	/* May be given a pointer to an interface object. Need */
+	/* to find the root of the object. */
+	self =  ((struct CClass*) self_)->C_ROOT;
+
+	/* If this assert fails, the objects inheritance chain is not correctly */
+	/* calling super class constructors. */
+	CAssertObject(self);
+	
+	/* Get this objects vtable. */
+	vtable = self->C_VTABLE;
+
+	/* If this object has an interface, and a reference to */
+	/* that interface is being used, we need to find the offset */
+	/* into this object's vtable where the interface's methods are. */
+	/* The offset will be zero if the reference is not to an interface. */
+	offset = ((struct CClass*) self_)->C_VTABLE_OFFSET;
+
+	/* Move into the vtable where the methods of interest are. */
+	vtable = ((char*) vtable) + offset;
+
+	/* Return this location to caller. */
+	return vtable;
+}
 
 #endif /* CLASS_H_ */

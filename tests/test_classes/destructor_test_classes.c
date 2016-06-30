@@ -91,8 +91,8 @@ static void dtClassCDestroy( void* self_ )
 
 	/* Call super's destructor. */
 	void (*dest)( void* );
-	struct DTClassC_VTable* vtable;
-	vtable = CGetVTable(self, struct DTClassC_VTable);
+	const struct DTClassC_VTable* vtable;
+	vtable = CGetVTable(self);
 	dest = vtable->Supers_DTClassA_VTable->CObject_VTable.CDestructor;
 	dest(self);
 }
@@ -141,7 +141,7 @@ static void dtClassDDestroy( void* self_ )
 	++*(self->dtClassB.dtClassA).destructorTestVar;
 
 	/* Call super's destructor. */
-	CGetVTable(self, struct DTClassD_VTable)->Supers_DTClassB_VTable->DTClassA_VTable.CObject_VTable.CDestructor(self);
+	((struct DTClassD_VTable*) CGetVTable(self))->Supers_DTClassB_VTable->DTClassA_VTable.CObject_VTable.CDestructor(self);
 }
 
 const struct DTClassD_VTable* DTClassD_VTable_Create( )
@@ -189,7 +189,7 @@ static void dtClassEDestroy( void* self_ )
 	*(self->dtClassC.dtClassA).destructorTestVar = DT_CLASS_E_VAL;
 
 	/* Call super's destructor. */
-	CGetVTable(self, struct DTClassE_VTable)->Supers_DTClassC_VTable->DTClassA_VTable.CObject_VTable.CDestructor(self);
+	((struct DTClassE_VTable*) CGetVTable(self))->Supers_DTClassC_VTable->DTClassA_VTable.CObject_VTable.CDestructor(self);
 }
 
 const struct DTClassE_VTable* DTClassE_VTable_Create( )

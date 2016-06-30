@@ -60,7 +60,7 @@ void* CObjectCast_( void* self, const char* file, int line )
 void CObject_Destroy( struct CObject* self )
 {
 	CAssertObject(self);
-	CGetVTable(self, struct CObject_VTable)->CDestructor(self);
+	((struct CObject_VTable*) CGetVTable(self))->CDestructor(self);
 }
 
 /* Set memory free method called in destructor. */
@@ -74,7 +74,7 @@ void CObject_SetFree( struct CObject* self, CFreeType objectFree )
 /* Destructor. */
 static void CDestructor( void* self_ )
 {
-	struct CObject* self = self_;
+	struct CObject* self = CCast(self_);
 
 	if( self->CObject_Free != NULL )
 	{
@@ -105,7 +105,8 @@ struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
 	CVTable(self, CObject_VTable_Create( ));
 
 	/* Setup object data. */
-	self->_cc._rt = self;
+	self->C_CLASS.C_ROOT = self;
+	self->C_CLASS.C_VTABLE_OFFSET = 0;
 	self->CObject_Free = NULL;
 	return self;
 }

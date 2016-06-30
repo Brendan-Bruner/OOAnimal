@@ -97,7 +97,7 @@ static int classBMethod2( struct VTClassA* self_ )
 	struct VTClassB* self = CCast(self_);
 
 	/* Call super's (VTClassA)  implementation of this method. */
-	return VT_CLASSB_METHOD2 + CGetVTable(self, struct VTClassB_VTable)->Supers_VTClassA_VTable->method2(&self->classA);
+	return VT_CLASSB_METHOD2 + ((struct VTClassB_VTable*) CGetVTable(self))->Supers_VTClassA_VTable->method2(&self->classA);
 }
 
 static int classBMethod3( struct VTClassA* self )
@@ -112,7 +112,7 @@ static int classBMethod4( struct VTClassA* self_ )
 	struct VTClassB* self = CCast(self_);
 
 	/* Call super's (VTClassA) implementation of this method. */
-	return VT_CLASSB_METHOD4 + CGetVTable(self, struct VTClassB_VTable)->Supers_VTClassA_VTable->method4(&self->classA);
+	return VT_CLASSB_METHOD4 + ((struct VTClassB_VTable*) CGetVTable(self))->Supers_VTClassA_VTable->method4(&self->classA);
 }
 
 const struct VTClassB_VTable* VTClassB_VTable_Create( )
@@ -157,7 +157,7 @@ static int classCMethod3( struct VTClassA* self_ )
 
 	CAssertSuper(self->method3);
 	/* Calls super's (VTClassB) implementation of this method. */
-	return VT_CLASSC_METHOD3 + CGetVTable(self, struct VTClassC_VTable)->Supers_VTClassB_VTable->VTClassA_VTable.method3((struct VTClassA*) self);
+	return VT_CLASSC_METHOD3 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method3((struct VTClassA*) self);
 }
 
 static int classCMethod4( struct VTClassA* self_ )
@@ -166,7 +166,7 @@ static int classCMethod4( struct VTClassA* self_ )
 	struct VTClassC* self = CCast(self_);
 
 	/* Calls super's (VTClassB) implementation of this method. */
-	return VT_CLASSC_METHOD4 + CGetVTable(self, struct VTClassC_VTable)->Supers_VTClassB_VTable->VTClassA_VTable.method4((struct VTClassA*) self);
+	return VT_CLASSC_METHOD4 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method4((struct VTClassA*) self);
 }
 
 const struct VTClassC_VTable* VTClassC_VTable_Create( )

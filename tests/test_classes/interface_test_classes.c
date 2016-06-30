@@ -86,16 +86,13 @@ void newITClassA( struct ITClassA* self )
 	/* Construct super class. */
 	CObject(&self->cobject);
 
-	/* Construct inherited interfaces */
-	CInterface(self, &self->itInterface2);
-	CInterface(self, &self->itInterface1);
-	CInterface(self, &self->itInterface1.itInterface0);
-
 	/* Map vtable. */
 	CVTable(self, ITClassA_VTable_Create( ));
-	CVTable(&self->itInterface1, &ITClassA_VTable_Create( )->ITInterface1_VTable);
-	CVTable(&self->itInterface1.itInterface0, &ITClassA_VTable_Create( )->ITInterface1_VTable.ITInterface0_VTable);
-	CVTable(&self->itInterface2, &ITClassA_VTable_Create( )->ITInterface2_VTable);
+	
+	/* Construct inherited interfaces */
+	CInterface(self, &self->itInterface2, &ITClassA_VTable_Create( )->ITInterface2_VTable);
+	CInterface(self, &self->itInterface1, &ITClassA_VTable_Create( )->ITInterface1_VTable);
+	CInterface(self, &self->itInterface1.itInterface0, &ITClassA_VTable_Create( )->ITInterface1_VTable.ITInterface0_VTable);
 }
 
 
@@ -109,7 +106,7 @@ static int ITInterface0_ClassB_Method0( struct ITInterface0* self_ )
 	struct ITClassB* self = CCast(self_);
 
 	/* Return sum of this macro plus value returned by super's implementation. */
-	return IT_CLASSB_I0_METHOD0 + CGetVTable(self, struct ITClassB_VTable)->Supers_ITClassA_VTable->ITInterface1_VTable.ITInterface0_VTable.i0method0(&self->classA.itInterface1.itInterface0);
+	return IT_CLASSB_I0_METHOD0 + ((struct ITClassB_VTable*) CGetVTable(self))->Supers_ITClassA_VTable->ITInterface1_VTable.ITInterface0_VTable.i0method0(&self->classA.itInterface1.itInterface0);
 }
 
 /* Override this inherited method. */
@@ -119,7 +116,7 @@ static int ITInterface2_ClassB_Method0( struct ITInterface2* self_ )
 	struct ITClassB* self = CCast(self_);
 
 	/* Return sum of this macro plus value returned by super's implementation. */
-	return IT_CLASSB_I2_METHOD0 + CGetVTable(self, struct ITClassB_VTable)->Supers_ITClassA_VTable->ITInterface2_VTable.i2method0(&self->classA.itInterface2);
+	return IT_CLASSB_I2_METHOD0 + ((struct ITClassB_VTable*) CGetVTable(self))->Supers_ITClassA_VTable->ITInterface2_VTable.i2method0(&self->classA.itInterface2);
 }
 
 /* Relink this method. */
@@ -169,8 +166,6 @@ void newITClassB( struct ITClassB* self )
 
 	/* Map vtable. */
 	CVTable(self, ITClassB_VTable_Create( ));
-	CVTable(&self->classA.itInterface2, &ITClassB_VTable_Create( )->ITClassA_VTable.ITInterface2_VTable);
-	CVTable(&self->classA.itInterface1.itInterface0, &ITClassB_VTable_Create( )->ITClassA_VTable.ITInterface1_VTable.ITInterface0_VTable);
 }
 
 
@@ -184,7 +179,7 @@ static int ITInterface0_ClassC_Method0( struct ITInterface0* self_ )
 	struct ITClassC* self = CCast(self_);
 
 	/* Return sum of this macro plus value returned by super's implementation. */
-	return IT_CLASSC_I0_METHOD0 + CGetVTable(self, struct ITClassC_VTable)->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface1_VTable.ITInterface0_VTable.i0method0(&self->classB.classA.itInterface1.itInterface0);
+	return IT_CLASSC_I0_METHOD0 + ((struct ITClassC_VTable*) CGetVTable(self))->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface1_VTable.ITInterface0_VTable.i0method0(&self->classB.classA.itInterface1.itInterface0);
 }
 
 /* Override this inherited method. */
@@ -194,7 +189,7 @@ static int ITInterface1_ClassC_Method0( struct ITInterface1* self_ )
 	struct ITClassC* self = CCast(self_);
 
 	/* Return sum of this macro plus value returned by super's implementation. */
-	return IT_CLASSC_I1_METHOD0 + CGetVTable(self, struct ITClassC_VTable)->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface1_VTable.i1method0(&self->classB.classA.itInterface1);
+	return IT_CLASSC_I1_METHOD0 + ((struct ITClassC_VTable*) CGetVTable(self))->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface1_VTable.i1method0(&self->classB.classA.itInterface1);
 }
 
 /* Override this inherited method. */
@@ -204,7 +199,7 @@ static int ITInterface2_ClassC_Method0( struct ITInterface2* self_ )
 	struct ITClassC* self = CCast(self_);
 
 	/* Return sum of this macro plus value returned by super's implementation. */
-	return IT_CLASSC_I2_METHOD0 + CGetVTable(self, struct ITClassC_VTable)->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface2_VTable.i2method0(&self->classB.classA.itInterface2);
+	return IT_CLASSC_I2_METHOD0 + ((struct ITClassC_VTable*) CGetVTable(self))->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface2_VTable.i2method0(&self->classB.classA.itInterface2);
 }
 
 const struct ITClassC_VTable* ITClassC_VTable_Create( )

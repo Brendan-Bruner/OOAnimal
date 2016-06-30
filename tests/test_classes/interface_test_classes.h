@@ -77,16 +77,16 @@ struct ITInterface0_VTable
 static inline int ITInterface0_Method0( struct ITInterface0* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct ITInterface0_VTable)->i0method0);
-	return CGetVTable(self, struct ITInterface0_VTable)->i0method0(self);
+	CAssertVirtual(((struct ITInterface0_VTable*) CGetVTable(self))->i0method0);
+	return ((struct ITInterface0_VTable*) CGetVTable(self))->i0method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface0_Method1( struct ITInterface0* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct ITInterface0_VTable)->i0method1);
-	return CGetVTable(self, struct ITInterface0_VTable)->i0method1(self);
+	CAssertVirtual(((struct ITInterface0_VTable*) CGetVTable(self))->i0method1);
+	return ((struct ITInterface0_VTable*) CGetVTable(self))->i0method1(self);
 }
 
 
@@ -113,8 +113,8 @@ struct ITInterface1_VTable
 static inline int ITInterface1_Method0( struct ITInterface1* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct ITInterface1_VTable)->i1method0);
-	return CGetVTable(self, struct ITInterface1_VTable)->i1method0(self);
+	CAssertVirtual(((struct ITInterface1_VTable*) CGetVTable(self))->i1method0);
+	return ((struct ITInterface1_VTable*) CGetVTable(self))->i1method0(self);
 }
 
 
@@ -138,16 +138,16 @@ struct ITInterface2_VTable
 static inline int ITInterface2_Method0( struct ITInterface2* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct ITInterface2_VTable)->i2method0);
-	return CGetVTable(self, struct ITInterface2_VTable)->i2method0(self);
+	CAssertVirtual(((struct ITInterface2_VTable*) CGetVTable(self))->i2method0);
+	return ((struct ITInterface2_VTable*) CGetVTable(self))->i2method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface2_Method1( struct ITInterface2* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(CGetVTable(self, struct ITInterface2_VTable)->i2method1);
-	return CGetVTable(self, struct ITInterface2_VTable)->i2method1(self);
+	CAssertVirtual(((struct ITInterface2_VTable*) CGetVTable(self))->i2method1);
+	return ((struct ITInterface2_VTable*) CGetVTable(self))->i2method1(self);
 }
 
 
