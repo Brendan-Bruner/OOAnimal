@@ -22,9 +22,9 @@
 #include <Class.h>
 
 
-/****************************************************************************/
-/* Error codes. 															*/
-/****************************************************************************/
+/************************************************************************/
+/* Error codes.								*/
+/************************************************************************/
 typedef enum
 {
 	CIQUEUE_OK = 0,
@@ -33,71 +33,62 @@ typedef enum
 } CIQueueError;
 
 
-/****************************************************************************/
-/* Declare interface.														*/
-/****************************************************************************/
-struct CIQueue_VTable;
+/************************************************************************/
+/* Declare interface and vtable.					*/
+/************************************************************************/
 struct CIQueue
 {
+	/* CInterface must always be first member of */
+	/* an interfaces struct .*/
 	struct CInterface interface;
-	struct CIQueue_VTable* vtable;
 };
 
-
-/****************************************************************************/
-/* Declare vtable. 															*/
-/****************************************************************************/
 struct CIQueue_VTable
 {
-	CIQueueError (*CIQueue_PureVirtual_Insert)( struct CIQueue*, const void* );
-	CIQueueError (*CIQueue_PureVirtual_Remove)( struct CIQueue*, void* );
-	CIQueueError (*CIQueue_PureVirtual_Peek)( struct CIQueue*, void* );
-	size_t (*CIQueue_PureVirtual_Size)( struct CIQueue* );
-	size_t (*CIQueue_PureVirtual_MaxSize)( struct CIQueue* );
+	CIQueueError (*insert)( struct CIQueue*, const void* );
+	CIQueueError (*remove)( struct CIQueue*, void* );
+	CIQueueError (*peek)( struct CIQueue*, void* );
+	size_t (*size)( struct CIQueue* );
+	size_t (*maxSize)( struct CIQueue* );
 };
 
 
-/****************************************************************************/
-/* Class methods. 															*/
-/****************************************************************************/
+/************************************************************************/
+/* Class methods. 							*/
+/************************************************************************/
 static inline CIQueueError CIQueue_Insert( struct CIQueue* self, const void* element )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->vtable);
-	CAssertVirtual(self->vtable->CIQueue_PureVirtual_Insert);
-	return self->vtable->CIQueue_PureVirtual_Insert(self, element);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->insert);
+	return ((struct CIQueue_VTable*) CGetVTable(self))->insert(self, element);
 }
 
 static inline CIQueueError CIQueue_Remove( struct CIQueue* self, void* element )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->vtable);
-	CAssertVirtual(self->vtable->CIQueue_PureVirtual_Remove);
-	return self->vtable->CIQueue_PureVirtual_Remove(self, element);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->remove);
+	return ((struct CIQueue_VTable*) CGetVTable(self))->remove(self, element);
 }
 
 static inline CIQueueError CIQueue_Peek( struct CIQueue* self, void* element )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->vtable);
-	CAssertVirtual(self->vtable->CIQueue_PureVirtual_Peek);
-	return self->vtable->CIQueue_PureVirtual_Peek(self, element);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->peek);
+	return ((struct CIQueue_VTable*) CGetVTable(self))->peek(self, element);
 }
 
 static inline size_t CIQueue_Size( struct CIQueue* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->vtable);
-	CAssertVirtual(self->vtable->CIQueue_PureVirtual_Size);
-	return self->vtable->CIQueue_PureVirtual_Size(self);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->size);
+	return ((struct CIQueue_VTable*) CGetVTable(self))->size(self);
 }
 
 static inline size_t CIQueue_MaxSize( struct CIQueue* self )
 {
 	CAssertObject(self);
-	CAssertVirtual(self->vtable);
-	CAssertVirtual(self->vtable->CIQueue_PureVirtual_MaxSize);
-	return self->vtable->CIQueue_PureVirtual_MaxSize(self);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->maxSize);
+	return ((struct CIQueue_VTable*) CGetVTable(self))->maxSize(self);
 }
 
 #endif /* UTIL_CIQUEUE_H_ */

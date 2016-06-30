@@ -34,16 +34,16 @@ TEST(underflow)
 	size_t				queue_size;
 	char				test_element[DEFAULT_ELEMENT_SIZE];
 
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 0, "Queue should be size zero, not %zu", queue_size);
 
-	err = CIQueue_Remove(&queue.CIQueue, test_element);
+	err = CIQueue_Remove(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "No underflow error on remove, got %d instead", err);
 
-	err = CIQueue_Peek(&queue.CIQueue, test_element);
+	err = CIQueue_Peek(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "No underflow error on peek, got %d instead", err);
 
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 0, "Queue should still be size zero after underflow error, not %zu", queue_size);
 }
 
@@ -60,10 +60,10 @@ TEST(middle)
 	}
 
 	/* Insert element. */
-	err = CIQueue_Insert(&queue.CIQueue, test_element);
+	err = CIQueue_Insert(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on first insert, got %d instead of OK", err);
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 1, "Queue should be size one after insert, not %zu", queue_size);
 
 	/* Insert new test data. */
@@ -72,57 +72,57 @@ TEST(middle)
 	}
 
 	/* Insert element. */
-	err = CIQueue_Insert(&queue.CIQueue, test_element);
+	err = CIQueue_Insert(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on second insert, got %d instead of OK", err);
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 2, "Queue should be size two after second insert, not %zu", queue_size);
 
 	/* Peek first element. */
-	err = CIQueue_Peek(&queue.CIQueue, test_element);
+	err = CIQueue_Peek(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on first peek, got %d instead of OK", err);
 	/* Assert elements of peeked item. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
 		ASSERT(test_element[i] == i, "element %d is %d, instead of %d", i, test_element[i], i);
 	}
 	/* Assert queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 2, "Queue should be size two after peek, not %zu", queue_size);
 	/* Zero out test element for remove. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
 		test_element[i] = 0;
 	}
 	/* Get first element. */
-	err = CIQueue_Remove(&queue.CIQueue, test_element);
+	err = CIQueue_Remove(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on first remove, got %d instead of OK", err);
 	/* Assert elements of removed item. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
 		ASSERT(test_element[i] == i, "element %d is %d, instead of %d", i, test_element[i], i);
 	}
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 1, "Queue should be size one after remove, not %zu", queue_size);
 
 
 	/* Peek second element. */
-	err = CIQueue_Peek(&queue.CIQueue, test_element);
+	err = CIQueue_Peek(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on second peek, got %d instead of OK", err);
 	/* Assert elements of peeked item. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
 		ASSERT(test_element[i] == i + DEFAULT_ELEMENT_SIZE, "element %d is %d, instead of %d", i, test_element[i], i);
 	}
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 1, "Queue should be size one after second peek, not %zu", queue_size);
 	/* Zero out test element for remove. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
 		test_element[i] = 0;
 	}
 	/* Get second element. */
-	err = CIQueue_Remove(&queue.CIQueue, test_element);
+	err = CIQueue_Remove(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_OK, "error on second remove, got %d instead of OK", err);
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 0, "Queue should be size one after second remove, not %zu", queue_size);
 	/* Assert elements of removed item. */
 	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
@@ -130,12 +130,12 @@ TEST(middle)
 	}
 
 	/* Assert underflow error. */
-	err = CIQueue_Peek(&queue.CIQueue, test_element);
+	err = CIQueue_Peek(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "no underflow error on peek, got %d instead", err);
-	err = CIQueue_Remove(&queue.CIQueue, test_element);
+	err = CIQueue_Remove(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "no underflow error on remove, got %d instead", err);
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 0, "Queue should be size zero after underflow, not %zu", queue_size);
 }
 
@@ -151,23 +151,23 @@ TEST(overflow)
 		for( j = 0; j < DEFAULT_ELEMENT_SIZE; ++j ) {
 			test_element[j] = (unsigned char) (i + j);
 		}
-		err = CIQueue_Insert(&queue.CIQueue, test_element);
+		err = CIQueue_Insert(&queue.cIQueue, test_element);
 		ASSERT(err == CIQUEUE_OK, "Error inserting, got %d during insert %zu, instead of %d", err, i, CIQUEUE_OK);
 
 		/* Assert queue size. */
-		queue_size = CIQueue_Size(&queue.CIQueue);
+		queue_size = CIQueue_Size(&queue.cIQueue);
 		ASSERT(queue_size == i + 1, "Queue should be size %zu after %zu'th insert, not %zu", i + 1, i, queue_size);
 	}
 
 	/* This insert should give overflow error. */
-	err = CIQueue_Insert(&queue.CIQueue, test_element);
+	err = CIQueue_Insert(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_OVERFLOW, "No overflow error, got %d instead of %d", err, CIQUEUE_ERR_OVERFLOW);
 
 	/* Remove back to size zero. */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
 
 		/* Test peek. */
-		err = CIQueue_Peek(&queue.CIQueue, test_element);
+		err = CIQueue_Peek(&queue.cIQueue, test_element);
 		ASSERT(err == CIQUEUE_OK, "Error peeking, got %d during removal %zu, instead of %d", err, i, CIQUEUE_OK);
 		for( j = 0; j < DEFAULT_ELEMENT_SIZE; ++j ) {
 			ASSERT(test_element[j] == i + j, "Peeked item is incorrect during removal %zu, got %d instead of %zu", i, test_element[j], i + j);
@@ -179,24 +179,24 @@ TEST(overflow)
 		}
 
 		/* Test remove. */
-		err = CIQueue_Remove(&queue.CIQueue, test_element);
+		err = CIQueue_Remove(&queue.cIQueue, test_element);
 		ASSERT(err == CIQUEUE_OK, "Error removing, got %d during removal %zu, instead of %d", err, i, CIQUEUE_OK);
 		for( j = 0; j < DEFAULT_ELEMENT_SIZE; ++j ) {
 			ASSERT(test_element[j] == i + j, "Removed item is incorrect during removal %zu, got %d instead of %zu", i, test_element[j], i + j);
 		}
 
 		/* Assert new queue size. */
-		queue_size = CIQueue_Size(&queue.CIQueue);
+		queue_size = CIQueue_Size(&queue.cIQueue);
 		ASSERT(queue_size == DEFAULT_LENGTH - i - 1, "Queue should be size %zu after %zu'th remove, not %zu", DEFAULT_LENGTH - i - 1, i, queue_size);
 	}
 
 	/* Should get underflow error now. */
-	err = CIQueue_Peek(&queue.CIQueue, test_element);
+	err = CIQueue_Peek(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "No underflow error on peek, got %d instead of %d", err, CIQUEUE_ERR_UNDERFLOW);
-	err = CIQueue_Remove(&queue.CIQueue, test_element);
+	err = CIQueue_Remove(&queue.cIQueue, test_element);
 	ASSERT(err == CIQUEUE_ERR_UNDERFLOW, "No underflow error on remove, got %d instead of %d", err, CIQUEUE_ERR_UNDERFLOW);
 	/* Assert new queue size. */
-	queue_size = CIQueue_Size(&queue.CIQueue);
+	queue_size = CIQueue_Size(&queue.cIQueue);
 	ASSERT(queue_size == 0, "Queue should be size zero after underflow, not %zu", queue_size);
 }
 

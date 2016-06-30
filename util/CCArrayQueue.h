@@ -24,15 +24,20 @@
 #include "CIQueue.h"
 
 
-/****************************************************************************/
-/* Declare class.															*/
-/****************************************************************************/
+/************************************************************************/
+/* Declare class and vtable.						*/
+/************************************************************************/
 struct CCArrayQueue
 {
-	struct CObject CObject;				/* Super class. */
-	struct CIQueue CIQueue;				/* Queue interface. */
+	/* Super class must always be first member */
+	/* of a class' struct. */
+	struct CObject cObject;
 
-	struct
+	/* Implement the CIQueue interface. */
+	struct CIQueue cIQueue;
+
+	/* Private member variables. */
+	struct     
 	{
 		size_t size;
 		size_t max_size;
@@ -43,30 +48,27 @@ struct CCArrayQueue
 	} _;
 };
 
-
-/****************************************************************************/
-/* vtable declare															*/
-/****************************************************************************/
 struct CCArrayQueue_VTable
 {
-	/* Keep reference to super classes vtable. */
-	struct CObject_VTable* Super_CObject_VTable;
-
-	/* new vtable for super class. */
+	/* Space for a copy of the super class' virtual table must  */
+	/* be the first member of a class virtual table declaration. */
 	struct CObject_VTable  CObject_VTable;
 
-	/* vtable for CIQueue interface. */
-	struct CIQueue_VTable CIQueue_VTable;
+	/* Since we are overriding the destructor, we need to keep */
+	/* keep a reference to the super class' implementation of */
+	/* the destructor. */
+	struct CObject_VTable* CObject_VTable_Ref;
 
-	/* CCArrayQueue has no virtual methods. */
+	/* Space for a copy of the implemented interface's virtual table */
+	struct CIQueue_VTable CIQueue_VTable;
 };
 
-extern struct CIQueue_VTable CCArrayQueue_CIQueue_VTable;
+const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( );
 
 
-/****************************************************************************/
-/* Constructor																*/
-/****************************************************************************/
+/************************************************************************/
+/* Constructor								*/
+/************************************************************************/
 CError CCArrayQueue( struct CCArrayQueue*, size_t, size_t );
 CError CCArrayQueueStatic( struct CCArrayQueue*, void*, size_t, size_t );
 

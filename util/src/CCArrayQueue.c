@@ -21,9 +21,9 @@
 #include <string.h>
 
 
-/****************************************************************************/
-/* Private methods															*/
-/****************************************************************************/
+/************************************************************************/
+/* Private methods							*/
+/************************************************************************/
 static inline void CCArrayQueue_IncrementTail( struct CCArrayQueue* self )
 {
 	CAssertObject(self);
@@ -40,10 +40,10 @@ static inline void CCArrayQueue_IncrementHead( struct CCArrayQueue* self )
 	self->_.head += self->_.element_size % (self->_.element_size * self->_.max_size);
 }
 
-/****************************************************************************/
-/* Virtual methods															*/
-/****************************************************************************/
-static CIQueueError CIQueue_Insert_Implementation( struct CIQueue* self_, const void* element )
+/************************************************************************/
+/* Virtual methods							*/
+/*************************************************************************/
+static CIQueueError CIQueue_Insert_Def( struct CIQueue* self_, const void* element )
 {
 	struct CCArrayQueue* self = CCast(self_);
 
@@ -64,7 +64,7 @@ static CIQueueError CIQueue_Insert_Implementation( struct CIQueue* self_, const 
 	return CIQUEUE_OK;
 }
 
-static CIQueueError CIQueue_Remove_Implementation( struct CIQueue* self_, void* element )
+static CIQueueError CIQueue_Remove_Def( struct CIQueue* self_, void* element )
 {
 	struct CCArrayQueue* self = CCast(self_);
 
@@ -85,7 +85,7 @@ static CIQueueError CIQueue_Remove_Implementation( struct CIQueue* self_, void* 
 	return CIQUEUE_OK;
 }
 
-static CIQueueError CIQueue_Peek_Implementation( struct CIQueue* self_, void* element )
+static CIQueueError CIQueue_Peek_Def( struct CIQueue* self_, void* element )
 {
 	struct CCArrayQueue* self = CCast(self_);
 
@@ -100,43 +100,58 @@ static CIQueueError CIQueue_Peek_Implementation( struct CIQueue* self_, void* el
 	return CIQUEUE_OK;
 }
 
-static size_t CIQueue_Size_Implementation( struct CIQueue* self_ )
+static size_t CIQueue_Size_Def( struct CIQueue* self_ )
 {
 	struct CCArrayQueue* self = CCast(self_);
 
 	return self->_.size;
 }
 
-static size_t CIQueue_MaxSize_Implementation( struct CIQueue* self_ )
+static size_t CIQueue_MaxSize_Def( struct CIQueue* self_ )
 {
 	struct CCArrayQueue* self = CCast(self_);
 
 	return self->_.max_size;
 }
 
-/****************************************************************************/
-/* vtable define															*/
-/****************************************************************************/
-struct CIQueue_VTable CCArrayQueue_CIQueue_VTable =
+/************************************************************************/
+/* vtable key								*/
+/************************************************************************/
+const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( )
+{
+	static struct CCArrayQueue_VTable vtable  =
 		{
-			.CIQueue_PureVirtual_Insert = CIQueue_Insert_Implementation,
-			.CIQueue_PureVirtual_Remove = CIQueue_Remove_Implementation,
-			.CIQueue_PureVirtual_Peek = CIQueue_Peek_Implementation,
-			.CIQueue_PureVirtual_Size = CIQueue_Size_Implementation,
-			.CIQueue_PureVirtual_MaxSize = CIQueue_MaxSize_Implementation
+			/* Assign implemenation of interface CIQueue's methods. */
+			.CIQueue_VTable.insert = CIQueue_Insert_Def,
+			.CIQueue_VTable.remove = CIQueue_Remove_Def,
+			.CIQueue_VTable.peek = CIQueue_Peek_Def,
+			.CIQueue_VTable.size = CIQueue_Size_Def,
+			.CIQueue_VTable.maxSize = CIQueue_MaxSize_Def
 		};
 
-/****************************************************************************/
-/* Constructor																*/
-/****************************************************************************/
-/* TODO, need to free queue base on destruction. */
+	/* Super's vtable copy. */
+	vtable.CObject_VTable = *CObject_VTable_Key( );
+
+	/* Reference to super's vtable. */
+	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+
+	/* Return pointer to CCArrayQueue's vtable. */
+	return &vtable;
+}
+
+/************************************************************************/
+/* Constructor								*/
+/************************************************************************/
 CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queue_size )
 {
-	CObject(&self->CObject);
-	CInterface(self, &self->CIQueue);
+	/* First thing in constructor must be to call super's constructor. */
+	CObject(&self->cObject);
 
-	/* Link virtual functions from interface. */
-	self->CIQueue.vtable = &CCArrayQueue_CIQueue_VTable;
+	/* Second thing in constructor must be to map vtable. */
+	CVTable(self, CCArrayQueue_VTable_Key( ));
+
+	/* Third thing in constructor must be calling interface's constructor. */
+	CInterface(self, &self->cIQueue, &CCArrayQueue_VTable_Key( )->CIQueue_VTable);
 
 	/* Allocate space for the array. */
 	self->_.queueBase = CMalloc(queue_size * element_size);
