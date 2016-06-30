@@ -73,7 +73,7 @@ struct VTClassA_VTable
 	int (*method4)( struct VTClassA* );
 };
 
-const struct VTClassA_VTable* VTClassA_VTable_Create( );
+const struct VTClassA_VTable* VTClassA_VTable_Key( );
 void newVTClassA( struct VTClassA* );
 
 static inline int VTClassA_Method0( struct VTClassA* self )
@@ -126,7 +126,7 @@ struct VTClassB_VTable
 	const struct VTClassA_VTable* Supers_VTClassA_VTable;
 };
 
-const struct VTClassB_VTable* VTClassB_VTable_Create( );
+const struct VTClassB_VTable* VTClassB_VTable_Key( );
 void newVTClassB( struct VTClassB* );
 
 /****************************************************************************/
@@ -146,7 +146,7 @@ struct VTClassC_VTable
 	const struct VTClassB_VTable* Supers_VTClassB_VTable;
 };
 
-const struct VTClassC_VTable* VTClassC_VTable_Create( );
+const struct VTClassC_VTable* VTClassC_VTable_Key( );
 void newVTClassC( struct VTClassC* );
 
 #endif /* TESTS_TEST_CLASSES_VIRTUAL_TEST_CLASSES_H_ */

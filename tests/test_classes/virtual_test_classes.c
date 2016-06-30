@@ -52,13 +52,13 @@ static int method4( struct VTClassA* self )
 	return VT_CLASSA_METHOD4;
 }
 
-const struct VTClassA_VTable* VTClassA_VTable_Create( )
+const struct VTClassA_VTable* VTClassA_VTable_Key( )
 {
 	/* Only need one vtable for every instance of this class. */
 	static struct VTClassA_VTable vtable;
 
 	/* Get a copy of the super's vtable for this class. */
-	vtable.CObject_VTable = *CObject_VTable_Create( );
+	vtable.CObject_VTable = *CObject_VTable_Key( );
 
 	/* Link all of this class' virtual methods. */
 	vtable.method0 = method0;
@@ -79,7 +79,7 @@ void newVTClassA( struct VTClassA* self )
 	CObject(&self->cobject);
 
 	/* Map vtable. */
-	CVTable(self, VTClassA_VTable_Create( ));
+	CVTable(self, VTClassA_VTable_Key( ));
 }
 
 /****************************************************************************/
@@ -115,13 +115,13 @@ static int classBMethod4( struct VTClassA* self_ )
 	return VT_CLASSB_METHOD4 + ((struct VTClassB_VTable*) CGetVTable(self))->Supers_VTClassA_VTable->method4(&self->classA);
 }
 
-const struct VTClassB_VTable* VTClassB_VTable_Create( )
+const struct VTClassB_VTable* VTClassB_VTable_Key( )
 {
 	/* Only need one vtable for every instance of this class. */
 	static struct VTClassB_VTable vtable;
 
 	/* Get a copy of the super's vtable. */
-	vtable.VTClassA_VTable = *VTClassA_VTable_Create( );
+	vtable.VTClassA_VTable = *VTClassA_VTable_Key( );
 
 	/* We are overriding method1, method2, method3, and method4 - do that now. */
 	vtable.VTClassA_VTable.method1 = classBMethod1;
@@ -130,7 +130,7 @@ const struct VTClassB_VTable* VTClassB_VTable_Create( )
 	vtable.VTClassA_VTable.method4 = classBMethod4;
 
 	/* method2 and method4 need to call their super's implementation, provide that reference here. */
-	vtable.Supers_VTClassA_VTable = VTClassA_VTable_Create( );
+	vtable.Supers_VTClassA_VTable = VTClassA_VTable_Key( );
 
 	/* Return pointer. */
 	return &vtable;
@@ -144,7 +144,7 @@ void newVTClassB( struct VTClassB* self )
 	newVTClassA(&self->classA);
 
 	/* Map vtable. */
-	CVTable(self, VTClassB_VTable_Create( ));
+	CVTable(self, VTClassB_VTable_Key( ));
 }
 
 /****************************************************************************/
@@ -155,7 +155,6 @@ static int classCMethod3( struct VTClassA* self_ )
 	/* This is VTClassC's implementation, so cast object back to type VTClassC. */
 	struct VTClassC* self = CCast(self_);
 
-	CAssertSuper(self->method3);
 	/* Calls super's (VTClassB) implementation of this method. */
 	return VT_CLASSC_METHOD3 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method3((struct VTClassA*) self);
 }
@@ -169,20 +168,20 @@ static int classCMethod4( struct VTClassA* self_ )
 	return VT_CLASSC_METHOD4 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method4((struct VTClassA*) self);
 }
 
-const struct VTClassC_VTable* VTClassC_VTable_Create( )
+const struct VTClassC_VTable* VTClassC_VTable_Key( )
 {
 	/* Only need one vtable for every instance of this class. */
 	static struct VTClassC_VTable vtable;
 
 	/* Get a copy of the supers vtable. */
-	vtable.VTClassB_VTable = *VTClassB_VTable_Create( );
+	vtable.VTClassB_VTable = *VTClassB_VTable_Key( );
 
 	/* Overriding method3 and method4. */
 	vtable.VTClassB_VTable.VTClassA_VTable.method3 = classCMethod3;
 	vtable.VTClassB_VTable.VTClassA_VTable.method4 = classCMethod4;
 
 	/* Need a reference to super's implementation for method3 and method4. */
-	vtable.Supers_VTClassB_VTable = VTClassB_VTable_Create( );
+	vtable.Supers_VTClassB_VTable = VTClassB_VTable_Key( );
 
 	/* Return pointer. */
 	return &vtable;
@@ -196,5 +195,5 @@ void newVTClassC( struct VTClassC* self )
 	newVTClassB(&self->classB);
 
 	/* Map vtable. */
-	CVTable(self, VTClassC_VTable_Create( ));
+	CVTable(self, VTClassC_VTable_Key( ));
 }

@@ -23,7 +23,6 @@
 /* when called in the CAssert( ) function. */
 #if C_DEBUG_DIAG_LEVEL == 2
 const char* CAssertVirtualMessage_ = C_ASSERT_VIRTUAL_MESSAGE;
-const char* CAssertSuperMethodMessage_ = C_ASSERT_SUPER_METHOD_MESSAGE;
 const char* CAssertObjectMessage_ = C_ASSERT_OBJECT_MESSAGE;
 const char* CAssertCastMessage_ = C_ASSERT_CAST_MESSAGE;
 #endif
@@ -83,7 +82,7 @@ static void CDestructor( void* self_ )
 }
 
 /* Create vtable. */
-const struct CObject_VTable* CObject_VTable_Create( )
+const struct CObject_VTable* CObject_VTable_Key( )
 {
 	static const struct CObject_VTable CObject_VTable =
 	{
@@ -93,16 +92,13 @@ const struct CObject_VTable* CObject_VTable_Create( )
 }
 
 /* Constructor for base object. */
-struct CObject* CObject_Constructor( struct CObject* self, size_t objectSize )
+struct CObject* CObject_Constructor( struct CObject* self )
 {
 	/* Assert non NULL pointer. */
 	C_ASSERT_OBJECT(self);
 
-	/* Set entire object to 0 for run time checks. */
-	C_INIT_OBJECT(self, objectSize);
-
 	/* Map vtable. */
-	CVTable(self, CObject_VTable_Create( ));
+	CVTable(self, CObject_VTable_Key( ));
 
 	/* Setup object data. */
 	self->C_CLASS.C_ROOT = self;

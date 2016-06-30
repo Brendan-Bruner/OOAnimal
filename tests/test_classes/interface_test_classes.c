@@ -19,9 +19,9 @@
 
 #include "interface_test_classes.h"
 
-/****************************************************************************/
-/* Class A																	*/
-/****************************************************************************/
+/************************************************************************/
+/* Class A								*/
+/************************************************************************/
 /* Implementation of inherited interface method. */
 static int ITInterface0_ClassA_Method0( struct ITInterface0* self_ )
 {
@@ -57,13 +57,13 @@ static int ITInterface2_ClassA_Method1( struct ITInterface2* self_ )
 	return IT_CLASSA_I2_METHOD1;
 }
 
-const struct ITClassA_VTable* ITClassA_VTable_Create( )
+const struct ITClassA_VTable* ITClassA_VTable_Key( )
 {
 	/* Only need one of these for every instance of this class. */
 	static struct ITClassA_VTable vtable;
 
 	/* Get a copy of super's vtable. */
-	vtable.CObject_VTable = *CObject_VTable_Create( );
+	vtable.CObject_VTable = *CObject_VTable_Key( );
 
 	/* Implement interface methods. */
 	vtable.ITInterface1_VTable.ITInterface0_VTable.i0method0 = ITInterface0_ClassA_Method0;
@@ -84,21 +84,24 @@ void newITClassA( struct ITClassA* self )
 	CAssertObject(self);
 
 	/* Construct super class. */
+	/* This must be the first thing done in constructor. */
 	CObject(&self->cobject);
 
 	/* Map vtable. */
-	CVTable(self, ITClassA_VTable_Create( ));
+	/* This must be the second thing done in constructor. */
+	CVTable(self, ITClassA_VTable_Key( ));
 	
 	/* Construct inherited interfaces */
-	CInterface(self, &self->itInterface2, &ITClassA_VTable_Create( )->ITInterface2_VTable);
-	CInterface(self, &self->itInterface1, &ITClassA_VTable_Create( )->ITInterface1_VTable);
-	CInterface(self, &self->itInterface1.itInterface0, &ITClassA_VTable_Create( )->ITInterface1_VTable.ITInterface0_VTable);
+	/* This must be third thing done in constructor. */
+	CInterface(self, &self->itInterface2, &ITClassA_VTable_Key( )->ITInterface2_VTable);
+	CInterface(self, &self->itInterface1, &ITClassA_VTable_Key( )->ITInterface1_VTable);
+	CInterface(self, &self->itInterface1.itInterface0, &ITClassA_VTable_Key( )->ITInterface1_VTable.ITInterface0_VTable);
 }
 
 
-/****************************************************************************/
-/* Class B																	*/
-/****************************************************************************/
+/************************************************************************/
+/* Class B								*/
+/************************************************************************/
 /* Override this inherited method. */
 static int ITInterface0_ClassB_Method0( struct ITInterface0* self_ )
 {
@@ -135,13 +138,13 @@ static int ITInterface2_ClassB_Method1( struct ITInterface2* self_ )
 	return IT_CLASSB_I2_METHOD1;
 }
 
-const struct ITClassB_VTable* ITClassB_VTable_Create( )
+const struct ITClassB_VTable* ITClassB_VTable_Key( )
 {
 	/* Only need one of these for every instance of this class. */
 	static struct ITClassB_VTable vtable;
 
 	/* Get a copy of super's vtable for this class. */
-	vtable.ITClassA_VTable = *ITClassA_VTable_Create( );
+	vtable.ITClassA_VTable = *ITClassA_VTable_Key( );
 
 	/* Override these methods. */
 	vtable.ITClassA_VTable.ITInterface1_VTable.ITInterface0_VTable.i0method0 = ITInterface0_ClassB_Method0;
@@ -151,7 +154,7 @@ const struct ITClassB_VTable* ITClassB_VTable_Create( )
 	vtable.ITClassA_VTable.ITInterface2_VTable.i2method1 = ITInterface2_ClassB_Method1;
 
 	/* Keep a reference to the super's implementation of certain methods. */
-	vtable.Supers_ITClassA_VTable = ITClassA_VTable_Create( );
+	vtable.Supers_ITClassA_VTable = ITClassA_VTable_Key( );
 
 	/* Return pointer. */
 	return &vtable;
@@ -162,10 +165,12 @@ void newITClassB( struct ITClassB* self )
 	CAssertObject(self);
 
 	/* Construct super class. */
+	/* Must be first thing done in constructor. */
 	newITClassA(&self->classA);
 
 	/* Map vtable. */
-	CVTable(self, ITClassB_VTable_Create( ));
+	/* Must be second thing done in constructor. */
+	CVTable(self, ITClassB_VTable_Key( ));
 }
 
 
@@ -202,13 +207,13 @@ static int ITInterface2_ClassC_Method0( struct ITInterface2* self_ )
 	return IT_CLASSC_I2_METHOD0 + ((struct ITClassC_VTable*) CGetVTable(self))->Supers_ITClassB_VTable->ITClassA_VTable.ITInterface2_VTable.i2method0(&self->classB.classA.itInterface2);
 }
 
-const struct ITClassC_VTable* ITClassC_VTable_Create( )
+const struct ITClassC_VTable* ITClassC_VTable_Key( )
 {
 	/* Only need one of these for every instance of this class. */
 	static struct ITClassC_VTable vtable;
 
 	/* Get copy of supers vtable. */
-	vtable.ITClassB_VTable = *ITClassB_VTable_Create( );
+	vtable.ITClassB_VTable = *ITClassB_VTable_Key( );
 	
 	/* Override these methods. */
 	vtable.ITClassB_VTable.ITClassA_VTable.ITInterface1_VTable.ITInterface0_VTable.i0method0 = ITInterface0_ClassC_Method0;
@@ -216,7 +221,7 @@ const struct ITClassC_VTable* ITClassC_VTable_Create( )
 	vtable.ITClassB_VTable.ITClassA_VTable.ITInterface2_VTable.i2method0 = ITInterface2_ClassC_Method0;
 
 	/* Keep reference to super's vtable. */
-	vtable.Supers_ITClassB_VTable = ITClassB_VTable_Create( );
+	vtable.Supers_ITClassB_VTable = ITClassB_VTable_Key( );
 
 	/* Return pointer. */
 	return &vtable;
@@ -227,8 +232,10 @@ void newITClassC( struct ITClassC* self )
 	CAssertObject(self);
 
 	/* Construct super class. */
+	/* Must be first thing done in constructor. */
 	newITClassB(&self->classB);
 
 	/* Map vtable. */
-	CVTable(self, ITClassC_VTable_Create( ));
+	/* Must be second thing done in constructor. */
+	CVTable(self, ITClassC_VTable_Key( ));
 }

@@ -58,9 +58,9 @@
 #define IT_CLASSC_I1_METHOD0 12
 #define IT_CLASSC_I2_METHOD0 11
 
-/****************************************************************************/
-/* Interface 0																*/
-/****************************************************************************/
+/************************************************************************/
+/* Interface 0								*/
+/************************************************************************/
 struct ITInterface0
 {
 	/* Must be first member of an interface. */
@@ -69,6 +69,7 @@ struct ITInterface0
 
 struct ITInterface0_VTable
 {
+	/* Interface methods are defined in the interface's vtable. */
 	int (*i0method0)( struct ITInterface0* );
 	int (*i0method1)( struct ITInterface0* );
 };
@@ -90,9 +91,9 @@ static inline int ITInterface0_Method1( struct ITInterface0* self )
 }
 
 
-/****************************************************************************/
-/* Interface 1																*/
-/****************************************************************************/
+/************************************************************************/
+/* Interface 1								*/
+/************************************************************************/
 struct ITInterface1
 {
 	/* Must be first member of an interface. */
@@ -104,8 +105,11 @@ struct ITInterface1
 
 struct ITInterface1_VTable
 {
+	/* Must include all super interface's vtable in this */
+	/* interfaces vtable. */
 	struct ITInterface0_VTable ITInterface0_VTable;
-       
+
+	/* This interfaces methods are defined in its vtable. */
 	int (*i1method0)( struct ITInterface1* );
 };
 
@@ -118,9 +122,9 @@ static inline int ITInterface1_Method0( struct ITInterface1* self )
 }
 
 
-/****************************************************************************/
-/* Interface 2																*/
-/****************************************************************************/
+/************************************************************************/
+/* Interface 2								*/
+/************************************************************************/
 struct ITInterface2
 {
 	/* Must be first member of an interface. */
@@ -129,7 +133,7 @@ struct ITInterface2
 
 struct ITInterface2_VTable
 {
-	/* Inheriting classes must implement these methods. */
+	/* The interface's methods must be defined in its vtable. */
 	int (*i2method0)( struct ITInterface2* );
 	int (*i2method1)( struct ITInterface2* );
 };
@@ -151,12 +155,12 @@ static inline int ITInterface2_Method1( struct ITInterface2* self )
 }
 
 
-/****************************************************************************/
-/* Class A																	*/
-/****************************************************************************/
+/************************************************************************/
+/* Class A								*/
+/************************************************************************/
 struct ITClassA
 {
-	/* Base class, so inherit from class object. */
+	/* Super class must be first member of the class declaration. */
 	struct CObject cobject;
 
 	/* Inherit from these interfaces */
@@ -166,57 +170,72 @@ struct ITClassA
 
 struct ITClassA_VTable
 {
-	/* Inherit super's vtable. */
+	/* Space for a copy of the super classes vtable must */
+	/* be the first member of any classes vtable. */
 	struct CObject_VTable CObject_VTable;
 
-	/* vtable of inherited interfaces. */
+	/* The vtables of inherited interfaces must be included as copies in this classes vtable. */
+	/* However, unlike the super class' vtable, this vtables have no ordering requirement. */
 	struct ITInterface1_VTable ITInterface1_VTable;
 	struct ITInterface2_VTable ITInterface2_VTable;
 };
 
-const struct ITClassA_VTable* ITClassA_VTable_Create( );
+/* Function to get the reference to this class' vtable. */
+const struct ITClassA_VTable* ITClassA_VTable_Key( );
 /* Constructor. */
 void newITClassA( struct ITClassA* );
 
 
-/****************************************************************************/
-/* Class B																	*/
-/****************************************************************************/
+/************************************************************************/
+/* Class B								*/
+/************************************************************************/
 struct ITClassB
 {
-	/* Inherit from this class. */
+	/* Super class must be first member of class declaration. */
 	struct ITClassA classA;
 };
 
 struct ITClassB_VTable
 {
+	/* Space for a copy of the super class' vtable must */
+	/* be the first member of this class' vtable declaration. */
 	struct ITClassA_VTable ITClassA_VTable;
+
+	/* We are overriding virtual methods inherited from the super class. In */
+	/* the new method definition, we want to call the super implementation. */
+	/* To do this, we need a reference to the super class' vtable. */
 	const struct ITClassA_VTable* Supers_ITClassA_VTable;
 };
 
-const struct ITClassB_VTable* ITClassB_VTable_Create( );
-	
+/* Used to get a reference to this class' vtable. */
+const struct ITClassB_VTable* ITClassB_VTable_Key( );	
 /* Constructor. */
 void newITClassB( struct ITClassB* );
 
 
-/****************************************************************************/
-/* Class C																	*/
-/****************************************************************************/
+/************************************************************************/
+/* Class C								*/
+/************************************************************************/
 struct ITClassC
 {
-	/* Inherit from this class. */
+	/* Super class must be first member of class declaration. */
 	struct ITClassB classB;
 };
 
 struct ITClassC_VTable
 {
+	/* Space for a copy of super class' vtable must be first member */
+	/* of any classes vtable declaration. */
 	struct ITClassB_VTable ITClassB_VTable;
+
+	/* We are overriding virtual methods inherited from the super class. In */
+	/* the new method definition, we want to call the super implementation. */
+	/* To do this, we need a reference to the super class' vtable. */
 	const struct ITClassB_VTable* Supers_ITClassB_VTable;
 };
 
-const struct ITClassC_VTable* ITClassC_VTable_Create( );
-
+/* Used to get a reference to this class' vtable. */
+const struct ITClassC_VTable* ITClassC_VTable_Key( );
 /* Constructor. */
 void newITClassC( struct ITClassC* );
 

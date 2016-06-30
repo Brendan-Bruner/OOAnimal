@@ -112,15 +112,15 @@ struct DTClassE_VTable
 /****************************************************************************/
 /* Constructors																*/
 /****************************************************************************/
-extern const struct DTClassA_VTable* DTClassA_VTable_Create( );
+extern const struct DTClassA_VTable* DTClassA_VTable_Key( );
 extern void newDTClassA( struct DTClassA*, int* );
-extern const struct DTClassB_VTable* DTClassB_VTable_Create( );
+extern const struct DTClassB_VTable* DTClassB_VTable_Key( );
 extern void newDTClassB( struct DTClassB*, int* );
-extern const struct DTClassC_VTable* DTClassC_VTable_Create( );
+extern const struct DTClassC_VTable* DTClassC_VTable_Key( );
 extern void newDTClassC( struct DTClassC*, int* );
-extern const struct DTClassD_VTable* DTClassD_VTable_Create( );
+extern const struct DTClassD_VTable* DTClassD_VTable_Key( );
 extern void newDTClassD( struct DTClassD*, int* );
-extern const struct DTClassE_VTable* DTClassE_VTable_Create( );
+extern const struct DTClassE_VTable* DTClassE_VTable_Key( );
 extern void newDTClassE( struct DTClassE*, int* );
 
 
