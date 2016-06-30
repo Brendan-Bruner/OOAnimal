@@ -44,6 +44,7 @@ struct CCArrayQueue
 		size_t element_size;
 		size_t head;
 		size_t tail;
+		unsigned char is_static;
 		unsigned char* queueBase;
 	} _;
 };
@@ -57,7 +58,7 @@ struct CCArrayQueue_VTable
 	/* Since we are overriding the destructor, we need to keep */
 	/* keep a reference to the super class' implementation of */
 	/* the destructor. */
-	struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* CObject_VTable_Ref;
 
 	/* Space for a copy of the implemented interface's virtual table */
 	struct CIQueue_VTable CIQueue_VTable;

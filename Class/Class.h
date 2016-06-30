@@ -51,6 +51,7 @@
 /* Note, this must resolve to a method with an address in memory. */
 /* ie, the default free method cannot be a macro function. */
 #define CDefaultFree 			free
+#define CFree				CDefaultFree	
 
 /* Default memory allocation method to use. */
 #define CMalloc				malloc

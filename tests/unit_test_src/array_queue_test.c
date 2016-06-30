@@ -200,6 +200,21 @@ TEST(overflow)
 	ASSERT(queue_size == 0, "Queue should be size zero after underflow, not %zu", queue_size);
 }
 
+TEST(null_remove)
+{
+	CIQueueError	err;
+	unsigned char	test_element[DEFAULT_ELEMENT_SIZE];
+
+	/* Insert element so null remove doesn't fail. */
+	if( CIQueue_Insert(&queue.cIQueue, test_element) != CIQUEUE_OK ) {
+		ABORT_TEST("Failed to insert");
+	}
+
+	/* Do null remove. */
+	err = CIQueue_Remove(&queue.cIQueue, NULL);
+	ASSERT(err == CIQUEUE_OK, "Failed to do NULL remove with err %d", err);
+}
+
 TEST_SUITE(array_queue)
 {
 	/* Construct queue. */
@@ -210,6 +225,7 @@ TEST_SUITE(array_queue)
 	ADD_TEST(underflow);
 	ADD_TEST(middle);
 	ADD_TEST(overflow);
+	ADD_TEST(null_remove);
 
 	CDestroy(&queue);
 }

@@ -19,6 +19,7 @@
 
 #include <util/CCArrayQueue.h>
 #include <string.h>
+#include <stdlib.h>
 
 
 /************************************************************************/
@@ -73,8 +74,10 @@ static CIQueueError CIQueue_Remove_Def( struct CIQueue* self_, void* element )
 		return CIQUEUE_ERR_UNDERFLOW;
 	}
 
-	/* Queue is not full, remove element. */
-	memcpy(element, self->_.queueBase + self->_.tail, self->_.element_size);
+	/* Queue is not full, copy element. */
+	if( element != NULL ) {
+		memcpy(element, self->_.queueBase + self->_.tail, self->_.element_size);
+	}
 
 	/* Increment tail to next element. */
 	CCArrayQueue_IncrementTail(self);
@@ -114,6 +117,23 @@ static size_t CIQueue_MaxSize_Def( struct CIQueue* self_ )
 	return self->_.max_size;
 }
 
+
+/************************************************************************/
+/* Overriding 								*/
+/************************************************************************/
+static void CDestructor( void* self_ )
+{
+	struct CCArrayQueue* self = CCast(self_);
+
+	if( !self->_.is_static ) {
+		free(self->_.queueBase);
+	}
+
+	/* Call super's destructor. */
+	((struct CObject_VTable*) CGetVTable(self))->CDestructor(self);
+}
+	
+
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
@@ -131,6 +151,9 @@ const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( )
 
 	/* Super's vtable copy. */
 	vtable.CObject_VTable = *CObject_VTable_Key( );
+
+	/* Override destructor. */
+	vtable.CObject_VTable.CDestructor = CDestructor;
 
 	/* Reference to super's vtable. */
 	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
@@ -165,6 +188,9 @@ CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queu
 	self->_.tail = 0;
 	self->_.max_size = queue_size;
 	self->_.size = 0;
+
+	/* Using malloc, so set this to false. */
+	self->_.is_static = 0;
 
 	return COBJ_OK;
 }
