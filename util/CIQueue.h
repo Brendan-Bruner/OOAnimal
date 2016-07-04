@@ -86,6 +86,7 @@ struct CIQueue_VTable
 	CIQueueError (*peek)( struct CIQueue*, void* );
 	size_t (*size)( struct CIQueue* );
 	size_t (*maxSize)( struct CIQueue* );
+	void (*clear)( struct CIQueue* );
 };
 
 
@@ -181,5 +182,21 @@ static inline size_t CIQueue_MaxSize( struct CIQueue* self )
 	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->maxSize);
 	return ((struct CIQueue_VTable*) CGetVTable(self))->maxSize(self);
 }
+
+/**
+ * @memberof CIQueue
+ * @details
+ *	Reset the queue to having zero elements in it. All data
+ *	copied into the queue is lost.
+ * @param self
+ *	The queue.
+ */
+static inline void CIQueue_Clear( struct CIQueue* self )
+{
+	CAssertObject(self);
+	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->clear);
+	((struct CIQueue_VTable*) CGetVTable(self))->clear(self);
+}
+
 
 #endif /* UTIL_CIQUEUE_H_ */

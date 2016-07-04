@@ -117,6 +117,15 @@ static size_t CIQueue_MaxSize_Def( struct CIQueue* self_ )
 	return self->_.max_size;
 }
 
+static void CIQueue_Clear_Def( struct CIQueue* self_ )
+{
+	struct CCArrayQueue* self = CCast(self_);
+
+	self->_.head = 0;
+	self->_.tail = 0;
+	self->_.size = 0;
+}
+
 
 /************************************************************************/
 /* Overriding 								*/
@@ -146,7 +155,8 @@ const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( )
 			.CIQueue_VTable.remove = CIQueue_Remove_Def,
 			.CIQueue_VTable.peek = CIQueue_Peek_Def,
 			.CIQueue_VTable.size = CIQueue_Size_Def,
-			.CIQueue_VTable.maxSize = CIQueue_MaxSize_Def
+			.CIQueue_VTable.maxSize = CIQueue_MaxSize_Def,
+			.CIQueue_VTable.clear = CIQueue_Clear_Def
 		};
 
 	/* Super's vtable copy. */
@@ -193,4 +203,37 @@ CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queu
 	self->_.is_static = 0;
 
 	return COBJ_OK;
+}
+
+CError CCArrayQueueStatic
+(
+	struct CCArrayQueue* self,
+	void* queue_memory,
+	size_t element_size,
+	size_t queue_size
+)
+{
+	/* First thing in constructor must be to call super's constructor. */
+	CObject(&self->cObject);
+
+	/* Second thing in constructor must be to map vtable. */
+	CVTable(self, CCArrayQueue_VTable_Key( ));
+
+	/* Third thing in constructor must be calling interface's constructor. */
+	CInterface(self, &self->cIQueue, &CCArrayQueue_VTable_Key( )->CIQueue_VTable);
+
+	/* Space for the array. */
+	self->_.queueBase = queue_memory;
+
+	/* Initialize member variables. */
+	self->_.element_size = element_size;
+	self->_.head = 0;
+	self->_.tail = 0;
+	self->_.max_size = queue_size;
+	self->_.size = 0;
+
+	/* Not using malloc, so set this to true. */
+	self->_.is_static = 1;
+
+	return COBJ_OK;	
 }
