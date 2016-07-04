@@ -196,6 +196,10 @@ static CIListError CIList_AddAt_Def( struct CIList* self_, void* element, size_t
 	 */
 	CCArrayList_SetMaskBit(self, index, CCARRAY_LIST_MASK_ELEMENT_FULL);
 
+	/* Increase current size.
+	 */
+	++self->_.current_size;
+	
 	return CILIST_OK;
 }
 
@@ -270,6 +274,10 @@ static CIListError CIList_Remove_Def( struct CIList* self_, void* element, size_
 	 */
 	CCArrayList_SetMaskBit(self, index, CCARRAY_LIST_MASK_ELEMENT_EMPTY);
 
+	/* Decrease current size.
+	 */
+	--self->_.current_size;
+	
 	return CILIST_OK;
 }
 

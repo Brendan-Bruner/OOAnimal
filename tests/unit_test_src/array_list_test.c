@@ -151,11 +151,171 @@ TEST(add)
 	ASSERT(err == CILIST_ERR_FULL, "Failed to throw a full list error");
 }
 
+TEST(clear)
+{
+	CIListError 	err;
+	int		test_var, i;
+
+	/* Fill the entire list.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Add(&list.cIList, &i);
+	}
+
+	/* Clear the list.
+	 */
+	CIList_Clear(&list.cIList);
+
+	/* Fill the entire list up again.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Add(&list.cIList, &i);
+
+		/* Assert there was no error adding the element,
+		 * and assert the current size increased.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to insert at iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == (size_t) (i+1), "Failed to track list size");
+	}
+
+	/* Assert each element can be removed correctly.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Remove(&list.cIList, &test_var, i);
+
+		/* Assert no error and correct element was got.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
+		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		       "Size did not decrease at iteration %d", i);
+	}
+	
+	
+}
+
+TEST(normal_operation)
+{
+	CIListError 	err;
+	int		test_var, i;
+
+	/* Fill the entire list.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Add(&list.cIList, &i);
+
+		/* Assert there was no error adding the element,
+		 * and assert the current size increased.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to insert at iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == (size_t) (i+1), "Failed to track list size");
+	}
+
+	/* Assert each element was correctly added.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Get(&list.cIList, &test_var, i);
+
+		/* Assert no error and correct element was got.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to get at iteration %d", i);
+		ASSERT(test_var == i, "Failed to get correctly at iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == DEFAULT_LENGTH, "Size did not stay constant at iteration %d", i);
+	}
+
+	/* Assert each element can be removed.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Remove(&list.cIList, &test_var, i);
+
+		/* Assert no error and correct element was got.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
+		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1, "Size did not decrease at iteration %d", i);
+	}
+
+	/* Assert each element was correctly removed and we cannot
+	 * try and get it again.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Get(&list.cIList, &test_var, i);
+
+		/* Assert no error and correct element was got.
+		 */
+		ASSERT(err == CILIST_ERR_EMPTY, "Failed to mark as removed at iteration %d", i);
+	}
+
+	/* Fill the list back up so we can assert its state doesn't get corrupt
+	 * during normal add and remove operation.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Add(&list.cIList, &i);
+
+		/* Assert there was no error adding the element,
+		 * and assert the current size increased.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to re-insert at iteration %d", i);
+	}
+
+	/* Assert each element can be removed as before.
+	 */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		err = CIList_Remove(&list.cIList, &test_var, i);
+
+		/* Assert no error and correct element was got.
+		 */
+		ASSERT(err == CILIST_OK, "Failed to remove at during second iteration %d", i);
+		ASSERT(test_var == i, "Failed to remove correctly at second iteration %d", i);
+		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		       "Size did not decrease at second iteration %d", i);
+	}
+	
+}
+
+TEST(max_size)
+{
+	ASSERT(CIList_MaxSize(&list.cIList) == DEFAULT_LENGTH, "Failed to get max size");
+}
+
+TEST(depth_one)
+{
+	/* Test a list of size one works correctly.
+	 */
+	struct CCArrayList oneList;
+	CIListError err;
+	int test_var;
+
+	CCArrayList(&oneList, sizeof(test_var), 1);
+
+	test_var = 0;
+	err = CIList_Add(&oneList.cIList, &test_var);
+	ASSERT(err == CILIST_OK, "Failed to add");
+
+	++test_var;
+	err = CIList_Add(&oneList.cIList, &test_var);
+	ASSERT(err == CILIST_ERR_FULL, "Added to full list by error");
+
+	err = CIList_Get(&oneList.cIList, &test_var, 0);
+	ASSERT(err == CILIST_OK, "Failed to get from list");
+	ASSERT(test_var == 0, "Failed to get correct value from list");
+
+	err = CIList_Get(&oneList.cIList, &test_var, 0);
+	ASSERT(err == CILIST_OK, "Failed to remove from list");
+	ASSERT(test_var == 0, "Failed to remove correct value from list");
+
+	CDestroy(&oneList);
+}
+
 TEST_SUITE(array_list)
 {
 	ADD_TEST(add_at);
 	ADD_TEST(get);
 	ADD_TEST(remove);
 	ADD_TEST(add);
+	ADD_TEST(clear);
+	ADD_TEST(max_size);
+	ADD_TEST(normal_operation);
+	ADD_TEST(depth_one);
 }
 
