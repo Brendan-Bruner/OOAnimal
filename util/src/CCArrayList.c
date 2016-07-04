@@ -20,8 +20,8 @@
 #include <util/CCArrayList.h>
 #include <string.h>
 
-#define CCARRAY_LIST_MASK_ELEMENT_EMPTY	1
-#define CCARRAY_LIST_MASK_ELEMENT_FULL	0
+#define CCARRAY_LIST_MASK_ELEMENT_EMPTY	0
+#define CCARRAY_LIST_MASK_ELEMENT_FULL	1
 
 /* There is one bit for every element in the list.
  * To get the number of bytes required to for a one to one
@@ -111,6 +111,23 @@ static void CCArrayList_SetMaskBit( struct CCArrayList* self, size_t index, unsi
 /************************************************************************/
 /* Virtual methods.							*/
 /************************************************************************/
+/* Complexity map
+ * 1(CCast) -> 2(if) -> 3(add_at) -> 4(return) <---------
+ *                   |                               |  |
+ *                   -> 5(for) -> 6(if) -> 7(add_at) -  |
+ *                   |                  |               |
+ *                   --------------------               |
+ *                                      |               |
+ *                                  (for end)           |
+ *                                      |               |
+ *                                      -----------------
+ * This gives a complexity of 9(edges) - 7(nodes) + 2 = 4
+ *
+ * Test cases should be:
+ *	* add index is empty
+ *	* add index is full, a new add index can be found.
+ *	* add index if full, a new add index cannot be found.
+ */
 static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 {	
 	CAssertObject(self_);
@@ -149,6 +166,17 @@ static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 	return CILIST_ERR_FULL;
 }
 
+/* Complexity map
+ * 1(CCast) -> 2(if) -> 3(return) <-------------
+ *                   |                         |
+ *                   -> 4(copy) -> 5(set_mask) -
+ *
+ * This gives complexity of 5(edges) - 5(nodes) + 2 = 2
+ *
+ * Test cases should be:
+ *	* Index out of bounds.
+ *	* Index not out of bounds.
+ */
 static CIListError CIList_AddAt_Def( struct CIList* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -171,6 +199,23 @@ static CIListError CIList_AddAt_Def( struct CIList* self_, void* element, size_t
 	return CILIST_OK;
 }
 
+/* Complexity map:
+ * 1(CCast) -> 2(if index >= max size) -> 3(return) <----------
+ *                                     |                   |  |
+ *                                     -> 4(if mask empty) -  |
+ *                                                         |  |
+ *                        - 6(copy) <- 5(if element NULL) <-  |
+ *                        |          |                        |
+ *                        -------------------------------------
+ *
+ * This gives complexity of 8(edges) - 6(nodes) + 2 = 4
+ *
+ * Test cases should be:
+ *	* Index out of bounds
+ *	* Index in bounds, mask is empty
+ *	* Index in bounds, mask full, element NULL
+ *	* Index in bounds, mask full, element non NULL 
+ */                                                         
 static CIListError CIList_Get_Def( struct CIList* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -184,19 +229,30 @@ static CIListError CIList_Get_Def( struct CIList* self_, void* element, size_t i
 
 	/* Check if there is anythign at this index to get.
 	 */
-	if( CCArrayList_GetMaskBit(self, self->_.add_index) == CCARRAY_LIST_MASK_ELEMENT_EMPTY ) {
+	if( CCArrayList_GetMaskBit(self, index) == CCARRAY_LIST_MASK_ELEMENT_EMPTY ) {
 		return CILIST_ERR_EMPTY;
 	}
 	
 	/* Copy data out of the list.
 	 */
 	if( element != NULL ) {
-		memcpy(&self->_.list_base[index * self->_.element_size], element, self->_.element_size);
+		memcpy(element, &self->_.list_base[index * self->_.element_size], self->_.element_size);
 	}
 
 	return CILIST_OK;
 }
 
+/* Complexity map:
+ * 1(CCast) -> 2(if err != OK ) -> 3(return) <----
+ *                              |                |
+ *                              -> 4(clear mask) -
+ *
+ * This gives complexity of 4(edges) - 4(nodes) + 2 = 2
+ *
+ * Test cases:
+ *	* A condition which makes CIList_Get fail, this could be out of bounds index.
+ *	* CIList_Get succeeds
+ */ 
 static CIListError CIList_Remove_Def( struct CIList* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -244,6 +300,11 @@ static void CDestructor( void* self_ )
 
 	CFree(self->_.list_base);
 	CFree(self->_.list_mask);
+
+	/* Call super's destructor
+	 */
+	const struct CCArrayList_VTable* vtable = CGetVTable(self);
+	vtable->CObject_VTable_Ref->CDestructor(self);
 }
 
 /************************************************************************/
