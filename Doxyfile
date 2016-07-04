@@ -32,7 +32,7 @@ DOXYFILE_ENCODING      = UTF-8
 # title of most generated pages and in a few other places.
 # The default value is: My Project.
 
-PROJECT_NAME           = "Util"
+PROJECT_NAME           = "CObject"
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number. This
 # could be handy for archiving the generated documentation or if some version
@@ -133,7 +133,7 @@ ALWAYS_DETAILED_SEC    = NO
 # operators of the base classes will not be shown.
 # The default value is: NO.
 
-INLINE_INHERITED_MEMB  = NO
+INLINE_INHERITED_MEMB  = YES
 
 # If the FULL_PATH_NAMES tag is set to YES, doxygen will prepend the full path
 # before files name in the file list and in the header files. If set to NO the
@@ -228,7 +228,7 @@ TAB_SIZE               = 4
 # "Side Effects:". You can put \n's in the value part of an alias to insert
 # newlines.
 
-ALIASES                =
+ALIASES                = "constructor=@par <b>Class Constructor</b>"
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"
@@ -242,7 +242,7 @@ TCL_SUBST              =
 # members will be omitted, etc.
 # The default value is: NO.
 
-OPTIMIZE_OUTPUT_FOR_C  = NO
+OPTIMIZE_OUTPUT_FOR_C  = YES
 
 # Set the OPTIMIZE_OUTPUT_JAVA tag to YES if your project consists of Java or
 # Python sources only. Doxygen will then generate output that is more tailored
@@ -758,7 +758,7 @@ WARN_LOGFILE           =
 # spaces.
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = Util/
+INPUT                  = util util/src
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses

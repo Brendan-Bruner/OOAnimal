@@ -16,6 +16,11 @@
  * bbruner@ualberta.ca
  * Jun 24, 2016
  */
+/**
+ * @file
+ * @defgroup Queues
+ * All queue type data structures.
+ */
 #ifndef UTIL_CIQUEUE_H_
 #define UTIL_CIQUEUE_H_
 
@@ -26,17 +31,13 @@
 /* Error codes.								*/
 /************************************************************************/
 /**
- * @memberof struct CIQueue
- * @details
- *	Error codes for queue methods.
- *
+ * @enum CIQueueError
+ * @ingroup Queues
  * @var CIQUEUE_OK
  *	No error.
- *
  * @var CIQUEUE_ERR_OVERFLOW
  *	Queue is full, element not inserted.
- *
- * @var CIQueue_ERR_UNDERFLOW
+ * @var CIQUEUE_ERR_UNDERFLOW
  *	Queue is empty, nothing popped/peeked.
  */
 typedef enum
@@ -52,18 +53,18 @@ typedef enum
 /************************************************************************/
 /**
  * @struct CIQueue
+ * @ingroup Queues
+ * @brief
+ *	Queue data structure interface.
  * @details
  *	Interface for queues. Provides methods for inserting, popping,
  *	peeking, and polling the queue's size. 
- *
- *	Implementing classes must implement the behaviour specified in the
+ *	<br>Implementing classes must implement the behaviour specified in the
  *	functions described below.
- *
- *	This is a copy by value queue. That means a pointer to data is
+ *	<br>This is a copy by value queue. That means a pointer to data is
  *	is given to the queues functions, and the data pointed to is then copied
  *	into the queue.
- *
- *	Implementing classes must provide a way to define the length of data
+ *	<br>Implementing classes must provide a way to define the length of data
  *	copied in/out of the queue.
  */
 struct CIQueue
@@ -74,10 +75,9 @@ struct CIQueue
 };
 
 /**
- * @struct CIQueue_VTable
- * @memberof struct CIQueue
- * @details
- *	Virtual table declaration for CIQueue interface.
+ * @cond HIDDEN_SYMBOL
+ * @brief
+ *	CIQueue virtual table.
  */
 struct CIQueue_VTable
 {
@@ -88,13 +88,16 @@ struct CIQueue_VTable
 	size_t (*maxSize)( struct CIQueue* );
 	void (*clear)( struct CIQueue* );
 };
+/**
+ * @endcond
+ */
 
 
 /************************************************************************/
 /* Class methods. 							*/
 /************************************************************************/
 /**
- * @memberof struct CIQueue
+ * @memberof CIQueue
  * @details
  *	Insert an element into the tail of the queue by copy.
  * @param self
@@ -112,7 +115,7 @@ static inline CIQueueError CIQueue_Insert( struct CIQueue* self, const void* ele
 }
 
 /**
- * @memberof struct CIQueue
+ * @memberof CIQueue
  * @details
  *	Remove an element from the head of the queue by copy.
  * @param self
@@ -132,7 +135,7 @@ static inline CIQueueError CIQueue_Remove( struct CIQueue* self, void* element )
 }
 
 /**
- * @memberof struct CIQueue
+ * @memberof CIQueue
  * @details
  *	Peek at the element in the head of the queue by copy. This does
  *	remove the head.
@@ -152,7 +155,7 @@ static inline CIQueueError CIQueue_Peek( struct CIQueue* self, void* element )
 }
 
 /**
- * @memberof struct CIQueue
+ * @memberof CIQueue
  * @details
  *	Get the number of elements currently in the queue.
  * @param self
@@ -168,7 +171,7 @@ static inline size_t CIQueue_Size( struct CIQueue* self )
 }
 
 /**
- * @memberof struct CIQueue
+ * @memberof CIQueue
  * @details
  *	Get the maximum number of elements allowed in the queue.
  * @param self

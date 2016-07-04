@@ -20,6 +20,9 @@
 #include <util/CCArrayList.h>
 #include <string.h>
 
+/* These must keep their respective 0 and 1 values
+ * for the bit mask to work correctly. 
+ */
 #define CCARRAY_LIST_MASK_ELEMENT_EMPTY	0
 #define CCARRAY_LIST_MASK_ELEMENT_FULL	1
 
@@ -47,6 +50,8 @@
 /************************************************************************/
 /* Private methods							*/
 /************************************************************************/
+/* Resets the list back to an empty state.
+ */
 static void CCArrayList_Clear( struct CCArrayList* self )
 {
 	CAssertObject(self);
@@ -58,6 +63,13 @@ static void CCArrayList_Clear( struct CCArrayList* self )
 	memset(self->_.list_mask, 0, CCARRAY_LIST_MASK_SIZE(self->_.max_size));
 }
 
+/* Given an index into the list, this returns the empty/full bit mask
+ * of the index. Checking the returned value against 
+ * CCARRAY_LIST_MASK_ELEMENT_EMPTY and CCARRAY_LIST_MASK_ELEMENT_FULL
+ * will indicate if the index has valid data in it or not.
+ * Bounds checking is not done on the index, this must be done before
+ * calling the method.
+ */
 static unsigned char CCArrayList_GetMaskBit( struct CCArrayList* self, size_t index )
 {
 	size_t mask_index;
@@ -82,6 +94,11 @@ static unsigned char CCArrayList_GetMaskBit( struct CCArrayList* self, size_t in
 	return ((mask_byte >> mask_bit) & 0x01);
 }
 
+/* Used to set the empty/full status of an index in the list. The status
+ * must be set with one of:
+ * CCARRAY_LIST_MASK_ELEMENT_EMPTY or CCARRAY_LIST_MASK_ELEMENT_FULL
+ * and the index must be bounds checked before calling this method.
+ */
 static void CCArrayList_SetMaskBit( struct CCArrayList* self, size_t index, unsigned char val )
 {
 	size_t mask_index;
@@ -136,7 +153,8 @@ static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 	/* Check if the add index is empty.
 	 */
 	if( CCArrayList_GetMaskBit(self, self->_.add_index) == CCARRAY_LIST_MASK_ELEMENT_EMPTY ) {
-		/* Increment add index and insert element.
+		/* There is no valid data at the add index, so we can
+		 * increment it and insert the element.
 		 */
 		CIListError err;
 		err = CIList_AddAt(&self->cIList, element, self->_.add_index);
@@ -145,7 +163,7 @@ static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 	}
 
 	/* Need to find a location to add the element, since the current add index 
-	 * is full.
+	 * has valid data that we don't want to overwrite.
 	 */
 	size_t i;
 	for( i = 0; i < self->_.max_size; ++i ) {

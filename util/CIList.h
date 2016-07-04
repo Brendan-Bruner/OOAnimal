@@ -16,12 +16,33 @@
  * bbruner@ualberta.ca
  * Jun 24, 2016
  */
+/**
+ * @file
+ * @defgroup Lists
+ * All list type data structures.
+ */
 #ifndef UTIL_CILIST_H_
 #define UTIL_CILIST_H_
 
 #include <Class.h>
 #include <stdlib.h>
 
+
+/************************************************************************/
+/* Error codes								*/
+/************************************************************************/
+/**
+ * @enum CIListError
+ * @ingroup Lists
+ * @var CILIST_OK
+ *	No error.
+ * @var CILIST_ERR_FULL
+ *	No room for data.
+ * @var CILIST_ERR_EMPTY
+ *	No data.
+ * @var CILIST_ERR_INDEX
+ *	Invalid index.
+ */
 typedef enum
 {
 	CILIST_OK = 0,
@@ -33,6 +54,17 @@ typedef enum
 /************************************************************************/
 /* Interface declaration.						*/
 /************************************************************************/
+/**
+ * @struct CIList
+ * @ingroup Lists
+ * @brief
+ *	Interface for list data structures.
+ * @details
+ *	Provides an interface for adding/removing data from a list.
+ *	This is a copy by value list, meaning all insert/get/remove functions
+ *	will copy at the location pointed to by inputs. See function descriptions
+ *	for more details.
+ */
 struct CIList
 {
 	/* CInterface must always be first member of */
@@ -40,6 +72,11 @@ struct CIList
 	struct CInterface interface;
 };
 
+/**
+ * @cond HIDDEN_SYMBOL
+ * @brief
+ *	CIList virtual table.
+ */
 struct CIList_VTable
 {
 	CIListError (*add)( struct CIList*, void* );
@@ -50,9 +87,16 @@ struct CIList_VTable
 	size_t (*size)( struct CIList* );
 	size_t (*maxSize)( struct CIList* );
 };
-
 /**
- * @memberof struct ICList
+ * @endcond
+ */
+
+
+/************************************************************************/
+/* Member functions.							*/
+/************************************************************************/
+/**
+ * @memberof CIList
  * @details
  * 	Add parameter element, by copy, to the first empty spot in the list. If 
  *	there are no empty spots, the list will be resized or an error returned.
@@ -61,8 +105,8 @@ struct CIList_VTable
  * @param element
  *	A pointer to the data which will be copied into the list.
  * @returns
- *	CILIST_OK:		The element was inserted into the list
- *	CILIST_ERR_FULL:	No room in the list, and if a resize was attempted
+ *	- CILIST_OK:		The element was inserted into the list
+ *	- CILIST_ERR_FULL:	No room in the list, and if a resize was attempted
  *				it failed. the element wasn't added.
  */
 static inline CIListError CIList_Add( struct CIList* self, void* element )
@@ -73,7 +117,7 @@ static inline CIListError CIList_Add( struct CIList* self, void* element )
 }
 
 /**
- * @memberof struct CIList
+ * @memberof CIList
  * @details
  *	Insert the element into the specefied index of the list. If there is already something
  *	at that index in the list, it gets overwritten.
@@ -84,8 +128,8 @@ static inline CIListError CIList_Add( struct CIList* self, void* element )
  * @param index
  *	The index in the list to copy the data.
  * @returns
- *	CILIST_OK:		Element was inserted.
- *	CILIST_ERR_INDEX:	Index out of bounds.
+ *	- CILIST_OK:		Element was inserted.
+ *	- CILIST_ERR_INDEX:	Index out of bounds.
  */
 static inline CIListError CIList_AddAt( struct CIList* self, void* element, size_t index )
 {
@@ -95,7 +139,7 @@ static inline CIListError CIList_AddAt( struct CIList* self, void* element, size
 }
 
 /**
- * @memberof struct CIList
+ * @memberof CIList
  * @details
  *	Get an element from the list at the specified index. The element is not removed
  *	from the list.
@@ -107,9 +151,9 @@ static inline CIListError CIList_AddAt( struct CIList* self, void* element, size
  * @param index
  *	The location in the list to get an item from.
  * @returns
- *	CILIST_OK:		Retrieved the element.
- *	CILIST_ERR_EMPTY:	Nothing at the location given by parameter index. 
- *	CILIST_ERR_INDEX:	The index is out of bounds, not a valid index.
+ *	- CILIST_OK:		Retrieved the element.
+ *	- CILIST_ERR_EMPTY:	Nothing at the location given by parameter index. 
+ *	- CILIST_ERR_INDEX:	The index is out of bounds, not a valid index.
  */	
 static inline CIListError CIList_Get( struct CIList* self, void* element, size_t index )
 {
@@ -119,7 +163,7 @@ static inline CIListError CIList_Get( struct CIList* self, void* element, size_t
 }
 
 /**
- * @memberof struct CIList
+ * @memberof CIList
  * @details
  *	Remove an element from the list at the specified index.
  * @param self
@@ -130,9 +174,9 @@ static inline CIListError CIList_Get( struct CIList* self, void* element, size_t
  * @param index
  *	Index in the list to remove data. 
  * @returns
- *	CILIST_OK:		Element removed from given index.
- *	CILIST_ERR_EMPTY:	No element at the given index.
- *	CILIST_ERR_INDEX:	Index is out of bounds.
+ *	- CILIST_OK:		Element removed from given index.
+ *	- CILIST_ERR_EMPTY:	No element at the given index.
+ *	- CILIST_ERR_INDEX:	Index is out of bounds.
  */
 static inline CIListError CIList_Remove( struct CIList* self, void* element, size_t index )
 {
@@ -141,6 +185,14 @@ static inline CIListError CIList_Remove( struct CIList* self, void* element, siz
 	return ((struct CIList_VTable*) CGetVTable(self))->remove(self, element, index);
 }
 
+/**
+ * @memberof CIList
+ * @details
+ *	Reset the list to a completely empty state. All data
+ *	within the list is lost.
+ * @param self
+ *	The list.
+ */
 static inline void CIList_Clear( struct CIList* self)
 {
 	CAssertObject(self);
@@ -148,6 +200,15 @@ static inline void CIList_Clear( struct CIList* self)
 	((struct CIList_VTable*) CGetVTable(self))->clear(self);
 }
 
+/**
+ * @memberof CIList
+ * @details
+ *	Poll the current size of the list.
+ * @param self
+ *	The list.
+ * @returns
+ *	Number of items currently in the list.
+ */
 static inline size_t CIList_Size( struct CIList* self )
 {
 	CAssertObject(self);
@@ -155,6 +216,15 @@ static inline size_t CIList_Size( struct CIList* self )
 	return ((struct CIList_VTable*) CGetVTable(self))->size(self);
 }
 
+/**
+ * @memberof CIList
+ * @details
+ *	Poll the currently maximum available space in the list.
+ * @param self
+ *	The list.
+ * @returns
+ *	The maximum available space in the list.
+ */
 static inline size_t CIList_MaxSize( struct CIList* self )
 {
 	CAssertObject(self);

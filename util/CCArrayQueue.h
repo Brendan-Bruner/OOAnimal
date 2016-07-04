@@ -16,6 +16,9 @@
  * bbruner@ualberta.ca
  * Jun 24, 2016
  */
+/**
+ * @file
+ */
 #ifndef UTIL_CCARRAYQUEUE_H_
 #define UTIL_CCARRAYQUEUE_H_
 
@@ -29,13 +32,17 @@
 /************************************************************************/
 /**
  * @struct CCArrayQueue
+ * @extends CIQueue
+ * @ingroup Queues
+ * @brief
+ *	Array implementation of CIQueue interface.
  * @details
  *	Implements the struct CIQueue interface using an array as the
  *	underlying data structure. This is a copy by value queue. 
  *	Below is an example of creating a new queue of size three to
  *	hold chars, then, adding an element and peeking at the added element.
  *	Note, error checking should be done, but is ommitted in this example.
- *	@code
+ *	@code{.c}
  *		struct CCArrayQueue queue;
  *		CCArrayQueue(&queue, sizeof(char), 3);
  *
@@ -50,6 +57,9 @@
  *		
  *		CDestroy(&queue);
  *	@endcode
+ * @attention
+ *	All functions inherited from the CIQueue interface can be called
+ *	using the CCArrayQueue::cIQueue as their first argument. 
  */
 struct CCArrayQueue
 {
@@ -74,10 +84,9 @@ struct CCArrayQueue
 };
 
 /**
- * @struct CCArrayQueue_VTable
- * @memberof struct CCArrayQueue
- * @details
- * 	Virtual table for struct CCArrayQueue.
+ * @cond HIDDEN_SYMBOL
+ * @brief
+ *	 Virtual table for struct CCArrayQueue.
  */
 struct CCArrayQueue_VTable
 {
@@ -95,20 +104,24 @@ struct CCArrayQueue_VTable
 };
 
 /**
- * @memberof struct CCArrayQueue
+ * @memberof CCArrayQueue
  * @details
  *	Get reference to the struct CCArrayQueue's vtable.
- * @returns
- *	Pointer to the virtual table for class struct CCArrayQueue.
  */
 const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( );
 
+/**
+ * @endcond
+ */
 
 /************************************************************************/
 /* Constructor								*/
 /************************************************************************/
 /**
- * @memberof struct CCArrayQueue
+ * @memberof CCArrayQueue
+ * @constructor
+ * @sa
+ *	- CCArrayQueueStatic
  * @details
  *	Constructor for class struct CCArrayQueue. This method uses
  *	CMalloc defined in Class.h to allocate space for the queue.
@@ -126,10 +139,11 @@ const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( );
 CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queue_size);
 
 /**
- * @memberof struct CCArrayQueue
+ * @memberof CCArrayQueue
+ * @constructor
  * @details
- *	Constructor for class struct CCArrayQueue. Uses an input 
- *	as the memory location for the queue.
+ *	Constructor for class struct CCArrayQueue. Allows application code to
+ *	define memory region to use for the queue's array back end.
  * @param self
  *	The instance of struct CCArrayQueue to construct.
  * @param memory
@@ -143,5 +157,6 @@ CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queu
  *	CIQUEUE_OK on successful construction.
  */
 CError CCArrayQueueStatic( struct CCArrayQueue* self, void* memory, size_t element_size, size_t queue_size );
+
 
 #endif /* UTIL_CCARRAYQUEUE_H_ */
