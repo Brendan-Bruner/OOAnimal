@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>CObject: Main Page</title>
+<title>CObject: Lists</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -45,8 +45,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="modules.html"><span>Modules</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li class="current"><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -79,7 +79,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   </div>
 </div>
 <script type="text/javascript">
-$(document).ready(function(){initNavTree('index.html','');});
+$(document).ready(function(){initNavTree('group__Lists.html','');});
 </script>
 <div id="doc-content">
 <!-- window showing the filter options -->
@@ -97,10 +97,61 @@ $(document).ready(function(){initNavTree('index.html','');});
 </div>
 
 <div class="header">
+  <div class="summary">
+<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
-<div class="title">CObject Documentation</div>  </div>
+<div class="title">Lists</div>  </div>
 </div><!--header-->
 <div class="contents">
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Data Structures</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList.html">CCArrayList</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array implementation of <a class="el" href="structCIList.html" title="Interface for list data structures. ">CIList</a>.  <a href="structCCArrayList.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIList.html">CIList</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Interface for list data structures.  <a href="structCIList.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:ga2d72232adb003e2d28eabd2a1525e6e4"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4">CIListError</a> { <a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4ae0236a36fee3eca55b77b5e0f6844277">CILIST_OK</a> = 0, 
+<a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4ad7037ac9639c67ee35d26ce61323636c">CILIST_ERR_FULL</a> = 1, 
+<a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4a4d0f221870f130dbeeda02f65d664a85">CILIST_ERR_EMPTY</a> = 2, 
+<a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4a0068e375757ae59a37f7131f4a956ec7">CILIST_ERR_INDEX</a> = 3
+ }</td></tr>
+<tr class="separator:ga2d72232adb003e2d28eabd2a1525e6e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<p>All list type data structures. </p>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="ga2d72232adb003e2d28eabd2a1525e6e4"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4">CIListError</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ga2d72232adb003e2d28eabd2a1525e6e4ae0236a36fee3eca55b77b5e0f6844277"></a>CILIST_OK&#160;</td><td class="fielddoc">
+<p>No error. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga2d72232adb003e2d28eabd2a1525e6e4ad7037ac9639c67ee35d26ce61323636c"></a>CILIST_ERR_FULL&#160;</td><td class="fielddoc">
+<p>No room for data. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga2d72232adb003e2d28eabd2a1525e6e4a4d0f221870f130dbeeda02f65d664a85"></a>CILIST_ERR_EMPTY&#160;</td><td class="fielddoc">
+<p>No data. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga2d72232adb003e2d28eabd2a1525e6e4a0068e375757ae59a37f7131f4a956ec7"></a>CILIST_ERR_INDEX&#160;</td><td class="fielddoc">
+<p>Invalid index. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
