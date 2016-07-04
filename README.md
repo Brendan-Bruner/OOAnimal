@@ -15,4 +15,4 @@ CObject is c99 compliant.
 #Util
 ---
 
-Several data structures have been written using CObject. Their documentation is available wit github pages at [bandren.github.io/CObject](http://bandren.github.io/CObject)
+Several data structures have been written using CObject. Their documentation is available with github pages at [bandren.github.io/CObject](http://bandren.github.io/CObject)
