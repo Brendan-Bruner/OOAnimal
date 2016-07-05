@@ -109,12 +109,7 @@ struct CIList_VTable
  *	- CILIST_ERR_FULL:	No room in the list, and if a resize was attempted
  *				it failed. the element wasn't added.
  */
-static inline CIListError CIList_Add( struct CIList* self, void* element )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->add);
-	return ((struct CIList_VTable*) CGetVTable(self))->add(self, element);
-}
+CIListError CIList_Add( struct CIList* self, void* element );
 
 /**
  * @memberof CIList
@@ -131,12 +126,7 @@ static inline CIListError CIList_Add( struct CIList* self, void* element )
  *	- CILIST_OK:		Element was inserted.
  *	- CILIST_ERR_INDEX:	Index out of bounds.
  */
-static inline CIListError CIList_AddAt( struct CIList* self, void* element, size_t index )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->addAt);
-	return ((struct CIList_VTable*) CGetVTable(self))->addAt(self, element, index);
-}
+CIListError CIList_AddAt( struct CIList* self, void* element, size_t index );
 
 /**
  * @memberof CIList
@@ -155,12 +145,7 @@ static inline CIListError CIList_AddAt( struct CIList* self, void* element, size
  *	- CILIST_ERR_EMPTY:	Nothing at the location given by parameter index. 
  *	- CILIST_ERR_INDEX:	The index is out of bounds, not a valid index.
  */	
-static inline CIListError CIList_Get( struct CIList* self, void* element, size_t index )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->get);
-	return ((struct CIList_VTable*) CGetVTable(self))->get(self, element, index);
-}
+CIListError CIList_Get( struct CIList* self, void* element, size_t index );
 
 /**
  * @memberof CIList
@@ -178,12 +163,7 @@ static inline CIListError CIList_Get( struct CIList* self, void* element, size_t
  *	- CILIST_ERR_EMPTY:	No element at the given index.
  *	- CILIST_ERR_INDEX:	Index is out of bounds.
  */
-static inline CIListError CIList_Remove( struct CIList* self, void* element, size_t index )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->remove);
-	return ((struct CIList_VTable*) CGetVTable(self))->remove(self, element, index);
-}
+CIListError CIList_Remove( struct CIList* self, void* element, size_t index );
 
 /**
  * @memberof CIList
@@ -193,12 +173,7 @@ static inline CIListError CIList_Remove( struct CIList* self, void* element, siz
  * @param self
  *	The list.
  */
-static inline void CIList_Clear( struct CIList* self)
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->clear);
-	((struct CIList_VTable*) CGetVTable(self))->clear(self);
-}
+void CIList_Clear( struct CIList* self);
 
 /**
  * @memberof CIList
@@ -209,12 +184,7 @@ static inline void CIList_Clear( struct CIList* self)
  * @returns
  *	Number of items currently in the list.
  */
-static inline size_t CIList_Size( struct CIList* self )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->size);
-	return ((struct CIList_VTable*) CGetVTable(self))->size(self);
-}
+size_t CIList_Size( struct CIList* self );
 
 /**
  * @memberof CIList
@@ -225,11 +195,6 @@ static inline size_t CIList_Size( struct CIList* self )
  * @returns
  *	The maximum available space in the list.
  */
-static inline size_t CIList_MaxSize( struct CIList* self )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIList_VTable*) CGetVTable(self))->maxSize);
-	return ((struct CIList_VTable*) CGetVTable(self))->maxSize(self);
-}
+size_t CIList_MaxSize( struct CIList* self );
 
 #endif /* UTIL_CILIST_H_ */

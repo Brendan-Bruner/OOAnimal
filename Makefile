@@ -1,28 +1,27 @@
-#all:
-#	$(CC) -std:=c99 -Wall -Wextra -pedantic -I../Class -I./test_classes -I. ../Class/Class.c ./*.c ./**/*.c -o main
-
-
-
 CC := gcc
-CFLAGS := -Wall -Wextra -pedantic -g
+AR := ar
+CFLAGS := -Wall -Wextra -pedantic -g -Os
 
-# Build directory
-BUILDDIR := debug
+# Build directory for executable
+BUILDDIR := debug/main
 # Name of binary executable
 EXEC = main
-# Source directory start
-SOURCEDIR := ./
 # Path to all header files used
 INCLUDES := -IClass -I. -Itests -Itests/test_classes
-
 # Path to all source files used
-# use ' ! -wholename '*/Tutorials/**.c' )' to exclude files
-SOURCES := $(shell find $(SOURCEDIR) -name '*.c')
-# Name and location for all object files
+SOURCES := $(shell echo tests/*.c) $(shell echo tests/**/*.c)
+# All object files
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
-all : MKDIR $(OBJECTS)
-	$(CC) $(CFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(EXEC)
+# sources/includes/objects for static util lib
+LIB_SRC := $(shell echo util/src/*.c) $(shell echo Class/*c)
+LIB_INC := -I. -IClass
+LIB_DIR := debug/lib
+LIB_NAME := cutil
+LIB_OBJ := $(addprefix $(LIB_DIR)/,$(LIB_SRC:%.c=%.o))
+
+all : MKDIR $(OBJECTS) libutil
+	$(CC) $(CFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(EXEC) $(LIB_DIR)/$(addprefix lib,$(LIB_NAME).a)
 
 $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
@@ -31,14 +30,16 @@ MKDIR :
 	mkdir -p $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%))
 
 clean :
-	rm -rf $(EXEC) $(BUILDDIR)
+	rm -rf $(EXEC) $(BUILDDIR) $(LIB_DIR)
 
 run:
 	./$(BUILDDIR)/$(EXEC)
 
-crun: clean all run
+libutil : MKLIBDIR $(LIB_OBJ)
+	$(AR) rcs $(LIB_DIR)/$(addprefix lib,$(LIB_NAME).a) $(LIB_OBJ)
 
-debug :
-	gdb ./$(BUILDDIR)/$(EXEC)
+MKLIBDIR :
+	mkdir -p $(addprefix $(LIB_DIR)/,$(LIB_SRC:%.c=%))
 
-cdebug: clean all debug
+$(LIB_DIR)/%.o : %.c
+	$(CC) $(CFLAGS) -c $(LIB_INC) $< -o $@
