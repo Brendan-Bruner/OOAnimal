@@ -17,7 +17,7 @@
  * July 3, 2016
  */
 
-#include <util/CCArrayList.h>
+#include <CCArrayList.h>
 #include <string.h>
 
 /* These must keep their respective 0 and 1 values

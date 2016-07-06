@@ -18,7 +18,7 @@
  */
 
 #include <unit.h>
-#include <util/CCArrayList.h>
+#include <CCArrayList.h>
 
 #define DEFAULT_LENGTH 12
 #define UNITY_LENGTH 1

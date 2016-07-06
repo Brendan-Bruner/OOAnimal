@@ -24,6 +24,11 @@
 #include <stdlib.h>
 
 /************************************************************************/
+/* Bool type								*/
+/************************************************************************/
+#define CBool unsigned char
+
+/************************************************************************/
 /* Configuration options						*/
 /************************************************************************/
 /*
@@ -314,16 +319,7 @@ struct CInterface
  *	construct A::I. struct A's vtable, struct A_VT, will contain an instance of struct I's
  *	vtable, struct I_VT. This would be a pointer to A_VT::I_VT.
  */
-static inline void CInterface( void* self, void* iface, const void* vtable )
-{
-	/* Point this to base of object, that way we can get a pointer to */
-	/* the object from a pointer to the interface. */
-	((struct CClass*) iface)->C_ROOT = self;
-
-	/* Get the offset into the class' vtable for the location of this interface's */
-	/* methods. */
-	((struct CClass*) iface)->C_VTABLE_OFFSET = ((char*) vtable) - ((char*) ((struct CObject*) self)->C_VTABLE);
-}
+void CInterface( void* self, void* iface, const void* vtable );
 
 
 /************************************************************************/
@@ -405,10 +401,7 @@ void* CObjectCast_( void* super_reference, const char* file_name, int line_num )
  * @param vtable
  *	The pointer to the class' virtual table.
  */
-static inline void CVTable( void* self, const void* vtable)
-{
-	((struct CObject*) self)-> C_VTABLE = vtable;
-}
+void CVTable( void* self, const void* vtable);
 
 /**
  * @memberof struct CObject
@@ -442,37 +435,7 @@ static inline void CVTable( void* self, const void* vtable)
  * @returns
  *	A pointer to the objects virtual table.
  */
-static inline const void* CGetVTable( void* self_ )
-{
-	size_t offset;
-	struct CObject* self;
-	const void* vtable;
-
-	CAssertObject(self_);
-
-	/* May be given a pointer to an interface object. Need */
-	/* to find the root of the object. */
-	self =  ((struct CClass*) self_)->C_ROOT;
-
-	/* If this assert fails, the objects inheritance chain is not correctly */
-	/* calling super class constructors. */
-	CAssertObject(self);
-	
-	/* Get this objects vtable. */
-	vtable = self->C_VTABLE;
-
-	/* If this object has an interface, and a reference to */
-	/* that interface is being used, we need to find the offset */
-	/* into this object's vtable where the interface's methods are. */
-	/* The offset will be zero if the reference is not to an interface. */
-	offset = ((struct CClass*) self_)->C_VTABLE_OFFSET;
-
-	/* Move into the vtable where the methods of interest are. */
-	vtable = ((char*) vtable) + offset;
-
-	/* Return this location to caller. */
-	return vtable;
-}
+const void* CGetVTable( void* self_ );
 
 
 #endif /* CLASS_H_ */

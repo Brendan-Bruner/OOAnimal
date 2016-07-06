@@ -19,7 +19,7 @@
 /**
  * @file
  */
-#include <util/CIList.h>
+#include <CIList.h>
 
 /************************************************************************/
 /* Virtual method call wrappers.					*/

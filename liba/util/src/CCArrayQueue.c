@@ -17,7 +17,7 @@
  * Jun 25, 2016
  */
 
-#include <util/CCArrayQueue.h>
+#include <CCArrayQueue.h>
 #include <string.h>
 #include <stdlib.h>
 
