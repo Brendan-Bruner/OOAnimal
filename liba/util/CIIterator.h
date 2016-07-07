@@ -35,9 +35,15 @@
  * @details
  *	Defines an interface for traversing collections of data and modifying
  *	the list while traversing. An interator always starts with its cursor
- *	positioned before the first index in a collection. Calls to CIIterator_Next( )
- *	and CIIterator_Previous( ) move the cursor through the collection one element at a time.
- * 	Empty elements in the collection are skipped.
+ *	positioned before the first index in a collection. Calls to CIIterator_Next()
+ *	and CIIterator_Previous() move the cursor through the collection one element at a time.
+ * 	Empty elements in the collection are skipped. After a call to CIIterator_Next() or
+ *	CIIterator_Previous(), the cursor is put between the two elements. For example:
+ *@verbatim
+  element 0     element 1     element 2     element 3     ...     element n-1
+^            ^             ^             ^             ^       ^               ^
+  @endverbatim
+ *	'^' are the possible cursor positions.
  *	<br>Below is an example of using an iterator with the CIList structure. Note, 
  *	this example assumes the iterator passed into the function has elements that are ascii
  *	strings. Since the iterator structure is copy by value, it's very important
