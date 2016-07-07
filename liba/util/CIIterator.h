@@ -39,18 +39,16 @@
  *	and CIIterator_Previous( ) move the cursor through the collection one element at a time.
  * 	Empty elements in the collection are skipped.
  *	<br>Below is an example of using an iterator with the CIList structure. Note, 
- *	this example assumes the list passed into the function has elements that are the
- *	size of a char. Since the CIList structure is a copy by value list, it's very important
- *	to know how large the list's elements are when iterating over them.
+ *	this example assumes the iterator passed into the function has elements that are ascii
+ *	strings. Since the iterator structure is copy by value, it's very important
+ *	to know how large the iterator's elements are when iterating over them.
  *	@code
- *		void printListElements( struct CIList* list ) 
+ *		void printListElements( struct CIIterator* iter, size_t element_size ) 
  *		{
- *			struct CIIterator* iter = CIList_GetIterator(list);
- *
+ *			char* element = malloc(element_size);
  *			while( CIIterator_HasNext(iter) ) {
- *				char listElement;
- *				CIIterator_Next(iter, &listElement);
- *				printf("Got element: %d\n", listElement);
+ *				CIIterator_Next(iter, element);
+ *				printf("Got element: %.*s\n", element_size, element);
  *			}
  *		}
  *	@endcode

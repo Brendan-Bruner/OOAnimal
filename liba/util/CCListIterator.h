@@ -36,8 +36,38 @@ struct CIList;
  * @struct CCListIterator
  * @extends CIIterator
  * @ingroup Iterators
+ * @details
+ *	This is an implementations of the CIIterator interface for the 
+ *	CIList interface. Any data structure which implements the CIList
+ *	interface can be iterated through using this structure. For example,
+ *	the code below uses this iterator to print out every element in an
+ *	array list.
+ *	@code
+ *		struct CCArrayList list;
+ *		int i = 0;
+ *
+ *		CCArrayList(&list, sizeof(int), LIST_LENGTH);
+ *		CIList_Add(&list.cIList, &i);
+ *		++i;
+ *		CIList_Add(&list.cIList, &i);
+ *		++i;
+ *		CIList_Add(&list.cIList, &i);
+ *		++i;
+ *
+ *		struct CCListIterator iter;
+ *
+ *		CCListIterator(&iter, &list.cIList);
+ *		while( CIIterator_HasNext(&iter.cIIterator) ) {
+ *			int element;
+ *			CIIterator_Next(&iter.cIIterator, &element);
+ *			printf("Got the number %d\n", element);
+ *		}
+ *		
+ *		CDestroy(&iter);
+ *		CDestroy(&list);
+ *	@endcode
  * @attention
- *	To call inherited methods for CIIterator, us as input to the first
+ *	To call inherited methods from CIIterator, use as input to the first
  *	argument of all CIIterator_* methods:
  *		- CCListIterator::cIIterator
  */
