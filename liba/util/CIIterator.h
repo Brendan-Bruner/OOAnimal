@@ -104,7 +104,9 @@ CBool CIIterator_HasNext( struct CIIterator* self );
  * @details
  *	Gets the next element in the collection. If CIIterator_HasNext() returns
  *	a logical true, then this function will get a valid element. If CIIterator_HasNext()
- * 	returned a logical false, then this function does nothing.
+ * 	returned a logical false, then this function does nothing. This does not happen
+ *	because of the call to CIIterator_HasNext(), CIIterator_HasNext() will only tell 
+ *	the application how this method is going to behave.
  * @param self
  *	The iterator
  * @param element

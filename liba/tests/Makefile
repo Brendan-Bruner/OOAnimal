@@ -1,6 +1,6 @@
 CC := gcc
 AR := ar
-CFLAGS := -Wall -Wextra -pedantic -g -Os
+CFLAGS := -Wall -Wextra -pedantic -g
 
 # sources/includes/objects for static util lib
 LIB_SRC := $(shell echo ./*.c) $(shell echo ./**/*.c)

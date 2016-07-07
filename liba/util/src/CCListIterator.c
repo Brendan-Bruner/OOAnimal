@@ -29,6 +29,20 @@
 /************************************************************************/
 /* Virtual methods.							*/
 /************************************************************************/
+ /* complexity map:
+ *                    ----------
+ *                    |        |
+ * 1(CCast) -> 2(for) -> 3(if) -> 4(return)
+ *          ^                  |
+ *          |                  |
+ *          --------------------
+ *
+ * Complexity of: 5(edges) - 4(nodes) + 2 = 3
+ * Test cases:
+ *	- No data in list, no next index
+ *	- data in list, next index found
+ *	- at end of list, no more indices to search
+ */
 static CBool CIIterator_HasNext_Def( struct CIIterator* self_ )
 {
 	CAssertObject(self_);
@@ -63,6 +77,19 @@ static CBool CIIterator_HasNext_Def( struct CIIterator* self_ )
 	return 0;
 }
 
+/* Complexity map:
+ * 1(CCast) -> 2(if is_valid) -> 3(get next) -> 4(return) <-
+ *                            |       ^-----------         |
+ *                            |                  |         |
+ *                            -> 5(if has next) ------------
+ *
+ * complexity of: 6(edge) - 5(nodes) + 2 = 3
+ *
+ * test cases:
+ *	* next is valid
+ *	* next is not valid, but has next
+ *	* next is not valid, no has next                                              
+ */
 static void CIIterator_Next_Def( struct CIIterator* self_, void* element )
 {
 	CAssertObject(self_);
@@ -89,6 +116,20 @@ static void CIIterator_Next_Def( struct CIIterator* self_, void* element )
 	self->is_next_valid = 0;
 }
 
+/* complexity map:
+ *                    ----------
+ *                    |        |
+ * 1(CCast) -> 2(for) -> 3(if) -> 4(return)
+ *          ^                  |
+ *          |                  |
+ *          --------------------
+ *
+ * Complexity of: 5(edges) - 4(nodes) + 2 = 3
+ * Test cases:
+ *	- At beginning of list.
+ *	- Not at beginning, there is a previous element.
+ *	- At end of list, list is now empty.
+ */
 static CBool CIIterator_HasPrevious_Def( struct CIIterator* self_ )
 {
 	CAssertObject(self_);
@@ -121,6 +162,19 @@ static CBool CIIterator_HasPrevious_Def( struct CIIterator* self_ )
 	return 0;
 }
 
+/* Complexity map:
+ * 1(CCast) -> 2(if is_valid) -> 3(get prev) -> 4(return) <-
+ *                            |       ^-----------         |
+ *                            |                  |         |
+ *                            -> 5(if has prev) ------------
+ *
+ * complexity of: 6(edge) - 5(nodes) + 2 = 3
+ *
+ * test cases:
+ *	* previous is valid
+ *	* previous is not valid, but has previous
+ *	* previous is not valid, no has previous                                         
+ */
 static void CIIterator_Previous_Def( struct CIIterator* self_, void* element )
 {
 	CAssertObject(self_);

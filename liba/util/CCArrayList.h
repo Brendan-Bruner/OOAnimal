@@ -23,6 +23,7 @@
 #define UTIL_CIARRAYLIST_H_
 
 #include "CIList.h"
+#include "CCListIterator.h"
 #include <CError.h>
 
 /************************************************************************/
@@ -32,6 +33,7 @@
  * @struct CCArrayList
  * @extends CIList
  * @ingroup Lists
+ * @see CCListIterator
  * @brief
  *	Array implementation of CIList.
  * @details

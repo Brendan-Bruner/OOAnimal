@@ -26,6 +26,7 @@
 
 #include <Class.h>
 #include <stdlib.h>
+#include <CIIterator.h>
 
 
 /************************************************************************/

@@ -34,7 +34,12 @@ struct CIList;
 
 /**
  * @struct CCListIterator
+ * @extends CIIterator
  * @ingroup Iterators
+ * @attention
+ *	To call inherited methods for CIIterator, us as input to the first
+ *	argument of all CIIterator_* methods:
+ *		- CCListIterator::cIIterator
  */
 struct CCListIterator
 {
