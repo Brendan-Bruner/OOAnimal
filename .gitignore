@@ -36,7 +36,8 @@
 
 # Build directory
 /Debug/
-/debug/**
+/debug/main
+./main/debug
 
 # doxygen
 html/
