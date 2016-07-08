@@ -17,7 +17,7 @@
  * July 3, 2016
  */
 
-#include <util/CCArrayList.h>
+#include <CCArrayList.h>
 #include <string.h>
 
 /* These must keep their respective 0 and 1 values
@@ -316,6 +316,7 @@ static size_t CIList_MaxSize_Def( struct CIList* self_ )
 	struct CCArrayList* self = CCast(self_);
 	return self->_.max_size;
 }
+
 
 /************************************************************************/
 /* Overriding 								*/

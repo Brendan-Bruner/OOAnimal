@@ -18,7 +18,7 @@
  */
 
 #include <unit.h>
-#include <util/CCArrayQueue.h>
+#include <CCArrayQueue.h>
 
 TEST_SETUP( ) { }
 TEST_TEARDOWN( ) { }

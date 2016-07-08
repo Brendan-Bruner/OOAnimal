@@ -75,7 +75,7 @@ struct CIQueue
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	CIQueue virtual table.
  */
@@ -88,9 +88,6 @@ struct CIQueue_VTable
 	size_t (*maxSize)( struct CIQueue* );
 	void (*clear)( struct CIQueue* );
 };
-/**
- * @endcond
- */
 
 
 /************************************************************************/
@@ -107,12 +104,7 @@ struct CIQueue_VTable
  * @returns
  *	Error code.
  */
-static inline CIQueueError CIQueue_Insert( struct CIQueue* self, const void* element )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->insert);
-	return ((struct CIQueue_VTable*) CGetVTable(self))->insert(self, element);
-}
+CIQueueError CIQueue_Insert( struct CIQueue* self, const void* element );
 
 /**
  * @memberof CIQueue
@@ -127,12 +119,7 @@ static inline CIQueueError CIQueue_Insert( struct CIQueue* self, const void* ele
  * @returns
  *	An error code.    
  */
-static inline CIQueueError CIQueue_Remove( struct CIQueue* self, void* element )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->remove);
-	return ((struct CIQueue_VTable*) CGetVTable(self))->remove(self, element);
-}
+CIQueueError CIQueue_Remove( struct CIQueue* self, void* element );
 
 /**
  * @memberof CIQueue
@@ -147,12 +134,7 @@ static inline CIQueueError CIQueue_Remove( struct CIQueue* self, void* element )
  * @returns
  *	An error code.
  */
-static inline CIQueueError CIQueue_Peek( struct CIQueue* self, void* element )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->peek);
-	return ((struct CIQueue_VTable*) CGetVTable(self))->peek(self, element);
-}
+CIQueueError CIQueue_Peek( struct CIQueue* self, void* element );
 
 /**
  * @memberof CIQueue
@@ -163,12 +145,7 @@ static inline CIQueueError CIQueue_Peek( struct CIQueue* self, void* element )
  * @returns
  *	Number of elements currently in the queue. 
  */
-static inline size_t CIQueue_Size( struct CIQueue* self )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->size);
-	return ((struct CIQueue_VTable*) CGetVTable(self))->size(self);
-}
+size_t CIQueue_Size( struct CIQueue* self );
 
 /**
  * @memberof CIQueue
@@ -179,12 +156,7 @@ static inline size_t CIQueue_Size( struct CIQueue* self )
  * @returns
  *	The maximum number of elements allowed in the queue. 
  */	
-static inline size_t CIQueue_MaxSize( struct CIQueue* self )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->maxSize);
-	return ((struct CIQueue_VTable*) CGetVTable(self))->maxSize(self);
-}
+size_t CIQueue_MaxSize( struct CIQueue* self );
 
 /**
  * @memberof CIQueue
@@ -194,12 +166,7 @@ static inline size_t CIQueue_MaxSize( struct CIQueue* self )
  * @param self
  *	The queue.
  */
-static inline void CIQueue_Clear( struct CIQueue* self )
-{
-	CAssertObject(self);
-	CAssertVirtual(((struct CIQueue_VTable*) CGetVTable(self))->clear);
-	((struct CIQueue_VTable*) CGetVTable(self))->clear(self);
-}
+void CIQueue_Clear( struct CIQueue* self );
 
 
 #endif /* UTIL_CIQUEUE_H_ */

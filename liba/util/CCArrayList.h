@@ -23,6 +23,7 @@
 #define UTIL_CIARRAYLIST_H_
 
 #include "CIList.h"
+#include "CCListIterator.h"
 #include <CError.h>
 
 /************************************************************************/
@@ -32,6 +33,7 @@
  * @struct CCArrayList
  * @extends CIList
  * @ingroup Lists
+ * @see CCListIterator
  * @brief
  *	Array implementation of CIList.
  * @details
@@ -106,7 +108,7 @@ struct CCArrayList
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	CCArrayList's vtable declaration.
  */
@@ -127,14 +129,12 @@ struct CCArrayList_VTable
 
 /**
  * @memberof CCArrayList
+ * @ingroup VTable
  * @details
  *	Get vtable reference for CCArrayList class.	
  */
 const struct CCArrayList_VTable* CCArrayList_Get_Key( );
 
-/**
- * @endcond
- */
 
 /************************************************************************/
 /* Constructor								*/

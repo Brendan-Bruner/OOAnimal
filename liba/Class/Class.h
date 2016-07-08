@@ -16,12 +16,24 @@
  * bbruner@ualberta.ca
  * Nov. 2015
  */
+/**
+ * @file
+ * @defgroup Class
+ * Methods used by all classes to implement object oriented back bone.
+ * @defgroup VTable
+ * Virtual tables of all classes.
+ */
 
 #ifndef CLASS_H_
 #define CLASS_H_		
 
 #include <stddef.h>
 #include <stdlib.h>
+
+/************************************************************************/
+/* Bool type								*/
+/************************************************************************/
+#define CBool unsigned char
 
 /************************************************************************/
 /* Configuration options						*/
@@ -141,10 +153,72 @@ extern void CAssert( char exp, char const* msg, char const* file, int line );
 /************************************************************************/
 /**
  * @struct CClass
+ * @ingroup Class
+ * @brief
+ *	First variables in every object's memory allocation.
  * @details
- *	This is at the base of all interfaces and classes. It is used 
- *	to back track to the base address of an object and the base 
- *	address of the virtual table. 
+ * 	This appears as the first member in all class and interface
+ *	structures. The CObject and CInterface structure has this as
+ *	their first member. By including CObject or CInterface as the
+ *	first member in another structure, this becomes that structures
+ *	first member.
+ *	<br>By doing this, a pointer to any object, which has as it's first
+ *	member one of struct CObject or struct CInterface, can be safely type cast
+ *	to a pointer to a struct CClass.
+ *	<br>This is used to back track to the base address of an object and the base 
+ *	address of the virtual table. It is very important that this 
+ *	structure is the first member in every class/interface structure.
+ *	<br>This works because of the C99 standard in ISO/IEC 9899 6.7.2.1.13,
+ *	which says in part:
+ *	<br>"A pointer to a structure object,  suitably  converted,  points  to
+ *	its  initial  member  (or  if  that  member  is  a bit-field,  then  to
+ *	the  unit  in  which  it  resides),  and  vice  versa.   There may  be  unnamed
+ *	padding within a structure object, but not at its beginning."
+ *	<br>Consider a class hierchy:
+ * @verbatim
+ClassB -> ClassA -> CObject
+                 |
+                 -> Interface0
+                 |
+                 -> Interface 1
+@endverbatim
+ * 	where ClassA and ClassB each have one member variable and ClassA, ClassB, 
+ * 	Interface0, and Interface1 each declare one virtual function. In memory, 
+ *	the layout would look like this:
+ * @verbatim
+  ---------------------------------------------------------------
+  |                                                        ^  ^  ^
+  v                                                        |  |  |
+ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
+                            | size_t C_VTABLE_OFFSET = 0 |    |  |
+         -------------------| const void* C_VTABLE       |    |  |                         
+         |                  | void (*free)( void* )      |    |  |
+         |     Interface0:  | void* C_ROOT               | ---   |
+         |                  | size_t C_VTABLE_OFFSET = 2 |       |
+         |     Interface1:  | void* C_ROOT               | -------
+         |                  | size_t C_VTABLE_OFFSET = 3 |
+         |                  | int classA_var             |
+         |                  | int classB_var             |
+         |
+         |
+         ------> vtable:  | void (*CDestructor)( void* )             |
+                          | void (*classA_method)( ClassA* )         |
+                          | void (*interface0_method)( Interface0* ) |
+                          | void (*interface1_method)( Interface1* ) |
+                          | void (*classB_method)( ClassB* )         |
+@endverbatim
+ *	Given this mapping of pointers, the virtual table can always be found and the entire
+ *	objects memory location known regardless of the pointer reference. For example, with 
+ *	a reference to Interface0 (5'th row in layout above), the virtual table is found by
+ *	using C_ROOT to find the top of the object's memory, then going to the third row
+ *	to get a pointer to the virtual table. Then, the offset into the virtual table of
+ *	Interface0's methods is found by using the C_VTABLE_OFFSET from the Interface0 reference.
+ *
+ *	The virtual tables leverage the 6.7.2.1.13 rule as well. Each class' table is declared
+ *	such that the super class' virtual table is always the first member of the structure.
+ *	By doing this, a class' virtual table can always be safetly type cast to a table
+ *	of the super class. The same is not true interfaces, hence, their table offset value
+ *	is never zero.
  * @var C_ROOT
  *	This contains a pointer to the top of an objects memory. It is used
  *	to back track to the top of an objects memory regardless of what
@@ -163,14 +237,14 @@ struct CClass
 
 /**
  * @struct CObject
+ * @ingroup Class
+ * @brief
+ *	Base class.
  * @details
- *	This is the class object. All classes inherit from this class. Basically,
- *	it tells an object how to be an object. It does this by having a struct CClass
- *	instance and a pointer to the objects virtual table. Although the struct CClass
- *	contains redundent information (ie, C_ROOT will point itself and C_VTABLE_OFFSET
- *	will be zero) it enables a consistent interface for class and interface references
- *	to locate the C_VTABLE pointer within an object and find the displacement into the
- *	vtable of virtual functions of interest.
+ *	This is the class object. All classes inherit from this class. It must be the
+ *	first member of any class' structure declaration (unless they're inheriting from 
+ *	from a user defined class, in that case, the user defined class must be the first
+ *	member).
  * @var C_CLASS
  *	Used to provide consistent interface for finding virtual functions when dealing with
  *	object and interface references.
@@ -178,7 +252,7 @@ struct CClass
  *	Pointer to an objects vtable. 
  * @var CObject_Free
  *	Pointer to a memory free method used in the objects destructor. Will be NULL by default
- *	(ie, assumes automatic variable) and can be set by application code.
+ *      and can be set by application code.
  */
 struct CObject
 {
@@ -191,7 +265,9 @@ struct CObject
 
 /**
  * @struct CObject_VTable
- * @memberof struct CObject
+ * @ingroup VTable
+ * @brief
+ *	CObject's virtual table declaration.
  * @details
  *	Contains the virtual function members of struct CObject. There is only one
  *	virtual table instance for every object instance of a class. To get a handle 
@@ -207,7 +283,8 @@ struct CObject_VTable
 };
 
 /**
- * @memberof struct CObject
+ * @memberof CObject
+ * @ingroup VTable
  * @details
  *	Return a reference to class CObject's virtual table. There is only one
  *	virtual table per class, which is shared by every instance of that class.
@@ -219,10 +296,11 @@ struct CObject_VTable
 const struct CObject_VTable* CObject_VTable_Key( );
 
 /**
- * @memberof struct CObject
+ * @memberof CObject
+ * @constructor
  * @details
  *	Constructor. To construct an instance of struct CObject, call this method on
- *	it. This method has a macro shortcut, CObject( ), to reduce the amount of typing
+ *	it. This method has a macro shortcut, CObject(), to reduce the amount of typing
  *	for creating an instance of struct CObject.
  * @param self
  *	The instance of struct CObject to construct
@@ -232,20 +310,20 @@ const struct CObject_VTable* CObject_VTable_Key( );
 struct CObject* CObject_Constructor( struct CObject* self );
 
 /**
- * @memberof struct CObject
+ * @memberof CObject
  * @details
  *	Destructor. This is the destructor for all objects. Its polymorphic, meaning
  *	A reference to any class instance / interface can be given and the entire object will
- *	be destroyed. If a memory free method was set with CObject_SetFree( ), CDynamic( ), or
- *	CFreeWith( ), that method will be at the end of destruction. This method has a macro short cut, 
- *	CDestroy( ), to reduce the amount of typing for destroying an object.
+ *	be destroyed. If a memory free method was set with CObject_SetFree(), CDynamic(), or
+ *	CFreeWith(), that method will be called at the end of destruction. This method has a macro
+ *	short cut, CDestroy(), to reduce the amount of typing for destroying an object.
  * @param self
  *	The object to destroy
  */
 void CObject_Destroy( struct CObject* self );
 
 /**
- * @memberof struct CObject
+ * @memberof CObject
  * @details
  *	Set a memory free method to be called at the end of destruction.
  * @param self
@@ -255,19 +333,23 @@ void CObject_Destroy( struct CObject* self );
  */
 void CObject_SetFree( struct CObject* self, CFreeType free_method );
 
-/* Help macro for object construction. */
+/* Help macro for object construction. 
+ */
 #define CObject( self )	\
 	CObject_Constructor(self)
 
-/* Helper macro for object destruction. */
+/* Helper macro for object destruction. 
+ */
 #define CDestroy( mem )	\
 	CObject_Destroy((void*) (mem))
 
-/* Helper macro for declaring object dynamic. */
+/* Helper macro for declaring object dynamic. 
+ */
 #define CDynamic( obj ) \
 	CObject_SetFree(((struct CClass*) (obj))->C_ROOT, CDefaultFree)
 
-/* Helper macro for declaring free method for object. */
+/* Helper macro for declaring free method for object. 
+ */
 #define CFreeWith( obj, freep ) \
 	CObject_SetFree(((struct CClass*) (obj))->C_ROOT, (freep))
 
@@ -277,11 +359,11 @@ void CObject_SetFree( struct CObject* self, CFreeType free_method );
 /************************************************************************/
 /**
  * @struct CInterface
+ * @ingroup Class
+ * @brief
+ *	Base interface.
  * @details
- *	All interfaces must include this as there first structure member.
- *	It tells an interface how to be an interface. The instance of 
- *	struct CClass is used to back track from the interface reference
- *	to its implementing class' vtable.
+ *	All interfaces must include this as their first structure member.
  * @var C_CLASS
  *	Used to back track from a pointer to an interface, to its implementing
  *	class' vtable, and the offset into that vtable where the implemented
@@ -295,7 +377,8 @@ struct CInterface
 };
 
 /**
- * @memberof struct CInterface
+ * @memberof CInterface
+ * @ingroup Class
  * @details
  *	This is the constructor for interfaces. All implementing classes must call this in
  *	their constructor AFTER mapping their virtual table with CVTable( ). This method
@@ -314,16 +397,7 @@ struct CInterface
  *	construct A::I. struct A's vtable, struct A_VT, will contain an instance of struct I's
  *	vtable, struct I_VT. This would be a pointer to A_VT::I_VT.
  */
-static inline void CInterface( void* self, void* iface, const void* vtable )
-{
-	/* Point this to base of object, that way we can get a pointer to */
-	/* the object from a pointer to the interface. */
-	((struct CClass*) iface)->C_ROOT = self;
-
-	/* Get the offset into the class' vtable for the location of this interface's */
-	/* methods. */
-	((struct CClass*) iface)->C_VTABLE_OFFSET = ((char*) vtable) - ((char*) ((struct CObject*) self)->C_VTABLE);
-}
+void CInterface( void* self, void* iface, const void* vtable );
 
 
 /************************************************************************/
@@ -351,7 +425,7 @@ static inline void CInterface( void* self, void* iface, const void* vtable )
 /* Casting and virtual table handling.					*/
 /************************************************************************/
 /**
- * @memberof struct CObject
+ * @ingroup Class
  * @details
  *	This is used to cast an object. It must only be used in virtual
  *	method definitions. The usage would be this, say we are overriding
@@ -386,7 +460,7 @@ void* CObjectCast_( void* super_reference, const char* file_name, int line_num )
 
 
 /**
- * @memberof struct CObject
+ * @ingroup Class
  * @details
  *	Used within a classes constructor to give the object instance
  *	the location of the class' virtual table.
@@ -405,13 +479,10 @@ void* CObjectCast_( void* super_reference, const char* file_name, int line_num )
  * @param vtable
  *	The pointer to the class' virtual table.
  */
-static inline void CVTable( void* self, const void* vtable)
-{
-	((struct CObject*) self)-> C_VTABLE = vtable;
-}
+void CVTable( void* self, const void* vtable);
 
 /**
- * @memberof struct CObject
+ * @ingroup Class
  * @details
  *	This is used to get a pointer to the objects vtable. When calling a 
  *	virtual method, this should always be used over $(CLASS_NAME)_VTable_Key( ).
@@ -442,37 +513,7 @@ static inline void CVTable( void* self, const void* vtable)
  * @returns
  *	A pointer to the objects virtual table.
  */
-static inline const void* CGetVTable( void* self_ )
-{
-	size_t offset;
-	struct CObject* self;
-	const void* vtable;
-
-	CAssertObject(self_);
-
-	/* May be given a pointer to an interface object. Need */
-	/* to find the root of the object. */
-	self =  ((struct CClass*) self_)->C_ROOT;
-
-	/* If this assert fails, the objects inheritance chain is not correctly */
-	/* calling super class constructors. */
-	CAssertObject(self);
-	
-	/* Get this objects vtable. */
-	vtable = self->C_VTABLE;
-
-	/* If this object has an interface, and a reference to */
-	/* that interface is being used, we need to find the offset */
-	/* into this object's vtable where the interface's methods are. */
-	/* The offset will be zero if the reference is not to an interface. */
-	offset = ((struct CClass*) self_)->C_VTABLE_OFFSET;
-
-	/* Move into the vtable where the methods of interest are. */
-	vtable = ((char*) vtable) + offset;
-
-	/* Return this location to caller. */
-	return vtable;
-}
+const void* CGetVTable( void* self_ );
 
 
 #endif /* CLASS_H_ */
