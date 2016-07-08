@@ -91,7 +91,7 @@ struct CCListIterator
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	Virtual table for CCListIterator
  */
@@ -107,14 +107,11 @@ struct CCListIterator_VTable
 
 /**
  * @memberof CCListIterator
+ * @ingroup VTable
  * @details
  *	Get vtable reference for CCListIterator class.	
  */
 const struct CCListIterator_VTable* CCListIterator_Get_Key( );
-
-/**
- * @endcond
- */
 
 
 /************************************************************************/

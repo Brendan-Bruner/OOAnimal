@@ -74,7 +74,7 @@ struct CIList
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	CIList virtual table.
  */
@@ -88,9 +88,6 @@ struct CIList_VTable
 	size_t (*size)( struct CIList* );
 	size_t (*maxSize)( struct CIList* );
 };
-/**
- * @endcond
- */
 
 
 /************************************************************************/

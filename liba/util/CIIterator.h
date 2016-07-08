@@ -68,7 +68,7 @@ struct CIIterator
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	CIIterator virtual table.
  */
@@ -82,9 +82,7 @@ struct CIIterator_VTable
 	CBool (*remove)( struct CIIterator* );
 	size_t (*index)( struct CIIterator* );
 };
-/**
- * @endcond
- */
+
 
 /************************************************************************/
 /* Method declarations. 						*/

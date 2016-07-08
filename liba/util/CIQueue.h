@@ -75,7 +75,7 @@ struct CIQueue
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	CIQueue virtual table.
  */
@@ -88,9 +88,6 @@ struct CIQueue_VTable
 	size_t (*maxSize)( struct CIQueue* );
 	void (*clear)( struct CIQueue* );
 };
-/**
- * @endcond
- */
 
 
 /************************************************************************/

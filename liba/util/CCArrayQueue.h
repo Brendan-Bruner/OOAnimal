@@ -84,7 +84,7 @@ struct CCArrayQueue
 };
 
 /**
- * @cond HIDDEN_SYMBOL
+ * @ingroup VTable
  * @brief
  *	 Virtual table for struct CCArrayQueue.
  */
@@ -105,14 +105,12 @@ struct CCArrayQueue_VTable
 
 /**
  * @memberof CCArrayQueue
+ * @ingroup VTable
  * @details
  *	Get reference to the struct CCArrayQueue's vtable.
  */
 const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( );
 
-/**
- * @endcond
- */
 
 /************************************************************************/
 /* Constructor								*/
