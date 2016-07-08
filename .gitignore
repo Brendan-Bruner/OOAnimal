@@ -1,5 +1,4 @@
 # Main executable
-main
 
 # Object files
 *.o
@@ -37,6 +36,7 @@ main
 
 # Build directory
 /Debug/
+/debug/
 
 # doxygen
 html/
