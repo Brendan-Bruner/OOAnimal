@@ -1,12 +1,13 @@
 var indexSectionsWithContent =
 {
-  0: "clq",
+  0: "cilqv",
   1: "c",
   2: "c",
   3: "c",
   4: "c",
   5: "c",
-  6: "lq"
+  6: "c",
+  7: "cilqv"
 };
 
 var indexSectionNames =
@@ -17,7 +18,8 @@ var indexSectionNames =
   3: "functions",
   4: "enums",
   5: "enumvalues",
-  6: "groups"
+  6: "defines",
+  7: "groups"
 };
 
 var indexSectionLabels =
@@ -28,6 +30,7 @@ var indexSectionLabels =
   3: "Functions",
   4: "Enumerations",
   5: "Enumerator",
-  6: "Modules"
+  6: "Macros",
+  7: "Modules"
 };
 

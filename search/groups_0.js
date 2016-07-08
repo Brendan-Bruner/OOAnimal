@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['lists',['Lists',['../group__Lists.html',1,'']]]
+  ['class',['Class',['../group__Class.html',1,'']]]
 ];
