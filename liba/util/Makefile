@@ -8,7 +8,7 @@ LIB_USE_ITER := true
 
 # Symbols required to compile in iterators and the source location
 # of iterator code
-LIB_USE_ITER_DEF := -DCIITERATOR_INCLUDED -DCIITERATOR_STATIC
+LIB_USE_ITER_DEF := -DCIITERATOR_INCLUDED
 LIB_ITER_SRC := src/CIIterator.c src/CCListIterator.c
 
 # sources/includes/defines for static util lib

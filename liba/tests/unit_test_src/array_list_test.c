@@ -24,15 +24,20 @@
 #define UNITY_LENGTH 1
 #define DEFAULT_ELEMENT_SIZE sizeof(int)
 
-struct CCArrayList list;
+struct CCArrayList* list;
+struct CCArrayList static_list;
+struct CCArrayList dynamic_list;
+char static_list_memory[CCARRAY_LIST_SIZE(DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH)];
 
 TEST_SETUP( )
 {
-	CCArrayList(&list, DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH);
+	CCArrayList(&dynamic_list, DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH);
+	CCArrayListStatic(&static_list, DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH, static_list_memory);
 }
 TEST_TEARDOWN( )
 {
-	CDestroy(&list);
+	CDestroy(&dynamic_list);
+	CDestroy(&static_list);
 }
 
 
@@ -43,12 +48,12 @@ TEST(add_at)
 
 	/* Insert with an out of bounds index.
 	 */
-	err = CIList_AddAt(&list.cIList, &test_var, DEFAULT_LENGTH+1);
+	err = CIList_AddAt(&list->cIList, &test_var, DEFAULT_LENGTH+1);
 	ASSERT(err == CILIST_ERR_INDEX, "Failure to catch out of bounds index");
 
 	/* Inserting within bounds should return OK. 
 	 */
-	err = CIList_AddAt(&list.cIList, &test_var, 0);
+	err = CIList_AddAt(&list->cIList, &test_var, 0);
 	ASSERT(err == CILIST_OK, "Failure to do clean insert");
 }
 
@@ -59,30 +64,30 @@ TEST(get)
 
 	/* Try to get element with out of bounds index.
 	 */
-	err = CIList_Get(&list.cIList, &test_var, DEFAULT_LENGTH+1);
+	err = CIList_Get(&list->cIList, &test_var, DEFAULT_LENGTH+1);
 	ASSERT(err == CILIST_ERR_INDEX, "Failure to catch out of bounds index");
 
 	/* Try to get element at empty location. All locations are
 	 * empty at this point, so can use any index in bounds.
 	 */
-	err = CIList_Get(&list.cIList, &test_var, 0);
+	err = CIList_Get(&list->cIList, &test_var, 0);
 	ASSERT(err == CILIST_ERR_EMPTY, "Failure to catch empty index");
 
 	/* Insert an element into the list to assert the get method
 	 * works with in bounds, non empty indices.
 	 */
-	CIList_AddAt(&list.cIList, &test_var, 0);
+	CIList_AddAt(&list->cIList, &test_var, 0);
 
 	/* Assert we can get this element without error now.
 	 */
 	test_var = !test_var;
-	err = CIList_Get(&list.cIList, &test_var, 0);
+	err = CIList_Get(&list->cIList, &test_var, 0);
 	ASSERT(err == CILIST_OK, "Failed to get element at clean index");
 	ASSERT(test_var == 0, "Failed to get correct element at clean index");
 
 	/* Assert we can get the same element, but ignoring its value.
 	 */
-	err = CIList_Get(&list.cIList, NULL, 0);
+	err = CIList_Get(&list->cIList, NULL, 0);
 	ASSERT(err == CILIST_OK, "Failed to get element at clean index");
 }
 
@@ -94,24 +99,24 @@ TEST(remove)
 	/* Test this method fails with an error on the same conditions
 	 * that CIList_Get( ) would.
 	 */
-	err = CIList_Remove(&list.cIList, &test_var, DEFAULT_LENGTH+1);
+	err = CIList_Remove(&list->cIList, &test_var, DEFAULT_LENGTH+1);
 	ASSERT(err == CILIST_ERR_INDEX, "Failed to throw same error as CIList_Get");
 
 	/* Insert an element into the list to assert the remove method
 	 * works with clean parameters.
 	 */
-	CIList_AddAt(&list.cIList, &test_var, 0);
+	CIList_AddAt(&list->cIList, &test_var, 0);
 
 	/* Assert we can get this element without error now.
 	 */
 	test_var = !test_var;
-	err = CIList_Remove(&list.cIList, &test_var, 0);
+	err = CIList_Remove(&list->cIList, &test_var, 0);
 	ASSERT(err == CILIST_OK, "Failed to remove element at clean index");
 	ASSERT(test_var == 0, "Failed to remove correct element at clean index");
 
 	/* Removing at this index should now return an empty error.
 	 */
-	err = CIList_Remove(&list.cIList, &test_var, 0);
+	err = CIList_Remove(&list->cIList, &test_var, 0);
 	ASSERT(err == CILIST_ERR_EMPTY, "Failed to throw error on empty index");
 }
 
@@ -123,7 +128,7 @@ TEST(add)
 
 	/* Assert no error when adding at an empty index.
 	 */
-	err = CIList_Add(&list.cIList, &test_var);
+	err = CIList_Add(&list->cIList, &test_var);
 	ASSERT(err == CILIST_OK, "Failed to insert with clean parameters");
 
 	/* Assert a new index can be found, do this by adding something
@@ -131,9 +136,9 @@ TEST(add)
 	 * its next insert.
 	 */
 	++test_var;
-	CIList_AddAt(&list.cIList, &test_var, 1);
+	CIList_AddAt(&list->cIList, &test_var, 1);
 	++test_var;
-	err = CIList_Add(&list.cIList, &test_var);
+	err = CIList_Add(&list->cIList, &test_var);
 	ASSERT(err == CILIST_OK, "Failed to find new index with clean parameters");
 
 	/* Fill the entire list, this way we can test a new index will
@@ -141,13 +146,13 @@ TEST(add)
 	 */
 	for( i = 3; i < DEFAULT_LENGTH; ++i ) {
 		++test_var;
-		CIList_AddAt(&list.cIList, &test_var, i);
+		CIList_AddAt(&list->cIList, &test_var, i);
 	}
 
 	/* Now test a new index can't be found.
 	 */
 	++test_var;
-	err = CIList_Add(&list.cIList, &test_var);
+	err = CIList_Add(&list->cIList, &test_var);
 	ASSERT(err == CILIST_ERR_FULL, "Failed to throw a full list error");
 }
 
@@ -159,35 +164,35 @@ TEST(clear)
 	/* Fill the entire list.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Add(&list.cIList, &i);
+		err = CIList_Add(&list->cIList, &i);
 	}
 
 	/* Clear the list.
 	 */
-	CIList_Clear(&list.cIList);
+	CIList_Clear(&list->cIList);
 
 	/* Fill the entire list up again.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Add(&list.cIList, &i);
+		err = CIList_Add(&list->cIList, &i);
 
 		/* Assert there was no error adding the element,
 		 * and assert the current size increased.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to insert at iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == (size_t) (i+1), "Failed to track list size");
+		ASSERT(CIList_Size(&list->cIList) == (size_t) (i+1), "Failed to track list size");
 	}
 
 	/* Assert each element can be removed correctly.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list.cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1,
 		       "Size did not decrease at iteration %d", i);
 	}
 	
@@ -202,44 +207,44 @@ TEST(normal_operation)
 	/* Fill the entire list.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Add(&list.cIList, &i);
+		err = CIList_Add(&list->cIList, &i);
 
 		/* Assert there was no error adding the element,
 		 * and assert the current size increased.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to insert at iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == (size_t) (i+1), "Failed to track list size");
+		ASSERT(CIList_Size(&list->cIList) == (size_t) (i+1), "Failed to track list size");
 	}
 
 	/* Assert each element was correctly added.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Get(&list.cIList, &test_var, i);
+		err = CIList_Get(&list->cIList, &test_var, i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to get at iteration %d", i);
 		ASSERT(test_var == i, "Failed to get correctly at iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == DEFAULT_LENGTH, "Size did not stay constant at iteration %d", i);
+		ASSERT(CIList_Size(&list->cIList) == DEFAULT_LENGTH, "Size did not stay constant at iteration %d", i);
 	}
 
 	/* Assert each element can be removed.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list.cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1, "Size did not decrease at iteration %d", i);
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1, "Size did not decrease at iteration %d", i);
 	}
 
 	/* Assert each element was correctly removed and we cannot
 	 * try and get it again.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Get(&list.cIList, &test_var, i);
+		err = CIList_Get(&list->cIList, &test_var, i);
 
 		/* Assert no error and correct element was got.
 		 */
@@ -250,7 +255,7 @@ TEST(normal_operation)
 	 * during normal add and remove operation.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Add(&list.cIList, &i);
+		err = CIList_Add(&list->cIList, &i);
 
 		/* Assert there was no error adding the element,
 		 * and assert the current size increased.
@@ -261,13 +266,13 @@ TEST(normal_operation)
 	/* Assert each element can be removed as before.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list.cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at during second iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at second iteration %d", i);
-		ASSERT(CIList_Size(&list.cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1,
 		       "Size did not decrease at second iteration %d", i);
 	}
 	
@@ -275,7 +280,7 @@ TEST(normal_operation)
 
 TEST(max_size)
 {
-	ASSERT(CIList_MaxSize(&list.cIList) == DEFAULT_LENGTH, "Failed to get max size");
+	ASSERT(CIList_MaxSize(&list->cIList) == DEFAULT_LENGTH, "Failed to get max size");
 }
 
 TEST(depth_one)
@@ -309,6 +314,10 @@ TEST(depth_one)
 
 TEST_SUITE(array_list)
 {
+	/* Run tests using dynamic list. 
+	 */
+	UNIT_PRINT("Running dynamic list tests...\n");
+	list = &dynamic_list;
 	ADD_TEST(add_at);
 	ADD_TEST(get);
 	ADD_TEST(remove);
@@ -316,6 +325,20 @@ TEST_SUITE(array_list)
 	ADD_TEST(clear);
 	ADD_TEST(max_size);
 	ADD_TEST(normal_operation);
+
+	/* Run tests using static list. 
+	 */
+	UNIT_PRINT("Running static list tests...\n");
+	list = &static_list;
+	ADD_TEST(add_at);
+	ADD_TEST(get);
+	ADD_TEST(remove);
+	ADD_TEST(add);
+	ADD_TEST(clear);
+	ADD_TEST(max_size);
+	ADD_TEST(normal_operation);
+
+	
 	ADD_TEST(depth_one);
 }
 
