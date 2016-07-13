@@ -20,6 +20,9 @@
  * @file
  */
 
+#include <CCBinaryTree.h>
+#include <string.h>
+
 #define CCBINARY_TREE_ROOT 0
 
 /* The parents index is floor(index/2) where index=1 is used for the
@@ -33,13 +36,18 @@
 /************************************************************************/
 /* Private methods.							*/
 /************************************************************************/
-static void CCBinaryTree_EncodeSwap( struct CCBinaryTree* self, void* element, void* key )
+/* Copy the data pointed to by element and key into swap_space_1.
+ */
+static void CCBinaryTree_EncodeSwap( struct CCBinaryTree* self, const void* element, const void* key )
 {
 	CAssertObject(self);
 	memcpy(self->swap_space_1, element, self->element_size);
 	memcpy(self->swap_space_1 + self->element_size, key, self->key_size);
 }
 
+/* Copy the data in swap_space_1 into element and key. These can be passed
+ * in as NULL to ignore them.
+ */
 static void CCBinaryTree_DecodeSwap( struct CCBinaryTree* self, void* element, void* key )
 {
 	CAssertObject(self);
@@ -51,7 +59,10 @@ static void CCBinaryTree_DecodeSwap( struct CCBinaryTree* self, void* element, v
 	}
 }
 
-static void CCBinaryTree_CacheKey( struct CCBinaryTree* self, size_t index, signed char* key_space )
+/* Cache the key for the element at index. swap_space_1 will be corrupt. key_space will
+ * point to the key.
+ */
+static void CCBinaryTree_CacheKey( struct CCBinaryTree* self, size_t index, unsigned char* key_space )
 {
 	CAssertObject(self);
 	
@@ -59,21 +70,28 @@ static void CCBinaryTree_CacheKey( struct CCBinaryTree* self, size_t index, sign
 	CCBinaryTree_DecodeSwap(self, NULL, key_space);
 }
 
+/* Swap the elements at indexA and indexB. swap_space_1 is corrupt
+ * by this.
+ */
 static void CCBinaryTree_SwapElements( struct CCBinaryTree* self, size_t indexA, size_t indexB )
 {
 	CAssertObject(self);
 
+	unsigned char* swap_space_2 = self->swap_space_1 + self->element_size + self->key_size;
+	
 	/* Read out elements at index A and B.
 	 */
 	CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, indexA);
-	CIList_Remove(&self->tree_backend.cIList, self->swap_space_2, indexB);
+	CIList_Remove(&self->tree_backend.cIList, swap_space_2, indexB);
 
 	/* Write back in different order.
 	 */
-	CIList_AddAt(&self->tree_backend.cIList, self->swap_space_2, indexA);
+	CIList_AddAt(&self->tree_backend.cIList, swap_space_2, indexA);
 	CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, indexB);
 }
 
+/* Move a node up the heap to satisfy the heap property.
+ */
 static void CCBinaryTree_HeapifyUp( struct CCBinaryTree* self, size_t index )
 {
 	CAssertObject(self);
@@ -107,6 +125,8 @@ static void CCBinaryTree_HeapifyUp( struct CCBinaryTree* self, size_t index )
 	}
 }
 
+/* Move a node down the heap to satisfy the heap property. 
+ */
 static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
 {
 	CAssertObject(self);
@@ -114,12 +134,12 @@ static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
 	size_t child_index;
 
 	for( ;; ) {
-		if( LCHILD_INDEX(index) >= self->current_size - 1 ) {
+		if( LCHILD_INDEX(index) >= self->index - 1 ) {
 			/* No children to swap with.
 			 */
 			break;
 		}
-		else if( LCHILD_INDEX(index) < self->current_size - 1 ) {
+		else if( LCHILD_INDEX(index) < self->index - 1 ) {
 			/* Find the child with the smallest key. 
 			 */
 			CCBinaryTree_CacheKey(self, LCHILD_INDEX(index), self->key_space_1);
@@ -171,7 +191,7 @@ CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const vo
 
 	/* Put the combined element/key pair into the list. 
 	 */
-	CIListError err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space, self->index);
+	CIListError err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, self->index);
 	if( err == CILIST_ERR_FULL ) {
 		return CITREE_ERR_FULL;
 	}
@@ -202,9 +222,17 @@ CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
 
-	/* Get the root of the heap.
+	return CITree_Get(&self->cITree, element, CCBINARY_TREE_ROOT);
+}
+
+CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
+{
+	CAssertObject(self_);
+	struct CCBinaryTree* self = CCast(self_);
+
+	/* Get the element of the heap given by index.
 	 */
-	CIListError err = CIList_Get(&self->tree_backend.cIList, self->swap_space, CCBINARY_TREE_ROOT);
+	CIListError err = CIList_Get(&self->tree_backend.cIList, self->swap_space_1, index);
 	if( err == CILIST_ERR_EMPTY ) {
 		return CITREE_ERR_EMPTY;
 	}
@@ -216,12 +244,6 @@ CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 	return CITREE_OK;
 }
 
-CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
-{
-	CAssertObject(self_);
-	struct CCBinaryTree* self = CCast(self_);
-}
-
 CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -229,7 +251,7 @@ CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index
 
 	/* Get at the index of the heap.
 	 */
-	CIListError err = CIList_Remove(&self->tree_backend.cIList, self->swap_space, index);
+	CIListError err = CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, index);
 	if( err == CILIST_ERR_EMPTY ) {
 		return CITREE_ERR_EMPTY;
 	}
@@ -252,13 +274,58 @@ CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index
 		/* Place the element at the end of tree into the removed index.
 		 */
 		--self->index;
-		CIList_Remove(&self->tree_backend.cIList, self->swap_space, self->index);
-		CIList_AddAt(&self->tree_backend.cIList, self->swap_space, index);
+		CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, self->index);
+		CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, index);
 		CCBinaryTree_HeapifyDown(self, index);
 	}
 
 	return CITREE_OK;
 }
+
+
+/************************************************************************/
+/* Overriding 								*/
+/************************************************************************/
+static void CDestructor( void* self_ )
+{
+	struct CCBinaryTree* self = CCast(self_);
+
+	/* Call super's destructor
+	 */
+	const struct CCBinaryTree_VTable* vtable = CGetVTable(self);
+	vtable->CObject_VTable_Ref->CDestructor(self);
+}
+
+
+/************************************************************************/
+/* vtable key								*/
+/************************************************************************/
+const struct CCBinaryTree_VTable* CCBinaryTree_VTable_Key( )
+{
+	static struct CCBinaryTree_VTable vtable  =
+		{
+			.CITree_VTable.push = CITree_Push_Def,
+			.CITree_VTable.pop = CITree_Pop_Def,
+			.CITree_VTable.peek = CITree_Peek_Def,
+			.CITree_VTable.get = CITree_Get_Def,
+			.CITree_VTable.delete = CITree_Delete_Def,
+			.CITree_VTable.split = NULL,
+			.CITree_VTable.merge = NULL
+		};
+
+	/* Super's vtable copy. */
+	vtable.CObject_VTable = *CObject_VTable_Key( );
+
+	/* Override destructor. */
+	vtable.CObject_VTable.CDestructor = CDestructor;
+
+	/* Reference to super's vtable. */
+	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+
+	/* Return pointer to CCArrayList's vtable. */
+	return &vtable;
+}
+
 
 
 /************************************************************************/
@@ -289,16 +356,18 @@ CError CCBinaryTree
 
 	/* Allocate the swap space.
 	 */
-	self->swap_space = CMalloc(element_size + key_size);
-	if( self->swap_space == NULL ) {
+	self->swap_space_1 = CMalloc((2*(element_size + key_size)) + (2*key_size));
+	if( self->swap_space_1 == NULL ) {
 		return COBJ_ALLOC_FAIL;
 	}
+	self->key_space_1 = self->swap_space_1 + (2*(element_size + key_size));
+	self->key_space_2 = self->key_space_1 + key_size;
 	
 	/* Construct the backend of the tree.
 	 */
 	CError err = CCArrayList(&self->tree_backend, element_size + key_size, max_size);
 	if( err != COBJ_OK ) {
-		CFree(self->swap_space);
+		CFree(self->swap_space_1);
 		return err;
 	}
 

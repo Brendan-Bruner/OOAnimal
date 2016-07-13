@@ -48,9 +48,8 @@ struct CCBinaryTree
 	/* Private data. */	
 	struct CCArrayList tree_backend;
 	unsigned char* swap_space_1;
-	unsigned char* swap_space_2;
 	unsigned char* key_space_1;
-	unsigned char* key_space_1;
+	unsigned char* key_space_2;
 	signed char (*compare)(const void*, const void*);
 	size_t index;
 	size_t element_size;

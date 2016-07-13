@@ -28,7 +28,7 @@
 CITreeError CITree_Push( struct CITree* self, const void* element, const void* key )
 {
 	CAssertObject(self);
-	struct CITree_VTable* vtable = CGetVTable(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
 	CAssertVirtual(vtable);
 	CAssertVirtual(vtable->push);
 	return vtable->push(self, element, key);
@@ -37,7 +37,7 @@ CITreeError CITree_Push( struct CITree* self, const void* element, const void* k
 CITreeError CITree_Pop( struct CITree* self, void* element )
 {
 	CAssertObject(self);
-	struct CITree_VTable* vtable = CGetVTable(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
 	CAssertVirtual(vtable);
 	CAssertVirtual(vtable->pop);
 	return vtable->pop(self, element);
@@ -46,7 +46,7 @@ CITreeError CITree_Pop( struct CITree* self, void* element )
 CITreeError CITree_Peek( struct CITree* self, void* element )
 {
 	CAssertObject(self);
-	struct CITree_VTable* vtable = CGetVTable(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
 	CAssertVirtual(vtable);
 	CAssertVirtual(vtable->peek);
 	return vtable->peek(self, element);
@@ -55,7 +55,7 @@ CITreeError CITree_Peek( struct CITree* self, void* element )
 CITreeError CITree_Get( struct CITree* self, void* element, size_t index )
 {
 	CAssertObject(self);
-	struct CITree_VTable* vtable = CGetVTable(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
 	CAssertVirtual(vtable);
 	CAssertVirtual(vtable->get);
 	return vtable->get(self, element, index);
@@ -64,7 +64,7 @@ CITreeError CITree_Get( struct CITree* self, void* element, size_t index )
 CITreeError CITree_Delete( struct CITree* self, void* element, size_t index )
 {
 	CAssertObject(self);
-	struct CITree_VTable* vtable = CGetVTable(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
 	CAssertVirtual(vtable);
 	CAssertVirtual(vtable->delete);
 	return vtable->delete(self, element, index);
