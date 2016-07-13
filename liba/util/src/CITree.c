@@ -25,7 +25,7 @@
 /************************************************************************/
 /* Virtual method wrappers						*/
 /************************************************************************/
-CITreeError CITree_Push( struct CITree* self, void* element, void* key )
+CITreeError CITree_Push( struct CITree* self, const void* element, const void* key )
 {
 	CAssertObject(self);
 	struct CITree_VTable* vtable = CGetVTable(self);

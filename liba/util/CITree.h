@@ -34,6 +34,10 @@
  * @ingroup Trees
  * @var CITREE_OK
  *	No error.
+ * @var CITREE_ERR_EMPTY
+ *	No data in the tree.
+ * @var CITREE_ERR_FULL
+ *	No room in tree for more data.
  */
 typedef enum
 {
@@ -52,7 +56,9 @@ typedef enum
  * @brief
  *	Tree data structure interface
  * @details
- *	
+ *	An interface for adding/removing data from trees. The tree
+ *	is copy by value, meaning data and keys added to the tree is copied
+ *	into it.
  */
 struct CITree
 {
@@ -68,7 +74,7 @@ struct CITree
  */
 struct CITree_VTable
 {
-	CITreeError (*push)( struct CITree*, void*, void* );
+	CITreeError (*push)( struct CITree*, const void*, const void* );
 	CITreeError (*pop)( struct CITree*, void* );
 	CITreeError (*peek)( struct CITree*, void* );
 	CITreeError (*get)( struct CITree*, void*, size_t );
@@ -103,7 +109,7 @@ struct CITree_VTable
  *	- CITREE_ERR_FULL: No room in tree to insert the element.
  *	- CITREE_OK: Element successfully inserted.	
  */ 
-CITreeError CITree_Push( struct CITree* self, void* element, void* key );
+CITreeError CITree_Push( struct CITree* self, const void* element, const void* key );
 
 /**
  * @memberof CITree
