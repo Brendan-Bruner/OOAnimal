@@ -359,16 +359,46 @@ TEST(remove)
 	ASSERT(err == CITREE_ERR_EMPTY, "heapify test 4: no empty error at index 5, got %d", err);
 }
 
-TEST(one_node)
-{
-}
-
-TEST(no_nodes)
-{
-}
-
 TEST(normal_operation)
 {
+	int i;
+	int item;
+	int key;
+
+	/* Fill the tree up. 
+	 */
+	for( i = 0; i < TREE_MAX_SIZE; ++i ) {
+		item = i;
+		key = TREE_MAX_SIZE - i;
+		CITree_Push(&tree->cITree, &item, &key);
+	}
+
+	/* Empty the tree. 
+	 */
+	for( i = 0; i < TREE_MAX_SIZE; ++i ) {
+		CITree_Pop(&tree->cITree, &item);
+		ASSERT(item == TREE_MAX_SIZE - i - 1,
+		       "pop %d gave item %d, when expecting %d",
+		       i, item, TREE_MAX_SIZE - i - 1);
+	}
+
+	/* Repeat above, except fill up the tree with keys such
+	 * that heapify will never have to run.
+	 */
+	for( i = 0; i < TREE_MAX_SIZE; ++i ) {
+		item = i;
+		key = i;
+		CITree_Push(&tree->cITree, &item, &key);
+	}
+
+	/* Empty the tree. 
+	 */
+	for( i = 0; i < TREE_MAX_SIZE; ++i ) {
+		CITree_Pop(&tree->cITree, &item);
+		ASSERT(item == i,
+		       "pop %d gave item %d, when expecting %d",
+		       i, item, i);
+	}
 }
 
 TEST_SUITE(binary_tree)
@@ -378,7 +408,5 @@ TEST_SUITE(binary_tree)
 	ADD_TEST(push);
 	ADD_TEST(get);
 	ADD_TEST(remove);
-	ADD_TEST(one_node);
-	ADD_TEST(no_nodes);
 	ADD_TEST(normal_operation);
 }

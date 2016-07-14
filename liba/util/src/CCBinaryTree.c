@@ -384,7 +384,7 @@ static void CDestructor( void* self_ )
 
 	CDestroy(&self->tree_backend);
 	CFree(self->swap_space_1);
-	
+
 	/* Call super's destructor
 	 */
 	const struct CCBinaryTree_VTable* vtable = CGetVTable(self);
@@ -450,7 +450,20 @@ CError CCBinaryTree
 
 	/* Third thing in constructor must be calling interface's constructor. 
 	 */
-	CInterface(self, &self->cITree, &CCBinaryTree_VTable_Key( )->CITree_VTable);	
+	CInterface(self, &self->cITree, &CCBinaryTree_VTable_Key( )->CITree_VTable);
+
+	/* Assign the compare method. 
+	 */
+	if( compare == NULL ) {
+		return COBJ_INV_PARAM;
+	}
+	self->compare = compare;
+
+	/* check boundary conditions on element, key, and max size.
+	 */
+	if( element_size < 1 || key_size < 1 || max_size < 2 ) {
+		return COBJ_INV_PARAM;
+	}
 
 	/* Allocate the swap space.
 	 */
@@ -469,14 +482,7 @@ CError CCBinaryTree
 		return err;
 	}
 
-	/* Assign the compare method. 
-	 */
-	if( compare == NULL ) {
-		return COBJ_INV_PARAM;
-	}
-	self->compare = compare;
-
-	/* Current index is the root (0). 
+	/* Assign remaining member functions.
 	 */
 	self->index = CCBINARY_TREE_ROOT;
 	self->element_size = element_size;
