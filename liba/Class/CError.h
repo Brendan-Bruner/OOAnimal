@@ -22,7 +22,8 @@
 typedef enum
 {
 	COBJ_OK = 0,
-	COBJ_ALLOC_FAIL = 1
+	COBJ_ALLOC_FAIL = 1,
+	COBJ_INV_PARAM = 2
 } CError;
 
 #endif /* CLASS_CERROR_H_ */

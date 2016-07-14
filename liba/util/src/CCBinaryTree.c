@@ -91,6 +91,14 @@ static void CCBinaryTree_SwapElements( struct CCBinaryTree* self, size_t indexA,
 }
 
 /* Move a node up the heap to satisfy the heap property.
+ * Cyclic complexity map:
+ * 1(assert) +-> 2(for) -> 3(if(root)) +-> 4(return) <--------------+
+ *           |                         |                            |
+ *           |                         +-> 5(cache) -> 6(if(go up)) +-> 7(swap) -+
+ *           |                                                                   |
+ *           +-------------------------------------------------------------------+
+ *
+ * This gives a complexity of: 8(edges) - 7(nodes) + 2 = 3
  */
 static void CCBinaryTree_HeapifyUp( struct CCBinaryTree* self, size_t index )
 {
@@ -126,6 +134,22 @@ static void CCBinaryTree_HeapifyUp( struct CCBinaryTree* self, size_t index )
 }
 
 /* Move a node down the heap to satisfy the heap property. 
+ * Cyclic complexity map:
+ * 1(CCast) +-> 2(for) -> 3(if(no child)) +-> 4(return) <-+
+ *          |                             |               |
+ *          |    +- 5(if(two children)) <-+               |
+ *          |    |                                        |
+ *          |    +--> 6(find smallest) --+                |
+ *          |    |                       |                |
+ *          |    +--> 7(left child) --+  |                |
+ *          |                         |  |                |
+ *          |      +------------------+--+                |
+ *          |      |                                      |
+ *          |      +-> 8(if(compare)) -+------------------+
+ *          |                          |
+ *          +--------------- 9(swap) <-+ 
+ *
+ * complexity of: 11(edges) - 9(nodes) + 2 = 4
  */
 static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
 {
@@ -134,7 +158,7 @@ static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
 	size_t child_index;
 
 	for( ;; ) {
-		if( LCHILD_INDEX(index) >= self->index - 1 ) {
+		if( LCHILD_INDEX(index) > self->index - 1 ) {
 			/* No children to swap with.
 			 */
 			break;
@@ -180,6 +204,19 @@ static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
 /************************************************************************/
 /* Virtual methods.							*/
 /************************************************************************/
+/* Cyclic complexity map:
+ * 1(CCast) -> 2(if full) +-> 3(return) <-+
+ *                        |               |
+ *                        +-> 4(heapify) -+
+ * The heapify has a cyclic complexity of 3.
+ * Complexity of: 4(edges) - 4(nodes) + (3-1)(heapify) + 2 = 4
+ *
+ * Test cases:
+ *	* Tree is full - get error code CITREE_ERR_FULL
+ *	* Tree is empty - no error, no inifinite loop
+ *	* New key gets heapified up to root - no error, no infinite loop
+ *	* New key gets heapified up at least once, but does not replace the root - no error, no infinite loop
+ */
 CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const void* key )
 {
 	CAssertObject(self_);
@@ -209,6 +246,9 @@ CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const vo
 	return CITREE_OK;
 }
 
+/* Simply calls CITree_Delete with the root node as the index to
+ * delete.
+ */
 CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
 {
 	CAssertObject(self_);
@@ -217,6 +257,9 @@ CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
 	return CITree_Delete(&self->cITree, element, CCBINARY_TREE_ROOT);
 }
 
+/* Simply calls CITree_Get with the root node as the index to
+ * get at.
+ */ 
 CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 {
 	CAssertObject(self_);
@@ -225,6 +268,16 @@ CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 	return CITree_Get(&self->cITree, element, CCBINARY_TREE_ROOT);
 }
 
+/* Cyclic complexity map:
+ * 1(CCast) -> 2(if(empty)) +-> 3(return) <-+
+ *                          |               |
+ *                          +-> 4(decode) --+
+ * 
+ * Complexity of: 4(edges) - 4(nodes) + 2 = 2
+ * test cases:
+ *	* tree is empty - returns error code CITREE_ERR_EMPTY
+ *	* tree is not empty - gets what is in the tree.
+ */
 CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -244,6 +297,26 @@ CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
 	return CITREE_OK;
 }
 
+/* Cyclic complexity map:
+ * 1(CCast) -> 2(if(empty)) +-> 3(return) <-+--+
+ *                          |               |  |
+ *           +- 4(decode) <-+               |  |
+ *           |                              |  |
+ *           +-> 5(if(empty)) +-> 6(reset) -+  |
+ *                            |                |
+ *                            +-> 7(heapify) --+
+ *
+ * heafiy has a complexity of 4
+ * This gives complexity of: 8(edges) - 7(nodes) + (4-1)(heapify) + 2 = 6
+ *
+ * Test cases:
+ *	* tree is empty - returns CITREE_ERR_EMPTY
+ *	* tree had only one element - returns CITREE_OK and tre is now empty
+ *	* Heapify ends with the heapified node having one child
+ *	* Heapify ends with the heapified node having two children
+ *	* Heapify ends with the heapified node having no children and no sibling
+ *	* Heapify ends with the heapified node having no children and one sibling
+ */
 CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
@@ -290,6 +363,9 @@ static void CDestructor( void* self_ )
 {
 	struct CCBinaryTree* self = CCast(self_);
 
+	CDestroy(&self->tree_backend);
+	CFree(self->swap_space_1);
+	
 	/* Call super's destructor
 	 */
 	const struct CCBinaryTree_VTable* vtable = CGetVTable(self);
@@ -373,6 +449,9 @@ CError CCBinaryTree
 
 	/* Assign the compare method. 
 	 */
+	if( compare == NULL ) {
+		return COBJ_INV_PARAM;
+	}
 	self->compare = compare;
 
 	/* Current index is the root (0). 
