@@ -34,7 +34,53 @@
  * @extends CITree
  * @ingroup Trees
  * @brief
- *	Implements the CITree interface with a binaray tree/heap.
+ *	Implements the CITree interface with a binary tree/heap.
+ * @details
+ *	Implements the CITree interface with a binaray tree/heap. Data and keys put into
+ *	the tree are copied by value. This implementation allows arbitrary
+ *	keys to be used when inserting into the tree. The root of the tree is always the
+ *	node with the key that evaluates to be smaller than all other keys. The evaluation
+ *	function for keys is passed into the constructor as a function argument. For example,
+ *	the tree below uses integers for keys, can have a maximum of 8 nodes, and will save
+ *	integers in each of its nodes. The code puts an item in with value 0 and key 0, then
+ *	an item with value 5 and key -3. This will put the -3:5 key:value pair at the root of
+ *	tree. Next time CITree_Pop() is called, that is the item that gets removed, since its
+ *	key will evaluate as being the smallest.
+ * 	@code
+ *		static signed char compare_function( const void* key1_p, const void* key2_p )
+ *		{
+ *			int key1 = *((int*) key1_p);
+ *			int key2 = *((int*) key2_p);
+ *
+ *			if( key1 < key2 ) { 
+ *				return -1; 
+ *			}
+ *			else if( key1 > key2 ) { 
+ *				return 1; 
+ *			}
+ *			else { 
+ *				return 0; 
+ *			}
+ *		}
+ *
+ *		int main( int argc, char** argv ) 
+ *		{
+ *			struct CCBinaryTree tree;
+ *			CCBinaryTree(&tree
+ *				     sizeof(int),
+ *			  	     8,
+ *				     compare_function,
+ *				     sizeof(int));
+ *
+ *			int item = 0, key = 0;
+ *			CITree_Push(&tree.cITree, &item, &key);
+ *
+ *			item = 5; key = -3;
+ *			CITree_Push(&tree.cITree, &item, &key);
+ *
+ *			CDestroy(&tree);
+ *		}
+ *	@endcode
  */
 struct CCBinaryTree
 {
@@ -93,7 +139,38 @@ const struct CCBinaryTree_VTable* CCBinaryTree_Get_Key( );
  * @memberof CCBinaryTree
  * @constructor
  * @details
- *	Construct a binary tree.
+ *	Construct a binary tree. The tree's memory is allocated using CMalloc 
+ *	defined in Class.h. When the tree is no longer needed, CDestroy() must be
+ *	called on it.
+ * @param self
+ *	The tree.
+ * @param element_size
+ *	The number of bytes of data per node. This is how many bytes are copied
+ *	into a node when CITree_Push() is called. This must be greater than or equal
+ *	to one.
+ * @param max_size
+ *	The maximum number of nodes in the tree. This must be greater than or equal to
+ *	2.
+ * @param compare
+ *	A function pointer used for comparing keys. The prototype of the function is
+ * 	@code
+ *		signed char compare( const void* key1, const void* key2 );
+ *	@endcode
+ *	The inputs point to the location of two keys in memory. This method
+ *	must be return:
+ *		- -1 if key1 evaluates to be less than key2.
+ *		- +1 if key2 evaluates to be greater than key2.
+ *		- 0 if key1 and key2 evalute to be equal.
+ *	Keeping in mind, that keys which evaluate to be of lower value are moved closer
+ *	to the root of the tree. An example implementation is given in the description
+ *	of struct CCBinaryTree.
+ * @param key_size
+ * 	The size of keys in bytes. Keys are copied into the tree when CITree_Push() is called.
+ * 	This must be greater than or equal to 1.
+ * @returns
+ *	- COBJ_OK: construction successfull.
+ *	- COBJ_INV_PARAM: Input parameters are not valid. 
+ *	- COBJ_ALLOC_FAIL: Failed to allocate memory for the tree using CMalloc.
  */
 CError CCBinaryTree
 (

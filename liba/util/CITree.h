@@ -57,7 +57,7 @@ typedef enum
  *	Tree data structure interface
  * @details
  *	An interface for adding/removing data from trees. The tree
- *	is copy by value, meaning data and keys added to the tree is copied
+ *	is copy by value, meaning data and keys added to the tree are copied
  *	into it.
  */
 struct CITree
@@ -100,8 +100,10 @@ struct CITree_VTable
  * @memberof CITree
  * @details
  *	Put an element into the tree by copy and move it up the tree
- *	such that the heap property is not violated using the parameter
- *	key to evaluate the heap property.
+ *	such that the heap property is not violated using the input param
+ *	key to evaluate the heap property. The heap property requires the
+ *	root of the tree has the key which evaluates to be less than
+ *	all other keys in the tree.
  * @param self
  *	The tree.
  * @param element
@@ -177,17 +179,34 @@ CITreeError CITree_Delete( struct CITree* self, void* element, size_t index );
 
 /**
  * @memberof CITree
+ * @details
+ *	Get the current size of tree, ie, how many nodes have been
+ *	added to the tree.
+ * @param self
+ *	The tree.
+ * @returns
+ *	The current size of the tree.
  */
 size_t CITree_Size( struct CITree* self );
 
 /**
  * @memberof CITree
+ * @details
+ *	The maximum number of nodes which can be added to the tree.
+ * @param self
+ *	The tree.
+ * @returns
+ *	The maximum number of nodes which can be added to the tree.
  */
 size_t CITree_MaxSize( struct CITree* self );
 
 /**
  * @memberof CITree
+ * @details
+ *	Reset the tree to have zero ndoes in it. All data in the tree is lost.
+ * @param self
+ *	The tree.
  */
-void CITree_Clear( struct CITree* self );
+self CITree_Clear( struct CITree* self );
 
 #endif /* UTIL_CITREE_H_ */
