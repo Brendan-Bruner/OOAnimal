@@ -367,6 +367,14 @@ static size_t CITree_MaxSize_Def( struct CITree* self_ )
 	return self->max_size;
 }
 
+static void CITree_Clear_Def( struct CITree* self_ )
+{
+	struct CCBinaryTree* self = CCast(self_);
+
+	self->index = CCBINARY_TREE_ROOT;
+	CIList_Clear(&self->tree_backend.cIList);
+}
+
 /************************************************************************/
 /* Overriding 								*/
 /************************************************************************/
@@ -398,6 +406,7 @@ const struct CCBinaryTree_VTable* CCBinaryTree_VTable_Key( )
 			.CITree_VTable.delete = CITree_Delete_Def,
 			.CITree_VTable.size = CITree_Size_Def,
 			.CITree_VTable.max_size = CITree_MaxSize_Def,
+			.CITree_VTable.clear = CITree_Clear_Def,
 			.CITree_VTable.split = NULL,
 			.CITree_VTable.merge = NULL
 		};

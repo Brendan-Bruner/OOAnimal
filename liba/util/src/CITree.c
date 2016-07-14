@@ -87,3 +87,12 @@ size_t CITree_MaxSize( struct CITree* self )
 	CAssertVirtual(vtable->max_size);
 	return vtable->max_size(self);
 }
+
+void CITree_Clear( struct CITree* self )
+{
+	CAssertObject(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
+	CAssertVirtual(vtable);
+	CAssertVirtual(vtable->clear);
+	vtable->clear(self);
+}

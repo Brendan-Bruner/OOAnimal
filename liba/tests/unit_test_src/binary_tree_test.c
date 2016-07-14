@@ -144,7 +144,16 @@ TEST(remove)
 	ASSERT(item == 1, "Removed wrong item from tree, got %d", item);
 	ASSERT(size == 0, "Tree should be size zero, not %zu", size);
 
-	/* Build a tree to test a dimension of heapify.
+	/* Build a tree to test a dimension of heapify. The tree is build like this:
+	 *       0:0
+	 *        ^
+	 *       / \
+	 *    1:4   2:7
+	 *     ^
+	 *    / \
+	 * 3:6   4:5
+	 * where v:k = value:key                         
+	 * 0:0 is removed, 4:5 should replace 1:4 and 1:4 replace 0:0.
 	 */
 	item = 0;
 	key = 0;
@@ -169,10 +178,185 @@ TEST(remove)
 	ASSERT(err == CITREE_OK, "heapify test 1: incorrectly got err %d", err);
 	ASSERT(item == 0, "heapify test 1: incorrectly deleted item value %d", item);
 
-	/* Key 5 should be at index 1 now.
+	/* index 1 should now have pair 4:5
 	 */
 	CITree_Get(&tree->cITree, &item, 1);
-	ASSERT(item == 4," heapify test 1: key 5 item's value is incorrectly %d", item);
+	ASSERT(item == 4," heapify test 1: pair 4:5 item value is incorrectly %d", item);
+
+	/* index 4 (originally pair 4:5) should be empty.
+	 */
+	err = CITree_Get(&tree->cITree, &item, 4);
+	ASSERT(err == CITREE_ERR_EMPTY, "heapify test 1: no empty error at index 4, got %d", err);
+
+	/* Clear the tree for next heapify test. 
+	 */
+	CITree_Clear(&tree->cITree);
+
+	/* Test another dimension of heapify. The tree will is build like this:
+	 *           0:1
+	 *        ___/ \___
+	 *       /         \
+	 *    1:6          2:7
+	 *    / \          /
+	 * 3:9   4:10   5:8
+	 *
+	 * 0:1 is removed, 5:8 should replace 1:6, and 1:6 replace 0:1.
+	 */
+	item = 0;
+	key = 1;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 6;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 7;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 9;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 10;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 8;
+	CITree_Push(&tree->cITree, &item, &key);
+
+	/* When we remove 0:1, we should see 5:8 be moved to index 1 (original
+	 * location of 1:6).
+	 */
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_OK, "heapify test 2: incorrectly got err %d", err);
+	ASSERT(item == 0, "heapify test 2: incorrectly deleted item value %d", item);
+
+	/* index 0 should now have 1:6
+	 */
+	CITree_Get(&tree->cITree, &item, 0);
+	ASSERT(item == 1," heapify test 2: pair 1:6 item value is incorrectly %d", item);
+
+	/* index 1 should now have 5:8
+	 */
+	CITree_Get(&tree->cITree, &item, 1);
+	ASSERT(item == 5," heapify test 2: pair 5:8 item value is incorrectly %d", item);
+
+	/* index 5 should be empty now.
+	 */
+	err = CITree_Get(&tree->cITree, &item, 5);
+	ASSERT(err == CITREE_ERR_EMPTY, "heapify test 2: no empty error at index 5, got %d", err);
+
+	/* Clear the tree for next heapify test. 
+	 */
+	CITree_Clear(&tree->cITree);
+
+	/* Test a third dimension of heapify. The tree built will look like this:
+	 *         0:1
+	 *        _/ \_
+	 *       /     \
+	 *    1:4       2:7
+	 *    / \
+	 * 3:6   4:9
+	 *
+	 * 0:1 is removed, 4:9 replaces 3:6, 3:6 replaces 1:4, 1:4 replaces 0:1.
+	 */
+	item = 0;
+	key = 1;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 4;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 7;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 6;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 9;
+	CITree_Push(&tree->cITree, &item, &key);
+
+	/* Remove 0:1 now.
+	 */		
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_OK, "heapify test 3: incorrectly got err %d", err);
+	ASSERT(item == 0, "heapify test 3: incorrectly deleted item value %d", item);
+
+	/* index 0 should now contain 1:5.
+	 */
+	CITree_Get(&tree->cITree, &item, 0);
+	ASSERT(item == 1," heapify test 3: pair 1:5 item value is incorrectly %d", item);
+	
+	/* index 1 should now contain 3:6.
+	 */
+	CITree_Get(&tree->cITree, &item, 1);
+	ASSERT(item == 3," heapify test 3: pair 3:6 item value is incorrectly %d", item);
+	
+	/* index 3 should now contain 4:9.
+	 */
+	CITree_Get(&tree->cITree, &item, 3);
+	ASSERT(item == 4," heapify test 3: pair 4:9 item value is incorrectly %d", item);
+	
+	/* index 4 should now be empty.
+	 */
+	err = CITree_Get(&tree->cITree, &item, 4);
+	ASSERT(err == CITREE_ERR_EMPTY, "heapify test 3: no empty error at index 4, got %d", err);
+
+	/* Clear the tree for next heapify test. 
+	 */
+	CITree_Clear(&tree->cITree);
+
+	/* Test a fourth dimension of heapify. The tree built will look like this:
+	 *           0:1
+	 *        ___/ \___
+	 *       /         \
+	 *    1:6          2:7
+	 *    / \          /
+	 * 3:9   4:10   5:11
+	 *
+	 * 0:1 is removed, 1:6 replaces 0:1, 3:9 replaces 1:6, 5:11 replaces 3:9
+	 */
+	item = 0;
+	key = 1;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 6;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 7;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 9;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 10;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 11;
+	CITree_Push(&tree->cITree, &item, &key);
+
+	/* Remove 0:1 now.
+	 */		
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_OK, "heapify test 4: incorrectly got err %d", err);
+	ASSERT(item == 0, "heapify test 4: incorrectly deleted item value %d", item);
+
+	/* index 0 should now contain 1:6.
+	 */
+	CITree_Get(&tree->cITree, &item, 0);
+	ASSERT(item == 1," heapify test 4: pair 1:6 item value is incorrectly %d", item);
+	
+	/* index 1 should now contain 3:9.
+	 */
+	CITree_Get(&tree->cITree, &item, 1);
+	ASSERT(item == 3," heapify test 4: pair 3:9 item value is incorrectly %d", item);
+	
+	/* index 3 should now contain 5:11.
+	 */
+	CITree_Get(&tree->cITree, &item, 3);
+	ASSERT(item == 5," heapify test 4: pair 5:11 item value is incorrectly %d", item);
+	
+	/* index 5 should now be empty.
+	 */
+	err = CITree_Get(&tree->cITree, &item, 5);
+	ASSERT(err == CITREE_ERR_EMPTY, "heapify test 4: no empty error at index 5, got %d", err);
 }
 
 TEST(one_node)
