@@ -79,6 +79,8 @@ struct CITree_VTable
 	CITreeError (*peek)( struct CITree*, void* );
 	CITreeError (*get)( struct CITree*, void*, size_t );
 	CITreeError (*delete)( struct CITree*, void*, size_t );
+	size_t (*size)( struct CITree* );
+	size_t (*max_size)( struct CITree* );
 
 	/* Reserved for future expansion.
 	 */
@@ -171,5 +173,15 @@ CITreeError CITree_Get( struct CITree* self, void* element, size_t index );
  *	- CITREE_OK: Success.
  */
 CITreeError CITree_Delete( struct CITree* self, void* element, size_t index );
+
+/**
+ * @memberof CITree
+ */
+size_t CITree_Size( struct CITree* self );
+
+/**
+ * @memberof CITree
+ */
+size_t CITree_MaxSize( struct CITree* self );
 
 #endif /* UTIL_CITREE_H_ */

@@ -69,3 +69,21 @@ CITreeError CITree_Delete( struct CITree* self, void* element, size_t index )
 	CAssertVirtual(vtable->delete);
 	return vtable->delete(self, element, index);
 }
+
+size_t CITree_Size( struct CITree* self )
+{
+	CAssertObject(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
+	CAssertVirtual(vtable);
+	CAssertVirtual(vtable->size);
+	return vtable->size(self);
+}
+
+size_t CITree_MaxSize( struct CITree* self )
+{
+	CAssertObject(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
+	CAssertVirtual(vtable);
+	CAssertVirtual(vtable->max_size);
+	return vtable->max_size(self);
+}

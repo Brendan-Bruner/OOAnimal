@@ -54,6 +54,7 @@ struct CCBinaryTree
 	size_t index;
 	size_t element_size;
 	size_t key_size;
+	size_t max_size;
 };
 
 /**

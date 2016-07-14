@@ -87,14 +87,92 @@ TEST(push)
 	++item;
 	err = CITree_Push(&tree->cITree, &item, &key);
 	ASSERT(err == CITREE_OK, "Error %d with heapify up to root", err);
+
+	/* Fill the tree and assert it returns a tree full error.
+	 */
+	int i;
+	for( i = CITree_Size(&tree->cITree); i < TREE_MAX_SIZE; ++i ) {
+		++item;
+		++key;
+		err = CITree_Push(&tree->cITree, &item, &key);
+		ASSERT(err == CITREE_OK, "Error %d inserting during push %d", err, i);
+	}
+	err = CITree_Push(&tree->cITree, &item, &key);
+	ASSERT(err == CITREE_ERR_FULL, "No full error on full tree, got %d", err);
 }
 
 TEST(get)
 {
+	int item = 299;
+	int key = 0;
+	CITreeError err;
+
+	/* Empty tree, get should return an error.
+	 */
+	err = CITree_Get(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_ERR_EMPTY, "No empty error pulling from empty tree, got %d", err);
+
+	/* Put an itme into tree and get it.
+	 */
+	CITree_Push(&tree->cITree, &item, &key);
+	item = 0;
+	err = CITree_Get(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_OK, "Error %d getting from tree", err);
+	ASSERT(item == 299, "Got wrong item, %d, from tree", item);
 }
 
-TEST(delete)
+TEST(remove)
 {
+	int item = 0;
+	int key = 0;
+	CITreeError err;
+	size_t size;
+
+	/* Tree is empty, delete should return empty error. 
+	 */
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_ERR_EMPTY, "No empty error deleting from epty tree, got %d", err);
+
+	/* Insert an element, then assert tree is empty after removing it.
+	 */
+	item = 1;
+	CITree_Push(&tree->cITree, &item, &key);
+	item = 0;
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	size = CITree_Size(&tree->cITree);
+	ASSERT(err == CITREE_OK, "Got err %d deleting tree of size one", err);
+	ASSERT(item == 1, "Removed wrong item from tree, got %d", item);
+	ASSERT(size == 0, "Tree should be size zero, not %zu", size);
+
+	/* Build a tree to test a dimension of heapify.
+	 */
+	item = 0;
+	key = 0;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 4;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 7;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 6;
+	CITree_Push(&tree->cITree, &item, &key);
+	++item;
+	key = 5;
+	CITree_Push(&tree->cITree, &item, &key);
+
+	/* When we remove the root now, key 5 should be heapified
+	 * to a child of the root with one child.
+	 */
+	err = CITree_Delete(&tree->cITree, &item, 0);
+	ASSERT(err == CITREE_OK, "heapify test 1: incorrectly got err %d", err);
+	ASSERT(item == 0, "heapify test 1: incorrectly deleted item value %d", item);
+
+	/* Key 5 should be at index 1 now.
+	 */
+	CITree_Get(&tree->cITree, &item, 1);
+	ASSERT(item == 4," heapify test 1: key 5 item's value is incorrectly %d", item);
 }
 
 TEST(one_node)
@@ -115,7 +193,7 @@ TEST_SUITE(binary_tree)
 	
 	ADD_TEST(push);
 	ADD_TEST(get);
-	ADD_TEST(delete);
+	ADD_TEST(remove);
 	ADD_TEST(one_node);
 	ADD_TEST(no_nodes);
 	ADD_TEST(normal_operation);

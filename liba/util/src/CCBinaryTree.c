@@ -217,7 +217,7 @@ static void CCBinaryTree_HeapifyDown( struct CCBinaryTree* self, size_t index )
  *	* New key gets heapified up to root - no error, no infinite loop
  *	* New key gets heapified up at least once, but does not replace the root - no error, no infinite loop
  */
-CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const void* key )
+static CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const void* key )
 {
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
@@ -229,7 +229,7 @@ CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const vo
 	/* Put the combined element/key pair into the list. 
 	 */
 	CIListError err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, self->index);
-	if( err == CILIST_ERR_FULL ) {
+	if( err == CILIST_ERR_INDEX ) {
 		return CITREE_ERR_FULL;
 	}
 
@@ -249,7 +249,7 @@ CITreeError CITree_Push_Def( struct CITree* self_, const void* element, const vo
 /* Simply calls CITree_Delete with the root node as the index to
  * delete.
  */
-CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
+static CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
 {
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
@@ -260,7 +260,7 @@ CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
 /* Simply calls CITree_Get with the root node as the index to
  * get at.
  */ 
-CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
+static CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 {
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
@@ -278,7 +278,7 @@ CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
  *	* tree is empty - returns error code CITREE_ERR_EMPTY
  *	* tree is not empty - gets what is in the tree.
  */
-CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
+static CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
@@ -317,7 +317,7 @@ CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t index )
  *	* Heapify ends with the heapified node having no children and no sibling
  *	* Heapify ends with the heapified node having no children and one sibling
  */
-CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index )
+static CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index )
 {
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
@@ -347,14 +347,25 @@ CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_t index
 		/* Place the element at the end of tree into the removed index.
 		 */
 		--self->index;
-		CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, self->index);
-		CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, index);
+		err = CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, self->index);
+		err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, index);
 		CCBinaryTree_HeapifyDown(self, index);
 	}
 
 	return CITREE_OK;
 }
 
+static size_t CITree_Size_Def( struct CITree* self_ )
+{
+	struct CCBinaryTree* self = CCast(self_);
+	return self->index;
+}
+
+static size_t CITree_MaxSize_Def( struct CITree* self_ )
+{
+	struct CCBinaryTree* self = CCast(self_);
+	return self->max_size;
+}
 
 /************************************************************************/
 /* Overriding 								*/
@@ -385,6 +396,8 @@ const struct CCBinaryTree_VTable* CCBinaryTree_VTable_Key( )
 			.CITree_VTable.peek = CITree_Peek_Def,
 			.CITree_VTable.get = CITree_Get_Def,
 			.CITree_VTable.delete = CITree_Delete_Def,
+			.CITree_VTable.size = CITree_Size_Def,
+			.CITree_VTable.max_size = CITree_MaxSize_Def,
 			.CITree_VTable.split = NULL,
 			.CITree_VTable.merge = NULL
 		};
@@ -457,6 +470,9 @@ CError CCBinaryTree
 	/* Current index is the root (0). 
 	 */
 	self->index = CCBINARY_TREE_ROOT;
+	self->element_size = element_size;
+	self->key_size = key_size;
+	self->max_size = max_size;
 
 	/* Done.
 	 */

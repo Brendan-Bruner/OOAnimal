@@ -116,12 +116,12 @@ static void CCArrayList_SetMaskBit( struct CCArrayList* self, size_t index, unsi
 	if( val == 0 ) {
 		/* Set the bit to zero.
 		 */
-		self->_.list_mask[mask_index] &= ((0xFE << mask_bit) | (0x7F >> (8 - mask_bit)));
+		self->_.list_mask[mask_index] &= ((0xFEu << mask_bit) | (0x7Fu >> (7 - mask_bit)));
 	}
 	else if( val == 1 ) {
 		/* Set the bit to one.
 		 */
-		self->_.list_mask[mask_index] |= (0x01 << mask_bit);
+		self->_.list_mask[mask_index] |= (0x01u << mask_bit);
 	}
 }
 
