@@ -19,6 +19,9 @@
 
 #include <unit.h>
 #include <chip.h>
+#include <CCDebugPrint.h>
+#include <FreeRTOS.h>
+#include <task.h>
 
 extern TEST_SUITE(destructor_suite);
 extern TEST_SUITE(virtual_suite);
@@ -37,14 +40,17 @@ int main( int argc, char** argv )
 {
 	(void) argc; (void) argv;
 #endif
-	RUN_TEST_SUITE(destructor_suite);
-	RUN_TEST_SUITE(virtual_suite);
-	RUN_TEST_SUITE(interface_suite);
-	RUN_TEST_SUITE(array_queue);
-	RUN_TEST_SUITE(array_list);
-	RUN_TEST_SUITE(array_list_iterator);
-	RUN_TEST_SUITE(binary_tree);
-	PRINT_DIAG( );
+//	RUN_TEST_SUITE(destructor_suite);
+//	RUN_TEST_SUITE(virtual_suite);
+//	RUN_TEST_SUITE(interface_suite);
+//	RUN_TEST_SUITE(array_queue);
+//	RUN_TEST_SUITE(array_list);
+//	RUN_TEST_SUITE(array_list_iterator);
+//	RUN_TEST_SUITE(binary_tree);
+//	PRINT_DIAG( );
+
+//	xTaskCreate(mainTask, "main task", 128, NULL, tskIDLE_PRIORITY+1, NULL);
+//	vTaskStartScheduler( );
 
 #if defined(__USE_LPCOPEN)
 	for(;;);

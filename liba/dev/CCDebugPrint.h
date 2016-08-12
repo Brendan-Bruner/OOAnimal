@@ -47,8 +47,8 @@ struct CCDebugPrint
 	/* of a C class struct. */
 	struct CObject cObject;
 
-	/* Implementing the CIList interface. */
-	struct CIList cIPrint;
+	/* Implementing the CIPrint interface. */
+	struct CIPrint cIPrint;
 
 	/* Private data.
 	 */
@@ -64,10 +64,33 @@ struct CCDebugPrint_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable  cObject_VTable;
 
 	/* Space for a copy of the implemented interface's virtual table */
-	struct CIPrint_VTable CIPrint_VTable;
+	struct CIPrint_VTable cIPrint_VTable;
 };
+
+/**
+ * @memberof CCDebugPrint
+ * @ingroup VTable
+ * @details
+ *	Get vtable reference for CCDebugPrint class.
+ */
+const struct CCDebugPrint_VTable* CCDebugPrint_Get_Key( );
+
+
+/************************************************************************/
+/* Constructor															*/
+/************************************************************************/
+/**
+ * @memberof CCDebugPrint
+ * @constructor
+ * @details
+ * 		Get the instance of the CCDebugPrint object.
+ * @returns
+ * 		Always returns the instance of the CCDebugPrint object.
+ */
+struct CCDebugPrint* CCDebugPrint_GetInstance( );
+
 
 #endif /* DEV_CCDEBUG_PRINT */
