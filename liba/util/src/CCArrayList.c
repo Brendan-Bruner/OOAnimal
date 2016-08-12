@@ -116,12 +116,12 @@ static void CCArrayList_SetMaskBit( struct CCArrayList* self, size_t index, unsi
 	if( val == 0 ) {
 		/* Set the bit to zero.
 		 */
-		self->_.list_mask[mask_index] &= ((0xFE << mask_bit) | (0x7F >> (8 - mask_bit)));
+		self->_.list_mask[mask_index] &= ((0xFEu << mask_bit) | (0x7Fu >> (7 - mask_bit)));
 	}
 	else if( val == 1 ) {
 		/* Set the bit to one.
 		 */
-		self->_.list_mask[mask_index] |= (0x01 << mask_bit);
+		self->_.list_mask[mask_index] |= (0x01u << mask_bit);
 	}
 }
 
@@ -325,8 +325,10 @@ static void CDestructor( void* self_ )
 {
 	struct CCArrayList* self = CCast(self_);
 
-	CFree(self->_.list_base);
-	CFree(self->_.list_mask);
+	if( !self->_.is_static ) {	
+		CFree(self->_.list_base);
+		CFree(self->_.list_mask);
+	}
 
 	/* Call super's destructor
 	 */
@@ -408,6 +410,57 @@ CError CCArrayList( struct CCArrayList* self, size_t element_size, size_t max_si
 	/* Clear the list mask to zero. 
 	 */
 	CCArrayList_Clear(self);
+
+	/* List was allocated within the scope of this structure.
+	 */
+	self->_.is_static = 0;
+	
+	return COBJ_OK;
+}
+
+
+CError CCArrayListStatic
+(
+	struct CCArrayList* self,
+	size_t element_size,
+	size_t max_size,
+	void* memory
+)
+{
+	/* First thing in constructor must be to call super's constructor. 
+	 */
+	CObject(&self->cObject);
+
+	/* Second thing in constructor must be to map vtable. 
+	 */
+	CVTable(self, CCArrayList_VTable_Key( ));
+
+	/* Third thing in constructor must be calling interface's constructor. 
+	 */
+	CInterface(self, &self->cIList, &CCArrayList_VTable_Key( )->CIList_VTable);
+
+	/* Assign the base of the list to provided memory block
+	 */
+	self->_.list_base = memory;
+
+	/* Assign list mask to latter part of provided memory block.
+	 */
+	self->_.list_mask = ((unsigned char*) memory) + (element_size * max_size);
+
+	/* All allocations were successful, set up the struct's member variables.
+	 */
+	self->_.max_size = max_size;
+	self->_.current_size = 0;
+	self->_.element_size = element_size;
+	self->_.add_index = 0;
+
+	/* Clear the list mask to zero. 
+	 */
+	CCArrayList_Clear(self);
+
+	/* List was allocated outside this structure's scope.
+	 */
+	self->_.is_static = 1;
 	
 	return COBJ_OK;
 }

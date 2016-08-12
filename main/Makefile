@@ -1,6 +1,7 @@
 CC := gcc
 AR := ar
-CFLAGS := -Wall -Wextra -pedantic -g
+
+CFLAGS := -Wall -Wextra -pedantic -g -Os
 
 # Build directory for executable
 BUILDDIR := debug
@@ -24,6 +25,11 @@ STATIC_LIB_NAME := ctests cutil cclass
 STATIC_LIBS := $(addprefix -l,$(STATIC_LIB_NAME));
 STATIC_LIB_BUILD := $(addsuffix /debug,$(addprefix -L,$(STATIC_LIB_SRC)))
 
+<<<<<<< HEAD
+=======
+crun: clean all run
+
+>>>>>>> data_structures
 all : MKDIR $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(EXEC) $(STATIC_LIB_BUILD) $(STATIC_LIBS)
 
