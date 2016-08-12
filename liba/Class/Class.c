@@ -55,7 +55,7 @@ void CInterface( void* self, void* iface, const void* vtable )
 
 	/* Get the offset into the class' vtable for the location of this interface's */
 	/* methods. */
-	((struct CClass*) iface)->C_VTABLE_OFFSET = ((char*) vtable) - ((char*) ((struct CObject*) self)->C_VTABLE);
+	((struct CClass*) iface)->C_VTABLE_OFFSET = (size_t) (((char*) vtable) - ((char*) ((struct CObject*) self)->C_VTABLE));
 }
 
 void CVTable( void* self, const void* vtable)

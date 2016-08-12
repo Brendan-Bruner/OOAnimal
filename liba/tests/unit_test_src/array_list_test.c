@@ -24,10 +24,10 @@
 #define UNITY_LENGTH 1
 #define DEFAULT_ELEMENT_SIZE sizeof(int)
 
-struct CCArrayList* list;
-struct CCArrayList static_list;
-struct CCArrayList dynamic_list;
-char static_list_memory[CCARRAY_LIST_SIZE(DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH)];
+static struct CCArrayList* list;
+static struct CCArrayList static_list;
+static struct CCArrayList dynamic_list;
+static char static_list_memory[CCARRAY_LIST_SIZE(DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH)];
 
 TEST_SETUP( )
 {
@@ -146,7 +146,7 @@ TEST(add)
 	 */
 	for( i = 3; i < DEFAULT_LENGTH; ++i ) {
 		++test_var;
-		CIList_AddAt(&list->cIList, &test_var, i);
+		CIList_AddAt(&list->cIList, &test_var, (size_t) i);
 	}
 
 	/* Now test a new index can't be found.
@@ -186,13 +186,13 @@ TEST(clear)
 	/* Assert each element can be removed correctly.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list->cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, (size_t) i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
-		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - (size_t) i - 1,
 		       "Size did not decrease at iteration %d", i);
 	}
 	
@@ -219,7 +219,7 @@ TEST(normal_operation)
 	/* Assert each element was correctly added.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Get(&list->cIList, &test_var, i);
+		err = CIList_Get(&list->cIList, &test_var, (size_t) i);
 
 		/* Assert no error and correct element was got.
 		 */
@@ -231,20 +231,20 @@ TEST(normal_operation)
 	/* Assert each element can be removed.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list->cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, (size_t) i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at iteration %d", i);
-		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1, "Size did not decrease at iteration %d", i);
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - (size_t) i - 1, "Size did not decrease at iteration %d", i);
 	}
 
 	/* Assert each element was correctly removed and we cannot
 	 * try and get it again.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Get(&list->cIList, &test_var, i);
+		err = CIList_Get(&list->cIList, &test_var, (size_t) i);
 
 		/* Assert no error and correct element was got.
 		 */
@@ -266,13 +266,13 @@ TEST(normal_operation)
 	/* Assert each element can be removed as before.
 	 */
 	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
-		err = CIList_Remove(&list->cIList, &test_var, i);
+		err = CIList_Remove(&list->cIList, &test_var, (size_t) i);
 
 		/* Assert no error and correct element was got.
 		 */
 		ASSERT(err == CILIST_OK, "Failed to remove at during second iteration %d", i);
 		ASSERT(test_var == i, "Failed to remove correctly at second iteration %d", i);
-		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - i - 1,
+		ASSERT(CIList_Size(&list->cIList) == (size_t) DEFAULT_LENGTH - (size_t) i - 1,
 		       "Size did not decrease at second iteration %d", i);
 	}
 	

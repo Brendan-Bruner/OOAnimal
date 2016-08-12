@@ -18,6 +18,7 @@
  */
 
 #include <unit.h>
+#include <chip.h>
 
 extern TEST_SUITE(destructor_suite);
 extern TEST_SUITE(virtual_suite);
@@ -27,9 +28,15 @@ extern TEST_SUITE(array_list);
 extern TEST_SUITE(array_list_iterator);
 extern TEST_SUITE(binary_tree);
 
+#if defined (__USE_LPCOPEN)
+int main( void )
+{
+	SystemCoreClockUpdate();
+#else
 int main( int argc, char** argv )
 {
 	(void) argc; (void) argv;
+#endif
 	RUN_TEST_SUITE(destructor_suite);
 	RUN_TEST_SUITE(virtual_suite);
 	RUN_TEST_SUITE(interface_suite);
@@ -38,5 +45,10 @@ int main( int argc, char** argv )
 	RUN_TEST_SUITE(array_list_iterator);
 	RUN_TEST_SUITE(binary_tree);
 	PRINT_DIAG( );
+
+#if defined(__USE_LPCOPEN)
+	for(;;);
+#endif
+
 	return 0;
 }

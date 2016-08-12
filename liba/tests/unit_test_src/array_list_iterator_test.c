@@ -33,8 +33,8 @@
 	} while( 0 )
 
 
-struct CCArrayList list;
-struct CCListIterator iterator;
+static struct CCArrayList list;
+static struct CCListIterator iterator;
 
 TEST_SETUP( )
 {
