@@ -26,6 +26,7 @@
 #include <CIPrint.h>
 #include <CError.h>
 #include <FreeRTOS.h>
+#include <semphr.h>
 #include <task.h>
 
 
@@ -56,7 +57,7 @@
 struct CCTerminal
 {
 	/* Super class must always be first member
-	/* of a C class struct. 
+	 * of a C class struct.
 	 */
 	struct CObject cObject;
 
@@ -64,6 +65,7 @@ struct CCTerminal
 	 */
 	struct CIPrint* printer;
 	xTaskHandle task_handle;
+	xSemaphoreHandle task_control;
 };
 
 /**

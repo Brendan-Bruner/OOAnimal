@@ -22,6 +22,7 @@
 #include <CCDebugPrint.h>
 #include <FreeRTOS.h>
 #include <task.h>
+#include <CCTerminal.h>
 
 extern TEST_SUITE(destructor_suite);
 extern TEST_SUITE(virtual_suite);
@@ -30,6 +31,18 @@ extern TEST_SUITE(array_queue);
 extern TEST_SUITE(array_list);
 extern TEST_SUITE(array_list_iterator);
 extern TEST_SUITE(binary_tree);
+
+struct CCTerminal terminal;
+static void main_task( void* term_ )
+{
+	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
+	CCTerminal(&terminal, printer);
+	CCTerminal_Start(&terminal);
+
+	for( ;; ) {
+		vTaskDelay(1000);
+	}
+}
 
 #if defined (__USE_LPCOPEN)
 int main( void )
@@ -48,9 +61,9 @@ int main( int argc, char** argv )
 //	RUN_TEST_SUITE(array_list_iterator);
 //	RUN_TEST_SUITE(binary_tree);
 //	PRINT_DIAG( );
+	xTaskCreate(main_task, "main task", 128, NULL, tskIDLE_PRIORITY+2, NULL);
 
-//	xTaskCreate(mainTask, "main task", 128, NULL, tskIDLE_PRIORITY+1, NULL);
-//	vTaskStartScheduler( );
+	vTaskStartScheduler( );
 
 #if defined(__USE_LPCOPEN)
 	for(;;);
