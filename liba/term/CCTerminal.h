@@ -25,9 +25,7 @@
 
 #include <CIPrint.h>
 #include <CError.h>
-#include <FreeRTOS.h>
-#include <semphr.h>
-#include <task.h>
+#include <rtos.h>
 
 
 /************************************************************************/
@@ -64,8 +62,8 @@ struct CCTerminal
 	/* Private data.
 	 */
 	struct CIPrint* printer;
-	xTaskHandle task_handle;
-	xSemaphoreHandle task_control;
+	CTask task_handle;
+	CSemaphore task_control;
 };
 
 /**

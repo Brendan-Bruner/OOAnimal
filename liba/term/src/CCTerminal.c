@@ -32,7 +32,7 @@
 void CCTerminal_Start( struct CCTerminal* self )
 {
 	CAssertObject(self);
-	xSemaphoreGive(self->task_control);
+	CSemaphore_Give(self->task_control);
 }
 
 static void CDestructor( void* self_ )
@@ -41,8 +41,8 @@ static void CDestructor( void* self_ )
 
 	/* Destroy running task and controller semaphore.
 	 */
-	vTaskDelete(self->task_handle);
-	vSemaphoreDelete(self->task_control);
+	CTaskDelete(self->task_handle);
+	CSemaphoreDelete(self->task_control);
 
 	/* Call super's destructor.
 	 */
@@ -59,7 +59,7 @@ void CCTerminal_Task_Def( void* self_ )
 	struct CCTerminal* self = CCast(self_);
 
 	for( ;; ) {
-		xQueuePeek((xQueueHandle) self->task_control, NULL, portMAX_DELAY);
+		CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
 		char input = CIPrint_GetChar(self->printer);
 		CIPrint_StringF(self->printer, "%c", input);
 	}
@@ -110,22 +110,22 @@ CError CCTerminal( struct CCTerminal* self, struct CIPrint* printer )
 
 	/* Create controller semaphore.
 	 */
-	self->task_control = xSemaphoreCreateCounting(CCTERMINAL_SEMAPHORE_SIZE, CCTERMINAL_SEMAPHORE_INIT_COUNT);
+	self->task_control = CSemaphoreCreate(CCTERMINAL_SEMAPHORE_SIZE, CCTERMINAL_SEMAPHORE_INIT_COUNT);
 	if( self->task_control == NULL ) {
 		return COBJ_ALLOC_FAIL;
 	}
-	xSemaphoreTake(self->task_control, POLL);
+	CSemaphore_Take(self->task_control, POLL);
 
 	/* Create the terminal's task.
 	 */
-	portBASE_TYPE status = xTaskCreate(	CCTerminal_Task_Def,
-										CCTERMINAL_TASK_NAME,
-										CCTERMINAL_TASK_STACK,
-										self,
-										CCTERMINAL_TASK_PRIO,
-										&self->task_handle	);
-	if( status != pdPASS ) {
-		vSemaphoreDelete(self->task_control);
+	COSBase status = CTaskCreate(	CCTerminal_Task_Def,
+									CCTERMINAL_TASK_NAME,
+									CCTERMINAL_TASK_STACK,
+									self,
+									CCTERMINAL_TASK_PRIO,
+									&self->task_handle	);
+	if( status != CTASK_CREATED) {
+		CSemaphoreDelete(self->task_control);
 		return COBJ_ALLOC_FAIL;
 	}
 
