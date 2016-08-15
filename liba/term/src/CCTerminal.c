@@ -83,6 +83,23 @@ static const char* CCTerminal_ExtractName(struct CCTerminal* self, const char* c
 	return command_string;
 }
 
+static void CCTerminal_NoProgramMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length )
+{
+	CAssertObject(self);
+	CIPrint_StringF(self->printer, "%.*s: %s\n", prog_name_length, prog_name, CCTERMINAL_UNKOWN_PROGRAM_MSG);
+}
+
+static void CCTerminal_NoMemoryMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length )
+{
+	CAssertObject(self);
+	CIPrint_StringF(self->printer, "%.*s: %s\n", prog_name_length, prog_name, CCTERMINAL_NO_MEMORY_MSG);
+}
+
+static void CCTerminal_ProgramErrMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length, CCProgramError err, const char* msg )
+{
+	CAssertObject(self);
+	CIPrint_StringF(self->printer, "%.*s: error (%d): %s\n", prog_name_length, prog_name, (int) err, msg);
+}
 
 /************************************************************************/
 /* Task																	*/
@@ -109,14 +126,40 @@ void CCTerminal_Task_Def( void* self_ )
 			prog_args = command_string + prog_name_length;
 			prog_args_length = input_length - prog_name_length - 1;
 
+			/* Try to find the program so it can be run.
+			 */
 			struct CCProgram* program = CCProgramList_Get(self->list, prog_name, prog_name_length);
 			if( program != NULL ) {
 				program = CCProgram_Clone(program);
 				if( program != NULL ) {
-					CCProgram_Run(program, prog_args, prog_args_length);
+					CCProgramError err = CCProgram_Run(program, prog_args, prog_args_length);
 					CDestroy(program);
+
+					if( err == CCPROGRAM_HARD_ERR) {
+						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_HARD_ERROR_MSG);
+					}
+					else if( err == CCPROGRAM_INV_SYNTAX ) {
+						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_SYNTAX_ERROR_MSG);
+						CCProgram_Help(program);
+					}
+					else if( err == CCPROGRAM_INV_ARGS ) {
+						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_ARGS_ERROR_MSG);
+						CCProgram_Help(program);
+					}
+				}
+				else {
+					/* Not enough memory to clone the program.
+					 */
+					CCTerminal_NoMemoryMessage(self, prog_name, prog_name_length);
 				}
 			}
+			else {
+				/* No such program exists.
+				 */
+				CCTerminal_NoProgramMessage(self, prog_name, prog_name_length);
+			}
+		}
+		else {
 			CIPrint_String(self->printer, "\n");
 		}
 	}

@@ -33,6 +33,14 @@
  */
 #define CCTERMINAL_MAX_INPUT_LENGTH	64
 
+/* Error messages printed to terminal.
+ */
+#define CCTERMINAL_UNKOWN_PROGRAM_MSG	"command not found"
+#define CCTERMINAL_NO_MEMORY_MSG		"memory low, try again later"
+#define CCTERMINAL_HARD_ERROR_MSG		"unexpected termination of program\nassociate object failure"
+#define CCTERMINAL_SYNTAX_ERROR_MSG		"unkown syntax"
+#define CCTERMINAL_ARGS_ERROR_MSG		"invalid arguments"
+
 /* Task parameters.
  */
 #define CCTERMINAL_TASK_NAME		((const signed char*) "terminal")
@@ -54,6 +62,7 @@
 
 /* Name of programs.
  */
+#define CCPROGRAM_LIST_NAME	"help"
 #define CCPING_PROGRAM_NAME "ping"
 
 #endif /* TERM_DEFINES */

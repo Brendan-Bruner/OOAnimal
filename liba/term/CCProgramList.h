@@ -32,17 +32,22 @@
 /**
  * @struct CCProgramList
  * @ingroup Programs
+ * @extends CCProgram
  * @details
  * 		Provides a list like interface for keeping track of programs. List
  * 		items are weakly aggregated and therefore are not destroyed when
  * 		this object is destroyed.
+ *
+ * 		In addition, this class provides a composite container for programs.
+ * 		Calling its run methods will invoke the help method of all aggregate
+ * 		programs.
  */
 struct CCProgramList
 {
 	/* Super class must always be first member
 	 * of a C class struct.
 	 */
-	struct CObject cObject;
+	struct CCProgram cCProgram;
 
 	/* Private data.
 	 */
@@ -59,7 +64,7 @@ struct CCProgramList_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CCProgram_VTable CCProgram_VTable;
 };
 
 /**
@@ -78,7 +83,7 @@ const struct CCProgramList_VTable* CCProgramList_VTable_Key( );
  * @memberof CCProgramList
  * @constructor
  */
-CError CCProgramList( struct CCProgramList* self );
+CError CCProgramList( struct CCProgramList* self, struct CIPrint* printer );
 
 
 /************************************************************************/

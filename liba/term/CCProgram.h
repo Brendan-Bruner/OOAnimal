@@ -38,12 +38,15 @@
  * 		No error running the program.
  * @var CCPROGRAM_INV_ARGS
  * 		Invalid commands/arguments given to the program.
+ * @var CCPROGRAM_HARD_ERR
+ * 		Error in associated objects occurred.
  */
 typedef enum
 {
 	CCPROGRAM_OK = 0,
 	CCPROGRAM_INV_ARGS = 1,
-	CCPROGRAM_INV_SYNTAX = 2
+	CCPROGRAM_INV_SYNTAX = 2,
+	CCPROGRAM_HARD_ERR = 3
 } CCProgramError;
 
 /************************************************************************/

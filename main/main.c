@@ -41,7 +41,7 @@ static void main_task( void* term_ )
 {
 	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
 	CCPing(&ping, printer);
-	CCProgramList(&prog_list);
+	CCProgramList(&prog_list, printer);
 	CCProgramList_Add(&prog_list, &ping.cCProgram);
 	CCTerminal(&terminal, printer, "debug$ ", &prog_list);
 	CCTerminal_Start(&terminal);
