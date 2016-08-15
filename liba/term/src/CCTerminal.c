@@ -22,6 +22,8 @@
 
 #include <CCTerminal.h>
 #include <term_defines.h>
+#include <CCPing.h>
+#include <string.h>
 
 #define CCTERMINAL_SEMAPHORE_SIZE 1
 #define CCTERMINAL_SEMAPHORE_INIT_COUNT 0
@@ -29,6 +31,17 @@
 /************************************************************************/
 /* Methods																*/
 /************************************************************************/
+static size_t CCTerminal_StringLength( const char* string, size_t max_length )
+{
+	size_t i;
+	for( i = 0; i < max_length; ++i ) {
+		if( string[i] == '\0' ) {
+			break;
+		}
+	}
+	return i;
+}
+
 void CCTerminal_Start( struct CCTerminal* self )
 {
 	CAssertObject(self);
@@ -50,18 +63,43 @@ static void CDestructor( void* self_ )
 	vtable->CObject_VTable_Ref->CDestructor(self);
 }
 
+static size_t CCTerminal_BlockOnInput(struct CCTerminal* self, char* command_string, size_t max_length)
+{
+	CAssertObject(self);
 
+	size_t length = 0;
+	char input = '\0';
+
+	while( input != '\n' ) {
+		input = CIPrint_GetChar(self->printer);
+		if( length < max_length ) {
+			command_string[length++] = input;
+		}
+	}
+	return length;
+}
 /************************************************************************/
 /* Task																	*/
 /************************************************************************/
 void CCTerminal_Task_Def( void* self_ )
 {
 	struct CCTerminal* self = CCast(self_);
+	char command_string[CCTERMINAL_MAX_INPUT_LENGTH];
+	size_t input_length;
 
 	for( ;; ) {
 		CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
-		char input = CIPrint_GetChar(self->printer);
-		CIPrint_StringF(self->printer, "%c", input);
+		CIPrint_String(self->printer, self->prompt);
+
+		input_length = CCTerminal_BlockOnInput(self, command_string, CCTERMINAL_MAX_INPUT_LENGTH);
+		if( command_string[0] != '\n' ) {
+//			if( strncmp("ping", command_string, 4) == 0 ) {
+//				CCPing(&ping, self->printer);
+//				CCProgram_Run(&ping.cCProgram, command_string+4, input_length-5);
+//				CDestroy(&ping);
+//			}
+			CIPrint_StringF(self->printer, "%.*s", input_length, command_string);
+		}
 	}
 }
 
@@ -94,7 +132,11 @@ const struct CCTerminal_VTable* CCTerminal_VTable_Key( )
 /************************************************************************/
 /* Constructor															*/
 /************************************************************************/
-CError CCTerminal( struct CCTerminal* self, struct CIPrint* printer )
+CError CCTerminal(
+					struct CCTerminal* self,
+					struct CIPrint* printer,
+					const char* prompt
+				  )
 {
 	/* First thing in constructor must be to call super's constructor. 
 	 */
@@ -107,6 +149,12 @@ CError CCTerminal( struct CCTerminal* self, struct CIPrint* printer )
 	/* Aggregate printer.
 	 */
 	self->printer = printer;
+
+	/* Command prompt.
+	 */
+	size_t prompt_length = CCTerminal_StringLength(prompt, CCTERMINAL_PROMPT_LENGTH);
+	strncpy(self->prompt, prompt, prompt_length);
+	self->prompt[prompt_length] = '\0';
 
 	/* Create controller semaphore.
 	 */

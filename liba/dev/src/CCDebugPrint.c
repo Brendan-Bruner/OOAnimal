@@ -47,10 +47,9 @@ static void CCDebugPrint_StringF_Def( struct CIPrint* self_, const char* string,
 static char CCDebugPrint_GetC_Def( struct CIPrint* self_ )
 {
 	struct CCDebugPrint* self = CCast(self_);
+	(void) self;
 
-	xSemaphoreTake(self->io_mutex, portMAX_DELAY);
 	char input = (char) getchar( );
-	xSemaphoreGive(self->io_mutex);
 	return input;
 }
 

@@ -36,7 +36,7 @@ struct CCTerminal terminal;
 static void main_task( void* term_ )
 {
 	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
-	CCTerminal(&terminal, printer);
+	CCTerminal(&terminal, printer, "debug$ ");
 	CCTerminal_Start(&terminal);
 
 	for( ;; ) {

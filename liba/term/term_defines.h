@@ -22,8 +22,29 @@
 #ifndef TERM_DEFINES
 #define TERM_DEFINES
 
-#define CCTERMINAL_TASK_NAME	((const signed char*) "terminal")
-#define CCTERMINAL_TASK_STACK	128
-#define CCTERMINAL_TASK_PRIO	(tskIDLE_PRIORITY+1)
+/****************************************************************************/
+/* CCTerminal Defines														*/
+/****************************************************************************/
+/* Max length of command prompt string.
+ */
+#define CCTERMINAL_PROMPT_LENGTH	16
+
+/* Max length of input string to terminal.
+ */
+#define CCTERMINAL_MAX_INPUT_LENGTH	64
+
+/* Task parameters.
+ */
+#define CCTERMINAL_TASK_NAME		((const signed char*) "terminal")
+#define CCTERMINAL_TASK_STACK		(128 + CCTERMINAL_MAX_INPUT_LENGTH)
+#define CCTERMINAL_TASK_PRIO		(tskIDLE_PRIORITY+1)
+
+
+/****************************************************************************/
+/* CCProgram Defines														*/
+/****************************************************************************/
+/* Maximum arguments that can be given to a program.
+ */
+#define CCPROGRAM_MAX_ARG_COUNT 8
 
 #endif /* TERM_DEFINES */

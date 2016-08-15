@@ -25,6 +25,7 @@
 
 #include <CIPrint.h>
 #include <CError.h>
+#include <term_defines.h>
 #include <rtos.h>
 
 
@@ -61,6 +62,7 @@ struct CCTerminal
 
 	/* Private data.
 	 */
+	char prompt[CCTERMINAL_PROMPT_LENGTH+1];
 	struct CIPrint* printer;
 	CTask task_handle;
 	CSemaphore task_control;
@@ -107,10 +109,18 @@ const struct CCTerminal_VTable* CCTerminal_Get_Key( );
  * @param printer
  * 		The object to for printing to a console and taking
  * 		input from a console.
+ * @param prompt
+ * 		A NULL terminated string which is copied. This is the
+ * 		command prompt displayed. A maximum of CCTERMINAL_PROMPT_LENGTH
+ * 		characters will be copied.
  * @returns
  * 		Error code.
  */
-CError CCTerminal( struct CCTerminal* self, struct CIPrint* printer );
+CError CCTerminal(
+					struct CCTerminal* self,
+					struct CIPrint* printer,
+					const char* prompt
+				  );
 
 
 /************************************************************************/
