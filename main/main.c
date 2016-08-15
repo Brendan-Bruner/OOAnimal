@@ -23,6 +23,8 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <CCTerminal.h>
+#include <CCProgramList.h>
+#include <CCPing.h>
 
 extern TEST_SUITE(destructor_suite);
 extern TEST_SUITE(virtual_suite);
@@ -32,11 +34,16 @@ extern TEST_SUITE(array_list);
 extern TEST_SUITE(array_list_iterator);
 extern TEST_SUITE(binary_tree);
 
-struct CCTerminal terminal;
+static struct CCTerminal terminal;
+static struct CCPing ping;
+static struct CCProgramList prog_list;
 static void main_task( void* term_ )
 {
 	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
-	CCTerminal(&terminal, printer, "debug$ ");
+	CCPing(&ping, printer);
+	CCProgramList(&prog_list);
+	CCProgramList_Add(&prog_list, &ping.cCProgram);
+	CCTerminal(&terminal, printer, "debug$ ", &prog_list);
 	CCTerminal_Start(&terminal);
 
 	for( ;; ) {

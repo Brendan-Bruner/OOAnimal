@@ -69,7 +69,7 @@ const struct CCPing_VTable* CCPing_VTable_Key( )
 	static struct CCPing_VTable vtable;
 
 	/* Copy of super's vtable. */
-	vtable.CCProgram_VTable = *CCProgram_Get_Key( );
+	vtable.CCProgram_VTable = *CCProgram_VTable_Key( );
 
 	/* Override all super class methods and methods of
 	 * interfaces implemented by super classes in the copy. 
@@ -91,7 +91,7 @@ CError CCPing( struct CCPing* self, struct CIPrint* printer )
 {
 	/* First thing in constructor must be to call super's constructor. 
 	 */
-	CError err = CCProgram(&self->cCProgram, printer);
+	CError err = CCProgram(&self->cCProgram, printer, CCPING_PROGRAM_NAME);
 	if( err != COBJ_OK ) {
 		return err;
 	}

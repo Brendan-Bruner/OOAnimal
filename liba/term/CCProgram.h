@@ -85,6 +85,7 @@ struct CCProgram
 	const char* config_type[CCPROGRAM_MAX_ARG_COUNT];
 	const char* config_param[CCPROGRAM_MAX_ARG_COUNT];
 	struct CIPrint* printer;
+	char name[CCPROGRAM_MAX_NAME_LENGTH+1];
 };
 
 /**
@@ -138,7 +139,7 @@ struct CCProgram_VTable
  * @details
  *	Get vtable reference for CCProgram class.
  */
-const struct CCProgram_VTable* CCProgram_Get_Key( );
+const struct CCProgram_VTable* CCProgram_VTable_Key( );
 
 
 /************************************************************************/
@@ -151,10 +152,12 @@ const struct CCProgram_VTable* CCProgram_Get_Key( );
  * 		The program to construct.
  * @var printer
  * 		The printer to use for sending messages to console.
+ * @var name
+ * 		The name of the command. This is taken by copy.
  * @return
  * 		Error code.
  */
-CError CCProgram( struct CCProgram* self, struct CIPrint* printer );
+CError CCProgram( struct CCProgram* self, struct CIPrint* printer, const char* name );
 
 
 /************************************************************************/
@@ -193,6 +196,15 @@ struct CCProgram* CCProgram_Clone( struct CCProgram* self );
  * 		Error code
  */
 CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_t length );
+
+/**
+ * @memberof CCProgram
+ * @details
+ * 		Get the name of the program.
+ * @returns
+ * 		Null terminated string which is the name of the program.
+ */
+const char* CCProgram_GetName( struct CCProgram* self );
 
 
 #endif /* TERM_CCPROGRAM */

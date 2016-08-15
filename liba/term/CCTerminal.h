@@ -27,6 +27,7 @@
 #include <CError.h>
 #include <term_defines.h>
 #include <rtos.h>
+#include <CCProgramList.h>
 
 
 /************************************************************************/
@@ -66,6 +67,7 @@ struct CCTerminal
 	struct CIPrint* printer;
 	CTask task_handle;
 	CSemaphore task_control;
+	struct CCProgramList* list;
 };
 
 /**
@@ -113,13 +115,16 @@ const struct CCTerminal_VTable* CCTerminal_Get_Key( );
  * 		A NULL terminated string which is copied. This is the
  * 		command prompt displayed. A maximum of CCTERMINAL_PROMPT_LENGTH
  * 		characters will be copied.
+ * @param list
+ * 		The list which will be used to find programs.
  * @returns
  * 		Error code.
  */
 CError CCTerminal(
 					struct CCTerminal* self,
 					struct CIPrint* printer,
-					const char* prompt
+					const char* prompt,
+					struct CCProgramList* list
 				  );
 
 

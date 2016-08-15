@@ -21,6 +21,7 @@
  */
 
 #include <CCProgram.h>
+#include <clib.h>
 
 /************************************************************************/
 /* Enum																	*/
@@ -53,6 +54,11 @@ typedef enum
 /************************************************************************/
 /* Methods																*/
 /************************************************************************/
+const char* CCProgram_GetName( struct CCProgram* self )
+{
+	CAssertObject(self);
+	return self->name;
+}
 void CCProgram_Help( struct CCProgram* self )
 {
 	CAssertObject(self);
@@ -159,7 +165,7 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 /************************************************************************/
 /* vtable key															*/
 /************************************************************************/
-const struct CCProgram_VTable* CCProgram_Get_Key( )
+const struct CCProgram_VTable* CCProgram_VTable_Key( )
 {
 	static struct CCProgram_VTable vtable;
 
@@ -175,7 +181,7 @@ const struct CCProgram_VTable* CCProgram_Get_Key( )
 /************************************************************************/
 /* Constructor															*/
 /************************************************************************/
-CError CCProgram( struct CCProgram* self, struct CIPrint* printer )
+CError CCProgram( struct CCProgram* self, struct CIPrint* printer, const char* name )
 {
 	/* First thing in constructor must be to call super's constructor. 
 	 */
@@ -183,12 +189,18 @@ CError CCProgram( struct CCProgram* self, struct CIPrint* printer )
 
 	/* Second thing in constructor must be to map vtable. 
 	 */
-	CVTable(self, CCProgram_Get_Key( ));
+	CVTable(self, CCProgram_VTable_Key( ));
 
 	if( printer == NULL ) {
 		return COBJ_INV_PARAM;
 	}
 	self->printer = printer;
+
+	if( name == NULL ) {
+		return COBJ_INV_PARAM;
+	}
+	cstrncpy(self->name, name, CCPROGRAM_MAX_NAME_LENGTH);
+	self->name[CCPROGRAM_MAX_NAME_LENGTH] = '\0';
 
 	return COBJ_OK;
 }

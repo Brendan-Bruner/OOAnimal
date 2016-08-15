@@ -22,7 +22,7 @@
 
 #include <CCTerminal.h>
 #include <term_defines.h>
-#include <CCPing.h>
+#include <clib.h>
 #include <string.h>
 
 #define CCTERMINAL_SEMAPHORE_SIZE 1
@@ -31,17 +31,6 @@
 /************************************************************************/
 /* Methods																*/
 /************************************************************************/
-static size_t CCTerminal_StringLength( const char* string, size_t max_length )
-{
-	size_t i;
-	for( i = 0; i < max_length; ++i ) {
-		if( string[i] == '\0' ) {
-			break;
-		}
-	}
-	return i;
-}
-
 void CCTerminal_Start( struct CCTerminal* self )
 {
 	CAssertObject(self);
@@ -78,6 +67,23 @@ static size_t CCTerminal_BlockOnInput(struct CCTerminal* self, char* command_str
 	}
 	return length;
 }
+
+static const char* CCTerminal_ExtractName(struct CCTerminal* self, const char* command_string, size_t* prog_name_length)
+{
+	CAssertObject(self);
+
+	size_t i = 0;
+	while( (command_string[i] >= '0' && command_string[i] <= '9') ||
+			(command_string[i] >= 'a' && command_string[i] <= 'z') ||
+			(command_string[i] >= 'A' && command_string[i] <= 'Z') ) {
+		++i;
+	}
+
+	*prog_name_length = i;
+	return command_string;
+}
+
+
 /************************************************************************/
 /* Task																	*/
 /************************************************************************/
@@ -86,6 +92,10 @@ void CCTerminal_Task_Def( void* self_ )
 	struct CCTerminal* self = CCast(self_);
 	char command_string[CCTERMINAL_MAX_INPUT_LENGTH];
 	size_t input_length;
+	const char* prog_name;
+	size_t prog_name_length;
+	const char* prog_args;
+	size_t prog_args_length;
 
 	for( ;; ) {
 		CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
@@ -93,12 +103,21 @@ void CCTerminal_Task_Def( void* self_ )
 
 		input_length = CCTerminal_BlockOnInput(self, command_string, CCTERMINAL_MAX_INPUT_LENGTH);
 		if( command_string[0] != '\n' ) {
-//			if( strncmp("ping", command_string, 4) == 0 ) {
-//				CCPing(&ping, self->printer);
-//				CCProgram_Run(&ping.cCProgram, command_string+4, input_length-5);
-//				CDestroy(&ping);
-//			}
-			CIPrint_StringF(self->printer, "%.*s", input_length, command_string);
+			/* Extract name of program and arguments.
+			 */
+			prog_name = CCTerminal_ExtractName(self, command_string, &prog_name_length);
+			prog_args = command_string + prog_name_length;
+			prog_args_length = input_length - prog_name_length - 1;
+
+			struct CCProgram* program = CCProgramList_Get(self->list, prog_name, prog_name_length);
+			if( program != NULL ) {
+				program = CCProgram_Clone(program);
+				if( program != NULL ) {
+					CCProgram_Run(program, prog_args, prog_args_length);
+					CDestroy(program);
+				}
+			}
+			CIPrint_String(self->printer, "\n");
 		}
 	}
 }
@@ -135,7 +154,8 @@ const struct CCTerminal_VTable* CCTerminal_VTable_Key( )
 CError CCTerminal(
 					struct CCTerminal* self,
 					struct CIPrint* printer,
-					const char* prompt
+					const char* prompt,
+					struct CCProgramList* list
 				  )
 {
 	/* First thing in constructor must be to call super's constructor. 
@@ -146,13 +166,14 @@ CError CCTerminal(
 	 */
 	CVTable(self, CCTerminal_VTable_Key( ));
 
-	/* Aggregate printer.
+	/* Aggregate printer and program list.
 	 */
 	self->printer = printer;
+	self->list = list;
 
 	/* Command prompt.
 	 */
-	size_t prompt_length = CCTerminal_StringLength(prompt, CCTERMINAL_PROMPT_LENGTH);
+	size_t prompt_length = cstrnlen(prompt, CCTERMINAL_PROMPT_LENGTH);
 	strncpy(self->prompt, prompt, prompt_length);
 	self->prompt[prompt_length] = '\0';
 

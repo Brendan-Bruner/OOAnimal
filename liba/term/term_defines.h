@@ -46,5 +46,14 @@
 /* Maximum arguments that can be given to a program.
  */
 #define CCPROGRAM_MAX_ARG_COUNT 8
+#define CCPROGRAM_MAX_NAME_LENGTH 16
+
+/* Maximum number of programs which can be kept at one time.
+ */
+#define CCPROGRAM_LIST_MAX_PROGRAMS 16
+
+/* Name of programs.
+ */
+#define CCPING_PROGRAM_NAME "ping"
 
 #endif /* TERM_DEFINES */
