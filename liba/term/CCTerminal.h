@@ -41,18 +41,38 @@
  * 		over an aggregate stream and programs which can be dynamically
  * 		run. For example:
  * 		@code
+ *			// This is used to store all programs the terminal can run.
+ * 			static struct CCProgramList program_list;
+ *
+ * 			// These are all the programs the terminal can run.
+ * 			static struct CCPing ping;
+ * 			static struct CCEcho echo;
+ *
+ * 			// This is the terminal and the object used for printing.
+ * 			static struct CCTerminal terminal;
+ *
  * 			void start_debug_terminal( )
  * 			{
- * 				struct CCTerminal terminal;
- * 				struct CCDebugPrinter* printer;
+ * 				struct CIPrint* printer = CCDebugPrinter_GetInstance( )->cIPrint;
  *
- * 				printer = CCDebugPrinter_GetInstance( );
- * 				CCTerminal(&terminal, &printer->cIPrint);
+ *				// Construct the program list and the programs.
+ *				CCProgramList(&program_list, printer);
+ *				CCPing(&ping, printer);
+ *				CCEcho(&echo, printer);
+ *
+ *				// Add the programs to the program list.
+ *				CCProgramList_Add(&program_list, &ping.cCProgram);
+ *				CCProgramList_Add(&program_list, &echo.cCProgram);
+ *
+ *				// Create the terminal
+ * 				CCTerminal(&terminal, &printer->cIPrint, "prompt$ ", &program_list);
+ *
+ * 				// Start the terminal
  * 				CCTerminal_Start(&terminal);
  * 			}
  * 		@endcode
  * 		Since the CCDebugPrinter uses stdio functions getchar() and printf()
- * 		the terminal will run by using printf() and getchar() for output/input.
+ * 		the terminal will be run by using printf() and getchar() for output/input.
  */
 struct CCTerminal
 {
@@ -93,7 +113,7 @@ struct CCTerminal_VTable
  * @details
  *	Get vtable reference for CCTerminal class.
  */
-const struct CCTerminal_VTable* CCTerminal_Get_Key( );
+const struct CCTerminal_VTable* CCTerminal_VTable_Key( );
 
 
 /************************************************************************/
@@ -103,8 +123,8 @@ const struct CCTerminal_VTable* CCTerminal_Get_Key( );
  * @memberof CCTerminal
  * @constructor
  * @details
- * 		Create a terminal object which is initally not active.
- * 		The terminal will start runnign when CCTerminal_Start()
+ * 		Create a terminal object which is initially not active.
+ * 		The terminal will start running when CCTerminal_Start()
  * 		is called on it.
  * @param self
  * 		The terminal to construct.

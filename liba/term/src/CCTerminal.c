@@ -52,6 +52,10 @@ static void CDestructor( void* self_ )
 	vtable->CObject_VTable_Ref->CDestructor(self);
 }
 
+/*
+ * Blocks until a line of input is read from the console. A line is terminated
+ * by a '\n' character.
+ */
 static size_t CCTerminal_BlockOnInput(struct CCTerminal* self, char* command_string, size_t max_length)
 {
 	CAssertObject(self);
@@ -89,12 +93,6 @@ static void CCTerminal_NoProgramMessage( struct CCTerminal* self, const char* pr
 	CIPrint_StringF(self->printer, "%.*s: %s\n", prog_name_length, prog_name, CCTERMINAL_UNKOWN_PROGRAM_MSG);
 }
 
-static void CCTerminal_NoMemoryMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length )
-{
-	CAssertObject(self);
-	CIPrint_StringF(self->printer, "%.*s: %s\n", prog_name_length, prog_name, CCTERMINAL_NO_MEMORY_MSG);
-}
-
 static void CCTerminal_ProgramErrMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length, CCProgramError err, const char* msg )
 {
 	CAssertObject(self);
@@ -111,46 +109,47 @@ void CCTerminal_Task_Def( void* self_ )
 	size_t input_length;
 	const char* prog_name;
 	size_t prog_name_length;
-	const char* prog_args;
+	char* prog_args;
 	size_t prog_args_length;
 
 	for( ;; ) {
 		CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
 		CIPrint_String(self->printer, self->prompt);
 
+		/* Block on input from the user.
+		 */
 		input_length = CCTerminal_BlockOnInput(self, command_string, CCTERMINAL_MAX_INPUT_LENGTH);
+
+		/* If the user only entered a new line (ie, only hit enter with no text)
+		 * then skip the code below which searches for and runs the entered program.
+		 */
 		if( command_string[0] != '\n' ) {
 			/* Extract name of program and arguments.
 			 */
 			prog_name = CCTerminal_ExtractName(self, command_string, &prog_name_length);
 			prog_args = command_string + prog_name_length;
-			prog_args_length = input_length - prog_name_length - 1;
+			prog_args_length = input_length - prog_name_length;
+			prog_args[prog_args_length-1] = '\0';
 
 			/* Try to find the program so it can be run.
 			 */
 			struct CCProgram* program = CCProgramList_Get(self->list, prog_name, prog_name_length);
 			if( program != NULL ) {
-				program = CCProgram_Clone(program);
-				if( program != NULL ) {
-					CCProgramError err = CCProgram_Run(program, prog_args, prog_args_length);
-					CDestroy(program);
+				CCProgramError err = CCProgram_Run(program, prog_args);
 
-					if( err == CCPROGRAM_HARD_ERR) {
-						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_HARD_ERROR_MSG);
-					}
-					else if( err == CCPROGRAM_INV_SYNTAX ) {
-						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_SYNTAX_ERROR_MSG);
-						CCProgram_Help(program);
-					}
-					else if( err == CCPROGRAM_INV_ARGS ) {
-						CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_ARGS_ERROR_MSG);
-						CCProgram_Help(program);
-					}
+				/* Switch on the possible error conditions when running the
+				 * program. Print a message to console if there was an error.
+				 */
+				if( err == CCPROGRAM_HARD_ERR) {
+					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_HARD_ERROR_MSG);
 				}
-				else {
-					/* Not enough memory to clone the program.
-					 */
-					CCTerminal_NoMemoryMessage(self, prog_name, prog_name_length);
+				else if( err == CCPROGRAM_INV_SYNTAX ) {
+					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_SYNTAX_ERROR_MSG);
+					CCProgram_Help(program);
+				}
+				else if( err == CCPROGRAM_INV_ARGS ) {
+					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_ARGS_ERROR_MSG);
+					CCProgram_Help(program);
 				}
 			}
 			else {

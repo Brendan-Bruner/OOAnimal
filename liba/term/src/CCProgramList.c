@@ -57,6 +57,8 @@ struct CCProgram* CCProgramList_Remove( struct CCProgramList* self, const char* 
 		return NULL;
 	}
 
+	/* Search for the program by name.
+	 */
 	while( CIIterator_HasNext(&iter.cIIterator) ) {
 		CIIterator_Next(&iter.cIIterator, &prog);
 		if( cstrncmp(name, CCProgram_GetName(prog), CCPROGRAM_MAX_NAME_LENGTH) == 0 ) {
@@ -88,6 +90,8 @@ struct CCProgram* CCProgramList_Get( struct CCProgramList* self, const char* nam
 		return NULL;
 	}
 
+	/* Search for the program by name.
+		 */
 	while( CIIterator_HasNext(&iter.cIIterator) ) {
 		CIIterator_Next(&iter.cIIterator, &prog);
 		if( cstrncmp(name, CCProgram_GetName(prog), length) == 0 ) {
@@ -111,29 +115,14 @@ static void CCProgramList_Help_Def( struct CCProgram* self_ )
 					"makes a list of all known programs\n");
 }
 
-static struct CCProgram* CCProgramList_Clone_Def( struct CCProgram* self_ )
-{
-	struct CCProgramList* self = CCast(self_);
-
-	struct CCProgramList* clone = CMalloc(sizeof(*self));
-	if( clone == NULL ) {
-		return NULL;
-	}
-
-	if( CCProgramList(clone, self->cCProgram.printer) != COBJ_OK ) {
-		CFree(clone);
-	}
-
-	CDynamic(clone);
-	return &clone->cCProgram;
-}
-
 static CCProgramError CCProgramList_RunHook_Def( struct CCProgram* self_, const char** config_type, const char** config_param, size_t count )
 {
 	struct CCProgramList* self = CCast(self_);
 	struct CCListIterator iter;
 	struct CCProgram* prog;
 	struct CIPrint* printer;
+	(void) config_type;
+	(void) config_param;
 
 	if( count > 0 ) {
 		return CCPROGRAM_INV_ARGS;
@@ -145,6 +134,10 @@ static CCProgramError CCProgramList_RunHook_Def( struct CCProgram* self_, const 
 
 	printer = self->cCProgram.printer;
 	CIPrint_String(printer, "Known programs:\n");
+
+	/* Go through every object in the program list and
+	 * print the program's name.
+	 */
 	while( CIIterator_HasNext(&iter.cIIterator) ) {
 		CIIterator_Next(&iter.cIIterator, &prog);
 		const char* prog_name = CCProgram_GetName(prog);
@@ -170,7 +163,6 @@ const struct CCProgramList_VTable* CCProgramList_VTable_Key( )
 	 * interfaces implemented by super classes in the copy.
    	 */
 	vtable.CCProgram_VTable.help = CCProgramList_Help_Def;
-	vtable.CCProgram_VTable.clone = CCProgramList_Clone_Def;
 	vtable.CCProgram_VTable.run_hook = CCProgramList_RunHook_Def;
 
 	/* Return pointer to vtable. 
@@ -195,11 +187,15 @@ CError CCProgramList( struct CCProgramList* self, struct CIPrint* printer )
 	 */
 	CVTable(self, CCProgramList_VTable_Key( ));
 
+	/* Create the list to hold programs.
+	 */
 	err = CCArrayListStatic(&self->list, sizeof(struct CCProgram*), CCPROGRAM_LIST_MAX_PROGRAMS, self->list_memory);
 	if( err != COBJ_OK ) {
 		return err;
 	}
 
+	/* Add itself to the list of programs.
+	 */
 	if( !CCProgramList_Add(self, &self->cCProgram) ) {
 		return COBJ_ALLOC_FAIL;
 	}

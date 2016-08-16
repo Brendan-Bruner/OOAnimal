@@ -29,9 +29,22 @@
 /************************************************************************/
 /**
  * @struct CCPing
- * @extends 
- * @ingroup 
+ * @extends CCProgram
+ * @ingroup Programs
  * @details
+ * 		This program provides a quick way to test system connection.
+ * 		When run, it simply prints "pong" to the console.
+ * 		@code
+ * 			struct CIPrint* debug_printer;
+ * 			struct CCPing ping;
+ *
+ * 			debug_printer = CCDebugPrinter_GetInstance()->cIPrint;
+ * 			CCPing(&ping, debug_printer);
+ *
+ * 			CCProgram_Run(&ping.cCProgram, NULL, NULL, 0);
+ *		@endcode
+ *		The above code will cause the string "pong" to be printed to
+ *		the debug console.
  */
 struct CCPing
 {
@@ -59,7 +72,7 @@ struct CCPing_VTable
  * @details
  *	Get vtable reference for CCPing class.
  */
-const struct CCPing_VTable* CCPing_Get_Key( );
+const struct CCPing_VTable* CCPing_VTable_Key( );
 
 
 /************************************************************************/
@@ -69,6 +82,11 @@ const struct CCPing_VTable* CCPing_Get_Key( );
  * @memberof CCPing
  * @constructor
  * @details
+ * 		Constructs a ping program. When run, the program prints
+ * 		"pong" to the console using the CIPrint object provided at
+ * 		construction time.
+ * @param printer
+ * 		The CIPrint object to use when this program is run.
  */
 CError CCPing( struct CCPing* self, struct CIPrint* printer );
 

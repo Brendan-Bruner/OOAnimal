@@ -32,31 +32,20 @@ static void CCPing_Help_Def( struct CCProgram* self_ )
 
 	CIPrint_String( printer,
 					"Usage: ping\n"
-					"Respond with \"pong\"");
-}
-
-static struct CCProgram* CCPing_Clone_Def( struct CCProgram* self_ )
-{
-	struct CCPing* self = CCast(self_);
-
-	struct CCPing* clone = CMalloc(sizeof(*self));
-	if( clone == NULL ) {
-		return NULL;
-	}
-
-	if( CCPing(clone, self->cCProgram.printer) != COBJ_OK ) {
-		CFree(clone);
-	}
-
-	CDynamic(clone);
-	return &clone->cCProgram;
+					"Respond with \"pong\"\n");
 }
 
 static CCProgramError CCPing_RunHook_Def( struct CCProgram* self_, const char** config_type, const char** config_param, size_t count )
 {
 	struct CCPing* self = CCast(self_);
-	CIPrint_String(self->cCProgram.printer, "pong\n");
+	(void) config_type;
+	(void) config_param;
 
+	if( count > 0 ) {
+		return CCPROGRAM_INV_ARGS;
+	}
+
+	CIPrint_String(self->cCProgram.printer, "pong\n");
 	return CCPROGRAM_OK;
 }
 
@@ -75,7 +64,6 @@ const struct CCPing_VTable* CCPing_VTable_Key( )
 	 * interfaces implemented by super classes in the copy. 
    	 */
 	vtable.CCProgram_VTable.help = CCPing_Help_Def;
-	vtable.CCProgram_VTable.clone = CCPing_Clone_Def;
 	vtable.CCProgram_VTable.run_hook = CCPing_RunHook_Def;
 
 	/* Return pointer to vtable. 

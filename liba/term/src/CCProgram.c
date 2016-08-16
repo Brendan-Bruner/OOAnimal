@@ -59,6 +59,19 @@ const char* CCProgram_GetName( struct CCProgram* self )
 	CAssertObject(self);
 	return self->name;
 }
+
+static CBool CCProgram_IsString( struct CCProgram* self, const char* string )
+{
+	CAssertObject(self);
+
+	if( (string[0] >= '0' && string[0] <= '9') ||
+		(string[0] >= 'a' && string[0] <= 'z') ||
+		(string[0] >= 'A' && string[0] <= 'Z') ) {
+		return 1;
+	}
+	return 0;
+}
+
 void CCProgram_Help( struct CCProgram* self )
 {
 	CAssertObject(self);
@@ -68,16 +81,7 @@ void CCProgram_Help( struct CCProgram* self )
 	vtable->help(self);
 }
 
-struct CCProgram* CCProgram_Clone( struct CCProgram* self )
-{
-	CAssertObject(self);
-	const struct CCProgram_VTable* vtable = CGetVTable(self);
-	CAssertObject(vtable);
-	CAssertVirtual(vtable->clone);
-	return vtable->clone(self);
-}
-
-CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_t length )
+CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 {
 	CAssertObject(self);
 	const struct CCProgram_VTable* vtable = CGetVTable(self);
@@ -90,6 +94,21 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 	size_t config_index = 0;
 	CCProgramParseState state = CCPROGRAM_PARSE_INIT;
 	char null_string = '\0';
+	size_t length;
+
+	/* Get the length of the input string.
+	 */
+	length = cstrnlen(command, CCPROGRAM_MAX_INPUT_LENGTH + 1);
+	if( length > CCPROGRAM_MAX_INPUT_LENGTH ) {
+		return CCPROGRAM_OVERFLOW;
+	}
+
+	/* Clear type/param from previous run (if any).
+	 */
+	for( i = 0; i < CCPROGRAM_MAX_ARG_COUNT; ++i ) {
+		self->config_type[i] = NULL;
+		self->config_param[i] = NULL;
+	}
 
 	for( i = 0; i < length; ++i ) {
 		switch( state ) {
@@ -98,11 +117,14 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 				if( command[i] == '-' ) {
 					state = CCPROGRAM_PARSE_SHORT_CMD;
 				}
-				else if( command[i] != ' ' ){
+				else if( CCProgram_IsString(self, command + i) ){
 					self->config_type[config_index] = &null_string;
 					self->config_param[config_index] = &command[i];
 					++config_index;
 					state = CCPROGRAM_PARSE_READ_ARG;
+				}
+				else if( command[i] != ' ' ) {
+					return CCPROGRAM_INV_SYNTAX;
 				}
 				break;
 			}
@@ -111,22 +133,39 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 				if( command[i] == '-' ) {
 					state = CCPROGRAM_PARSE_LONG_CMD;
 				}
-				else if( command[i] != ' ' ) {
+				else if( CCProgram_IsString(self, command + i) ) {
 					state = CCPROGRAM_PARSE_READ_CMD;
 					self->config_type[config_index] = &command[i];
+					if( i == (length - 1) ) {
+						self->config_param[config_index++] = &null_string;
+					}
+				}
+				else {
+					return CCPROGRAM_INV_SYNTAX;
 				}
 				break;
 			}
 
 			case CCPROGRAM_PARSE_LONG_CMD: {
-				state = CCPROGRAM_PARSE_READ_CMD;
-				self->config_type[config_index] = &command[i];
+				if( CCProgram_IsString(self, command + i) ) {
+					state = CCPROGRAM_PARSE_READ_CMD;
+					self->config_type[config_index] = &command[i];
+					if( i == (length - 1) ) {
+						self->config_param[config_index++] = &null_string;
+					}
+				}
+				else {
+					return CCPROGRAM_INV_SYNTAX;
+				}
 				break;
 			}
 
 			case CCPROGRAM_PARSE_READ_CMD: {
 				if( command[i] == ' ' ) {
 					state = CCPROGRAM_PARSE_ARG_SCAN;
+				}
+				else if( !CCProgram_IsString(self, command + i) ) {
+					return CCPROGRAM_INV_SYNTAX;
 				}
 				break;
 			}
@@ -139,9 +178,12 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 					self->config_param[config_index++] = &null_string;
 					state = CCPROGRAM_PARSE_SHORT_CMD;
 				}
-				else if( command[i] != ' ' ){
+				else if( CCProgram_IsString(self, command + i) ) {
 					self->config_param[config_index++] = &command[i];
 					state = CCPROGRAM_PARSE_READ_ARG;
+				}
+				else if( command[i] != ' ' ) {
+					return CCPROGRAM_INV_SYNTAX;
 				}
 				break;
 			}
@@ -149,6 +191,9 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command, size_
 			case CCPROGRAM_PARSE_READ_ARG: {
 				if( command[i] == ' ' ) {
 					state = CCPROGRAM_PARSE_INIT;
+				}
+				else if( !CCProgram_IsString(self, command + i) ) {
+					return CCPROGRAM_INV_SYNTAX;
 				}
 				break;
 			}

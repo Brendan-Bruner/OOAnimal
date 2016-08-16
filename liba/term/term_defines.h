@@ -56,6 +56,10 @@
 #define CCPROGRAM_MAX_ARG_COUNT 8
 #define CCPROGRAM_MAX_NAME_LENGTH 16
 
+/* Max length of input string to CCProgram_Run()
+ */
+#define CCPROGRAM_MAX_INPUT_LENGTH	64
+
 /* Maximum number of programs which can be kept at one time.
  */
 #define CCPROGRAM_LIST_MAX_PROGRAMS 16

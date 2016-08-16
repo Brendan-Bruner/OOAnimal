@@ -34,13 +34,16 @@
  * @ingroup Programs
  * @extends CCProgram
  * @details
- * 		Provides a list like interface for keeping track of programs. List
- * 		items are weakly aggregated and therefore are not destroyed when
- * 		this object is destroyed.
+ * 		Provides a list like interface for keeping track of programs. When
+ * 		the CCProgramList object is constructed, it adds itself to the list
+ * 		of programs. Since this class provides a composite container for programs,
+ * 		It inherits the CCProgram_Run() methods for CCProgram. Calling that method will
+ * 		print the name of every program in its list.
  *
- * 		In addition, this class provides a composite container for programs.
- * 		Calling its run methods will invoke the help method of all aggregate
- * 		programs.
+ * 		On destruction, none of the aggregate programs in its list are destroyed, except
+ * 		for itself. This is a confusing sentence, but all it means is it will destroy itself
+ * 		(which is a part of its internal list of programs), but no other programs in the last
+ * 		are destroyed.
  */
 struct CCProgramList
 {
@@ -82,6 +85,14 @@ const struct CCProgramList_VTable* CCProgramList_VTable_Key( );
 /**
  * @memberof CCProgramList
  * @constructor
+ * 		Creates an object that can track programs and query them based
+ * 		on their name. Since this class inherits from CCProgram, it
+ * 		has a help and run method that will print to the console. The input
+ * 		CIPrint object is used to do that.
+ * @var printer
+ * 		This is the object used to print to console. Programs added to the
+ * 		list use their own printer, not this one, unless they are the
+ * 		same printer.
  */
 CError CCProgramList( struct CCProgramList* self, struct CIPrint* printer );
 
@@ -92,7 +103,10 @@ CError CCProgramList( struct CCProgramList* self, struct CIPrint* printer );
 /**
  * @memberof CCProgramList
  * @details
- * 		Adds the program to the list.
+ * 		Adds the program to the list. The program can then be queried or
+ * 		removed based on its name using CCProgramList_Remove() or
+ * 		CCProgramList_Get(). When this objects CCProgram_Run() method is
+ * 		called, it prints the name of all programs added.
  * @param program
  * 		The program to add.
  * @returns
