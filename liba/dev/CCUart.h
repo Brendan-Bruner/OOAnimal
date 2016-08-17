@@ -51,6 +51,8 @@ struct CCUart
 	CSemaphore 		send_sync;
 	CMutex			rx_mutex;
 	CMutex			tx_mutex;
+	COSQueue		tx_queue;
+	COSQueue		rx_queue;
 	LPC_USART_T* 	uart_port_type;
 	IRQn_Type 		irq_vector;
 	RINGBUFF_T	 	rx_ring;

@@ -279,6 +279,50 @@ struct CCUart* CCUart_GetDev3( )
 /********************************************************************/
 /* ISRs																*/
 /********************************************************************/
+static void CCUart_ISRHandle( struct CCUart* self )
+{
+	COSBase task_woken_tx = CTASK_NONE_WOKEN;
+	COSBase task_woken_rx = CTASK_NONE_WOKEN;
+
+	/* Handle transmit interrupt if enabled
+	 */
+	if( self->uart_port_type->IER & UART_IER_THREINT ) {
+		uint8_t ch;
+
+		/* Fill tx FIFO until full or until there is no data to put into tx fifo.
+		 */
+		while( (Chip_UART_ReadLineStatus(self->uart_port_type) & UART_LSR_THRE) != 0 &&
+			   COSQueue_GetFromISR(self->tx_queue, &ch, &task_woken_tx) == COSQUEUE_OK ) {
+			Chip_UART_SendByte(self->uart_port_type, ch);
+		}
+
+		/* Disable transmit interrupt if there is no data left to put into tx FIFO.
+		 */
+		if( COSQueue_AvailableFromISR(self->tx_queue) == 0 ) {
+			Chip_UART_IntDisable(self->uart_port_type, UART_IER_THREINT);
+		}
+	}
+
+	/* Handle receive interrupt
+	 * New data will be ignored if data not popped in time
+	 */
+	while (Chip_UART_ReadLineStatus(self->uart_port_type) & UART_LSR_RDR) {
+		uint8_t ch = Chip_UART_ReadByte(self->uart_port_type);
+		COSQueue_InsertFromISR(self->rx_queue, &ch, &task_woken_rx);
+	}
+
+    /* Handle Autobaud interrupts
+     */
+    Chip_UART_ABIntHandler(self->uart_port_type);
+
+    /* Send request for context switch if a task was unblocked by
+     * reading/writing from tx/rx queues.
+     */
+    if( task_woken_tx == CTASK_WOKEN || task_woken_rx == CTASK_WOKEN ) {
+    	 taskYIELD( );
+    }
+}
+
 #ifdef CCUART_USE_UART0
 void UART0_IRQHandler(void)
 {
@@ -298,8 +342,9 @@ void UART1_IRQHandler(void)
 #ifdef CCUART_USE_UART2
 void UART2_IRQHandler(void)
 {
-	Chip_UART_IRQRBHandler(uart2_p->uart_port_type, &uart2_p->rx_ring, &uart2_p->tx_ring);
-	CSemaphore_Give(uart2_p->send_sync);
+	CCUart_ISRHandle(uart2_p);
+//	Chip_UART_IRQRBHandler(uart2_p->uart_port_type, &uart2_p->rx_ring, &uart2_p->tx_ring);
+//	CSemaphore_Give(uart2_p->send_sync);
 }
 #endif
 

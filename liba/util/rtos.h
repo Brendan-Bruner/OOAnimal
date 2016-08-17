@@ -43,6 +43,8 @@
 #define POLL 0
 typedef portBASE_TYPE COSBase;
 #define CTICKS_TO_MS(ms) (ms/portTICK_RATE_MS)
+#define CTASK_WOKEN	pdTRUE
+#define CTASK_NON_WOKEN pdFALSE
 
 /****************************************************************************/
 /* Timing																	*/
@@ -61,9 +63,12 @@ typedef xQueueHandle COSQueue;
 
 #define COSQueueCreate(depth, item_size)		xQueueCreate((depth), (item_size))
 #define COSQueue_Insert(queue, item, block)		xQueueSend((queue), (item), (block))
+#define COSQueue_InsertFromISR(queue, item, yield)	xQueueSendFromISR((queue), (item), (yield))
 #define COSQueue_Get(queue, item, block)		xQueueReceive((queue), (item), (block))
+#define COSQueue_GetFromISR(queue, item, yield)	xQueueReceiveFromISR((queue), (item), (yield))
 #define COSQueue_Peek(queue, item, block)		xQueuePeek((queue), (item), (block))
-
+#define COSQueue_Available(queue)				uxQueueMessagesWaiting((queue))
+#define COSQueue_AvailableFromISR(queue)		uxQueueMessagesWaitingFromISR((queue))
 
 /****************************************************************************/
 /* Semaphores																*/
