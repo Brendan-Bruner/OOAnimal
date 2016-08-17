@@ -113,6 +113,8 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 	for( i = 0; i < length; ++i ) {
 		switch( state ) {
 
+			/* Begin parsing type:param tokens.
+			 */
 			case CCPROGRAM_PARSE_INIT: {
 				if( command[i] == '-' ) {
 					state = CCPROGRAM_PARSE_SHORT_CMD;
@@ -129,6 +131,8 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 				break;
 			}
 
+			/* Have a token to scan for a short config type.
+			 */
 			case CCPROGRAM_PARSE_SHORT_CMD: {
 				if( command[i] == '-' ) {
 					state = CCPROGRAM_PARSE_LONG_CMD;
@@ -146,6 +150,8 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 				break;
 			}
 
+			/* Have a token to scan for a long config type.
+			 */
 			case CCPROGRAM_PARSE_LONG_CMD: {
 				if( CCProgram_IsString(self, command + i) ) {
 					state = CCPROGRAM_PARSE_READ_CMD;
@@ -160,6 +166,8 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 				break;
 			}
 
+			/* Have a token to read out a config type argument.
+			 */
 			case CCPROGRAM_PARSE_READ_CMD: {
 				if( command[i] == ' ' ) {
 					state = CCPROGRAM_PARSE_ARG_SCAN;
@@ -170,9 +178,11 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 				break;
 			}
 
+			/* Have a token to scan for a config param.
+			 */
 			case CCPROGRAM_PARSE_ARG_SCAN: {
 				if( command[i] == '-' ) {
-					/* No configuration paramter, move onto next configuration
+					/* No configuration parameter, move onto next configuration
 					 * type.
 					 */
 					self->config_param[config_index++] = &null_string;
@@ -188,6 +198,8 @@ CCProgramError CCProgram_Run( struct CCProgram* self, const char* command )
 				break;
 			}
 
+			/* Have a token to read out a config param.
+			 */
 			case CCPROGRAM_PARSE_READ_ARG: {
 				if( command[i] == ' ' ) {
 					state = CCPROGRAM_PARSE_INIT;

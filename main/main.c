@@ -25,6 +25,9 @@
 #include <CCTerminal.h>
 #include <CCProgramList.h>
 #include <CCPing.h>
+#include <CCUart.h>
+#include <CCUartPrint.h>
+#include <string.h>
 
 extern TEST_SUITE(destructor_suite);
 extern TEST_SUITE(virtual_suite);
@@ -39,15 +42,27 @@ static struct CCPing ping;
 static struct CCProgramList prog_list;
 static void main_task( void* term_ )
 {
+	/* Start the debug console.
+	 */
 	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
 	CCPing(&ping, printer);
 	CCProgramList(&prog_list, printer);
 	CCProgramList_Add(&prog_list, &ping.cCProgram);
 	CCTerminal(&terminal, printer, "debug$ ", &prog_list);
-	CCTerminal_Start(&terminal);
+//	CCTerminal_Start(&terminal);
+
+	/* Setup uart2 to print to console.
+	 */
+	struct CCUart* uart = CCUart_GetDev2( );
+	struct CCUartPrint uart_printer;
+	CCUartPrint(&uart_printer, uart);
 
 	for( ;; ) {
-		vTaskDelay(1000);
+		CIPrint_String(&uart_printer.cIPrint, "Enter a letter: ");
+		char letter = CIPrint_GetChar(&uart_printer.cIPrint);
+		CIPrint_StringF(&uart_printer.cIPrint, "%c\n", letter);
+		CIPrint_StringF(&uart_printer.cIPrint, "You entered: %c\n", letter);
+		vTaskDelay(100/portTICK_RATE_MS);
 	}
 }
 
@@ -68,7 +83,7 @@ int main( int argc, char** argv )
 //	RUN_TEST_SUITE(array_list_iterator);
 //	RUN_TEST_SUITE(binary_tree);
 //	PRINT_DIAG( );
-	xTaskCreate(main_task, "main task", 128, NULL, tskIDLE_PRIORITY+2, NULL);
+	xTaskCreate(main_task, "main task", 256, NULL, tskIDLE_PRIORITY+2, NULL);
 
 	vTaskStartScheduler( );
 

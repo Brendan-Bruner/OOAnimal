@@ -68,7 +68,10 @@ typedef enum
  * 		Programs have the following syntax:
  * 		@code
  * 			program ::=
- * 					["program name" {configuration} {operation}]
+ * 					["program name" {option}]
+ *
+ * 			option ::=
+ * 					(configuration | operation) {option}
  *
  * 			configuration ::=
  * 					(("-" character) | ("--" string)) {string}
@@ -82,6 +85,7 @@ typedef enum
  * 			operation ::=
  * 					string
  * 		@endcode
+ *		Note, the syntax is very similar to the unix command line syntax, but not the same.
  *
  * 		At construction time, the program aggregates a CIPrint object. This object
  * 		must be used for any printing messages. In addition, a name (ascii string) is given to the

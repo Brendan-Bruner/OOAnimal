@@ -28,6 +28,7 @@
 #include <FreeRTOS.h>
 #include <task.h>
 #include <semphr.h>
+#include <queue.h>
 #elif defined(PTHREAD)
 #error "Must create RTOS classes for pthread API"
 #else
@@ -41,6 +42,28 @@
 #define BLOCK_UNTIL_READY portMAX_DELAY
 #define POLL 0
 typedef portBASE_TYPE COSBase;
+#define CTICKS_TO_MS(ms) (ms/portTICK_RATE_MS)
+
+/****************************************************************************/
+/* Timing																	*/
+/****************************************************************************/
+#define CTaskDelay(ticks) 	vTaskDelay((ticks))
+#define CTaskDelayMS(ms)	vTaskDelay(CTICKS_TO_MS((ms)))
+
+
+/****************************************************************************/
+/* Queues																	*/
+/****************************************************************************/
+typedef xQueueHandle COSQueue;
+
+#define COSQUEUE_TIMEOUT 	pdFALSE
+#define COSQUEUE_OK			pdTRUE
+
+#define COSQueueCreate(depth, item_size)		xQueueCreate((depth), (item_size))
+#define COSQueueInsert(queue, item, block)		xQueueSend((queue), (item), (block))
+#define COSQueueGet(queue, item, block)			xQueueReceive((queue), (item), (block))
+#define COSQueuePeek(queue, item, block)		xQueuePeek((queue), (item), (block))
+
 
 /****************************************************************************/
 /* Semaphores																*/
@@ -54,6 +77,7 @@ typedef xSemaphoreHandle CMutex;
 #define CMUTEX_TIMEOUT 		pdFALSE
 
 #define CSemaphoreCreate(max, init) 	xSemaphoreCreateCounting((max), (init))
+#define CSemaphoreCreateBinary( ) 		xSemaphoreCreateCounting(1, 0)
 #define CSemaphoreDelete(sem)			vSemaphoreDelete((sem))
 #define CSemaphore_Take(sem, timeout) 	xSemaphoreTake((sem), (timeout))
 #define CSemaphore_Give(sem)			xSemaphoreGive((sem))
