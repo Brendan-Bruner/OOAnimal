@@ -154,6 +154,12 @@ static CError CCUart( 	struct CCUart* self,
 	}
 	CSemaphore_Give(self->send_sync);
 
+	self->rx_mutex = CMutexCreate( );
+	if( self->rx_mutex == NULL ) {
+		CSemaphoreDelete(self->send_sync);
+		return COBJ_ALLOC_FAIL;
+	}
+
 	/* Mux the pins. */
 	Chip_IOCON_SetPinMuxing(LPC_IOCON, pin_mux, UART_PIN_MUX_LENGTH);
 

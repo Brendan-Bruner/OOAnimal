@@ -60,9 +60,9 @@ typedef xQueueHandle COSQueue;
 #define COSQUEUE_OK			pdTRUE
 
 #define COSQueueCreate(depth, item_size)		xQueueCreate((depth), (item_size))
-#define COSQueueInsert(queue, item, block)		xQueueSend((queue), (item), (block))
-#define COSQueueGet(queue, item, block)			xQueueReceive((queue), (item), (block))
-#define COSQueuePeek(queue, item, block)		xQueuePeek((queue), (item), (block))
+#define COSQueue_Insert(queue, item, block)		xQueueSend((queue), (item), (block))
+#define COSQueue_Get(queue, item, block)		xQueueReceive((queue), (item), (block))
+#define COSQueue_Peek(queue, item, block)		xQueuePeek((queue), (item), (block))
 
 
 /****************************************************************************/
@@ -95,8 +95,10 @@ typedef xSemaphoreHandle CMutex;
 /****************************************************************************/
 typedef xTaskHandle CTask;
 
-
-#define CTASK_CREATED pdTRUE
+#define CTASK_IDLE_PRIO	tskIDLE_PRIORITY
+#define CTASK_CREATED	pdTRUE
+#define CTASK_NO_ARG	NULL
+#define CTASK_NO_HANDLE	NULL
 
 #define CTaskCreate(task_function, task_name, task_stack, task_arg,	task_prio, task_handle)\
 	xTaskCreate(task_function, task_name, task_stack, task_arg,	task_prio, task_handle)
