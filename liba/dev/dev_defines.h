@@ -36,10 +36,12 @@
 /* Size of rx buffer.
  */
 #define CCUART_RX_RING_BUFSIZE 128
+#define CCUART_RX_BUFSIZE 128
 
 /* Size of tx buffer
  */
 #define CCUART_TX_RING_BUFSIZE 128
+#define CCUART_TX_BUFSIZE 128
 
 /* Define these to enable the compilation of code for the
  * uart port.

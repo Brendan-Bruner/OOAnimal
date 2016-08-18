@@ -38,52 +38,67 @@ size_t CCUart_Tx( struct CCUart* self, const char* buffer, size_t buflen )
 {
 	CAssertObject(self);
 
-	size_t bytes = 0;
+	size_t buf_index;
+	char ch;
 
-	if( buflen > INT_MAX ) {
-		return 0;
-	}
-
-	/* loop until everything is transmitted.
+	/* Move all data into tx queue.
 	 */
-	CMutex_Take(self->tx_mutex, BLOCK_UNTIL_READY);
-	while( buflen > 0 )
-	{
-		CSemaphore_Take(self->send_sync, BLOCK_UNTIL_READY);
-		bytes += Chip_UART_SendRB(self->uart_port_type, &self->tx_ring, buffer + bytes, (int) buflen);
-		buflen = buflen - bytes;
-	}
-	CMutex_Give(self->rx_mutex);
+	buf_index = 0;
+	while( buf_index < buflen ) {
+		ch = buffer[buf_index];
+		++buf_index;
 
-	return bytes;
+		COSBase err = COSQueue_Insert(self->tx_queue, &ch, POLL);
+		if( err != COSQUEUE_OK ) {
+			break;
+		}
+	}
+
+	/* Enable UART transmit interrupt so it can begin filling its hardware
+	 * FIFO with data from tx queue.
+	 */
+	Chip_UART_IntEnable(self->uart_port_type, UART_IER_THREINT);
+
+	/* Return total number of bytes successful queued for tx.
+	 */
+	return buf_index;
 }
 
 size_t CCUart_Rx( struct CCUart* self, char* buffer, size_t buflen )
 {
 	CAssertObject(self);
+	return CCUart_RxBlocking(self, buffer, buflen, POLL);
+}
 
-	if( buflen > INT_MAX ) {
-		return 0;
+size_t CCUart_RxBlocking( struct CCUart* self, char* buffer, size_t buflen, COSTime block )
+{
+	CAssertObject(self);
+
+	size_t buf_index;
+	char ch;
+
+	buf_index = 0;
+	while( buf_index < buflen ) {
+		COSBase err = COSQueue_Get(self->rx_queue, &ch, block);
+		if( err != COSQUEUE_OK ) {
+			break;
+		}
+
+		buffer[buf_index] = ch;
+		++buf_index;
 	}
 
-	CMutex_Take(self->rx_mutex, BLOCK_UNTIL_READY);
-	int read = Chip_UART_ReadRB(self->uart_port_type, &self->rx_ring, buffer, (int) buflen);
-	CMutex_Give(self->rx_mutex);
-
-	if( read < 0 ) {
-		return 0;
-	}
-	return (size_t) read;
+	return buf_index;
 }
 
 size_t CCUart_Available( struct CCUart* self )
 {
 	CAssertObject(self);
 
-	int available = RingBuffer_GetFree(&self->rx_ring);
+	COSSize available = COSQueue_Available(self->rx_queue);
 
-	if( available < 0 ) {
-		return 0;
+	if( available > SIZE_MAX ) {
+		return SIZE_MAX;
 	}
 	return (size_t) available;
 }
@@ -92,14 +107,14 @@ void CCUart_FlushRx( struct CCUart* self )
 {
 	CAssertObject(self);
 
-	RingBuffer_Flush(&self->rx_ring);
+	COSQueue_Reset(self->rx_queue);
 }
 
 void CCUart_FlushTx( struct CCUart* self )
 {
 	CAssertObject(self);
 
-	RingBuffer_Flush(&self->tx_ring);
+	COSQueue_Reset(self->tx_queue);
 }
 
 
@@ -144,19 +159,16 @@ static CError CCUart( 	struct CCUart* self,
 	self->irq_vector = irq_vector;
 	self->uart_port_type = port;
 
-	/* Create sync semaphore.
+	/* Create tx and rx queues.
 	 */
-	self->send_sync = CSemaphoreCreateBinary( );
-	if( self->send_sync == NULL ) {
-		/* Error creating semaphore.
-		 */
+	self->rx_queue = COSQueueCreate(CCUART_RX_BUFSIZE, sizeof(char));
+	if( self->rx_queue == NULL ) {
 		return COBJ_ALLOC_FAIL;
 	}
-	CSemaphore_Give(self->send_sync);
 
-	self->rx_mutex = CMutexCreate( );
-	if( self->rx_mutex == NULL ) {
-		CSemaphoreDelete(self->send_sync);
+	self->tx_queue = COSQueueCreate(CCUART_TX_BUFSIZE, sizeof(char));
+	if( self->tx_queue == NULL ) {
+		COSQueueDelete(self->rx_queue);
 		return COBJ_ALLOC_FAIL;
 	}
 
@@ -169,10 +181,6 @@ static CError CCUart( 	struct CCUart* self,
 	Chip_UART_ConfigData(self->uart_port_type, uart_config);
 	Chip_UART_SetupFIFOS(self->uart_port_type, fifo_config);
 	Chip_UART_TXEnable(self->uart_port_type);
-
-	/* Initialize ring buffers. */
-	RingBuffer_Init(&self->rx_ring, self->rx_buff, sizeof(*self->rx_buff), CCUART_RX_RING_BUFSIZE );
-	RingBuffer_Init(&self->tx_ring, self->tx_buff, sizeof(*self->tx_buff), CCUART_TX_RING_BUFSIZE );
 
 	/* Reset and enable FIFOs */
 	Chip_UART_SetupFIFOS(self->uart_port_type, fifo_config);
@@ -304,16 +312,25 @@ static void CCUart_ISRHandle( struct CCUart* self )
 	}
 
 	/* Handle receive interrupt
-	 * New data will be ignored if data not popped in time
 	 */
 	while (Chip_UART_ReadLineStatus(self->uart_port_type) & UART_LSR_RDR) {
 		uint8_t ch = Chip_UART_ReadByte(self->uart_port_type);
 		COSQueue_InsertFromISR(self->rx_queue, &ch, &task_woken_rx);
 	}
 
-    /* Handle Autobaud interrupts
+	/* Handle End Of Autobaud interrupt
+	 */
+	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABEO_INT) != 0) {
+        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABEOINT_CLR);
+		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABEOINT);
+	}
+
+    /* Handle Autobaud Timeout interrupt
      */
-    Chip_UART_ABIntHandler(self->uart_port_type);
+	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABTO_INT) != 0) {
+        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABTOINT_CLR);
+		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABTOINT);
+	}
 
     /* Send request for context switch if a task was unblocked by
      * reading/writing from tx/rx queues.
@@ -326,16 +343,14 @@ static void CCUart_ISRHandle( struct CCUart* self )
 #ifdef CCUART_USE_UART0
 void UART0_IRQHandler(void)
 {
-	Chip_UART_IRQRBHandler(uart0_p->uart_port_type, &uart0_p->rx_ring, &uart0_p->tx_ring);
-	CSemaphore_Give(uart0_p->send_sync);
+	CCUart_ISRHandle(uart0_p);
 }
 #endif
 
 #ifdef CCUART_USE_UART1
 void UART1_IRQHandler(void)
 {
-	Chip_UART_IRQRBHandler(uart1_p->uart_port_type, &uart1_p->rx_ring, &uart1_p->tx_ring);
-	CSemaphore_Give(uart1_p->send_sync);
+	CCUart_ISRHandle(uart1_p);
 }
 #endif
 
@@ -343,16 +358,13 @@ void UART1_IRQHandler(void)
 void UART2_IRQHandler(void)
 {
 	CCUart_ISRHandle(uart2_p);
-//	Chip_UART_IRQRBHandler(uart2_p->uart_port_type, &uart2_p->rx_ring, &uart2_p->tx_ring);
-//	CSemaphore_Give(uart2_p->send_sync);
 }
 #endif
 
 #ifdef CCUART_USE_UART3
 void UART3_IRQHandler(void)
 {
-	Chip_UART_IRQRBHandler(uart3_p->uart_port_type, &uart3_p->rx_ring, &uart3_p->tx_ring);
-	CSemaphore_Give(uart3_p->send_sync);
+	CCUart_ISRHandle(uart3_p);
 }
 #endif
 

@@ -32,7 +32,7 @@ static void CCPing_Help_Def( struct CCProgram* self_ )
 
 	CIPrint_String( printer,
 					"Usage: ping\n"
-					"Respond with \"pong\"\n");
+					"Respond with \"pong\"\r\n");
 }
 
 static CCProgramError CCPing_RunHook_Def( struct CCProgram* self_, const char** config_type, const char** config_param, size_t count )
@@ -45,7 +45,7 @@ static CCProgramError CCPing_RunHook_Def( struct CCProgram* self_, const char** 
 		return CCPROGRAM_INV_ARGS;
 	}
 
-	CIPrint_String(self->cCProgram.printer, "pong\n");
+	CIPrint_String(self->cCProgram.printer, "pong\r\n");
 	return CCPROGRAM_OK;
 }
 

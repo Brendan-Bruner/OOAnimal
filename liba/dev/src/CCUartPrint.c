@@ -57,11 +57,8 @@ static char CCDebugPrint_GetC_Def( struct CIPrint* self_ )
 {
 	struct CCUartPrint* self = CCast(self_);
 
-	char input = '\0';
-
-	while( CCUart_Rx(self->uart, &input, sizeof(input)) == 0 ) {
-		CTaskDelayMS(100);
-	}
+	char input;
+	CCUart_RxBlocking(self->uart, &input, sizeof(input), BLOCK_UNTIL_READY);
 
 	return input;
 }

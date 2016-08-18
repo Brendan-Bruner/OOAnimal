@@ -44,25 +44,25 @@ static void main_task( void* term_ )
 {
 	/* Start the debug console.
 	 */
-	struct CIPrint* printer = &CCDebugPrint_GetInstance( )->cIPrint;
+	struct CCUart* uart = CCUart_GetDev2( );
+	struct CCUartPrint uart_printer;
+	CCUartPrint(&uart_printer, uart);
+	struct CIPrint* printer = &uart_printer.cIPrint;
 	CCPing(&ping, printer);
 	CCProgramList(&prog_list, printer);
 	CCProgramList_Add(&prog_list, &ping.cCProgram);
 	CCTerminal(&terminal, printer, "debug$ ", &prog_list);
-//	CCTerminal_Start(&terminal);
+	CCTerminal_Start(&terminal);
 
 	/* Setup uart2 to print to console.
 	 */
-	struct CCUart* uart = CCUart_GetDev2( );
-	struct CCUartPrint uart_printer;
-	CCUartPrint(&uart_printer, uart);
 
 	for( ;; ) {
-		CIPrint_String(&uart_printer.cIPrint, "Enter a letter: ");
-		char letter = CIPrint_GetChar(&uart_printer.cIPrint);
-		CIPrint_StringF(&uart_printer.cIPrint, "%c\n", letter);
-		CIPrint_StringF(&uart_printer.cIPrint, "You entered: %c\n", letter);
-		vTaskDelay(100/portTICK_RATE_MS);
+//		CIPrint_String(&uart_printer.cIPrint, "Enter a letter: ");
+//		char letter = CIPrint_GetChar(&uart_printer.cIPrint);
+//		CIPrint_StringF(&uart_printer.cIPrint, "%c\n", letter);
+//		CIPrint_StringF(&uart_printer.cIPrint, "You entered: %c\n", letter);
+		vTaskDelay(1000/portTICK_RATE_MS);
 	}
 }
 

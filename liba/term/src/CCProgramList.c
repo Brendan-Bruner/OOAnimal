@@ -78,7 +78,7 @@ struct CCProgram* CCProgramList_Get( struct CCProgramList* self, const char* nam
 	struct CCListIterator iter;
 	struct CCProgram* prog;
 
-	if( name == NULL ) {
+	if( name == NULL || length == 0 ) {
 		return NULL;
 	}
 
@@ -112,7 +112,7 @@ static void CCProgramList_Help_Def( struct CCProgram* self_ )
 
 	CIPrint_String( printer,
 					"Usage: help\n"
-					"makes a list of all known programs\n");
+					"makes a list of all known programs\r\n");
 }
 
 static CCProgramError CCProgramList_RunHook_Def( struct CCProgram* self_, const char** config_type, const char** config_param, size_t count )
@@ -133,7 +133,7 @@ static CCProgramError CCProgramList_RunHook_Def( struct CCProgram* self_, const 
 	}
 
 	printer = self->cCProgram.printer;
-	CIPrint_String(printer, "Known programs:\n");
+	CIPrint_String(printer, "Known programs:\r\n");
 
 	/* Go through every object in the program list and
 	 * print the program's name.
@@ -141,7 +141,7 @@ static CCProgramError CCProgramList_RunHook_Def( struct CCProgram* self_, const 
 	while( CIIterator_HasNext(&iter.cIIterator) ) {
 		CIIterator_Next(&iter.cIIterator, &prog);
 		const char* prog_name = CCProgram_GetName(prog);
-		CIPrint_StringF(printer, "\t%s\n", prog_name);
+		CIPrint_StringF(printer, "\t%s\r\n", prog_name);
 	}
 
 	CDestroy(&iter);

@@ -42,9 +42,11 @@
 #define BLOCK_UNTIL_READY portMAX_DELAY
 #define POLL 0
 typedef portBASE_TYPE COSBase;
+typedef unsigned portBASE_TYPE COSSize;
+typedef portTickType COSTime;
 #define CTICKS_TO_MS(ms) (ms/portTICK_RATE_MS)
 #define CTASK_WOKEN	pdTRUE
-#define CTASK_NON_WOKEN pdFALSE
+#define CTASK_NONE_WOKEN pdFALSE
 
 /****************************************************************************/
 /* Timing																	*/
@@ -69,6 +71,8 @@ typedef xQueueHandle COSQueue;
 #define COSQueue_Peek(queue, item, block)		xQueuePeek((queue), (item), (block))
 #define COSQueue_Available(queue)				uxQueueMessagesWaiting((queue))
 #define COSQueue_AvailableFromISR(queue)		uxQueueMessagesWaitingFromISR((queue))
+#define COSQueue_Reset(queue)					xQueueReset((queue))
+#define COSQueueDelete(queue)					vQueueDelete((queue))
 
 /****************************************************************************/
 /* Semaphores																*/
@@ -86,6 +90,7 @@ typedef xSemaphoreHandle CMutex;
 #define CSemaphoreDelete(sem)			vSemaphoreDelete((sem))
 #define CSemaphore_Take(sem, timeout) 	xSemaphoreTake((sem), (timeout))
 #define CSemaphore_Give(sem)			xSemaphoreGive((sem))
+#define CSemaphore_GiveFromISR(sem, woken)	xSemaphoreGiveFromISR((sem), (woken))
 #define CSemaphore_Peek(sem, timeout)	xQueuePeek((sem), NULL, (timeout))
 
 #define CMutexCreate( ) 				xSemaphoreCreateMutex( )

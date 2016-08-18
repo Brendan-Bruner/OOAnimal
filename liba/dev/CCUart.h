@@ -48,17 +48,10 @@ struct CCUart
 	/* Private data.
 	 */
 #ifdef __LPC17XX__
-	CSemaphore 		send_sync;
-	CMutex			rx_mutex;
-	CMutex			tx_mutex;
 	COSQueue		tx_queue;
 	COSQueue		rx_queue;
 	LPC_USART_T* 	uart_port_type;
 	IRQn_Type 		irq_vector;
-	RINGBUFF_T	 	rx_ring;
-	RINGBUFF_T	 	tx_ring;
-	char	 		rx_buff[CCUART_RX_RING_BUFSIZE];
-	char			tx_buff[CCUART_TX_RING_BUFSIZE];
 #else
 #error "CCUart included in project without a valid declaration"
 #endif
@@ -149,6 +142,7 @@ struct CCUart* CCUart_GetDev3( );
 
 size_t CCUart_Tx( struct CCUart* self, const char* buffer, size_t length );
 size_t CCUart_Rx( struct CCUart* self, char* buffer, size_t length );
+size_t CCUart_RxBlocking( struct CCUart* self, char* buffer, size_t length, COSTime block );
 size_t CCUart_Available( struct CCUart* self );
 void CCUart_FlushTx( struct CCUart* self );
 void CCUart_FlushRx( struct CCUart* self );

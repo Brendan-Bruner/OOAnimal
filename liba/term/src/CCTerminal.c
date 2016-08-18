@@ -52,34 +52,24 @@ static void CDestructor( void* self_ )
 	vtable->CObject_VTable_Ref->CDestructor(self);
 }
 
-/*
- * Blocks until a line of input is read from the console. A line is terminated
- * by a '\n' character.
- */
-static size_t CCTerminal_BlockOnInput(struct CCTerminal* self, char* command_string, size_t max_length)
+static CBool CCTerminal_IsValidChar( struct CCTerminal* self, char input )
 {
 	CAssertObject(self);
 
-	size_t length = 0;
-	char input = '\0';
-
-	while( input != '\n' ) {
-		input = CIPrint_GetChar(self->printer);
-		if( length < max_length ) {
-			command_string[length++] = input;
-		}
+	if(	(input >= '0' && input <= '9') ||
+		(input >= 'a' && input <= 'z') ||
+		(input >= 'A' && input <= 'Z')) {
+		return 1;
 	}
-	return length;
+	return 0;
 }
 
-static const char* CCTerminal_ExtractName(struct CCTerminal* self, const char* command_string, size_t* prog_name_length)
+static const char* CCTerminal_ExtractName(struct CCTerminal* self, const char* command_string, size_t max_length, size_t* prog_name_length)
 {
 	CAssertObject(self);
 
 	size_t i = 0;
-	while( (command_string[i] >= '0' && command_string[i] <= '9') ||
-			(command_string[i] >= 'a' && command_string[i] <= 'z') ||
-			(command_string[i] >= 'A' && command_string[i] <= 'Z') ) {
+	while( CCTerminal_IsValidChar(self, command_string[i]) && i < max_length ) {
 		++i;
 	}
 
@@ -90,13 +80,66 @@ static const char* CCTerminal_ExtractName(struct CCTerminal* self, const char* c
 static void CCTerminal_NoProgramMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length )
 {
 	CAssertObject(self);
-	CIPrint_StringF(self->printer, "%.*s: %s\n", prog_name_length, prog_name, CCTERMINAL_UNKOWN_PROGRAM_MSG);
+	CIPrint_StringF(self->printer, "%.*s: %s\r\n", prog_name_length, prog_name, CCTERMINAL_UNKOWN_PROGRAM_MSG);
 }
 
 static void CCTerminal_ProgramErrMessage( struct CCTerminal* self, const char* prog_name, size_t prog_name_length, CCProgramError err, const char* msg )
 {
 	CAssertObject(self);
-	CIPrint_StringF(self->printer, "%.*s: error (%d): %s\n", prog_name_length, prog_name, (int) err, msg);
+	CIPrint_StringF(self->printer, "%.*s: error (%d): %s\r\n", prog_name_length, prog_name, (int) err, msg);
+}
+
+/*
+ * Blocks until a line of input is read from the console. A line is terminated
+ * by a '\n' character.
+ */
+static void CCTerminal_RunProgram(struct CCTerminal* self, char* command_string, size_t length)
+{
+	CAssertObject(self);
+
+	const char* prog_name;
+	size_t prog_name_length;
+	char* prog_args;
+	size_t prog_args_length;
+
+	/* If the user only entered a new line (ie, only hit enter with no text)
+	 * then skip the code below which searches for and runs the entered program.
+	 */
+	if( length > 0 ) {
+		/* Extract name of program and arguments.
+		 */
+		prog_name = CCTerminal_ExtractName(self, command_string, length, &prog_name_length);
+		prog_args = command_string + prog_name_length;
+		prog_args_length = length - prog_name_length;
+		prog_args[prog_args_length] = '\0';
+
+		/* Try to find the program so it can be run.
+		 */
+		struct CCProgram* program = CCProgramList_Get(self->list, prog_name, prog_name_length);
+		if( program != NULL ) {
+			CCProgramError err = CCProgram_Run(program, prog_args);
+
+			/* Switch on the possible error conditions when running the
+			 * program. Print a message to console if there was an error.
+			 */
+			if( err == CCPROGRAM_HARD_ERR) {
+				CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_HARD_ERROR_MSG);
+			}
+			else if( err == CCPROGRAM_INV_SYNTAX ) {
+				CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_SYNTAX_ERROR_MSG);
+				CCProgram_Help(program);
+			}
+			else if( err == CCPROGRAM_INV_ARGS ) {
+				CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_ARGS_ERROR_MSG);
+				CCProgram_Help(program);
+			}
+		}
+		else {
+			/* No such program exists.
+			 */
+			CCTerminal_NoProgramMessage(self, prog_name, prog_name_length);
+		}
+	}
 }
 
 /************************************************************************/
@@ -106,61 +149,62 @@ void CCTerminal_Task_Def( void* self_ )
 {
 	struct CCTerminal* self = CCast(self_);
 	char command_string[CCTERMINAL_MAX_INPUT_LENGTH];
-	size_t input_length;
-	const char* prog_name;
-	size_t prog_name_length;
-	char* prog_args;
-	size_t prog_args_length;
+	char input, prev_input = '\0';
+	size_t length = 0;
+
+	CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
+	CIPrint_String(self->printer, self->prompt);
 
 	for( ;; ) {
-		CSemaphore_Peek(self->task_control, BLOCK_UNTIL_READY);
-		CIPrint_String(self->printer, self->prompt);
 
-		/* Block on input from the user.
-		 */
-		input_length = CCTerminal_BlockOnInput(self, command_string, CCTERMINAL_MAX_INPUT_LENGTH);
 
-		/* If the user only entered a new line (ie, only hit enter with no text)
-		 * then skip the code below which searches for and runs the entered program.
-		 */
-		if( command_string[0] != '\n' ) {
-			/* Extract name of program and arguments.
-			 */
-			prog_name = CCTerminal_ExtractName(self, command_string, &prog_name_length);
-			prog_args = command_string + prog_name_length;
-			prog_args_length = input_length - prog_name_length;
-			prog_args[prog_args_length-1] = '\0';
+		input = CIPrint_GetChar(self->printer);
 
-			/* Try to find the program so it can be run.
-			 */
-			struct CCProgram* program = CCProgramList_Get(self->list, prog_name, prog_name_length);
-			if( program != NULL ) {
-				CCProgramError err = CCProgram_Run(program, prog_args);
-
-				/* Switch on the possible error conditions when running the
-				 * program. Print a message to console if there was an error.
+		switch( input ) {
+			case '\x03': {
+				/* CTRL - C
 				 */
-				if( err == CCPROGRAM_HARD_ERR) {
-					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_HARD_ERROR_MSG);
-				}
-				else if( err == CCPROGRAM_INV_SYNTAX ) {
-					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_SYNTAX_ERROR_MSG);
-					CCProgram_Help(program);
-				}
-				else if( err == CCPROGRAM_INV_ARGS ) {
-					CCTerminal_ProgramErrMessage(self, prog_name, prog_name_length, err, CCTERMINAL_ARGS_ERROR_MSG);
-					CCProgram_Help(program);
-				}
+				CIPrint_String(self->printer, "\r\n");
+				CIPrint_String(self->printer, self->prompt);
+				break;
 			}
-			else {
-				/* No such program exists.
+			case '\b': {
+				/* Backspace.
 				 */
-				CCTerminal_NoProgramMessage(self, prog_name, prog_name_length);
+				if( length > 0 ) {
+					CIPrint_String(self->printer, "\b \b");
+					--length;
+				}
+				break;
+			}
+			case '\n': {
+				if( prev_input != '\r' ) {
+					CIPrint_String(self->printer, "\r\n");
+					CCTerminal_RunProgram(self, command_string, length);
+					CIPrint_String(self->printer, self->prompt);
+					length = 0;
+				}
+				break;
+			}
+			case '\r': {
+				if( prev_input != '\n' ) {
+					CIPrint_String(self->printer, "\r\n");
+					CCTerminal_RunProgram(self, command_string, length);
+					CIPrint_String(self->printer, self->prompt);
+					length = 0;
+				}
+				break;
+			}
+			default: {
+				char ch[] = {input, '\0'};
+				CIPrint_String(self->printer, ch);
+				command_string[length] = input;
+				++length;
+				break;
 			}
 		}
-		else {
-			CIPrint_String(self->printer, "\n");
-		}
+
+		prev_input = input;
 	}
 }
 
