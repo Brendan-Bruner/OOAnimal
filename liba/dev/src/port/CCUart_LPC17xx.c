@@ -189,8 +189,7 @@ static CError CCUart( 	struct CCUart* self,
 	Chip_UART_IntEnable(self->uart_port_type, (UART_IER_RBRINT | UART_IER_RLSINT));
 
 	/* Enable interrupts in the NVIC */
-	NVIC_SetPriority(self->irq_vector, 1);
-	NVIC_EnableIRQ(self->irq_vector);
+	NVIC_SetPriority(self->irq_vector, 15);
 
 	return COBJ_OK;
 }
@@ -318,19 +317,19 @@ static void CCUart_ISRHandle( struct CCUart* self )
 		COSQueue_InsertFromISR(self->rx_queue, &ch, &task_woken_rx);
 	}
 
-	/* Handle End Of Autobaud interrupt
-	 */
-	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABEO_INT) != 0) {
-        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABEOINT_CLR);
-		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABEOINT);
-	}
-
-    /* Handle Autobaud Timeout interrupt
-     */
-	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABTO_INT) != 0) {
-        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABTOINT_CLR);
-		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABTOINT);
-	}
+//	/* Handle End Of Autobaud interrupt
+//	 */
+//	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABEO_INT) != 0) {
+//        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABEOINT_CLR);
+//		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABEOINT);
+//	}
+//
+//    /* Handle Autobaud Timeout interrupt
+//     */
+//	if((Chip_UART_ReadIntIDReg(self->uart_port_type) & UART_IIR_ABTO_INT) != 0) {
+//        Chip_UART_SetAutoBaudReg(self->uart_port_type, UART_ACR_ABTOINT_CLR);
+//		Chip_UART_IntDisable(self->uart_port_type, UART_IER_ABTOINT);
+//	}
 
     /* Send request for context switch if a task was unblocked by
      * reading/writing from tx/rx queues.
