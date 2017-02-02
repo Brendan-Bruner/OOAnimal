@@ -9,11 +9,11 @@ LIB_DIR := debug
 LIB_NAME := cclass
 LIB_OBJ := $(addprefix $(LIB_DIR)/,$(LIB_SRC:%.c=%.o))
 
-clean :
-	rm -rf $(LIB_DIR)
-
 all : MKDIR $(LIB_OBJ)
 	$(AR) rcs $(LIB_DIR)/$(addprefix lib,$(LIB_NAME).a) $(LIB_OBJ)
+
+clean :
+	rm -rf $(LIB_DIR)
 
 MKDIR :
 	mkdir -p $(addprefix $(LIB_DIR)/,$(LIB_SRC:%.c=%))

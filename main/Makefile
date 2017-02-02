@@ -25,11 +25,6 @@ STATIC_LIB_NAME := ctests cutil cclass
 STATIC_LIBS := $(addprefix -l,$(STATIC_LIB_NAME));
 STATIC_LIB_BUILD := $(addsuffix /debug,$(addprefix -L,$(STATIC_LIB_SRC)))
 
-<<<<<<< HEAD
-=======
-crun: clean all run
-
->>>>>>> data_structures
 all : MKDIR $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(EXEC) $(STATIC_LIB_BUILD) $(STATIC_LIBS)
 
@@ -44,3 +39,5 @@ clean :
 
 run:
 	./$(BUILDDIR)/$(EXEC)
+
+crun: clean all run

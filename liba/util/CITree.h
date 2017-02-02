@@ -207,6 +207,6 @@ size_t CITree_MaxSize( struct CITree* self );
  * @param self
  *	The tree.
  */
-self CITree_Clear( struct CITree* self );
+void CITree_Clear( struct CITree* self );
 
 #endif /* UTIL_CITREE_H_ */
