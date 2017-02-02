@@ -4,6 +4,8 @@ var annotated_dup =
     [ "CCArrayList_VTable", "structCCArrayList__VTable.html", "structCCArrayList__VTable" ],
     [ "CCArrayQueue", "structCCArrayQueue.html", "structCCArrayQueue" ],
     [ "CCArrayQueue_VTable", "structCCArrayQueue__VTable.html", "structCCArrayQueue__VTable" ],
+    [ "CCBinaryTree", "structCCBinaryTree.html", "structCCBinaryTree" ],
+    [ "CCBinaryTree_VTable", "structCCBinaryTree__VTable.html", "structCCBinaryTree__VTable" ],
     [ "CClass", "structCClass.html", "structCClass" ],
     [ "CCListIterator", "structCCListIterator.html", "structCCListIterator" ],
     [ "CCListIterator_VTable", "structCCListIterator__VTable.html", "structCCListIterator__VTable" ],
@@ -14,6 +16,8 @@ var annotated_dup =
     [ "CInterface", "structCInterface.html", "structCInterface" ],
     [ "CIQueue", "structCIQueue.html", "structCIQueue" ],
     [ "CIQueue_VTable", "structCIQueue__VTable.html", "structCIQueue__VTable" ],
+    [ "CITree", "structCITree.html", "structCITree" ],
+    [ "CITree_VTable", "structCITree__VTable.html", "structCITree__VTable" ],
     [ "CObject", "structCObject.html", "structCObject" ],
     [ "CObject_VTable", "structCObject__VTable.html", "structCObject__VTable" ]
 ];

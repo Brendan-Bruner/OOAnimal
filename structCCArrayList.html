@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ga555c53a4f341479dfce3044fbf6bebfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab588e841a9b2b0869a677b031e4a2671"><td class="memItemLeft" align="right" valign="top">CError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList.html#ab588e841a9b2b0869a677b031e4a2671">CCArrayList</a> (struct <a class="el" href="structCCArrayList.html">CCArrayList</a> *self, size_t element_size, size_t max_size)</td></tr>
 <tr class="separator:ab588e841a9b2b0869a677b031e4a2671"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a94628bfbf5663a34d4bec758df595fa3"><td class="memItemLeft" align="right" valign="top">CError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList.html#a94628bfbf5663a34d4bec758df595fa3">CCArrayListStatic</a> (struct <a class="el" href="structCCArrayList.html">CCArrayList</a> *self, size_t element_size, size_t max_size, void *memory)</td></tr>
+<tr class="separator:a94628bfbf5663a34d4bec758df595fa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a021c19a20c4061f06efa1e658c266638"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4">CIListError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIList.html#a021c19a20c4061f06efa1e658c266638">CIList_Add</a> (struct <a class="el" href="structCIList.html">CIList</a> *self, void *element)</td></tr>
 <tr class="separator:a021c19a20c4061f06efa1e658c266638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab4f1ab398ca8df8c42fd7ab55613cadf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Lists.html#ga2d72232adb003e2d28eabd2a1525e6e4">CIListError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIList.html#ab4f1ab398ca8df8c42fd7ab55613cadf">CIList_AddAt</a> (struct <a class="el" href="structCIList.html">CIList</a> *self, void *element, size_t index)</td></tr>
@@ -177,6 +179,9 @@ struct {</td></tr>
 <tr class="memitem:a51e96801dbbfae117ba699c61cb8f7eb"><td class="memItemLeft" >
 &#160;&#160;&#160;size_t&#160;&#160;&#160;<b>add_index</b></td></tr>
 <tr class="separator:a51e96801dbbfae117ba699c61cb8f7eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a502d77d3209116446ef698a3908651bf"><td class="memItemLeft" >
+&#160;&#160;&#160;CBool&#160;&#160;&#160;<b>is_static</b></td></tr>
+<tr class="separator:a502d77d3209116446ef698a3908651bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70d7ab25cb425ba487a79e9e9cb79637"><td class="memItemLeft" valign="top">}&#160;</td><td class="memItemRight" valign="bottom"><b>_</b></td></tr>
 <tr class="separator:a70d7ab25cb425ba487a79e9e9cb79637"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28fc7ae9b4826d454aded73a5f4b8f29"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28fc7ae9b4826d454aded73a5f4b8f29"></a>
@@ -240,6 +245,55 @@ COBJ_ALLOC_FAIL: on failure to allocate memory for list. </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="a94628bfbf5663a34d4bec758df595fa3"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">CError CCArrayListStatic </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structCCArrayList.html">CCArrayList</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>element_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>memory</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section user"><dt>Class Constructor</dt><dd></dd></dl>
+<pre class="fragment">Creates an array list using the memory block provided as input. The size
+</pre><p> of the memory block for different element_size and max_size lists can be resolved at compile time using the macro CCARRAY_LIST_SIZE(). For example, to make a list with the max size of three elements, and each element being the size of an int: </p><div class="fragment"><div class="line"><span class="keyword">struct </span><a class="code" href="structCCArrayList.html">CCArrayList</a> list;</div><div class="line"><span class="keywordtype">char</span> list_memory[CCARRAY_LIST_SIZE(<span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), 3)];</div><div class="line"><a class="code" href="structCCArrayList.html#a94628bfbf5663a34d4bec758df595fa3">CCArrayListStatic</a>(&amp;list, <span class="keyword">sizeof</span>(<span class="keywordtype">int</span>), 3, list_memory);</div></div><!-- fragment --><p> Also, take a look at <a class="el" href="structCCArrayList.html#ab588e841a9b2b0869a677b031e4a2671">CCArrayList()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The list. </td></tr>
+    <tr><td class="paramname">element_size</td><td>The size of elements being copied into/out of the list. </td></tr>
+    <tr><td class="paramname">max_size</td><td>The maximum number of elements in the list. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Always returns COBJ_OK. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a021c19a20c4061f06efa1e658c266638"></a>
 <div class="memitem">
 <div class="memproto">
@@ -548,7 +602,7 @@ COBJ_ALLOC_FAIL: on failure to allocate memory for list. </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structCCArrayList.html">CCArrayList</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:24:13 for CObject by
+    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

@@ -10,6 +10,11 @@ var group__VTable =
       [ "CObject_VTable", "structCCArrayQueue__VTable.html#a0584f8aa3013bc76b6ed84753adf9578", null ],
       [ "CObject_VTable_Ref", "structCCArrayQueue__VTable.html#ac0db730caa4122532b00db15f2372502", null ]
     ] ],
+    [ "CCBinaryTree_VTable", "structCCBinaryTree__VTable.html", [
+      [ "CITree_VTable", "structCCBinaryTree__VTable.html#adadf611ec7d919df478500020265f2ce", null ],
+      [ "CObject_VTable", "structCCBinaryTree__VTable.html#a842828c048bf7861d279c3f08fbadf08", null ],
+      [ "CObject_VTable_Ref", "structCCBinaryTree__VTable.html#ae1014504259859d0d9106c49f1c58368", null ]
+    ] ],
     [ "CCListIterator_VTable", "structCCListIterator__VTable.html", [
       [ "CIIterator_VTable", "structCCListIterator__VTable.html#a5486ff0d2702d759769f3246aca75f0a", null ],
       [ "CObject_VTable", "structCCListIterator__VTable.html#ab6044f6829e10deac53757ae910ffe8c", null ]
@@ -40,11 +45,24 @@ var group__VTable =
       [ "remove", "structCIQueue__VTable.html#a3b5f78fb4512a7975b66f936dcf521da", null ],
       [ "size", "structCIQueue__VTable.html#a8ca73967337f865879876839a4f97f5f", null ]
     ] ],
+    [ "CITree_VTable", "structCITree__VTable.html", [
+      [ "clear", "structCITree__VTable.html#af64ae3dd6410ff37356b18f8cb199a17", null ],
+      [ "delete", "structCITree__VTable.html#ac7f95181071d4c50a76d7bd418e6ea23", null ],
+      [ "get", "structCITree__VTable.html#a493eae2ec2736ffa24e249fea4de6395", null ],
+      [ "max_size", "structCITree__VTable.html#a0af2a178876388befdb7224202272139", null ],
+      [ "merge", "structCITree__VTable.html#a8906e1aee15ac62fefdad3c8955cb3e9", null ],
+      [ "peek", "structCITree__VTable.html#a5477b82b6d1125a2cd8638fc69b9ac67", null ],
+      [ "pop", "structCITree__VTable.html#af507c7aee99eb0c11d046bdf3a577f4b", null ],
+      [ "push", "structCITree__VTable.html#acbe1a4d66e3bebd265a2574ef37268aa", null ],
+      [ "size", "structCITree__VTable.html#a470f21c2d49fd063e7262986a9079cf2", null ],
+      [ "split", "structCITree__VTable.html#ab165a9bdd0113075a1061875010bbffe", null ]
+    ] ],
     [ "CObject_VTable", "structCObject__VTable.html", [
       [ "CDestructor", "structCObject__VTable.html#a09aafa8577f8073f000545f2056101cf", null ]
     ] ],
     [ "CCArrayList_Get_Key", "group__VTable.html#ga555c53a4f341479dfce3044fbf6bebfb", null ],
     [ "CCArrayQueue_VTable_Key", "group__VTable.html#gaa18f365631f69e5adaa85fee97b3e9d0", null ],
+    [ "CCBinaryTree_Get_Key", "group__VTable.html#gaaed838863a02131c93efd5e03687fcb2", null ],
     [ "CCListIterator_Get_Key", "group__VTable.html#gadc7265ab1649dffe6c0a90567f8ea441", null ],
     [ "CObject_VTable_Key", "group__VTable.html#gab7fe4cd83d3362001d29bf540f311999", null ]
 ];

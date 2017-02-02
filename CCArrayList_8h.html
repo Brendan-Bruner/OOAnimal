@@ -104,13 +104,13 @@ $(document).ready(function(){initNavTree('CCArrayList_8h.html','');});
 
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a>  </div>
+<a href="#nested-classes">Data Structures</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">CCArrayList.h File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &quot;<a class="el" href="CIList_8h_source.html">CIList.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="CCListIterator_8h_source.html">CCListIterator.h</a>&quot;</code><br />
 <code>#include &lt;CError.h&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for CCArrayList.h:</div>
@@ -126,6 +126,17 @@ $(document).ready(function(){initNavTree('CCArrayList_8h.html','');});
 <area shape="rect" id="node7" href="CIIterator_8h.html" title="CIIterator.h" alt="" coords="125,155,213,181"/>
 </map>
 </div>
+</div><div class="textblock"><div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="closed.png" alt="+"/> This graph shows which files directly or indirectly include this file:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="CCArrayList_8h__dep__incl.png" border="0" usemap="#liba_2util_2CCArrayList_8hdep" alt=""/></div>
+<map name="liba_2util_2CCArrayList_8hdep" id="liba_2util_2CCArrayList_8hdep">
+<area shape="rect" id="node2" href="CCBinaryTree_8h.html" title="liba/util/CCBinaryTree.h" alt="" coords="16,80,177,107"/>
+<area shape="rect" id="node3" href="CCBinaryTree_8c.html" title="liba/util/src/CCBinaryTree.c" alt="" coords="5,155,188,181"/>
+</map>
+</div>
 </div>
 <p><a href="CCArrayList_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -137,6 +148,15 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structCCArrayList.html" title="Array implementation of CIList. ">CCArrayList</a>'s vtable declaration.  <a href="structCCArrayList__VTable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a629ad3935ca9ee1be43adb90124c9ca4"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a629ad3935ca9ee1be43adb90124c9ca4"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CCARRAY_LIST_MASK_SIZE</b>(list_size)&#160;&#160;&#160;(((list_size) &gt;&gt; 3) + 1)</td></tr>
+<tr class="separator:a629ad3935ca9ee1be43adb90124c9ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38c08ec6c752bd02362ddcc5e2aebc46"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a38c08ec6c752bd02362ddcc5e2aebc46"></a>
+#define&#160;</td><td class="memItemRight" valign="bottom"><b>CCARRAY_LIST_SIZE</b>(element_length,  list_length)&#160;&#160;&#160;(((list_length) * (element_length)) + CCARRAY_LIST_MASK_SIZE(list_length))</td></tr>
+<tr class="separator:a38c08ec6c752bd02362ddcc5e2aebc46"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -144,7 +164,7 @@ Data Structures</h2></td></tr>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_185a2777ab922bf84bc8b8b92f1484e7.html">liba</a></li><li class="navelem"><a class="el" href="dir_d5aa739a15075206fa21a50a6283b056.html">util</a></li><li class="navelem"><a class="el" href="CCArrayList_8h.html">CCArrayList.h</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:24:13 for CObject by
+    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

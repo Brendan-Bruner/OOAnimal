@@ -306,7 +306,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>CAssertCastMe
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This contains a pointer to the top of an objects memory. It is used to back track to the top of an objects memory regardless of what super class reference is used. </p>
+<p>This contains a pointer to the top of an objects memory. It is used to back track to the top of an objects memory regardless of what super class reference is used. Using the above example, with a reference to Interface0 (pointer to 5'th row in memory layout table above), the C_ROOT variable can resolve the top of the memory block. </p>
 
 </div>
 </div>
@@ -332,7 +332,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>CAssertCastMe
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This is used to find the offset into the virtual table where a classes virtual methods are. </p>
+<p>This is used to find the offset into the virtual table where a classes virtual methods are. Using the above example, with a reference to Interface0 (pointer to 5'th row in memory layout table above), the C_ROOT variable can resolve the top of the memory block and an offset into vtable (in this case, the offset is 2). With the top of the memory block known, a pointer to the virtual table can be obtained. Moving two rows down the virtual table (third row), as specified by the offset value, we find method0. </p>
 
 </div>
 </div>
@@ -380,7 +380,7 @@ const char *&#160;</td><td class="memItemRight" valign="bottom"><b>CAssertCastMe
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_185a2777ab922bf84bc8b8b92f1484e7.html">liba</a></li><li class="navelem"><a class="el" href="dir_96e4371bca216c86f437ae87313da758.html">Class</a></li><li class="navelem"><a class="el" href="Class_8h.html">Class.h</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:24:13 for CObject by
+    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

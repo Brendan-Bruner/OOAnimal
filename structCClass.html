@@ -132,15 +132,25 @@ By doing this, a pointer to any object, which has as it's first member one of st
 This is used to back track to the base address of an object and the base address of the virtual table. It is very important that this structure is the first member in every class/interface structure. <br />
 This works because of the C99 standard in ISO/IEC 9899 6.7.2.1.13, which says in part: <br />
 "A pointer to a structure object, suitably converted, points to its initial member (or if that member is a bit-field, then to the unit in which it resides), and vice versa. There may be unnamed padding within a structure object, but not at its beginning." <br />
-Consider a class hierchy: </p><pre class="fragment">ClassB -&gt; ClassA -&gt; CObject
-                 |
-                 -&gt; Interface0
-                 |
-                 -&gt; Interface 1
-</pre><p> where ClassA and ClassB each have one member variable and ClassA, ClassB, Interface0, and Interface1 each declare one virtual function. In memory, the layout would look like this: </p><pre class="fragment">  ---------------------------------------------------------------
-  |                                                        ^  ^  ^
-  v                                                        |  |  |
-ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
+Consider a class hierchy: </p><pre class="fragment">|-------------------------|       |-------------------------|        |---------|
+| ClassB                  | ----&gt; | ClassA                  | -----&gt; | CObject |
+|-------------------------|       |-------------------------|   |    |---------|
+| int varB                |       | int varA                |   |
+|-------------------------|       |-------------------------|   |--&gt; |-----------------------------|
+| void methodB( ClassB* ) |       | void methodA( ClassA* ) |   |    | Interface0                  |
+|-------------------------|       |-------------------------|   |    |-----------------------------|
+                                                                |    | void method0( Interface0* ) |
+                                                                |    |-----------------------------|
+                                                                |
+                                                                |--&gt; |-----------------------------|
+                                                                     | Interface1                  |
+                                                                     |-----------------------------|
+                                                                     | void method1( Interface1* ) |
+                                                                     |-----------------------------|
+</pre><p> where ClassA inherits from <a class="el" href="structCObject.html" title="Base class. ">CObject</a> and implements Interface0 and Interface1. ClassB inherits from ClassA. If there is a variable of type ClassB: </p><div class="fragment"><div class="line">ClassB* anObject;</div></div><!-- fragment --><p> Then in memory the layout looks like this: </p><pre class="fragment">                      --------------------------------------------
+                      |                                    |  |  |
+                      |                                    |  |  |
+            anObject: ---&gt;  | void* C_ROOT               | -  |  |
                             | size_t C_VTABLE_OFFSET = 0 |    |  |
          -------------------| const void* C_VTABLE       |    |  |                         
          |                  | void (*free)( void* )      |    |  |
@@ -148,16 +158,16 @@ ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
          |                  | size_t C_VTABLE_OFFSET = 2 |       |
          |     Interface1:  | void* C_ROOT               | -------
          |                  | size_t C_VTABLE_OFFSET = 3 |
-         |                  | int classA_var             |
-         |                  | int classB_var             |
+         |         ClassA:  | int varA                   |
+         |         ClassB:  | int varB                   |
          |
          |
-         ------&gt; vtable:  | void (*CDestructor)( void* )             |
-                          | void (*classA_method)( ClassA* )         |
-                          | void (*interface0_method)( Interface0* ) |
-                          | void (*interface1_method)( Interface1* ) |
-                          | void (*classB_method)( ClassB* )         |
-</pre><p> Given this mapping of pointers, the virtual table can always be found and the entire objects memory location known regardless of the pointer reference. For example, with a reference to Interface0 (5'th row in layout above), the virtual table is found by using C_ROOT to find the top of the object's memory, then going to the third row to get a pointer to the virtual table. Then, the offset into the virtual table of Interface0's methods is found by using the C_VTABLE_OFFSET from the Interface0 reference.</p>
+         ----&gt; vtable --&gt; | void (*CDestructor)( void* )    |
+                          | void (*methodA)( ClassA* )      |
+                          | void (*method0)( Interface0* )  |
+                          | void (*_method1)( Interface1* ) |
+                          | void (*methodB)( ClassB* )      |
+</pre><p> Given this mapping of pointers, the virtual table can always be found and the entire objects memory location known regardless of the pointer reference. For example, with a reference to Interface0 (5'th row in layout above), the virtual table is found by using C_ROOT to find the top of the object's memory, then going to the third row to get a pointer to the virtual table. Then, the offset into the virtual table of Interface0's methods is found by using the C_VTABLE_OFFSET from the Interface0 reference. Note, the layout of the virtual table is different when function overriding is used. In this example, ClassA doesn't override any methods from <a class="el" href="structCObject.html" title="Base class. ">CObject</a> and ClassB doesn't override any methods from ClassA and/or <a class="el" href="structCObject.html" title="Base class. ">CObject</a>.</p>
 <p>The virtual tables leverage the 6.7.2.1.13 rule as well. Each class' table is declared such that the super class' virtual table is always the first member of the structure. By doing this, a class' virtual table can always be safetly type cast to a table of the super class. The same is not true interfaces, hence, their table offset value is never zero. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
 <li>liba/Class/<a class="el" href="Class_8h_source.html">Class.h</a></li>
@@ -168,7 +178,7 @@ ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structCClass.html">CClass</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:24:13 for CObject by
+    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
