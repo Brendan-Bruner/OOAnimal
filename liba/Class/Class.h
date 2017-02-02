@@ -176,20 +176,33 @@ extern void CAssert( char exp, char const* msg, char const* file, int line );
  *	padding within a structure object, but not at its beginning."
  *	<br>Consider a class hierchy:
  * @verbatim
-ClassB -> ClassA -> CObject
-                 |
-                 -> Interface0
-                 |
-                 -> Interface 1
+|-------------------------|       |-------------------------|        |---------|
+| ClassB                  | ----> | ClassA                  | -----> | CObject |
+|-------------------------|       |-------------------------|   |    |---------|
+| int varB                |       | int varA                |   |
+|-------------------------|       |-------------------------|   |--> |-----------------------------|
+| void methodB( ClassB* ) |       | void methodA( ClassA* ) |   |    | Interface0                  |
+|-------------------------|       |-------------------------|   |    |-----------------------------|
+                                                                |    | void method0( Interface0* ) |
+                                                                |    |-----------------------------|
+                                                                |
+                                                                |--> |-----------------------------|
+                                                                     | Interface1                  |
+                                                                     |-----------------------------|
+                                                                     | void method1( Interface1* ) |
+                                                                     |-----------------------------|
 @endverbatim
- * 	where ClassA and ClassB each have one member variable and ClassA, ClassB, 
- * 	Interface0, and Interface1 each declare one virtual function. In memory, 
- *	the layout would look like this:
+ *	where ClassA inherits from CObject and implements Interface0 and Interface1.
+ *	ClassB inherits from ClassA. If there is a variable of type ClassB:
+ * @code
+ *	ClassB* anObject;
+ * @endcode
+ *	Then in memory the layout looks like this:
  * @verbatim
-  ---------------------------------------------------------------
-  |                                                        ^  ^  ^
-  v                                                        |  |  |
-ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
+                      --------------------------------------------
+                      |                                    |  |  |
+                      |                                    |  |  |
+            anObject: --->  | void* C_ROOT               | -  |  |
                             | size_t C_VTABLE_OFFSET = 0 |    |  |
          -------------------| const void* C_VTABLE       |    |  |                         
          |                  | void (*free)( void* )      |    |  |
@@ -197,15 +210,15 @@ ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
          |                  | size_t C_VTABLE_OFFSET = 2 |       |
          |     Interface1:  | void* C_ROOT               | -------
          |                  | size_t C_VTABLE_OFFSET = 3 |
-         |                  | int classA_var             |
-         |                  | int classB_var             |
+         |         ClassA:  | int varA                   |
+         |         ClassB:  | int varB                   |
          |
          |
-         ------> vtable:  | void (*CDestructor)( void* )             |
-                          | void (*classA_method)( ClassA* )         |
-                          | void (*interface0_method)( Interface0* ) |
-                          | void (*interface1_method)( Interface1* ) |
-                          | void (*classB_method)( ClassB* )         |
+         ----> vtable --> | void (*CDestructor)( void* )    |
+                          | void (*methodA)( ClassA* )      |
+                          | void (*method0)( Interface0* )  |
+                          | void (*_method1)( Interface1* ) |
+                          | void (*methodB)( ClassB* )      |
 @endverbatim
  *	Given this mapping of pointers, the virtual table can always be found and the entire
  *	objects memory location known regardless of the pointer reference. For example, with 
@@ -213,6 +226,9 @@ ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
  *	using C_ROOT to find the top of the object's memory, then going to the third row
  *	to get a pointer to the virtual table. Then, the offset into the virtual table of
  *	Interface0's methods is found by using the C_VTABLE_OFFSET from the Interface0 reference.
+ *	Note, the layout of the virtual table is different when function overriding is used. In this
+ *	example, ClassA doesn't override any methods from CObject and ClassB doesn't override any methods
+ *	from ClassA and/or CObject.
  *
  *	The virtual tables leverage the 6.7.2.1.13 rule as well. Each class' table is declared
  *	such that the super class' virtual table is always the first member of the structure.
@@ -222,10 +238,18 @@ ClassB:  ClassA:  CObject:  | void* C_ROOT               | -  |  |
  * @var C_ROOT
  *	This contains a pointer to the top of an objects memory. It is used
  *	to back track to the top of an objects memory regardless of what
- *	super class reference is used. 
+ *	super class reference is used. Using the above example, with a reference to
+ *	Interface0 (pointer to 5'th row in memory layout table above), the
+ *	C_ROOT variable can resolve the top of the memory block. 
  * @var C_VTABLE_OFFSET
  *	This is used to find the offset into the  virtual table where a
- *	classes virtual methods are.
+ *	classes virtual methods are. Using the above example, with a reference to
+ *	Interface0 (pointer to 5'th row in memory layout table above), the
+ *	C_ROOT variable can resolve the top of the memory block and an offset into
+ *	vtable (in this case, the offset is 2). With the top of the memory block known,
+ *	a pointer to the virtual table can be obtained. Moving two rows down the virtual
+ *	table (third row), as specified by the offset value, we find method0.
+ *
  */
 struct CClass
 {
@@ -241,7 +265,7 @@ struct CClass
  * @brief
  *	Base class.
  * @details
- *	This is the class object. All classes inherit from this class. It must be the
+ *	This is the base Class. All classes inherit from it. It must be the
  *	first member of any class' structure declaration (unless they're inheriting from 
  *	from a user defined class, in that case, the user defined class must be the first
  *	member).

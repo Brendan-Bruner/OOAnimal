@@ -27,7 +27,7 @@
 
 
 /* There is one bit for every element in the list do indicate full/empty status.
- * To get the number of bytes required to for a one to one
+ * To get the number of bytes required for a one to one
  * map of element indices to bits: divide the max size of the list by the
  * number of bits in a byte, then add one to ensure
  * a round up. 
