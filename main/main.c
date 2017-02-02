@@ -14,16 +14,29 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Jun 24, 2016
+ * Jun 19, 2016
  */
-#ifndef CLASS_CERROR_H_
-#define CLASS_CERROR_H_
 
-typedef enum
+#include <unit.h>
+
+extern TEST_SUITE(destructor_suite);
+extern TEST_SUITE(virtual_suite);
+extern TEST_SUITE(interface_suite);
+extern TEST_SUITE(array_queue);
+extern TEST_SUITE(array_list);
+extern TEST_SUITE(array_list_iterator);
+extern TEST_SUITE(binary_tree);
+
+int main( int argc, char** argv )
 {
-	COBJ_OK = 0,
-	COBJ_ALLOC_FAIL = 1,
-	COBJ_INV_PARAM = 2
-} CError;
-
-#endif /* CLASS_CERROR_H_ */
+	(void) argc; (void) argv;
+	RUN_TEST_SUITE(destructor_suite);
+	RUN_TEST_SUITE(virtual_suite);
+	RUN_TEST_SUITE(interface_suite);
+	RUN_TEST_SUITE(array_queue);
+	RUN_TEST_SUITE(array_list);
+	RUN_TEST_SUITE(array_list_iterator);
+	RUN_TEST_SUITE(binary_tree);
+	PRINT_DIAG( );
+	return 0;
+}

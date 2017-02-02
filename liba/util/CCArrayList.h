@@ -23,8 +23,24 @@
 #define UTIL_CIARRAYLIST_H_
 
 #include "CIList.h"
-#include "CCListIterator.h"
 #include <CError.h>
+
+
+/* There is one bit for every element in the list do indicate full/empty status.
+ * To get the number of bytes required for a one to one
+ * map of element indices to bits: divide the max size of the list by the
+ * number of bits in a byte, then add one to ensure
+ * a round up. 
+ */
+#define CCARRAY_LIST_MASK_SIZE( list_size ) (((list_size) >> 3) + 1)
+
+/* Macro which resolves to the number of bytes that must be
+ * allocated for a list of length 'list_length' with elements of size
+ * 'element_length'.
+ */
+#define CCARRAY_LIST_SIZE( element_length, list_length )				\
+	(((list_length) * (element_length)) + CCARRAY_LIST_MASK_SIZE(list_length))
+
 
 /************************************************************************/
 /* Class and vtable decalre.						*/
@@ -104,6 +120,10 @@ struct CCArrayList
 		 * implementation.
 		 */
 		size_t add_index;
+
+		/* Used in destructor.
+		 */
+		CBool is_static;
 	} _;
 };
 
@@ -160,6 +180,38 @@ const struct CCArrayList_VTable* CCArrayList_Get_Key( );
  *	<br>COBJ_ALLOC_FAIL: on failure to allocate memory for list.
  */	
 CError CCArrayList( struct CCArrayList* self, size_t element_size, size_t max_size );
+
+/**
+ * @memberof CCArrayList
+ * @constructor
+ * @details
+ * 	Creates an array list using the memory block provided as input. The size
+ *	of the memory block for different element_size and max_size lists
+ *	can be resolved at compile time using the macro CCARRAY_LIST_SIZE().
+ *	For example, to make a list with the max size of three elements, and
+ *	each element being the size of an int:
+ *	@code
+ *		struct CCArrayList list;
+ *		char list_memory[CCARRAY_LIST_SIZE(sizeof(int), 3)];
+ *		CCArrayListStatic(&list, sizeof(int), 3, list_memory);
+ *	@endcode
+ *	Also, take a look at CCArrayList().
+ * @param self
+ *	The list.
+ * @param element_size
+ *	The size of elements being copied into/out of the list.
+ * @param max_size
+ *	The maximum number of elements in the list.
+ * @returns 
+ *	Always returns COBJ_OK.
+ */	
+CError CCArrayListStatic
+(
+	struct CCArrayList* self,
+	size_t element_size,
+	size_t max_size,
+	void* memory
+);
 
 #endif /* UTIL_CIARRAYLIST_H_ */
 
