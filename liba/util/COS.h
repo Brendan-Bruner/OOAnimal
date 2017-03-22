@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Brendan Bruner
+ * Copyright 2017 Brendan Bruner
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,17 @@
  * limitations under the License.
  *
  * bbruner@ualberta.ca
- * Jun 24, 2016
+ * March 22, 2017
  */
-#ifndef CLASS_CERROR_H_
-#define CLASS_CERROR_H_
+/**
+ * @file
+ */
+#ifndef UTIL_COS_H_
+#define UTIL_COS_H_
 
-typedef enum
-{
-	COBJ_OK = 0,
-	COBJ_ALLOC_FAIL = 1,
-	COBJ_INV_PARAM = 2,
-	COBJ_EXT_FAIL = 3
-} CError;
+typedef int COS_Timemsec;
+#define COS_BLOCK_FOREVER 0
+#define MS_PER_SECOND 1000
+#define NS_PER_MS 1000*1000
 
-#endif /* CLASS_CERROR_H_ */
+#endif /* UTIL_COS_H_ */
