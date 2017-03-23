@@ -106,8 +106,25 @@ void* CObjectCast_( void* self, const char* file, int line )
 /* Wrapper for calling destructor. */
 void CObject_Destroy( struct CObject* self )
 {
+	const void* vtable;
+	
 	CAssertObject(self);
-	((struct CObject_VTable*) CGetVTable(self))->CDestructor(self);
+
+	/* May be given a pointer to an interface object. Need */
+	/* to find the root of the object. */
+	self =  ((struct CClass*) self)->C_ROOT;
+
+	/* If this assert fails, the objects inheritance chain is not correctly */
+	/* calling super class constructors. */
+	CAssertObject(self);
+	
+	/* Get this objects vtable. */
+	vtable = self->C_VTABLE;
+
+	/* Call the destructor. */
+	((struct CObject_VTable*) vtable)->CDestructor(self);
+
+	//((struct CObject_VTable*) CGetVTable(self))->CDestructor(self);
 }
 
 /* Set memory free method called in destructor. */
