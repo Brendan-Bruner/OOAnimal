@@ -84,16 +84,22 @@ static void CCThreadedQueue_QueryUnlock( struct CCThreadedQueue* self )
 
 static CCTQueueError CCThreadedQueue_RemoveLock( struct CCThreadedQueue* self, COS_Timemsec blockTime )
 {
+	struct timespec abstime;
+	
 	CAssertObject(self);
 
-	struct timespec abstime;
-	clock_gettime(CLOCK_REALTIME, &abstime);
-	abstime.tv_sec += blockTime / MS_PER_SECOND;
-	abstime.tv_nsec += (blockTime % MS_PER_SECOND) * NS_PER_MS;
+	if( blockTime == COS_BLOCK_FOREVER ) {
+		pthread_mutex_lock(&self->_.mutex);
+	}
+	else {
+		clock_gettime(CLOCK_REALTIME, &abstime);
+		abstime.tv_sec += blockTime / MS_PER_SECOND;
+		abstime.tv_nsec += (blockTime % MS_PER_SECOND) * NS_PER_MS;
 
-	if( pthread_mutex_timedlock(&self->_.mutex, &abstime) != 0 ) {
-		/* Timed out. */
-		return CCTQUEUE_ERR_TIMEOUT;
+		if( pthread_mutex_timedlock(&self->_.mutex, &abstime) != 0 ) {
+			/* Timed out. */
+			return CCTQUEUE_ERR_TIMEOUT;
+		}
 	}
 
 	for( ;; ) {
@@ -104,10 +110,15 @@ static CCTQueueError CCThreadedQueue_RemoveLock( struct CCThreadedQueue* self, C
 		}
 
 		/* No elements to remove, block on conditional variable. */
-		if( pthread_cond_timedwait(&self->_.removeCondition, &self->_.mutex, &abstime) != 0 ) {
-			/* Timed out. */
-			pthread_mutex_unlock(&self->_.mutex);
-			return CCTQUEUE_ERR_TIMEOUT;
+		if( blockTime == COS_BLOCK_FOREVER ) {
+			pthread_cond_wait(&self->_.removeCondition, &self->_.mutex);
+		}
+		else {
+			if( pthread_cond_timedwait(&self->_.removeCondition, &self->_.mutex, &abstime) != 0 ) {
+				/* Timed out. */
+				pthread_mutex_unlock(&self->_.mutex);
+				return CCTQUEUE_ERR_TIMEOUT;
+			}
 		}
 	}
 
@@ -127,16 +138,22 @@ static void CCThreadedQueue_RemoveUnlock( struct CCThreadedQueue* self )
 
 static CCTQueueError CCThreadedQueue_InsertLock( struct CCThreadedQueue* self, COS_Timemsec blockTime )
 {
+	struct timespec abstime;
+	
 	CAssertObject(self);
 
-	struct timespec abstime;
-	clock_gettime(CLOCK_REALTIME, &abstime);
-	abstime.tv_sec += blockTime / MS_PER_SECOND;
-	abstime.tv_nsec += (blockTime % MS_PER_SECOND) * NS_PER_MS;
+	if( blockTime == COS_BLOCK_FOREVER ) {
+		pthread_mutex_lock(&self->_.mutex);
+	}
+	else {
+		clock_gettime(CLOCK_REALTIME, &abstime);
+		abstime.tv_sec += blockTime / MS_PER_SECOND;
+		abstime.tv_nsec += (blockTime % MS_PER_SECOND) * NS_PER_MS;
 
-	if( pthread_mutex_timedlock(&self->_.mutex, &abstime) != 0 ) {
-		/* Timed out. */
-		return CCTQUEUE_ERR_TIMEOUT;
+		if( pthread_mutex_timedlock(&self->_.mutex, &abstime) != 0 ) {
+			/* Timed out. */
+			return CCTQUEUE_ERR_TIMEOUT;
+		}
 	}
 
 	for( ;; ) {
@@ -146,10 +163,15 @@ static CCTQueueError CCThreadedQueue_InsertLock( struct CCThreadedQueue* self, C
 		}
 
 		/* No room to add elements, block on conditional variable. */
-		if( pthread_cond_timedwait(&self->_.insertCondition, &self->_.mutex, &abstime) != 0 ) {
-			/* Timed out. */
-			pthread_mutex_unlock(&self->_.mutex);
-			return CCTQUEUE_ERR_TIMEOUT;
+		if( blockTime == COS_BLOCK_FOREVER ) {
+			pthread_mutex_lock(&self->_.mutex);
+		}
+		else {
+			if( pthread_cond_timedwait(&self->_.insertCondition, &self->_.mutex, &abstime) != 0 ) {
+				/* Timed out. */
+				pthread_mutex_unlock(&self->_.mutex);
+				return CCTQUEUE_ERR_TIMEOUT;
+			}
 		}
 	}
 

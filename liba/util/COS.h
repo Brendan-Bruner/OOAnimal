@@ -22,8 +22,10 @@
 #ifndef UTIL_COS_H_
 #define UTIL_COS_H_
 
-typedef int COS_Timemsec;
-#define COS_BLOCK_FOREVER 0
+#include <limits.h>
+
+typedef unsigned int COS_Timemsec;
+#define COS_BLOCK_FOREVER UINT_MAX
 #define COS_NO_BLOCK 0
 #define MS_PER_SECOND 1000
 #define NS_PER_MS 1000*1000
