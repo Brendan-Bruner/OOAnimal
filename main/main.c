@@ -26,6 +26,7 @@ extern TEST_SUITE(array_queue);
 extern TEST_SUITE(array_list);
 extern TEST_SUITE(array_list_iterator);
 extern TEST_SUITE(binary_tree);
+extern TEST_SUITE(threaded_array_queue);
 
 int main( int argc, char** argv )
 {
@@ -34,6 +35,7 @@ int main( int argc, char** argv )
 	RUN_TEST_SUITE(virtual_suite);
 	RUN_TEST_SUITE(interface_suite);
 	RUN_TEST_SUITE(array_queue);
+	RUN_TEST_SUITE(threaded_array_queue);
 	RUN_TEST_SUITE(array_list);
 	RUN_TEST_SUITE(array_list_iterator);
 	RUN_TEST_SUITE(binary_tree);

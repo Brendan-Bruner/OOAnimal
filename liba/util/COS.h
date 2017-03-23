@@ -24,6 +24,7 @@
 
 typedef int COS_Timemsec;
 #define COS_BLOCK_FOREVER 0
+#define COS_NO_BLOCK 0
 #define MS_PER_SECOND 1000
 #define NS_PER_MS 1000*1000
 

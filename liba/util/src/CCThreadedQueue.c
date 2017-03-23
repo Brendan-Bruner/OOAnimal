@@ -266,7 +266,7 @@ static void CDestructor( void* self_ )
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCThreadedQueue_VTable* CCArrayQueue_VTable_Key( )
+const struct CCThreadedQueue_VTable* CCThreadedQueue_VTable_Key( )
 {
 	static struct CCThreadedQueue_VTable vtable;
 

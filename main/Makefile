@@ -20,7 +20,7 @@ OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
 # All libraries
 STATIC_LIB_SRC := ../liba/Class ../liba/tests ../liba/util
-STATIC_LIB_NAME := ctests cutil cclass
+STATIC_LIB_NAME := ctests cutil cclass pthread
 
 STATIC_LIBS := $(addprefix -l,$(STATIC_LIB_NAME));
 STATIC_LIB_BUILD := $(addsuffix /debug,$(addprefix -L,$(STATIC_LIB_SRC)))
