@@ -20,6 +20,7 @@
 #include <unit.h>
 #include <CCArrayQueue.h>
 #include <CCThreadedQueue.h>
+#include <pthread.h>
 
 TEST_SETUP( ) { }
 TEST_TEARDOWN( ) { }
@@ -270,6 +271,132 @@ TEST(one)
 	CDestroy(&oneQueue);
 }
 
+#ifdef __unix__
+#include <semaphore.h>
+#include <unistd.h>
+sem_t syncObj;
+#define ONE_SECOND 1000
+static void* thread1( void* arg ) 
+{
+	char dat[DEFAULT_ELEMENT_SIZE];
+	int i;
+	CCTQueueError err;
+	(void) arg;
+	
+	/* Block on queue trying to pull data out with timeout. */
+	err = CCThreadedQueue_Remove(&queue, dat, ONE_SECOND);
+	ASSERT(err == CCTQUEUE_ERR_TIMEOUT, "was expecting timeout err");
+	
+	/* Post to sync object. */
+	sem_post(&syncObj);
+	
+	/* Block on queue again forever to pull data. */
+	err = CCThreadedQueue_Remove(&queue, dat, COS_BLOCK_FOREVER);
+	ASSERT(err == CCTQUEUE_OK, "was expecting no err");
+
+	/* Fill queue to max. */
+	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
+		dat[i] = 2*i;
+	}       
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		CCThreadedQueue_Insert(&queue, dat, COS_BLOCK_FOREVER);
+	}
+
+	/* Block on queue trying to put data, ensure timeout. */
+	err = CCThreadedQueue_Insert(&queue, dat, ONE_SECOND);
+	ASSERT(err == CCTQUEUE_ERR_TIMEOUT, "was expecting timeout err");
+	
+	/* Post to syn object. */
+	/* Block on queue again forever to put data. */
+	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
+		dat[i] = 4*(i+1);
+	}       
+	sem_post(&syncObj);
+	CCThreadedQueue_Insert(&queue, dat, COS_BLOCK_FOREVER);
+		
+	/* Empty queue and verify contents. */
+	for( i = 0; i < DEFAULT_LENGTH; ++i ) {
+		CCThreadedQueue_Remove(&queue, dat, COS_BLOCK_FOREVER);
+	}
+	ASSERT(dat[0] == 4, "Got unexpected data");
+
+	pthread_exit(NULL);
+}
+
+static void* thread2( void* arg ) 
+{
+	char dat[DEFAULT_ELEMENT_SIZE];
+	int i;
+	(void) arg;
+	
+	for( i = 0; i < DEFAULT_ELEMENT_SIZE; ++i ) {
+		dat[i] = i;
+	}
+	
+	/* Block on sync object. */
+	sem_wait(&syncObj);
+	
+	/* Post to queue. There is no code implemented that prevents this task
+	 * from running the moment thread1 posts to the sync object. this will
+	 * help make sure thread1 gets to block before the data is inserted
+	 */
+	sleep(1);
+	CCThreadedQueue_Insert(&queue, dat, COS_BLOCK_FOREVER);
+	
+	/* Block on syn object. */
+	sem_wait(&syncObj);
+		
+	/* Pop from queue. */
+	sleep(1);
+	CCThreadedQueue_Remove(&queue, dat, COS_BLOCK_FOREVER);
+
+	pthread_exit(NULL);
+}
+#endif
+
+TEST(threading)
+{
+	CCThreadedQueue_Clear(&queue);
+
+	/* Create two threads. One waits on the queue for data, the other 
+	 * puts data in it. Test that waiting actually blocks.
+	 * Do the same thing with a full queue and putting data 
+	 * into it.
+	 */
+	#ifdef __unix__
+	/* Create threads. */
+	/* Wait for threads to join. */
+	/* Done. */
+	pthread_t threadObj1, threadObj2;
+	pthread_attr_t attr;
+	int err;
+	void* status;
+
+	if( sem_init(&syncObj, 0, 0) != 0 ) {
+		ABORT_TEST("Error creating sync object");
+	}
+	
+	err = pthread_attr_init(&attr);
+	if( err != 0 ) {
+		ABORT_TEST("Error creating attritube");
+	}
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	err = pthread_create(&threadObj1, &attr, thread1, NULL);
+	if( err != 0 ) {
+		ABORT_TEST("Error creating thread 1");
+	}
+	err = pthread_create(&threadObj2, &attr, thread2, NULL);
+	if( err != 0 ) {
+		ABORT_TEST("Error creating thread 2");
+	}
+	pthread_attr_destroy(&attr);
+	pthread_join(threadObj1, &status);
+	pthread_join(threadObj2, &status);
+	#else
+	ABORT_TEST("No tests written for current operating system");
+	#endif
+}
+
 TEST_SUITE(threaded_array_queue)
 {
 	/* Construct queue. */
@@ -292,6 +419,6 @@ TEST_SUITE(threaded_array_queue)
 	ADD_TEST(clear);
 	/* Test a queue of size one. */
 	ADD_TEST(one);
-
+	ADD_TEST(threading);
 	CDestroy(&queue);
 }

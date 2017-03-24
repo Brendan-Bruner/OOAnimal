@@ -164,7 +164,7 @@ static CCTQueueError CCThreadedQueue_InsertLock( struct CCThreadedQueue* self, C
 
 		/* No room to add elements, block on conditional variable. */
 		if( blockTime == COS_BLOCK_FOREVER ) {
-			pthread_mutex_lock(&self->_.mutex);
+			pthread_cond_wait(&self->_.insertCondition, &self->_.mutex);
 		}
 		else {
 			if( pthread_cond_timedwait(&self->_.insertCondition, &self->_.mutex, &abstime) != 0 ) {
