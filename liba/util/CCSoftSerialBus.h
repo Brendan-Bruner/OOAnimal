@@ -117,32 +117,51 @@ CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self, struct CCThreadedQue
 /**
  * @memberof CCSoftSerialBus
  * @details
+ *	Should never be called in application code. This is used to put data on the bus.
+ * @param device
+ *	The device which is trying to put data on the bus
  */
-CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CCSoftSerial* controller, void* data );
+CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void* data, COSTimemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
  * @details
+ *	Should never be called in application code. This is used to read data off the bus.
+ * @param device
+ *	The device which is trying to read data off the bus.
+
  */
-CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerial* controller, void** data );
+CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void** data, COSTimemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
  * @details
+ *	Should never be called in application code. This is used to select a device
+ * @param device
+ *	The device which is trying to select a slave.
+
  */
-CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self, struct CCSoftSerial* controller, CCSoftSerialID id );
+CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, CCSoftSerialID id, COSTimemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
  * @details
+ *	Should never be called in application code. This is used to unselect a device.
+ * @param device
+ *	The device which is unselecting a slave.
+
  */
-CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self, struct CCSoftSerial* controller );
+CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device );
 
 /**
  * @memberof CCSoftSerialBus
  * @details
+ *	Should never be called in application code. This is used to put data on the bus.
+ * @param device
+ *	The device which is waiting to be selected.
+
  */
-CCSoftSerialError CCSoftSerialBus_Isselect( struct CCSoftSerialBus* self, struct CCSoftSerial* controller );
+CCSoftSerialError CCSoftSerialBus_Isselect( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, COSTimemsec blockTime );
 
 
 #endif /* UTIL_CCSOFTSERIALBUS_H_ */
