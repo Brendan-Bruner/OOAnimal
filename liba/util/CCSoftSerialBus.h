@@ -23,8 +23,8 @@
 #ifndef UTIL_CCSOFTSERIALBUS_H_
 #define UTIL_CCSOFTSERIALBUS_H_
 
-#include <CCSoftSerial.h>
-#include <CIQueue.h>
+#include <CCSoftSerialDev.h>
+#include <CCThreadedQueue.h>
 
 /************************************************************************/
 /* Declare Class and vtable.						*/
@@ -48,9 +48,11 @@ struct CCSoftSerialBus
 	/* Private member variables. */
 	struct
 	{
-		CCSoftSerialID selected;
+		struct CCSoftSerialDev* master;
+		struct CCSoftSerialDev* slave;
 		struct CIQueue* misoChannel;
 		struct CIQueue* mosiChannel;
+		CBool isStatic;
 	}_;
 };
 
@@ -61,10 +63,25 @@ struct CCSoftSerialBus
  */
 struct CCSoftSerialBus_VTable
 {
-	/* Space for a copy of the super class' virtual table must  */
+	/* Space for a carbon copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;	
+	/* This is where we will override inherited members. */
+	struct CObject_VTable  CObject_VTable;
+
+	/* Since we are overriding the destructor, and need to call the */
+	/* originally implementation in the new implementation, we need to */
+	/* keep a reference to the super class' vtable. */
+	const struct CObject_VTable* CObject_VTable_Ref;
 };
+
+/**
+ * @memberof CCSoftSerialBus
+ * @ingroup VTable
+ * @details
+ *	Get reference to the struct CCSoftSerialBus's vtable.
+ */
+const struct CCSoftSerialBus_VTable* CCSoftSerialBus_VTable_Key( );
+
 
 /************************************************************************/
 /* Class Methods							*/
@@ -72,9 +89,30 @@ struct CCSoftSerialBus_VTable
 /**
  * @memberof CCSoftSerialBus
  * @constructor
+ * @sa CCSoftSerialDevMaster()
  * @details
+ * @param self
+ *	The serial bus to construct.
+ * @param tokenSize
+ *	The length of data arrays which are written/read by devices with CCSoftSerialDev_Read()
+ *	and CCSoftSerialDev_Write().
+ * @param channelSize
+ *	The number of tokens which can fit into the read/write channel before causing an
+ *	overflow condition.
  */
-CError CCSoftSerialBus( struct CCSoftSerialBus* self );
+CError CCSoftSerialBus( struct CCSoftSerialBus* self, size_t tokenSize, size_t channelSize );
+
+/**
+ * @memberof CCSoftSerialBus
+ * @constructor
+ * @note
+ *	Master in Slave out (miso) and Master out Slave in (mosi)
+ * @details
+ *	Same as CCSoftSerialBus, except the programmer is reponsible for constructing the miso and
+ *	mosi data channels (the channels are just thread safe queues).
+ *	When the destructor for the bus object is called, these queues will be have their destructor called too.
+ */
+CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self, struct CCThreadedQueue* misoChannel, struct CCThreadedQueue* mosiChannel );
 
 /**
  * @memberof CCSoftSerialBus
