@@ -24,18 +24,22 @@
 #ifndef UTIL_CCSOFTSERIALDEV_H_
 #define UTIL_CCSOFTSERIALDEV_H_
 
+#include <Class.h>
+#include <CError.h>
+#include "COS.h"
+
 /************************************************************************/
 /* Error codes.								*/
 /************************************************************************/
 /**
- * @enum CCSoftSerialDevError
+ * @enum CCSoftSerialError
  * @ingroup InterTaskCommunication
- * @var CCSOFTSERIALDEV_OK
+ * @var CCSOFTSERIAL_OK
  *	No error
- * @var CCSOFTSERIALDEV_ERR_NOT_SELECTED
+ * @var CCSOFTSERIAL_ERR_NOT_SELECTED
  *	Slave device attempting to use the serial bus when it's not
  *	selected.
- * @var CCSOFTSERIALDEV_ERR_CONTENTION
+ * @var CCSOFTSERIAL_ERR_CONTENTION
  *	One of two possibilities:
  *		- Master attempting to use the bus when another
  *		  master already has access to the bus. Read/write will have
@@ -43,28 +47,30 @@
  *		- Master attempting to select a slave when a another
  *		  master already has access to the bus. slave select
  *		  will fail.
- * @var CCSOFTSERIALDEV_ERR_PREEMPTED
+ * @var CCSOFTSERIAL_ERR_PREEMPTED
  *	On a bus which allows for pre-emption, this means the slave/master
  *	was thrown off the bus by a higher priority master. This will be
  *	returned only one time by ether of read/write to indicate you've
  *	been pre-empted. slave select has to be used again to regain bus
  *	controll. Remaining calls to read/write will return 
- *	CCSOFTSERIALDEV_ERR_NOT_SELECTED.
- * @var CCSOFTSERIALDEV_ERR_TIMEOUT
+ *	CCSOFTSERIAL_ERR_NOT_SELECTED.
+ * @var CCSOFTSERIAL_ERR_TIMEOUT
  *	Timeout trying to select a slave. This means a higher priority
  *	master still has control of the bus. 
- * @var CCSOFTSERIALDEV_ERR_PRIV
+ * @var CCSOFTSERIAL_ERR_PRIV
  *	Slave device attempting to do somethign that only a master device
  *	has the privileges to do.
  */
 typedef enum
 {
-	CCSOFTSERIALDEV_OK = 0,
-	CCSOFTSERIALDEV_ERR_NOT_SELECTED = 1,
-	CCSOFTSERIALDEV_ERR_CONTENTION = 2,
-	CCSOFTSERIALDEV_ERR_PREEMPTED = 3,
-	CCSOFTSERIALDEV_ERR_TIMEOUT = 4,
-} CCSoftSerialDevError;
+	CCSOFTSERIAL_OK = 0,
+	CCSOFTSERIAL_ERR_NOT_SELECTED = 1,
+	CCSOFTSERIAL_ERR_CONTENTION = 2,
+	CCSOFTSERIAL_ERR_PREEMPTED = 3,
+	CCSOFTSERIAL_ERR_TIMEOUT = 4,
+	CCSOFTSERIAL_ERR_PRIV = 5,
+	CCSOFTSERIAL_ERR_INV_PARAM = 6
+} CCSoftSerialError;
 
 
 /**
@@ -76,18 +82,22 @@ typedef enum
  */
 typedef enum
 {
-	CCSOFTSERIALDEV_ID0 = 1,
-	CCSOFTSERIALDEV_ID1 = 2
+	CCSOFTSERIAL_NO_ID, /* reserved */
+	CCSOFTSERIAL_ID0,
+	CCSOFTSERIAL_ID1
 } CCSoftSerialDevID;
 
-/*
- * Lowest possible priority level. Serial objects with this priority 
+
+/* Lowest possible priority level. Serial objects with this priority 
  * will be treated as slaves.
  */
 #define CCSOFTSERIALDEV_SLAVE 0
 
-/* 
- * Forward declar serial bus class
+/* Lowest priority level possible for a master.
+ */
+#define CCSOFTSERIALDEV_MIN_PRIO 1
+
+/* Forward declare serial bus class
  */
 struct CCSoftSerialBus;
 
@@ -104,65 +114,13 @@ struct CCSoftSerialBus;
  *	priority encoded serial bus.
  * @details
  *	Implements an interface to a software defined  multi master 
- *	priority encoded serial bus. This class acts as a single controller
+ *	priority encoded serial bus. This class acts as a single device
  *	attached to the bus which manages writing/reading to the bus. An object 
- *	of this class can write/read to a bus which has other controllers attached
- *	to it.
- */
-struct CCSoftSerialDev
-{
-	/* Super class must always be first member */
-	/* of a class' struct. */
-	struct CObject cObject;
-
-	/* Private member variables. */
-	struct
-	{
-		CCSoftSerialDevID id;
-		char priority;
-		struct CCSoftSerialBus* bus;
-	}_;
-};
-
-/**
- * @ingroup VTable
- * @brief
- *	CCSoftSerialDev vtable
- */
-struct CCSoftSerialDev_VTable
-{
-	/* Space for a copy of the super class' virtual table must  */
-	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;	
-};
-
-/**
- * @memberof CCSoftSerialDev
- * @ingroup VTable
- * @details
- *	Get reference to the struct CCSoftSerialDev's vtable.
- */
-const struct CCSoftSerialDev_VTable* CCSoftSerialDev_VTable_Key( );
-
-
-/************************************************************************/
-/* Class Methods							*/
-/************************************************************************/
-/**
- * @memberof CCSoftSerialDev
- * @constructor
- * @sa CCSoftSerialDevSlave()
- * @details
- *	Creates a CCSoftSerialDev controller object as a master device on the
- *	bus. As a master, the device can use CCSoftSerialDev_Select() to 
- *	select other masters or slaves to write/read from. Only one master
- *	can control the bus at a time. The master must release the bus when done
- *	with CCSoftSerialDev_Unselect().
+ *	of this class can write/read to other devices attached to the same bus.
  *
  *	An example of creating a bus and attaching a master and a slave. The master
  *	writes a message to the slave, then waits for a response. The slave waits until
  *	it's selected, then listens for a message, then gives a reponse.
- *
  *	@code
  *	struct CCSoftSerialBus bus; 
  *	struct CCSoftSerialDev master;
@@ -231,6 +189,56 @@ const struct CCSoftSerialDev_VTable* CCSoftSerialDev_VTable_Key( );
  *		}
  *	}
  *	@endcode
+ */
+struct CCSoftSerialDev
+{
+	/* Super class must always be first member */
+	/* of a class' struct. */
+	struct CObject cobject;
+
+	/* Private member variables. */
+	struct
+	{
+		CCSoftSerialDevID id;
+		char priority;
+		struct CCSoftSerialBus* bus;
+	} priv;
+};
+
+/**
+ * @ingroup VTable
+ * @brief
+ *	CCSoftSerialDev vtable
+ */
+struct CCSoftSerialDev_VTable
+{
+	/* Space for a copy of the super class' virtual table must  */
+	/* be the first member of a class virtual table declaration. */
+	struct CObject_VTable  cobject_override;
+};
+
+/**
+ * @memberof CCSoftSerialDev
+ * @ingroup VTable
+ * @details
+ *	Get reference to the struct CCSoftSerialDev's vtable.
+ */
+const struct CCSoftSerialDev_VTable* CCSoftSerialDev_GetVTable( );
+
+
+/************************************************************************/
+/* Class Methods							*/
+/************************************************************************/
+/**
+ * @memberof CCSoftSerialDev
+ * @constructor
+ * @sa CCSoftSerialDevSlave()
+ * @details
+ *	Creates a CCSoftSerialDev controller object as a master device on the
+ *	bus. As a master, the device can use CCSoftSerialDev_Select() to 
+ *	select other masters or slaves to write/read from. Only one master
+ *	can control the bus at a time. The master must release the bus when done
+ *	with CCSoftSerialDev_Unselect().
  * @param self
  *	The object to construct.
  * @param priority
@@ -312,7 +320,7 @@ char CCSoftSerialDev_GetPriority( struct CCSoftSerialDev* self );
  * @param blockTime
  *	The number of ms to block for while waiting for the bus to become available.
  */
-CCSoftSerialDevError CCSoftSerialDev_Select( struct CCSoftSerialDev* self, CCSoftSerialDevID id, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialDev_Select( struct CCSoftSerialDev* self, CCSoftSerialDevID id, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialDev
@@ -320,7 +328,7 @@ CCSoftSerialDevError CCSoftSerialDev_Select( struct CCSoftSerialDev* self, CCSof
  *	Release the bus when finished writing/reading from it so that another
  *	master device can use it. Returns an error if called by a slave device.
  */
-CCSoftSerialDevError CCSoftSerialDev_Unselect( struct CCSoftSerialDev* self );
+CCSoftSerialError CCSoftSerialDev_Unselect( struct CCSoftSerialDev* self );
 
 /**
  * @memberof CCSoftSerialDev
@@ -331,7 +339,7 @@ CCSoftSerialDevError CCSoftSerialDev_Unselect( struct CCSoftSerialDev* self );
  * @returns
  *	true if selected, false otherwise. 
  */
-CBool CCSoftSerialDev_Isselected( struct CCSoftSerialDev* self, COSTimemsec blockTime );
+CBool CCSoftSerialDev_Isselected( struct CCSoftSerialDev* self, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialDev
@@ -352,7 +360,7 @@ CBool CCSoftSerialDev_Isselected( struct CCSoftSerialDev* self, COSTimemsec bloc
  *	the master has unselected you), the block will end immediately and the function will
  *	return.
  */
-CCSoftSerialDevError CCSoftSerialDev_Write( struct CCSoftSerialDev* self, void* data, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialDev_Write( struct CCSoftSerialDev* self, void* data, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialDev
@@ -376,7 +384,7 @@ CCSoftSerialDevError CCSoftSerialDev_Write( struct CCSoftSerialDev* self, void* 
  *	the master has unselected you), the block will end immediately and the function will
  *	return.
  */
-CCSoftSerialDevError CCSoftSerialDev_Read( struct CCSoftSerialDev* self, void** data, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialDev_Read( struct CCSoftSerialDev* self, void** data, COS_Timemsec blockTime );
 
 
 #endif /* UTIL_CCSOFTSERIALDEV_H_ */

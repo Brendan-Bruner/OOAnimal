@@ -29,7 +29,7 @@ const struct DTClassA_VTable* DTClassA_VTable_Key( )
 	static struct DTClassA_VTable vtable;
 
 	/* Not changing the super's vtable, so just copy it in. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.CObject_VTable = *CObject_GetVTable( );
 
 	/* Return pointer. */
 	return &vtable;

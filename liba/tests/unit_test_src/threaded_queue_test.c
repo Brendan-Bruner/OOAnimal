@@ -233,7 +233,7 @@ TEST(one)
 	if( CCArrayQueue(&oneBackbone, DEFAULT_ELEMENT_SIZE, ONE_TEST_QUEUE_LEN) != COBJ_OK ) {
 		
 	}
-	if( CCThreadedQueue(&oneQueue, &oneBackbone.cIQueue) != COBJ_OK ) {
+	if( CCThreadedQueue(&oneQueue, &oneBackbone.ciqueue) != COBJ_OK ) {
 	  ABORT_TEST("Failed to construct queue backbone");
 	}
 
@@ -403,7 +403,7 @@ TEST_SUITE(threaded_array_queue)
 	if( CCArrayQueue(&backbone, DEFAULT_ELEMENT_SIZE, DEFAULT_LENGTH) != COBJ_OK ) {
 		ABORT_TEST("Failed to construct queue backbone");
 	}
-	if( CCThreadedQueue(&queue, &backbone.cIQueue) != COBJ_OK ) {
+	if( CCThreadedQueue(&queue, &backbone.ciqueue) != COBJ_OK ) {
 		ABORT_TEST("Failed to construct queue backbone");
 	}
 

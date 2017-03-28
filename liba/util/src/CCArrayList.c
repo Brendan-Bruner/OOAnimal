@@ -157,7 +157,7 @@ static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 		 * increment it and insert the element.
 		 */
 		CIListError err;
-		err = CIList_AddAt(&self->cIList, element, self->_.add_index);
+		err = CIList_AddAt(&self->cilist, element, self->_.add_index);
 		self->_.add_index = (self->_.add_index + 1) % self->_.max_size;
 		return err;
 	}
@@ -173,7 +173,7 @@ static CIListError CIList_Add_Def( struct CIList* self_, void* element )
 			 */
 			CIListError err;
 			self->_.add_index = i;
-			err = CIList_AddAt(&self->cIList, element, self->_.add_index);
+			err = CIList_AddAt(&self->cilist, element, self->_.add_index);
 			self->_.add_index = (self->_.add_index + 1) % self->_.max_size;
 			return err;
 		}
@@ -282,7 +282,7 @@ static CIListError CIList_Remove_Def( struct CIList* self_, void* element, size_
 
 	/* Get the element that is going to be removed. 
 	 */
-	CIListError err = CIList_Get(&self->cIList, element, index);
+	CIListError err = CIList_Get(&self->cilist, element, index);
 	if( err != CILIST_OK )  {
 		return err;
 	}
@@ -333,34 +333,34 @@ static void CDestructor( void* self_ )
 	/* Call super's destructor
 	 */
 	const struct CCArrayList_VTable* vtable = CGetVTable(self);
-	vtable->CObject_VTable_Ref->CDestructor(self);
+	vtable->cobject->CDestructor(self);
 }
 
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCArrayList_VTable* CCArrayList_VTable_Key( )
+const struct CCArrayList_VTable* CCArrayList_GetVTable( )
 {
 	static struct CCArrayList_VTable vtable  =
 		{
 			/* Assign implemenation of interface CIQueue's methods. */
-			.CIList_VTable.add = CIList_Add_Def,
-			.CIList_VTable.addAt = CIList_AddAt_Def,
-			.CIList_VTable.get = CIList_Get_Def,
-			.CIList_VTable.remove = CIList_Remove_Def,
-			.CIList_VTable.clear = CIList_Clear_Def,
-			.CIList_VTable.size = CIList_Size_Def,
-			.CIList_VTable.maxSize = CIList_MaxSize_Def
+			.cilist_override.add = CIList_Add_Def,
+			.cilist_override.addAt = CIList_AddAt_Def,
+			.cilist_override.get = CIList_Get_Def,
+			.cilist_override.remove = CIList_Remove_Def,
+			.cilist_override.clear = CIList_Clear_Def,
+			.cilist_override.size = CIList_Size_Def,
+			.cilist_override.maxSize = CIList_MaxSize_Def
 		};
 
 	/* Super's vtable copy. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.cobject_override = *CObject_GetVTable( );
 
 	/* Override destructor. */
-	vtable.CObject_VTable.CDestructor = CDestructor;
+	vtable.cobject_override.CDestructor = CDestructor;
 
 	/* Reference to super's vtable. */
-	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+	vtable.cobject = CObject_GetVTable( );
 
 	/* Return pointer to CCArrayList's vtable. */
 	return &vtable;
@@ -373,15 +373,15 @@ CError CCArrayList( struct CCArrayList* self, size_t element_size, size_t max_si
 {
 	/* First thing in constructor must be to call super's constructor. 
 	 */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. 
 	 */
-	CVTable(self, CCArrayList_VTable_Key( ));
+	CVTable(self, CCArrayList_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. 
 	 */
-	CInterface(self, &self->cIList, &CCArrayList_VTable_Key( )->CIList_VTable);
+	CInterface(self, &self->cilist, &CCArrayList_GetVTable( )->cilist_override);
 
 	/* Allocate memory for the list. 
 	 */
@@ -429,15 +429,15 @@ CError CCArrayListStatic
 {
 	/* First thing in constructor must be to call super's constructor. 
 	 */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. 
 	 */
-	CVTable(self, CCArrayList_VTable_Key( ));
+	CVTable(self, CCArrayList_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. 
 	 */
-	CInterface(self, &self->cIList, &CCArrayList_VTable_Key( )->CIList_VTable);
+	CInterface(self, &self->cilist, &CCArrayList_GetVTable( )->cilist_override);
 
 	/* Assign the base of the list to provided memory block
 	 */

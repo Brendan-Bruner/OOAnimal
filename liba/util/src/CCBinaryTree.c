@@ -66,7 +66,7 @@ static void CCBinaryTree_CacheKey( struct CCBinaryTree* self, size_t index, unsi
 {
 	CAssertObject(self);
 	
-	CIList_Get(&self->tree_backend.cIList, self->swap_space_1, index);
+	CIList_Get(&self->tree_backend.cilist, self->swap_space_1, index);
 	CCBinaryTree_DecodeSwap(self, NULL, key_space);
 }
 
@@ -81,13 +81,13 @@ static void CCBinaryTree_SwapElements( struct CCBinaryTree* self, size_t indexA,
 	
 	/* Read out elements at index A and B.
 	 */
-	CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, indexA);
-	CIList_Remove(&self->tree_backend.cIList, swap_space_2, indexB);
+	CIList_Remove(&self->tree_backend.cilist, self->swap_space_1, indexA);
+	CIList_Remove(&self->tree_backend.cilist, swap_space_2, indexB);
 
 	/* Write back in different order.
 	 */
-	CIList_AddAt(&self->tree_backend.cIList, swap_space_2, indexA);
-	CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, indexB);
+	CIList_AddAt(&self->tree_backend.cilist, swap_space_2, indexA);
+	CIList_AddAt(&self->tree_backend.cilist, self->swap_space_1, indexB);
 }
 
 /* Move a node up the heap to satisfy the heap property.
@@ -228,7 +228,7 @@ static CITreeError CITree_Push_Def( struct CITree* self_, const void* element, c
 
 	/* Put the combined element/key pair into the list. 
 	 */
-	CIListError err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, self->index);
+	CIListError err = CIList_AddAt(&self->tree_backend.cilist, self->swap_space_1, self->index);
 	if( err == CILIST_ERR_INDEX ) {
 		return CITREE_ERR_FULL;
 	}
@@ -254,7 +254,7 @@ static CITreeError CITree_Pop_Def( struct CITree* self_, void* element )
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
 
-	return CITree_Delete(&self->cITree, element, CCBINARY_TREE_ROOT);
+	return CITree_Delete(&self->citree, element, CCBINARY_TREE_ROOT);
 }
 
 /* Simply calls CITree_Get with the root node as the index to
@@ -265,7 +265,7 @@ static CITreeError CITree_Peek_Def( struct CITree* self_, void* element )
 	CAssertObject(self_);
 	struct CCBinaryTree* self = CCast(self_);
 
-	return CITree_Get(&self->cITree, element, CCBINARY_TREE_ROOT);
+	return CITree_Get(&self->citree, element, CCBINARY_TREE_ROOT);
 }
 
 /* Cyclic complexity map:
@@ -285,7 +285,7 @@ static CITreeError CITree_Get_Def( struct CITree* self_, void* element, size_t i
 
 	/* Get the element of the heap given by index.
 	 */
-	CIListError err = CIList_Get(&self->tree_backend.cIList, self->swap_space_1, index);
+	CIListError err = CIList_Get(&self->tree_backend.cilist, self->swap_space_1, index);
 	if( err == CILIST_ERR_EMPTY ) {
 		return CITREE_ERR_EMPTY;
 	}
@@ -324,7 +324,7 @@ static CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_
 
 	/* Get at the index of the heap.
 	 */
-	CIListError err = CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, index);
+	CIListError err = CIList_Remove(&self->tree_backend.cilist, self->swap_space_1, index);
 	if( err == CILIST_ERR_EMPTY ) {
 		return CITREE_ERR_EMPTY;
 	}
@@ -347,8 +347,8 @@ static CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_
 		/* Place the element at the end of tree into the removed index.
 		 */
 		--self->index;
-		err = CIList_Remove(&self->tree_backend.cIList, self->swap_space_1, self->index);
-		err = CIList_AddAt(&self->tree_backend.cIList, self->swap_space_1, index);
+		err = CIList_Remove(&self->tree_backend.cilist, self->swap_space_1, self->index);
+		err = CIList_AddAt(&self->tree_backend.cilist, self->swap_space_1, index);
 		CCBinaryTree_HeapifyDown(self, index);
 	}
 
@@ -372,7 +372,7 @@ static void CITree_Clear_Def( struct CITree* self_ )
 	struct CCBinaryTree* self = CCast(self_);
 
 	self->index = CCBINARY_TREE_ROOT;
-	CIList_Clear(&self->tree_backend.cIList);
+	CIList_Clear(&self->tree_backend.cilist);
 }
 
 /************************************************************************/
@@ -388,37 +388,37 @@ static void CDestructor( void* self_ )
 	/* Call super's destructor
 	 */
 	const struct CCBinaryTree_VTable* vtable = CGetVTable(self);
-	vtable->CObject_VTable_Ref->CDestructor(self);
+	vtable->cobject->CDestructor(self);
 }
 
 
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCBinaryTree_VTable* CCBinaryTree_VTable_Key( )
+const struct CCBinaryTree_VTable* CCBinaryTree_GetVTable( )
 {
 	static struct CCBinaryTree_VTable vtable  =
 		{
-			.CITree_VTable.push = CITree_Push_Def,
-			.CITree_VTable.pop = CITree_Pop_Def,
-			.CITree_VTable.peek = CITree_Peek_Def,
-			.CITree_VTable.get = CITree_Get_Def,
-			.CITree_VTable.delete = CITree_Delete_Def,
-			.CITree_VTable.size = CITree_Size_Def,
-			.CITree_VTable.max_size = CITree_MaxSize_Def,
-			.CITree_VTable.clear = CITree_Clear_Def,
-			.CITree_VTable.split = NULL,
-			.CITree_VTable.merge = NULL
+			.citree_override.push = CITree_Push_Def,
+			.citree_override.pop = CITree_Pop_Def,
+			.citree_override.peek = CITree_Peek_Def,
+			.citree_override.get = CITree_Get_Def,
+			.citree_override.delete = CITree_Delete_Def,
+			.citree_override.size = CITree_Size_Def,
+			.citree_override.max_size = CITree_MaxSize_Def,
+			.citree_override.clear = CITree_Clear_Def,
+			.citree_override.split = NULL,
+			.citree_override.merge = NULL
 		};
 
 	/* Super's vtable copy. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.cobject_override = *CObject_GetVTable( );
 
 	/* Override destructor. */
-	vtable.CObject_VTable.CDestructor = CDestructor;
+	vtable.cobject_override.CDestructor = CDestructor;
 
 	/* Reference to super's vtable. */
-	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+	vtable.cobject = CObject_GetVTable( );
 
 	/* Return pointer to CCArrayList's vtable. */
 	return &vtable;
@@ -442,15 +442,15 @@ CError CCBinaryTree
 
 	/* First thing in constructor must be to call super's constructor. 
 	 */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. 
 	 */
-	CVTable(self, CCBinaryTree_VTable_Key( ));
+	CVTable(self, CCBinaryTree_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. 
 	 */
-	CInterface(self, &self->cITree, &CCBinaryTree_VTable_Key( )->CITree_VTable);
+	CInterface(self, &self->citree, &CCBinaryTree_GetVTable( )->citree_override);
 
 	/* Assign the compare method. 
 	 */

@@ -105,7 +105,7 @@ struct CCThreadedQueue
 {
 	/* Super class must always be first member */
 	/* of a class' struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	struct     
 	{	 
@@ -139,12 +139,12 @@ struct CCThreadedQueue_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable  cobject_override;
 
 	/* Since we are overriding the destructor, we need to keep */
 	/* keep a reference to the super class' implementation of */
 	/* the destructor. */
-	const struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* cobject;
 };
 
 /**

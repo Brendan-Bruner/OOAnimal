@@ -65,10 +65,10 @@ struct CCArrayQueue
 {
 	/* Super class must always be first member */
 	/* of a class' struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	/* Implement the CIQueue interface. */
-	struct CIQueue cIQueue;
+	struct CIQueue ciqueue;
 
 	/* Private member variables. */
 	struct     
@@ -92,15 +92,15 @@ struct CCArrayQueue_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable cobject_override;
 
 	/* Since we are overriding the destructor, we need to keep */
 	/* keep a reference to the super class' implementation of */
 	/* the destructor. */
-	const struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* cobject;
 
 	/* Space for a copy of the implemented interface's virtual table */
-	struct CIQueue_VTable CIQueue_VTable;
+	struct CIQueue_VTable ciqueue_override;
 };
 
 /**
@@ -109,7 +109,7 @@ struct CCArrayQueue_VTable
  * @details
  *	Get reference to the struct CCArrayQueue's vtable.
  */
-const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( );
+const struct CCArrayQueue_VTable* CCArrayQueue_GetVTable( );
 
 
 /************************************************************************/

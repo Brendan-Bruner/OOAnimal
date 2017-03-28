@@ -34,6 +34,8 @@
 /* Bool type								*/
 /************************************************************************/
 #define CBool unsigned char
+#define CTRUE 1
+#define CFALSE !CTRUE
 
 /************************************************************************/
 /* Configuration options						*/
@@ -317,7 +319,7 @@ struct CObject_VTable
  * @returns
  *	A read only pointer to class CObject's virtual table.
  */
-const struct CObject_VTable* CObject_VTable_Key( );
+const struct CObject_VTable* CObject_GetVTable( );
 
 /**
  * @memberof CObject

@@ -93,10 +93,10 @@ struct CCArrayList
 {
 	/* Super class must always be first member */
 	/* of a C class struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	/* Implementing the CIList interface. */
-	struct CIList cIList;
+	struct CIList cilist;
 
 	/* Private member variables. */
 	struct
@@ -136,15 +136,15 @@ struct CCArrayList_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable  cobject_override;
 
 	/* Since we are overriding the destructor, we need to keep */
 	/* keep a reference to the super class' implementation of */
 	/* the destructor. */
-	const struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* cobject;
 
 	/* Space for a copy of the implemented interface's virtual table */
-	struct CIList_VTable CIList_VTable;
+	struct CIList_VTable cilist_override;
 };
 
 /**
@@ -153,7 +153,7 @@ struct CCArrayList_VTable
  * @details
  *	Get vtable reference for CCArrayList class.	
  */
-const struct CCArrayList_VTable* CCArrayList_Get_Key( );
+const struct CCArrayList_VTable* CCArrayList_GetVTable( );
 
 
 /************************************************************************/

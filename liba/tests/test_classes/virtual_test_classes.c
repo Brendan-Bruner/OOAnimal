@@ -58,7 +58,7 @@ const struct VTClassA_VTable* VTClassA_VTable_Key( )
 	static struct VTClassA_VTable vtable;
 
 	/* Get a copy of the super's vtable for this class. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.CObject_VTable = *CObject_GetVTable( );
 
 	/* Link all of this class' virtual methods. */
 	vtable.method0 = method0;

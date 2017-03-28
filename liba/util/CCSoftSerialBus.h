@@ -32,28 +32,37 @@
 /**
  * @struct CCSoftSerialBus
  * @ingroup InterTaskCommunication
+ * @sa struct CCSoftSerialDev
  * @brief
  *	Implements a bus used to faciliate the communication between
  *	CCSoftSerial objects.
  * @details
  *	Implements a bus used to faciliate the communication between
- *	CCSoftSerial objects.
+ *	CCSoftSerial objects. This class' functions should never be
+ *	called by the application program.
  */
 struct CCSoftSerialBus
 {
 	/* Super class must always be first member */
 	/* of a class' struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	/* Private member variables. */
 	struct
 	{
 		struct CCSoftSerialDev* master;
 		struct CCSoftSerialDev* slave;
-		struct CIQueue* misoChannel;
-		struct CIQueue* mosiChannel;
-		CBool isStatic;
-	}_;
+		struct CIQueue* miso_channel;
+		struct CIQueue* mosi_channel;
+		CBool is_static;
+		#ifdef __unix__
+		struct CCSoftSerialDev* selection_queue_memory[1];
+		struct CCArrayQueue selection_queue_backend;
+		struct CCThreadedQueue selection_queue;
+		#else
+		#error "Unsupported operating system"
+		#endif
+	} priv;
 };
 
 /**
@@ -66,12 +75,12 @@ struct CCSoftSerialBus_VTable
 	/* Space for a carbon copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
 	/* This is where we will override inherited members. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable cobject_override;
 
 	/* Since we are overriding the destructor, and need to call the */
 	/* originally implementation in the new implementation, we need to */
 	/* keep a reference to the super class' vtable. */
-	const struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* cobject;
 };
 
 /**
@@ -80,7 +89,7 @@ struct CCSoftSerialBus_VTable
  * @details
  *	Get reference to the struct CCSoftSerialBus's vtable.
  */
-const struct CCSoftSerialBus_VTable* CCSoftSerialBus_VTable_Key( );
+const struct CCSoftSerialBus_VTable* CCSoftSerialBus_GetVTable( );
 
 
 /************************************************************************/
@@ -121,7 +130,7 @@ CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self, struct CCThreadedQue
  * @param device
  *	The device which is trying to put data on the bus
  */
-CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void* data, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void* data, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
@@ -129,9 +138,8 @@ CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CC
  *	Should never be called in application code. This is used to read data off the bus.
  * @param device
  *	The device which is trying to read data off the bus.
-
  */
-CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void** data, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void** data, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
@@ -139,9 +147,10 @@ CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCS
  *	Should never be called in application code. This is used to select a device
  * @param device
  *	The device which is trying to select a slave.
-
+ * @param id
+ *	ID of the device being selected.
  */
-CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, CCSoftSerialID id, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, CCSoftSerialDevID id, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus
@@ -149,7 +158,6 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self, struct C
  *	Should never be called in application code. This is used to unselect a device.
  * @param device
  *	The device which is unselecting a slave.
-
  */
 CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device );
 
@@ -159,9 +167,8 @@ CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self, struct
  *	Should never be called in application code. This is used to put data on the bus.
  * @param device
  *	The device which is waiting to be selected.
-
  */
-CCSoftSerialError CCSoftSerialBus_Isselect( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, COSTimemsec blockTime );
+CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, COS_Timemsec blockTime );
 
 
 #endif /* UTIL_CCSOFTSERIALBUS_H_ */

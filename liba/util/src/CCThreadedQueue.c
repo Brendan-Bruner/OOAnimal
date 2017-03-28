@@ -281,25 +281,25 @@ static void CDestructor( void* self_ )
 	CDestroy(self->_.backbone);
 
 	/* Call super's destructor. */
-	((struct CCThreadedQueue_VTable*) CGetVTable(self))->CObject_VTable_Ref->CDestructor(self);
+	((struct CCThreadedQueue_VTable*) CGetVTable(self))->cobject->CDestructor(self);
 }
 	
 
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCThreadedQueue_VTable* CCThreadedQueue_VTable_Key( )
+const struct CCThreadedQueue_VTable* CCThreadedQueue_GetVTable( )
 {
 	static struct CCThreadedQueue_VTable vtable;
 
 	/* Super's vtable copy. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.cobject_override = *CObject_GetVTable( );
 
 	/* Override destructor of super class. */
-	vtable.CObject_VTable.CDestructor = CDestructor;
+	vtable.cobject_override.CDestructor = CDestructor;
 
 	/* Reference to super's vtable. */
-	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+	vtable.cobject = CObject_GetVTable( );
 
 	/* Return pointer to CCArrayQueue's vtable. */
 	return &vtable;
@@ -311,10 +311,10 @@ const struct CCThreadedQueue_VTable* CCThreadedQueue_VTable_Key( )
 CError CCThreadedQueue( struct CCThreadedQueue* self, struct CIQueue* backbone )
 {
 	/* First thing in constructor must be to call super's constructor. */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. */
-	CVTable(self, CCThreadedQueue_VTable_Key( ));
+	CVTable(self, CCThreadedQueue_GetVTable( ));
 
 	/* Set backbone. */
 	self->_.backbone = backbone;
