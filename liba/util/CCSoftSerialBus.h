@@ -25,6 +25,7 @@
 
 #include <CCSoftSerialDev.h>
 #include <CCThreadedQueue.h>
+#include <CCArrayQueue.h>
 
 /************************************************************************/
 /* Declare Class and vtable.						*/
@@ -50,15 +51,15 @@ struct CCSoftSerialBus
 	/* Private member variables. */
 	struct
 	{
-		struct CCSoftSerialDev* master;
-		struct CCSoftSerialDev* slave;
+		CCSoftSerialDevID master;
+		CCSoftSerialDevID slave;
 		struct CIQueue* miso_channel;
 		struct CIQueue* mosi_channel;
-		CBool is_static;
+		CCSoftSerialDevID pending_master;
 		#ifdef __unix__
-		struct CCSoftSerialDev* selection_queue_memory[1];
-		struct CCArrayQueue selection_queue_backend;
-		struct CCThreadedQueue selection_queue;
+		pthread_mutex_t device_lock;
+		pthread_cond_t select_cond;
+		pthread_cond_t idle_cond;
 		#else
 		#error "Unsupported operating system"
 		#endif

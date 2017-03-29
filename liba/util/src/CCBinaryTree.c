@@ -355,6 +355,37 @@ static CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_
 	return CITREE_OK;
 }
 
+static CITreeError CITree_DeleteElement_Def( struct CITree* self_, void* element )
+{
+	struct CCListIterator iter;
+	int i;
+	size_t index;
+	
+	CAssertObject(self_);
+	struct CCBinaryTree* self = CCast(self_);
+
+	if( CCListIterator(&iter, &self->tree_backend.cilist) != COBJ_OK ) {
+		return CITREE_ERR_EXT;
+	}
+
+	/* Look through each node of tree for matching element
+	 */
+	while( CIIterator_HasNext(&iter.ciiterator) ) {
+		CIIterator_Next(&iter.ciiterator, self->swap_space_1);
+	        if( memcmp(self->swap_space_1, element, self->element_size) == 0 ) {
+			/* Found the element, remove it!
+			 */
+			index = CIIterator_Index(&iter.ciiterator);
+			CITee_Delete(&self->citree, NULL, index);
+			CDestroy(&iter);
+			return CITREE_OK;
+		}
+	}
+
+	CDestroy(&iter);
+	return CITREE_ERR_EMPTY;
+}
+
 static size_t CITree_Size_Def( struct CITree* self_ )
 {
 	struct CCBinaryTree* self = CCast(self_);
@@ -404,6 +435,7 @@ const struct CCBinaryTree_VTable* CCBinaryTree_GetVTable( )
 			.citree_override.peek = CITree_Peek_Def,
 			.citree_override.get = CITree_Get_Def,
 			.citree_override.delete = CITree_Delete_Def,
+			.citree_override.delete_element = CITree_DeleteElement_Def,
 			.citree_override.size = CITree_Size_Def,
 			.citree_override.max_size = CITree_MaxSize_Def,
 			.citree_override.clear = CITree_Clear_Def,

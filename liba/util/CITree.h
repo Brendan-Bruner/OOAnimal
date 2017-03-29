@@ -38,12 +38,15 @@
  *	No data in the tree.
  * @var CITREE_ERR_FULL
  *	No room in tree for more data.
+ * @var CITREE_ERR_EXT
+ *	Transient error in helper objects. 
  */
 typedef enum
 {
 	CITREE_OK = 0,
 	CITREE_ERR_EMPTY = 1,
-	CITREE_ERR_FULL = 2
+	CITREE_ERR_FULL = 2,
+	CITREE_ERR_EXT = 3
 } CITreeError;
 
 
@@ -79,6 +82,7 @@ struct CITree_VTable
 	CITreeError (*peek)( struct CITree*, void* );
 	CITreeError (*get)( struct CITree*, void*, size_t );
 	CITreeError (*delete)( struct CITree*, void*, size_t );
+	CITreeError (delete_element)( struct CITree*, void* );
 	size_t (*size)( struct CITree* );
 	size_t (*max_size)( struct CITree* );
 	void (*clear)( struct CITree* );
@@ -131,6 +135,23 @@ CITreeError CITree_Push( struct CITree* self, const void* element, const void* k
  *	- CITREE_OK: Root of the tree successfully popped.
  */
 CITreeError CITree_Pop( struct CITree* self, void* element );
+
+/**
+ * @memberof CITree
+ * @details
+ *	Delete the node in the three who's element matches the input
+ *	parameter element. This function has O(n) execution time.
+ * @param self
+ *	The tree.
+ * @param element
+ *	The data pointed to by this is the search critera. The function will
+ *	search for a node whos element matches the data pointed to by this
+ *	and remove it.
+ * @returns
+ *	- CITREE_ERR_EMPTY: Nothing in the tree to delete or no matching element.
+ *	- CITREE_OK: Root of the tree successfully popped.
+ */
+CITreeError CITree_DeleteElement( struct CITree* self, void* element );
 
 /**
  * @memberof CITree
