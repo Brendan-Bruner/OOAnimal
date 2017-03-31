@@ -21,6 +21,7 @@
  */
 
 #include <CCBinaryTree.h>
+#include <CCListIterator.h>
 #include <string.h>
 
 #define CCBINARY_TREE_ROOT 0
@@ -355,10 +356,28 @@ static CITreeError CITree_Delete_Def( struct CITree* self_, void* element, size_
 	return CITREE_OK;
 }
 
+/* Cyclic complexity map:
+ * 1(CCast) -> 2if(constructed iterator) +-> 3(return) <-+
+ *                                       |               |
+ *        +--+- 4(while not empty) < ----+               |
+ *        |  |                           |               |
+ *        |  +->5(found element) +-------+               |
+ *        |                      |                       |
+ *        |                      +-> 6(remove it) -------+
+ *        -----------------------------------------------+
+ *
+ * This gives a complexity of:
+ * 8(edges) - 6(nodes) + 2 = 4
+ *
+ * test cases:
+ *	* Iterator fails to construct (impossible to test)
+ *	* Tree is empty
+ *	* No match
+ *	* found a match
+ */
 static CITreeError CITree_DeleteElement_Def( struct CITree* self_, void* element )
 {
 	struct CCListIterator iter;
-	int i;
 	size_t index;
 	
 	CAssertObject(self_);
@@ -376,7 +395,7 @@ static CITreeError CITree_DeleteElement_Def( struct CITree* self_, void* element
 			/* Found the element, remove it!
 			 */
 			index = CIIterator_Index(&iter.ciiterator);
-			CITee_Delete(&self->citree, NULL, index);
+			CITree_Delete(&self->citree, NULL, index);
 			CDestroy(&iter);
 			return CITREE_OK;
 		}

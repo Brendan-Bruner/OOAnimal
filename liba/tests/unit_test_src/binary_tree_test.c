@@ -401,6 +401,74 @@ TEST(normal_operation)
 	}
 }
 
+TEST(delete_element)
+{
+	int item;
+	int key;
+	CITreeError err;
+
+	/* Test with empty tree.
+	 */
+	item = 0;
+	err = CITree_DeleteElement(&tree->citree, &item);
+	ASSERT(err == CITREE_ERR_EMPTY, "Wrong error code returned");
+	
+	/* Construct a tree with value:key pairs:
+	 *       0:0
+	 *        ^
+	 *       / \
+	 *    1:4   2:7
+	 *     ^
+	 *    / \
+	 * 3:6   4:5
+	 * Then, remove 1:4 by value.
+	 */
+	item = 0;
+	key = 0;
+	CITree_Push(&tree->citree, &item, &key);
+	++item;
+	key = 4;
+	CITree_Push(&tree->citree, &item, &key);
+	++item;
+	key = 7;
+	CITree_Push(&tree->citree, &item, &key);
+	++item;
+	key = 6;
+	CITree_Push(&tree->citree, &item, &key);
+	++item;
+	key = 5;
+	CITree_Push(&tree->citree, &item, &key);
+
+	/* Test remove with element thats not in the tree
+	 */
+	item = 2000;
+	err = CITree_DeleteElement(&tree->citree, &item);
+	ASSERT(err == CITREE_ERR_EMPTY, "Got wrong error return");
+
+	/* Removing 1:4 to get tree that looks like:
+	 *       0:0
+	 *        ^
+	 *       / \
+	 *    1:4   2:7
+	 *     ^
+	 *    /
+	 * 3:6
+	 */
+	item = 4;
+	err = CITree_DeleteElement(&tree->citree, &item);
+	ASSERT(err == CITREE_OK, "Should not get error return");
+
+	CITree_Get(&tree->citree, &item, 0);
+	ASSERT(item == 0, "Tree did not heapify correctly at 0, got %d", item);
+	CITree_Get(&tree->citree, &item, 1);
+	ASSERT(item == 1, "Tree did not heapify correctly at 1, got %d", item);
+	CITree_Get(&tree->citree, &item, 2);
+	ASSERT(item == 2, "Tree did not heapify correctly at 2, got %d", item);
+	CITree_Get(&tree->citree, &item, 3);
+	ASSERT(item == 3, "Tree did not heapify correctly at 3, got %d", item);
+	ASSERT(CITree_Size(&tree->citree) == 4, "Tree is incorrect size");
+}
+
 TEST_SUITE(binary_tree)
 {
 	tree = &dynamic_tree;
@@ -409,4 +477,5 @@ TEST_SUITE(binary_tree)
 	ADD_TEST(get);
 	ADD_TEST(remove);
 	ADD_TEST(normal_operation);
+	ADD_TEST(delete_element);
 }

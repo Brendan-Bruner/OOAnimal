@@ -82,7 +82,7 @@ struct CITree_VTable
 	CITreeError (*peek)( struct CITree*, void* );
 	CITreeError (*get)( struct CITree*, void*, size_t );
 	CITreeError (*delete)( struct CITree*, void*, size_t );
-	CITreeError (delete_element)( struct CITree*, void* );
+	CITreeError (*delete_element)( struct CITree*, void* );
 	size_t (*size)( struct CITree* );
 	size_t (*max_size)( struct CITree* );
 	void (*clear)( struct CITree* );
@@ -171,7 +171,7 @@ CITreeError CITree_Peek( struct CITree* self, void* element );
  * @memberof CITree
  * @details
  *	Look at an arbitrary index in the tree. Indexing is done such that
- *	at any index i, left_child(i) = 2i and right_child(i) = 2i + 1.
+ *	at any index i, left_child(i) = 2i + 1 and right_child(i) = 2i + 2.
  * @param element
  *	Pointer to location where data at the index will be copied to.
  * @param index

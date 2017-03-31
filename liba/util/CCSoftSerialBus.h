@@ -23,6 +23,7 @@
 #ifndef UTIL_CCSOFTSERIALBUS_H_
 #define UTIL_CCSOFTSERIALBUS_H_
 
+#include <Class.h>
 #include <CCSoftSerialDev.h>
 #include <CCThreadedQueue.h>
 #include <CCArrayQueue.h>
@@ -51,10 +52,10 @@ struct CCSoftSerialBus
 	/* Private member variables. */
 	struct
 	{
-		CCSoftSerialDevID master;
-		CCSoftSerialDevID slave;
-		struct CIQueue* miso_channel;
-		struct CIQueue* mosi_channel;
+		CCSoftSerialDevID masterID;
+		CCSoftSerialDevID slaveID;
+		struct CCThreadedQueue* miso_channel;
+		struct CCThreadedQueue* mosi_channel;
 		CCSoftSerialDevID pending_master;
 		#ifdef __unix__
 		pthread_mutex_t device_lock;

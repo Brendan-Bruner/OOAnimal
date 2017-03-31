@@ -36,7 +36,7 @@ static CError CCSoftSerialBus_CreateLocks( struct CCSoftSerialBus* self )
 		pthread_mutex_destroy(&self->priv.device_lock);
 		return COBJ_EXT_FAIL;
 	}
-	return OBJ_OK;
+	return COBJ_OK;
 }
 static CError CCSoftSerialBus_CreateChannel( struct CCSoftSerialBus* self,
 					     struct CCThreadedQueue **temp_channel,
@@ -91,15 +91,23 @@ static CError CCSoftSerialBus_CreateChannel( struct CCSoftSerialBus* self,
 CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self,
 					 struct CCSoftSerialDev* device,
 					 void* data,
-					 COS_Timemsec blockTime )
+					 COS_Timemsec block_time )
 {
+	(void) self;
+	(void) device;
+	(void) data;
+	(void) block_time;
 }
 
 CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 					struct CCSoftSerialDev* device,
 					void** data,
-					COS_Timemsec blockTime )
+					COS_Timemsec block_time )
 {
+	(void) self;
+	(void) device;
+	(void) data;
+	(void) block_time;
 }
 
 CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
@@ -109,13 +117,14 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 {
 	struct timespec abstime;
 	CCSoftSerialDevID master_id;
+	int err;
 	CAssertObject(self);
 
 	if( querying_device == NULL ) {
 		return CCSOFTSERIAL_ERR_INV_PARAM;
 	}
 
-	master_id = CCSoftSerialDev_GetID(querying_device)
+	master_id = CCSoftSerialDev_GetID(querying_device);
 	if( master_id == CCSOFTSERIALDEV_SLAVE ) {
 		/* Slave device attempting to make a selection.
 		 */
@@ -143,11 +152,11 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 	/* Have mutual exclusion, check for bus activity.
 	 */
 	for( ;; ) {
-		if( self->priv.master == CCSOFTSERIAL_NO_ID ) {
+		if( self->priv.masterID == CCSOFTSERIAL_NO_ID ) {
 			/* No bus activity, do the selection.
 			 */
-			self->priv.master = master_id;
-			self->priv.slave = slave_id;
+			self->priv.masterID = master_id;
+			self->priv.slaveID = slave_id;
 			pthread_cond_broadcast(&self->priv.select_cond);
 			pthread_mutex_unlock(&self->priv.device_lock);
 			return CCSOFTSERIAL_OK;
@@ -159,8 +168,10 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 			pthread_cond_wait(&self->priv.idle_cond, &self->priv.device_lock);
 		}
 		else {
-			err = pthread_cond_timedwait(&self->priv.idle_cond, &self->priv.device_lock, block_time);
-			if( err == TIMED_OUT ) {
+			err = pthread_cond_timedwait(&self->priv.idle_cond, &self->priv.device_lock, &abstime);
+			if( err != 0 ) {
+				/* Timed out.
+				 */
 				pthread_mutex_unlock(&self->priv.device_lock);
 				return CCSOFTSERIAL_ERR_TIMEOUT;
 			}
@@ -179,12 +190,12 @@ CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self,
 	}
 
 	pthread_mutex_lock(&self->priv.device_lock);
-	if( CCSoftSerialDev_GetID(querying_device) == self->priv.master ) {
+	if( CCSoftSerialDev_GetID(querying_device) == self->priv.masterID ) {
 		/* The querying device is indeed the current bus master.
 		 * release the bus and signal the idle bus condition.
 		 */
-		self->priv.slave = CCSOFTSERIAL_NO_ID;
-		self->priv.master = CCSOFTSERIAL_NO_ID;
+		self->priv.slaveID = CCSOFTSERIAL_NO_ID;
+		self->priv.masterID = CCSOFTSERIAL_NO_ID;
 		pthread_cond_broadcast(&self->priv.idle_cond);
 		err = CCSOFTSERIAL_OK;
 	}
@@ -201,12 +212,13 @@ CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self,
 					      COS_Timemsec block_time )
 {
 	struct timespec abstime;
+	int err;
 	
 	/* Parameter bounds checks.
 	 */
 	CAssertObject(self);
 	if( querying_device == NULL ) {
-		CCSOFTSERIAL_ERR_INV_PARAM;
+		return CCSOFTSERIAL_ERR_INV_PARAM;
 	}
 
 
@@ -242,8 +254,10 @@ CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self,
 			pthread_cond_wait(&self->priv.select_cond, &self->priv.device_lock);
 		}
 		else {
-			err = pthread_cond_timedwait(&self->priv.select_cond, &self->priv.device_lock, block_time);
-			if( err == TIMED_OUT ) {
+			err = pthread_cond_timedwait(&self->priv.select_cond, &self->priv.device_lock, &abstime);
+			if( err != 0 ) {
+				/* Timed out.
+				 */
 				pthread_mutex_unlock(&self->priv.device_lock);
 				return CCSOFTSERIAL_ERR_TIMEOUT;
 			}
@@ -314,7 +328,7 @@ CError CCSoftSerialBus( struct CCSoftSerialBus* self,
 
 	/* Bind this classes vtable to the object.
 	 */
-	CVTable(self, CCSoftSerialBus_GetVtable( ));
+	CVTable(self, CCSoftSerialBus_GetVTable( ));
 
 	/* Create miso channel.
 	 */
@@ -342,8 +356,8 @@ CError CCSoftSerialBus( struct CCSoftSerialBus* self,
 	
 	/* Initially, the bus is unused.
 	 */
-	self->priv.master = NULL;
-	self->priv.slave = NULL;
+	self->priv.masterID = CCSOFTSERIAL_NO_ID;
+	self->priv.slaveID = CCSOFTSERIAL_NO_ID;
 
 	return COBJ_OK;
 }
@@ -361,7 +375,7 @@ CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self,
 
 	/* Bind this classes vtable to the object.
 	 */
-	CVTable(self, CCSoftSerialBus_GetVtable( ));
+	CVTable(self, CCSoftSerialBus_GetVTable( ));
 
 	/* Assert non NULL channel inputs. 
 	 */
@@ -378,8 +392,8 @@ CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self,
 	
 	/* Initially, the bus is unused.
 	 */
-	self->priv.master = NULL;
-	self->priv.slave = NULL;
+	self->priv.masterID = CCSOFTSERIAL_NO_ID;
+	self->priv.slaveID = CCSOFTSERIAL_NO_ID;
 
 	return COBJ_OK;	
 }
