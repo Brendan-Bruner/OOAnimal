@@ -173,10 +173,9 @@ TEST(arbitration)
 
 	/* Clean up the threads
 	 */
-	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	CCSoftSerialDev_Unselect(&master[0]);
 	for( j = 0; j < TEST_MAX_PENDING_MASTERS; ++j ) {
-		ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
 		pthread_join(thread_handle[j], &status);
 	}
 
@@ -195,7 +194,7 @@ TEST(arbitration)
 	 * 8. master[0] releases bus.
 	 */
 	CCSoftSerialDev_Select(&master[1], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
-	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	
 	/* Create threads for master[0,2] to take the bus.
 	 */
@@ -221,7 +220,7 @@ TEST(arbitration)
 	CCSoftSerialDev_Unselect(&master[1]);
 	pthread_join(thread_handle[2], &status);
 	thread_err = pthread_tryjoin_np(thread_handle[0], &status);
-	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	ASSERT(thread_err == EBUSY, "master[0] should no have taken the bus yet");
 
 	/* master[2] currently has the bus. Release the bus and master[0] should take
@@ -229,7 +228,7 @@ TEST(arbitration)
 	 */
 	CCSoftSerialDev_Unselect(&master[2]);
 	thread_err = pthread_join(thread_handle[0], &status);
-	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	ASSERT(thread_err == 0, "master[0] should have taken the bus");
 
 	/* master[0] has bus, release it and finish the priority testing.
@@ -244,7 +243,7 @@ TEST(arbitration)
 	 * 5. verify master[1] got selected
 	 */
 	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_NO_BLOCK);
-	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&slave, COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 
 	/* Create thread for master[1] to block until selected.
 	 */
@@ -264,7 +263,7 @@ TEST(arbitration)
 	err = CCSoftSerialDev_Select(&master[0], CCSoftSerialDev_GetID(&master[1]), COS_NO_BLOCK);
 	ASSERT(err == CCSOFTSERIAL_OK, "Should be no error doing a reselect");
 	pthread_join(thread_handle[0], &status);
-	ASSERT(CCSoftSerialDev_Isselected(&master[1], COS_NO_BLOCK) == CTRUE, "Slave should be selected");
+	ASSERT(CCSoftSerialDev_Isselected(&master[1], COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	ASSERT(*((CCSoftSerialError*) status) == CCSOFTSERIAL_OK, "Error in blocking thread");
 	CCSoftSerialDev_Unselect(&master[0]);
 

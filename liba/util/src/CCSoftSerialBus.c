@@ -333,9 +333,11 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 	 */
 	tree_err = CITree_Push(&self->priv.pending_masters.citree, &querying_master_id, &querying_master_prio);
 	if( tree_err == CITREE_ERR_FULL ) {
+		pthread_mutex_unlock(&self->priv.device_lock);
 		return CCSOFTSERIAL_ERR_OVRLD;
 	}
 	if( tree_err != CITREE_OK ) {
+		pthread_mutex_unlock(&self->priv.device_lock);
 		return CCSOFTSERIAL_ERR_EXT;
 	}
 

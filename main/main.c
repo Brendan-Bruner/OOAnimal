@@ -36,11 +36,11 @@ int main( int argc, char** argv )
 	RUN_TEST_SUITE(virtual_suite);
 	RUN_TEST_SUITE(interface_suite);
 	RUN_TEST_SUITE(array_queue);
-	RUN_TEST_SUITE(threaded_array_queue);
 	RUN_TEST_SUITE(array_list);
 	RUN_TEST_SUITE(array_list_iterator);
 	RUN_TEST_SUITE(binary_tree);
 	RUN_TEST_SUITE(soft_serial);
+	RUN_TEST_SUITE(threaded_array_queue);
 	PRINT_DIAG( );
 	return 0;
 }
