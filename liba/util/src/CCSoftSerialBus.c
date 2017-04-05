@@ -44,7 +44,10 @@ static CError CCSoftSerialBus_CreateLocks( struct CCSoftSerialBus* self )
 	return COBJ_OK;
 }
 
-
+/* The tree heapifies the smaller keys to the root, therefore
+ * we will have to invert the evaluation so that larger keys
+ * get heapified to the root.
+ */
 static signed char CCSoftSerialBus_PriorityCompare( const void* key1_p, const void* key2_p )
 {
 	unsigned char key1 = *((unsigned char*) key1_p);
