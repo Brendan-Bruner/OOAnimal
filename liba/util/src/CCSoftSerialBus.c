@@ -256,15 +256,18 @@ CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 /* Cyclic complexit map:
  * 1(bounds check) -> 2(if slave) -----------+
  *                                           |                  
- *    +--> 8(take bus) -->-+--> 3(return) <--+--> 4(if tree full) --+
+ *    +--> 8(take bus) -->-+--> 3(return) <--+--> 10(if reselect) --+
  *    |                    |                                        |
- *    |                    +-<--------------------------------------+
- *    |                                                             |
- *    +-- 7(if highest prio) <- 6(if idle) <- 5(for) <--+-----------+
+ *    |                    +-<--------------------------------------+----------+
+ *    |                    |                                                   |
+ *    |                    +-<--------------------------+-- 4(if tree full) <--+
+ *    |                                                 |
+ *    |                                                 |
+ *    +-- 7(if highest prio) <- 6(if idle) <- 5(for) <--+
  *    |                                                 |
  *    +--> 9(block until idle) ----------------------->-+
  *
- * Complexity of: 11(edges) - 9(nodes) + 2 = 4
+ * Complexity of: 13(edges) - 10(nodes) + 2 = 5
  * Test cases:
  *	* Querying device is a slave
  *	* Pending masters tree is full
@@ -272,6 +275,13 @@ CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
  *	* Pending master is highest priority when bus goes idle
  *		- Bus is initially idle 
  *		- Bus is initally busy
+ *	* Querying device already owns bus, doing a reselect.
+ *
+ * An additional test not captured by the complexity map:
+ *	* If highest priority master times out, it correctly
+ *	  removes itself from the pending tree so that next
+ *	  highest priority master can take the bus when it
+ *	  becomes idle.
  */
 CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 					  struct CCSoftSerialDev* querying_device,
@@ -291,7 +301,8 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 	}
 
 	querying_master_id = CCSoftSerialDev_GetID(querying_device);
-	if( querying_master_id == CCSOFTSERIALDEV_SLAVE ) {
+	querying_master_prio = CCSoftSerialDev_GetPriority(querying_device);
+	if( querying_master_prio == CCSOFTSERIALDEV_SLAVE ) {
 		/* Slave device attempting to make a selection.
 		 */
 		return CCSOFTSERIAL_ERR_PRIV;
@@ -302,10 +313,24 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 	 * bus activity.
 	 */
 	pthread_mutex_lock(&self->priv.device_lock);
+
+	/* Does the querying device already own the bus?
+	 */
+	if( querying_master_id == self->priv.masterID ) {
+		/* The device alreayd owns the bus, do a reselect.
+		 */
+		self->priv.slaveID = slave_id;
+
+		/* Broadcast to blocking slaves that a new device has 
+		 * been selected.
+		 */
+		pthread_cond_broadcast(&self->priv.select_cond);
+		pthread_mutex_unlock(&self->priv.device_lock);
+		return CCSOFTSERIAL_OK;
+	}
 	
 	/* Have mutual exclusion, put querying device into the tree of pending masters.
 	 */
-	querying_master_prio = CCSoftSerialDev_GetPriority(querying_device);
 	tree_err = CITree_Push(&self->priv.pending_masters.citree, &querying_master_id, &querying_master_prio);
 	if( tree_err == CITREE_ERR_FULL ) {
 		return CCSOFTSERIAL_ERR_OVRLD;

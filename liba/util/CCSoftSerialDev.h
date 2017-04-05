@@ -81,7 +81,7 @@ typedef enum
 /* Maximum number of bus masters which can block on selecting a 
  * device at one time.
  */
-#define CCSOFTSERIAL_MAX_PENDING_MASTERS 10
+#define CCSOFTSERIAL_MAX_PENDING_MASTERS 4
 
 /* Lowest possible priority level. Serial objects with this priority 
  * will be treated as slaves.

@@ -25,17 +25,27 @@ STATIC_LIB_NAME := ctests cutil cclass pthread
 STATIC_LIBS := $(addprefix -l,$(STATIC_LIB_NAME));
 STATIC_LIB_BUILD := $(addsuffix /debug,$(addprefix -L,$(STATIC_LIB_SRC)))
 
-all : MKDIR $(OBJECTS)
+all : MKDIR BUILD_LIBS $(OBJECTS)
 	$(CC) $(CFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(EXEC) $(STATIC_LIB_BUILD) $(STATIC_LIBS)
+	cp $(BUILDDIR)/$(EXEC) ./
 
 $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
+
+BUILD_LIBS :
+	make -C ../liba/util/ all
+	make -C ../liba/tests/ all
+	make -C ../liba/Class all
 
 MKDIR :
 	mkdir -p $(dir $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%)))
 
 clean :
 	rm -rf $(BUILDDIR)
+	make -C ../liba/util/ clean
+	make -C ../liba/tests/ clean
+	make -C ../liba/Class clean
+
 
 run:
 	./$(BUILDDIR)/$(EXEC)

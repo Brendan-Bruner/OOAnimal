@@ -25,6 +25,7 @@
 TEST_SETUP( ) { }
 TEST_TEARDOWN( ) { }
 
+#define TEST_TENTH_SECOND (1000*1000/10)
 #define DEFAULT_LENGTH 12
 #define DEFAULT_ELEMENT_SIZE 7
 
@@ -340,14 +341,14 @@ static void* thread2( void* arg )
 	 * from running the moment thread1 posts to the sync object. this will
 	 * help make sure thread1 gets to block before the data is inserted
 	 */
-	sleep(1);
+	usleep(TEST_TENTH_SECOND);
 	CCThreadedQueue_Insert(&queue, dat, COS_BLOCK_FOREVER);
 	
 	/* Block on syn object. */
 	sem_wait(&syncObj);
 		
 	/* Pop from queue. */
-	sleep(1);
+	usleep(TEST_TENTH_SECOND);
 	CCThreadedQueue_Remove(&queue, dat, COS_BLOCK_FOREVER);
 
 	pthread_exit(NULL);
