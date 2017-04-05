@@ -159,7 +159,7 @@ const struct CCBinaryTree_VTable* CCBinaryTree_GetVTable( );
  *	The inputs point to the location of two keys in memory. This method
  *	must be return:
  *		- -1 if key1 evaluates to be less than key2.
- *		- +1 if key2 evaluates to be greater than key2.
+ *		- +1 if key1 evaluates to be greater than key2.
  *		- 0 if key1 and key2 evalute to be equal.
  *	Keeping in mind, that keys which evaluate to be of lower value are moved closer
  *	to the root of the tree. An example implementation is given in the description

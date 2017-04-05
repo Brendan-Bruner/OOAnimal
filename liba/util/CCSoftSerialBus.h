@@ -26,7 +26,8 @@
 #include <Class.h>
 #include <CCSoftSerialDev.h>
 #include <CCThreadedQueue.h>
-#include <CCArrayQueue.h>
+#include <CCBinaryTree.h>
+
 
 /************************************************************************/
 /* Declare Class and vtable.						*/
@@ -56,7 +57,7 @@ struct CCSoftSerialBus
 		CCSoftSerialDevID slaveID;
 		struct CCThreadedQueue* miso_channel;
 		struct CCThreadedQueue* mosi_channel;
-		CCSoftSerialDevID pending_master;
+		struct CCBinaryTree pending_masters;
 		#ifdef __unix__
 		pthread_mutex_t device_lock;
 		pthread_cond_t select_cond;

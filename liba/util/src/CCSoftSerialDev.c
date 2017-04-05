@@ -29,7 +29,7 @@ CCSoftSerialDevID CCSoftSerialDev_GetID( struct CCSoftSerialDev* self )
 	return self->priv.id;
 }
 
-char CCSoftSerialDev_GetPriority( struct CCSoftSerialDev* self )
+unsigned char CCSoftSerialDev_GetPriority( struct CCSoftSerialDev* self )
 {
 	CAssertObject(self);
 	return self->priv.priority;
@@ -108,7 +108,7 @@ const struct CCSoftSerialDev_VTable* CCSoftSerialDev_GetVTable( )
 /* Constructors methods.						*/
 /************************************************************************/
 CError CCSoftSerialDevMaster( struct CCSoftSerialDev* self,
-			      char priority,
+			      unsigned char priority,
 			      CCSoftSerialDevID id,
 			      struct CCSoftSerialBus* bus )
 {

@@ -36,40 +36,31 @@
  * @ingroup InterTaskCommunication
  * @var CCSOFTSERIAL_OK
  *	No error
- * @var CCSOFTSERIAL_ERR_NOT_SELECTED
- *	Slave device attempting to use the serial bus when it's not
- *	selected.
- * @var CCSOFTSERIAL_ERR_CONTENTION
- *	One of two possibilities:
- *		- Master attempting to use the bus when another
- *		  master already has access to the bus. Read/write will have
- *		  no effect.
- *		- Master attempting to select a slave when a another
- *		  master already has access to the bus. slave select
- *		  will fail.
- * @var CCSOFTSERIAL_ERR_PREEMPTED
- *	On a bus which allows for pre-emption, this means the slave/master
- *	was thrown off the bus by a higher priority master. This will be
- *	returned only one time by ether of read/write to indicate you've
- *	been pre-empted. slave select has to be used again to regain bus
- *	controll. Remaining calls to read/write will return 
- *	CCSOFTSERIAL_ERR_NOT_SELECTED.
  * @var CCSOFTSERIAL_ERR_TIMEOUT
- *	Timeout trying to select a slave. This means a higher priority
- *	master still has control of the bus. 
+ *	Timeout blocking for something
  * @var CCSOFTSERIAL_ERR_PRIV
- *	Slave device attempting to do somethign that only a master device
- *	has the privileges to do.
+ *	This happens when a device attempts to do something it's not allowed to
+ *	do. This includes:
+ *	- Reading/writing to the bus without control of the bus
+ *	- Slave device attempting to make a selection on the bus
+ *	- Device who is not current master attempting to unselect the bus
+ * @var CCSOFTSERIAL_ERR_OVRLD
+ *	Too many devices are currently blocking to select a slave device.
+ *	The limit on the maximum number of masters that can block at one
+ *	time on a slave device is set at compile time by the constant
+ *	CCSOFTSERIAL_MAX_PENDING_MASTERS.
+ * @var CCSOFTSERIAL_ERR_EXT
+ *	Failure in helper objects. The reason for this failure is outside the scope of
+ *	of the soft serial code. This error should not occur in production code.
  */
 typedef enum
 {
 	CCSOFTSERIAL_OK = 0,
-	CCSOFTSERIAL_ERR_NOT_SELECTED = 1,
-	CCSOFTSERIAL_ERR_CONTENTION = 2,
-	CCSOFTSERIAL_ERR_PREEMPTED = 3,
 	CCSOFTSERIAL_ERR_TIMEOUT = 4,
 	CCSOFTSERIAL_ERR_PRIV = 5,
-	CCSOFTSERIAL_ERR_INV_PARAM = 6
+	CCSOFTSERIAL_ERR_INV_PARAM = 6,
+	CCSOFTSERIAL_ERR_OVRLD = 7,
+	CCSOFTSERIAL_ERR_EXT = 8
 } CCSoftSerialError;
 
 
@@ -87,15 +78,19 @@ typedef enum
 	CCSOFTSERIAL_ID1
 } CCSoftSerialDevID;
 
+/* Maximum number of bus masters which can block on selecting a 
+ * device at one time.
+ */
+#define CCSOFTSERIAL_MAX_PENDING_MASTERS 10
 
 /* Lowest possible priority level. Serial objects with this priority 
  * will be treated as slaves.
  */
-#define CCSOFTSERIALDEV_SLAVE 0
+#define CCSOFTSERIALDEV_SLAVE (unsigned char) 0
 
 /* Lowest priority level possible for a master.
  */
-#define CCSOFTSERIALDEV_MIN_PRIO 1
+#define CCSOFTSERIALDEV_MIN_PRIO (unsigned char) 1
 
 /* Forward declare serial bus class
  */
@@ -258,7 +253,7 @@ const struct CCSoftSerialDev_VTable* CCSoftSerialDev_GetVTable( );
  *	The bus that this controller will write/read from. It can only write/read from devices who
  *	have the same bus attached to them. The bus cannot be changed once constructed.
  */
-CError CCSoftSerialDevMaster( struct CCSoftSerialDev* self, char priority, CCSoftSerialDevID id, struct CCSoftSerialBus* bus );
+CError CCSoftSerialDevMaster( struct CCSoftSerialDev* self, unsigned char priority, CCSoftSerialDevID id, struct CCSoftSerialBus* bus );
 
 /**
  * @memberof CCSoftSerialDev
@@ -300,7 +295,7 @@ CCSoftSerialDevID CCSoftSerialDev_GetID( struct CCSoftSerialDev* self );
  * @param self
  *	The device.
  */
-char CCSoftSerialDev_GetPriority( struct CCSoftSerialDev* self );
+unsigned char CCSoftSerialDev_GetPriority( struct CCSoftSerialDev* self );
 
 /**
  * @memberof CCSoftSerialDev
