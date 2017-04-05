@@ -51,10 +51,10 @@ static signed char CCSoftSerialBus_PriorityCompare( const void* key1_p, const vo
 	unsigned char key2 = *((unsigned char*) key2_p);
 
 	if( key1 > key2 ) {
-		return 1;
+		return -1;
 	}
 	else if( key1 < key2 ) {
-		return -1;
+		return 1;
 	}
 	else {
 		return 0;

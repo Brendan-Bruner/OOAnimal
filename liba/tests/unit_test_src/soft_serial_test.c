@@ -199,7 +199,7 @@ TEST(arbitration)
 	/* Create threads for master[0,2] to take the bus.
 	 */
 	for( i = 0; i < 2; ++i ) {
-		err = pthread_create(&thread_handle[i], &attr, arbitration_priority, &master[2*i]);
+		err = pthread_create(&thread_handle[2*i], &attr, arbitration_priority, &master[2*i]);
 		if( err != 0 ) {
 			CCSoftSerialDev_Unselect(&master[1]);
 			for( j = 0; j <= i; ++j ) {
@@ -247,7 +247,7 @@ TEST(arbitration)
 
 	/* Create thread for master[1] to block until selected.
 	 */
-	err = pthread_create(&thread_handle[i], &attr, arbitration_reselection, &master[2*i]);
+	err = pthread_create(&thread_handle[0], &attr, arbitration_reselection, &master[1]);
 	if( err != 0 ) {
 		CCSoftSerialDev_Unselect(&master[0]);
 		CCSoftSerialDev_Select(&master[0], CCSoftSerialDev_GetID(&master[1]), COS_BLOCK_FOREVER);
