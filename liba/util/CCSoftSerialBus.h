@@ -111,6 +111,11 @@ const struct CCSoftSerialBus_VTable* CCSoftSerialBus_GetVTable( );
  * @param channelSize
  *	The number of tokens which can fit into the read/write channel before causing an
  *	overflow condition.
+ * @notes
+ *	This class requires a binary tree data structure to operate correctly. The current
+ *	binary tree interface only implements dynamic construction. Therefore, this will
+ *	use CMalloc to create a binary and CFree to release the memory when the bus object
+ *	is destroyed.
  */
 CError CCSoftSerialBus( struct CCSoftSerialBus* self, size_t tokenSize, size_t channelSize );
 
@@ -123,6 +128,12 @@ CError CCSoftSerialBus( struct CCSoftSerialBus* self, size_t tokenSize, size_t c
  *	Same as CCSoftSerialBus, except the programmer is reponsible for constructing the miso and
  *	mosi data channels (the channels are just thread safe queues).
  *	When the destructor for the bus object is called, these queues will be have their destructor called too.
+ * @notes
+ *	This class requires a binary tree data structure to operate correctly. The current
+ *	binary tree interface only implements dynamic construction. Therefore, this will
+ *	use CMalloc to create a binary and CFree to release the memory when the bus object
+ *	is destroyed.
+
  */
 CError CCSoftSerialBusStatic( struct CCSoftSerialBus* self, struct CCThreadedQueue* misoChannel, struct CCThreadedQueue* mosiChannel );
 

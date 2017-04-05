@@ -150,6 +150,18 @@ static CError CCSoftSerialBus_CreateChannel( struct CCSoftSerialBus* self,
 /************************************************************************/
 /* Class Methods							*/
 /************************************************************************/
+/* Cyclic complexity map:
+ * 1(bounds check) -> 2(is master) --+-->------------>--+--> 3(assign channel) --+
+ *                                   |                  |                        |
+ *                                   +--> 4(is slave) --+                        |
+ *                                                      |                        |
+ *                                                      +------> 5(return) <-----+
+ * Complexity of: 6(edges) - 5(nodes) + 2 = 3
+ * Test cases:
+ *	* Slave writing
+ *	* Master writing
+ *	* Unauthorized device writing
+ */
 CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self,
 					 struct CCSoftSerialDev* querying_device,
 					 void* data,
@@ -193,6 +205,12 @@ CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self,
 	return CCSOFTSERIAL_OK;
 }
 
+/* Same algorithm as CCSoftSerialBus_Write. Use the same test
+ * cases but for reading instead:
+ *	* Slave device reading
+ *	* Master device reading
+ *	* Unauthorized device reading
+ */
 CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 					struct CCSoftSerialDev* querying_device,
 					void** data,
@@ -235,7 +253,26 @@ CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 	return CCSOFTSERIAL_OK;      
 }
 
-
+/* Cyclic complexit map:
+ * 1(bounds check) -> 2(if slave) -----------+
+ *                                           |                  
+ *    +--> 8(take bus) -->-+--> 3(return) <--+--> 4(if tree full) --+
+ *    |                    |                                        |
+ *    |                    +-<--------------------------------------+
+ *    |                                                             |
+ *    +-- 7(if highest prio) <- 6(if idle) <- 5(for) <--+-----------+
+ *    |                                                 |
+ *    +--> 9(block until idle) ----------------------->-+
+ *
+ * Complexity of: 11(edges) - 9(nodes) + 2 = 4
+ * Test cases:
+ *	* Querying device is a slave
+ *	* Pending masters tree is full
+ *	* Pending master is not highest priority when bus goes idle.
+ *	* Pending master is highest priority when bus goes idle
+ *		- Bus is initially idle 
+ *		- Bus is initally busy
+ */
 CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 					  struct CCSoftSerialDev* querying_device,
 					  CCSoftSerialDevID slave_id,
@@ -328,6 +365,11 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 	}
 }
 
+/* Very simple complexity map, not going to write it out.
+ * Test cases:
+ *	* Querying device is current bus master
+ *	* Querying device is not current bus master
+ */
 CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self,
 					    struct CCSoftSerialDev* querying_device )
 {
@@ -364,11 +406,29 @@ CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self,
 	return err;
 }
 
+/* Cyclic complexity map:
+ * 1(bounds check) -> 7(master check) -+---------------------------------+
+ *                                     |                                 |
+ *                   +-----------------+                                 |
+ *                   |                                                   |
+ *                   +--> 2(for) -> 3(check) ----------+--> 4(return) <--+
+ *                   ^                                 |                 |
+ *                   +-- 6(timeout) <- 5(cond wait) <--+                 |
+ *                   v                                                   |
+ *                   +---------------------------------------------------+
+ * complexity of: 9(edges) - 7(nodes) + 2 = 4
+ * test cases:
+ *	* Is current master
+ *	* Is current selected slave
+ *	* Is not current slave, block until becoming slave
+ *	* Is not current slave, block and timeout waiting to become slave
+ */
 CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self,
 					      struct CCSoftSerialDev* querying_device,
 					      COS_Timemsec block_time )
 {
 	struct timespec abstime;
+	CCSoftSerialDevID dev_id;
 	int err;
 	
 	/* Parameter bounds checks.
@@ -382,6 +442,15 @@ CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self,
 	/* Get mutual exclusion on member variables.
 	 */
 	pthread_mutex_lock(&self->priv.device_lock);
+
+	/* If we are the master device, no need to block until bus master 
+	 * changes.
+	 */
+	dev_id = CCSoftSerialDev_GetID(querying_device);
+	if( dev_id == self->priv.masterID ) {
+		pthread_mutex_unlock(&self->priv.device_lock);
+		return CCSOFTSERIAL_OK;
+	}
 
 	/* Block until selected or timeout occurs.
 	 */

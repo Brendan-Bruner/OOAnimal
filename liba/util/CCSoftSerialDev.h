@@ -73,7 +73,7 @@ typedef enum
  */
 typedef enum
 {
-	CCSOFTSERIAL_NO_ID, /* reserved */
+	CCSOFTSERIAL_NO_ID = -1, /* reserved */
 	CCSOFTSERIAL_ID0,
 	CCSOFTSERIAL_ID1
 } CCSoftSerialDevID;
