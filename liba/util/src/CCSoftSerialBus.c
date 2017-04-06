@@ -382,6 +382,9 @@ CCSoftSerialError CCSoftSerialBus_Select( struct CCSoftSerialBus* self,
 			pthread_cond_wait(&self->priv.idle_cond, &self->priv.device_lock);
 		}
 		else {
+			clock_gettime(CLOCK_REALTIME, &abstime);
+			abstime.tv_sec += block_time / MS_PER_SECOND;
+			abstime.tv_nsec += (block_time % MS_PER_SECOND) * NS_PER_MS;
 			err = pthread_cond_timedwait(&self->priv.idle_cond, &self->priv.device_lock, &abstime);
 			if( err != 0 ) {
 				/* Timed out. Remove the querying device from the tree of 
@@ -501,6 +504,9 @@ CCSoftSerialError CCSoftSerialBus_Isselected( struct CCSoftSerialBus* self,
 			pthread_cond_wait(&self->priv.select_cond, &self->priv.device_lock);
 		}
 		else {
+			clock_gettime(CLOCK_REALTIME, &abstime);
+			abstime.tv_sec += block_time / MS_PER_SECOND;
+			abstime.tv_nsec += (block_time % MS_PER_SECOND) * NS_PER_MS;
 			err = pthread_cond_timedwait(&self->priv.select_cond, &self->priv.device_lock, &abstime);
 			if( err != 0 ) {
 				/* Timed out.

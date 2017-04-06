@@ -31,6 +31,7 @@
 #error "Cannot perform soft serial tests. See this file for reason why"
 #endif
 
+#define TEST_TENTH_SECOND_MS (1000/10) /* one tenth of a second in milli seconds. */
 #define TEST_TENTH_SECOND (1000*1000/10) /* one tenth of a second in micro seconds. */
 #define TEST_TOTAL_MASTERS (CCSOFTSERIAL_MAX_PENDING_MASTERS+2)
 #define TEST_MAX_PENDING_MASTERS CCSOFTSERIAL_MAX_PENDING_MASTERS
@@ -112,6 +113,17 @@ static void* arbitration_reselection( void* args )
 	pthread_exit(&arb_res_err);
 }
 
+static void* arbitration_timeout( void* args )
+{
+	struct CCSoftSerialDev* device;
+	CCSoftSerialError err;
+
+	device = args;
+	err = CCSoftSerialDev_Select(device, TEST_SLAVE_ID, TEST_TENTH_SECOND_MS);
+	ASSERT(err == CCSOFTSERIAL_ERR_TIMEOUT, "Should have timed out");
+	pthread_exit(&arb_res_err);
+}
+
 TEST(arbitration)
 {
 	CCSoftSerialError err;
@@ -147,6 +159,7 @@ TEST(arbitration)
 	 */
 	thread_err = pthread_attr_init(&attr);
 	if( thread_err != 0 ) {
+		pthread_attr_destroy(&attr);	
 		ABORT_TEST("Error creating attritube");
 	}
 	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
@@ -157,6 +170,7 @@ TEST(arbitration)
 			for( j = 0; j <= i; ++j ) {
 				pthread_join(thread_handle[j], &status);
 			}
+			pthread_attr_destroy(&attr);	
 			ABORT_TEST("Error creating thread 1");
 		}
 	}
@@ -205,6 +219,7 @@ TEST(arbitration)
 			for( j = 0; j <= i; ++j ) {
 				pthread_join(thread_handle[j], &status);
 			}
+			pthread_attr_destroy(&attr);	
 			ABORT_TEST("Error creating thread 2");
 		}
 	}
@@ -252,6 +267,7 @@ TEST(arbitration)
 		CCSoftSerialDev_Unselect(&master[0]);
 		CCSoftSerialDev_Select(&master[0], CCSoftSerialDev_GetID(&master[1]), COS_BLOCK_FOREVER);
 		pthread_join(thread_handle[0], &status);
+		pthread_attr_destroy(&attr);	
 		ABORT_TEST("Error creating thread 3");
 	}
 
@@ -278,7 +294,36 @@ TEST(arbitration)
 	 * 5. master[1] should now take bus.
 	 * 6. master[1] realeses bus.
 	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+
+	/* Create threads for master[1,2] to block on bus.
+	 */
+	err = pthread_create(&thread_handle[0], &attr, arbitration_tree_fill, &master[1]);
+	if( err != 0 ) {
+		pthread_attr_destroy(&attr);	
+		ABORT_TEST("Error creating thread 4");
+	}
+	err = pthread_create(&thread_handle[1], &attr, arbitration_timeout, &master[2]);
+	if( err != 0 ) {
+		CCSoftSerialDev_Unselect(&master[0]);
+		pthread_join(thread_handle[0], &status);
+		pthread_attr_destroy(&attr);	
+		ABORT_TEST("Error creating thread 5");
+	}
 	
+	/* Wait for master[2] to timeout.
+	 */
+	pthread_join(thread_handle[1], &status);
+
+	/* Release bus, then wait for master[1] to take it.
+	 */
+	CCSoftSerialDev_Unselect(&master[0]);
+	pthread_join(thread_handle[0], &status);
+
+	/* If we're at this point, master[2] successfully removed itself from
+	 * the tree of pending masters and master[1] was able to take the bus.
+	 */
+	pthread_attr_destroy(&attr);	
 }
 
 TEST(bus_release)
