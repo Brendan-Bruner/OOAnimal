@@ -82,10 +82,16 @@ static CError CCSoftSerialBus_CommonConst( struct CCSoftSerialBus* self,
 	/* Create binary tree for pending masters.
 	 */
 	err = CCBinaryTree(&self->priv.pending_masters,
-			   sizeof(CCSoftSerialDevID),
-			   CCSOFTSERIAL_MAX_PENDING_MASTERS,
-			   CCSoftSerialBus_PriorityCompare,
-			   sizeof(unsigned char));
+			      sizeof(CCSoftSerialDevID),
+			      CCSOFTSERIAL_MAX_PENDING_MASTERS,
+			      CCSoftSerialBus_PriorityCompare,
+			      sizeof(unsigned char));
+	if( err != COBJ_OK ) {
+		CDestroy(self->priv.mosi_channel);
+		CDestroy(self->priv.miso_channel);
+		CDestroy(&self->priv.pending_masters);
+		return err;
+	}
 
 	err = CCSoftSerialBus_CreateLocks(self);
 	if( err != COBJ_OK ) {
@@ -113,7 +119,7 @@ static CError CCSoftSerialBus_CreateChannel( struct CCSoftSerialBus* self,
 	CError err;
 
 	CAssertObject(self);
-	if( temp_channel == NULL || *temp_channel == NULL ) {
+	if( temp_channel == NULL ) {
 		return COBJ_INV_PARAM;
 	}
 	

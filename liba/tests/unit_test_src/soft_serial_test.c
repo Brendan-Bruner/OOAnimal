@@ -38,18 +38,27 @@
 #define TEST_CHANNEL_LENGTH 10
 #define TEST_SLAVE_ID (TEST_TOTAL_MASTERS+1)
 #define TEST_MASTER_ID 0
-struct CCSoftSerialDev master[TEST_TOTAL_MASTERS];
-struct CCSoftSerialDev slave;
-struct CCSoftSerialBus bus;
+static struct CCSoftSerialDev master[TEST_TOTAL_MASTERS];
+static struct CCSoftSerialDev slave;
+static struct CCSoftSerialBus bus;
+static pthread_attr_t attr;
 
 TEST_SETUP( )
 {
 	CError err;
 	int i;
+	int thread_err;
 
+	thread_err = pthread_attr_init(&attr);
+	if( thread_err != 0 ) {	
+		UNIT_PRINT("Error creating attritube. "
+			   "Test results are unreliable.");
+	}
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+	
 	err = CCSoftSerialBus(&bus, sizeof(char), TEST_CHANNEL_LENGTH);
 	if( err != COBJ_OK ) {
-		UNIT_PRINT("Fatal error during test setup."
+		UNIT_PRINT("Fatal error during test setup. "
 			   "Test result are unreliable");
 	}
 	
@@ -59,7 +68,7 @@ TEST_SETUP( )
 					    (CCSoftSerialDevID) i,
 					    &bus);
 		if( err != COBJ_OK ) {
-			UNIT_PRINT("Fatal error during test setup."
+			UNIT_PRINT("Fatal error during test setup. "
 				   "Test result are unreliable");
 		}
 	}
@@ -67,7 +76,7 @@ TEST_SETUP( )
 				   (CCSoftSerialDevID) TEST_SLAVE_ID,
 				   &bus);
 	if( err != COBJ_OK ) {
-		UNIT_PRINT("Fatal error during test setup."
+		UNIT_PRINT("Fatal error during test setup. "
 			   "Test result are unreliable");
 	}
 	
@@ -76,7 +85,9 @@ TEST_SETUP( )
 TEST_TEARDOWN( )
 {
 	int i;
-
+	
+	pthread_attr_destroy(&attr);
+	
 	for( i = 0; i < TEST_TOTAL_MASTERS; ++i ) {
 		CDestroy(&master[i]);
 	}
@@ -124,12 +135,10 @@ static void* arbitration_timeout( void* args )
 	pthread_exit(&arb_res_err);
 }
 
-TEST(arbitration)
+TEST(arbitration_max_masters)
 {
 	CCSoftSerialError err;
 	pthread_t thread_handle[TEST_MAX_PENDING_MASTERS];
-	pthread_attr_t attr;
-	int thread_err;
 	int i, j;
 	void* status;
 	
@@ -157,12 +166,6 @@ TEST(arbitration)
 
 	/* Create the threads.
 	 */
-	thread_err = pthread_attr_init(&attr);
-	if( thread_err != 0 ) {
-		pthread_attr_destroy(&attr);	
-		ABORT_TEST("Error creating attritube");
-	}
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
 	for( i = 0; i < TEST_MAX_PENDING_MASTERS; ++i ) {
 		err = pthread_create(&thread_handle[i], &attr, arbitration_tree_fill, &master[i+1]);
 		if( err != 0 ) {
@@ -170,7 +173,6 @@ TEST(arbitration)
 			for( j = 0; j <= i; ++j ) {
 				pthread_join(thread_handle[j], &status);
 			}
-			pthread_attr_destroy(&attr);	
 			ABORT_TEST("Error creating thread 1");
 		}
 	}
@@ -192,6 +194,15 @@ TEST(arbitration)
 	for( j = 0; j < TEST_MAX_PENDING_MASTERS; ++j ) {
 		pthread_join(thread_handle[j], &status);
 	}
+}
+
+TEST(arbitration_priority)
+{
+	CCSoftSerialError err;
+	pthread_t thread_handle[TEST_MAX_PENDING_MASTERS];
+	int thread_err;
+	int i, j;
+	void* status;
 
 	/* Test that master priorities are correctly handled. First, we will
 	 * use three masters:
@@ -219,7 +230,6 @@ TEST(arbitration)
 			for( j = 0; j <= i; ++j ) {
 				pthread_join(thread_handle[j], &status);
 			}
-			pthread_attr_destroy(&attr);	
 			ABORT_TEST("Error creating thread 2");
 		}
 	}
@@ -249,6 +259,13 @@ TEST(arbitration)
 	/* master[0] has bus, release it and finish the priority testing.
 	 */
 	CCSoftSerialDev_Unselect(&master[0]);
+}
+
+TEST(arbitration_reselection)
+{
+	CCSoftSerialError err;
+	pthread_t thread_handle[TEST_MAX_PENDING_MASTERS];
+	void* status;
 
 	/* Test that reselection works as intended.
 	 * 1. master[0] selects the slave
@@ -267,7 +284,6 @@ TEST(arbitration)
 		CCSoftSerialDev_Unselect(&master[0]);
 		CCSoftSerialDev_Select(&master[0], CCSoftSerialDev_GetID(&master[1]), COS_BLOCK_FOREVER);
 		pthread_join(thread_handle[0], &status);
-		pthread_attr_destroy(&attr);	
 		ABORT_TEST("Error creating thread 3");
 	}
 
@@ -282,6 +298,13 @@ TEST(arbitration)
 	ASSERT(CCSoftSerialDev_Isselected(&master[1], COS_NO_BLOCK) == CCSOFTSERIAL_OK, "Slave should be selected");
 	ASSERT(*((CCSoftSerialError*) status) == CCSOFTSERIAL_OK, "Error in blocking thread");
 	CCSoftSerialDev_Unselect(&master[0]);
+}
+
+TEST(arbitration_timeout)
+{
+	CCSoftSerialError err;
+	pthread_t thread_handle[TEST_MAX_PENDING_MASTERS];
+	void* status;
 
 	/* Finally, we test that a device correctly removes itself from 
 	 * the list of pending masters when a timeout occurs while trying
@@ -300,14 +323,12 @@ TEST(arbitration)
 	 */
 	err = pthread_create(&thread_handle[0], &attr, arbitration_tree_fill, &master[1]);
 	if( err != 0 ) {
-		pthread_attr_destroy(&attr);	
 		ABORT_TEST("Error creating thread 4");
 	}
 	err = pthread_create(&thread_handle[1], &attr, arbitration_timeout, &master[2]);
 	if( err != 0 ) {
 		CCSoftSerialDev_Unselect(&master[0]);
 		pthread_join(thread_handle[0], &status);
-		pthread_attr_destroy(&attr);	
 		ABORT_TEST("Error creating thread 5");
 	}
 	
@@ -323,7 +344,6 @@ TEST(arbitration)
 	/* If we're at this point, master[2] successfully removed itself from
 	 * the tree of pending masters and master[1] was able to take the bus.
 	 */
-	pthread_attr_destroy(&attr);	
 }
 
 TEST(bus_release)
@@ -358,7 +378,10 @@ TEST(data_transfer)
 
 TEST_SUITE(soft_serial)
 {
-	ADD_TEST(arbitration);
+	ADD_TEST(arbitration_max_masters);
+	ADD_TEST(arbitration_priority);
+	ADD_TEST(arbitration_reselection);
+	ADD_TEST(arbitration_timeout);
 	ADD_TEST(bus_release);
 	ADD_TEST(is_selected);
 	ADD_TEST(data_transfer);
