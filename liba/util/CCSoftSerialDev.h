@@ -154,12 +154,12 @@ struct CCSoftSerialBus;
  *
  *		// Write a message.
  *		for( int i = 0; i < masterMsgLen; ++i ) {
- *			CCSoftSerialDev_Write(&master, masterMsg, COS_BLOCK_FOREVER);
+ *			CCSoftSerialDev_Write(&master, &masterMsg[i], COS_BLOCK_FOREVER);
  *		}
  *	
  *		// Get responce and unselect.
  *		for( int i = 0; i < slaveMsgLen; ++i ) {
- *			CCSoftSerialDev_Read(&master, &msgBuf, COS_BLOCK_FOREVER);
+ *			CCSoftSerialDev_Read(&master, &msgBuf[i], COS_BLOCK_FOREVER);
  *		}
  *
  *		// Unselect the slave device.
@@ -175,12 +175,12 @@ struct CCSoftSerialBus;
  *
  *		// Read message.
  *		for( int i = 0; i < masterMsgLen; ++i ) {
- *			CCSoftSerialDev_Read(&slave, &msgBuf, COS_BLOCK_FOREVER);
+ *			CCSoftSerialDev_Read(&slave, &msgBuf[i], COS_BLOCK_FOREVER);
  *		}
  *	
  *		// Give response.
  *		for( int i = 0; i < slaveMsgLen; ++i ) {
- *			CCSoftSerialDev_Write(&master, slaveMsg, COS_BLOCK_FOREVER);
+ *			CCSoftSerialDev_Write(&master, &slaveMsg[i], COS_BLOCK_FOREVER);
  *		}
  *	}
  *	@endcode
@@ -364,13 +364,7 @@ CCSoftSerialError CCSoftSerialDev_Write( struct CCSoftSerialDev* self, void* dat
  *	CCSoftSerialBus() for data size. If you currently don't have
  *	control of the bus this function immediately returns with an error code.
  * @param data
- *	Pointer to variable which points to location where data will be
- *	copied to. For exampe, if you have an array, myArray, where data
- *	will be copied to:
- *	@code
- *		char myArray[MSG_LEN];
- *		CCSoftSerial_Read(device, &myArray, COS_NO_BLOCK);
- *	@endcode
+ *	Pointer to location where data will copied to.
  * @param blockTime
  *	The amount of time in ms to block for trying to read from the bus. The only
  *	time a block is done is if the bus currently has no data in it.
@@ -379,7 +373,7 @@ CCSoftSerialError CCSoftSerialDev_Write( struct CCSoftSerialDev* self, void* dat
  *	the master has unselected you), the block will end immediately and the function will
  *	return.
  */
-CCSoftSerialError CCSoftSerialDev_Read( struct CCSoftSerialDev* self, void** data, COS_Timemsec blockTime );
+CCSoftSerialError CCSoftSerialDev_Read( struct CCSoftSerialDev* self, void* data, COS_Timemsec blockTime );
 
 
 #endif /* UTIL_CCSOFTSERIALDEV_H_ */

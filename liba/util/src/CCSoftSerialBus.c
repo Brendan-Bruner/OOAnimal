@@ -203,6 +203,7 @@ CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self,
 	else {
 		/* Not the current slave or master.
 		 */
+		pthread_mutex_unlock(&self->priv.device_lock);
 		return CCSOFTSERIAL_ERR_PRIV;
 	}
 
@@ -222,7 +223,7 @@ CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self,
  */
 CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 					struct CCSoftSerialDev* querying_device,
-					void** data,
+					void* data,
 					COS_Timemsec block_time )
 {
 	CCSoftSerialDevID deviceID;
@@ -243,14 +244,15 @@ CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self,
 	 */
 	deviceID = CCSoftSerialDev_GetID(querying_device);
 	if( deviceID == self->priv.slaveID ) {
-		channel = self->priv.mosi_channel;
+		channel = self->priv.miso_channel;
 	}
 	else if( deviceID == self->priv.masterID ) {
-		channel = self->priv.miso_channel;
+		channel = self->priv.mosi_channel;
 	}
 	else {
 		/* Not the current slave or master.
 		 */
+		pthread_mutex_unlock(&self->priv.device_lock);
 		return CCSOFTSERIAL_ERR_PRIV;
 	}
 

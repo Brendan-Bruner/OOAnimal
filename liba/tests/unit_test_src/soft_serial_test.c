@@ -31,6 +31,7 @@
 #error "Cannot perform soft serial tests. See this file for reason why"
 #endif
 
+#define TEST_MSG_1 'a'
 #define TEST_TENTH_SECOND_MS (1000/10) /* one tenth of a second in milli seconds. */
 #define TEST_TENTH_SECOND (1000*1000/10) /* one tenth of a second in micro seconds. */
 #define TEST_TOTAL_MASTERS (CCSOFTSERIAL_MAX_PENDING_MASTERS+2)
@@ -60,6 +61,7 @@ TEST_SETUP( )
 	if( err != COBJ_OK ) {
 		UNIT_PRINT("Fatal error during test setup. "
 			   "Test result are unreliable");
+		UNIT_FLUSH();
 	}
 	
 	for( i = 0; i < TEST_TOTAL_MASTERS; ++i ) {
@@ -70,6 +72,7 @@ TEST_SETUP( )
 		if( err != COBJ_OK ) {
 			UNIT_PRINT("Fatal error during test setup. "
 				   "Test result are unreliable");
+			UNIT_FLUSH();
 		}
 	}
 	err = CCSoftSerialDevSlave(&slave,
@@ -78,6 +81,7 @@ TEST_SETUP( )
 	if( err != COBJ_OK ) {
 		UNIT_PRINT("Fatal error during test setup. "
 			   "Test result are unreliable");
+		UNIT_FLUSH();
 	}
 	
 }
@@ -348,32 +352,178 @@ TEST(arbitration_timeout)
 
 TEST(bus_release)
 {
+	CCSoftSerialError err;
+	
+	/* Release bus when not current bus master.
+	 */
+	err = CCSoftSerialDev_Unselect(&master[0]);
+	ASSERT(err == CCSOFTSERIAL_ERR_PRIV, "Should not be able to release bus");
+
+	/* Release bus when current owning it.
+	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	err = CCSoftSerialDev_Unselect(&master[0]);
+	ASSERT(err == CCSOFTSERIAL_OK, "Could not release owned bus");
+}
+
+TEST(is_selected_current_master)
+{
+	CCSoftSerialError err;
+	
+	/* Assert return value of isselected() when
+	 * current bus master.
+	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	err = CCSoftSerialDev_Isselected(&master[0], COS_BLOCK_FOREVER);
+	ASSERT(err == CCSOFTSERIAL_OK, "Should return no error");
+}
+
+TEST(is_selected_current_slave)
+{
+	CCSoftSerialError err;
+	
+	/* Assert return value of isselected() when
+	 * current bus slave.
+	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	err = CCSoftSerialDev_Isselected(&slave, COS_BLOCK_FOREVER);
+	ASSERT(err == CCSOFTSERIAL_OK, "Should return no error");
+
+}
+
+TEST(is_selected_slave_timeout)
+{
+	CCSoftSerialError err;
+	
+	/* Assert return value of isselected() when
+	 * timing out.
+	 */
+	err = CCSoftSerialDev_Isselected(&master[0], TEST_TENTH_SECOND_MS);
+	ASSERT(err == CCSOFTSERIAL_ERR_TIMEOUT, "Should return no error");
+
 }
 
 static void* is_selected_do_selection( void* args )
 {
-	(void) args;
+	struct CCSoftSerialDev* device;
+
+	device = args;
+
+	/* Give owner thread time to do it's block 
+	 * before making a selection.
+	 */
+	usleep(TEST_TENTH_SECOND);
+
+	/* Do the selection.
+	 */
+	CCSoftSerialDev_Select(device, TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	
 	pthread_exit(NULL);
 }
 
-TEST(is_selected)
+TEST(is_selected_blocking_slave)
 {
+	
+	CCSoftSerialError err;
+	int thread_err;
+	pthread_t thread_handle;
+	void* status;
+
+	/* Create thread that will allow blocking slave
+	 * to unblock.
+	 */
+	thread_err = pthread_create(&thread_handle, &attr, is_selected_do_selection, &master[0]);
+	if( thread_err != 0 ) {
+		pthread_join(thread_handle, &status);
+		ABORT_TEST("Error creating thread");
+	}
+
+	/* Block, waiting until selected.
+	 */
+	err = CCSoftSerialDev_Isselected(&slave, COS_BLOCK_FOREVER);
+	ASSERT(err == CCSOFTSERIAL_OK, "Should be selected..");
+
+	pthread_join(thread_handle, &status);	
 }
 
-static void* data_transfer_slave( void* args )
+static void* data_transfer_read( void* args )
 {
-	(void) args;
-	pthread_exit(NULL);
-}
+	struct CCSoftSerialDev* device;
+	char msg;
 
-static void* data_transfer_master( void* args )
-{
-	(void) args;
+	device = args;
+
+	CCSoftSerialDev_Read(device, &msg, COS_BLOCK_FOREVER);
+	ASSERT(msg == TEST_MSG_1, "Got wrong msg: %c", msg);
 	pthread_exit(NULL);
 }
 
 TEST(data_transfer)
 {
+	CCSoftSerialError err;
+	int thread_err;
+	pthread_t thread_handle;
+	void* status;
+	char msg;
+	
+	msg = TEST_MSG_1;
+	/* Test that unauthorized devices are blocked from reading/writing.
+	 */
+	err = CCSoftSerialDev_Write(&master[0], &msg, COS_BLOCK_FOREVER);
+	ASSERT(err == CCSOFTSERIAL_ERR_PRIV, "Got wrong error: %d", err);
+
+	err = CCSoftSerialDev_Read(&master[0], &msg, COS_BLOCK_FOREVER);
+	ASSERT(err == CCSOFTSERIAL_ERR_PRIV, "Got wrong error: %d", err);
+	
+	/* Master writes and slave reads.
+	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	thread_err = pthread_create(&thread_handle, &attr, data_transfer_read, &slave);
+	if( thread_err != 0 ) {
+		pthread_join(thread_handle, &status);
+		ABORT_TEST("Error creating thread");
+	}
+
+	err = CCSoftSerialDev_Write(&master[0], &msg, COS_BLOCK_FOREVER);
+	pthread_join(thread_handle, &status);
+	ASSERT(err == CCSOFTSERIAL_OK, "Got error writing: %d", err);
+
+	/* Slave writes and master reads.
+	 */
+	thread_err = pthread_create(&thread_handle, &attr, data_transfer_read, &master[0]);
+	if( thread_err != 0 ) {
+		pthread_join(thread_handle, &status);
+		ABORT_TEST("Error creating thread");
+	}
+	
+	err = CCSoftSerialDev_Write(&slave, &msg, COS_BLOCK_FOREVER);
+	pthread_join(thread_handle, &status);
+	ASSERT(err == CCSOFTSERIAL_OK, "Got error writing: %d", err);
+
+	/* Repeat above, but target is a master, not a slave.
+	 */
+	CCSoftSerialDev_Select(&master[0], CCSoftSerialDev_GetID(&master[1]), COS_BLOCK_FOREVER);
+	thread_err = pthread_create(&thread_handle, &attr, data_transfer_read, &master[1]);
+	if( thread_err != 0 ) {
+		pthread_join(thread_handle, &status);
+		ABORT_TEST("Error creating thread");
+	}
+
+	err = CCSoftSerialDev_Write(&master[0], &msg, COS_BLOCK_FOREVER);
+	pthread_join(thread_handle, &status);
+	ASSERT(err == CCSOFTSERIAL_OK, "Got error writing: %d", err);
+
+	/* Slave writes and master reads.
+	 */
+	thread_err = pthread_create(&thread_handle, &attr, data_transfer_read, &master[0]);
+	if( thread_err != 0 ) {
+		pthread_join(thread_handle, &status);
+		ABORT_TEST("Error creating thread");
+	}
+	
+	err = CCSoftSerialDev_Write(&master[1], &msg, COS_BLOCK_FOREVER);
+	pthread_join(thread_handle, &status);
+	ASSERT(err == CCSOFTSERIAL_OK, "Got error writing: %d", err);
 }
 
 TEST_SUITE(soft_serial)
@@ -383,6 +533,9 @@ TEST_SUITE(soft_serial)
 	ADD_TEST(arbitration_reselection);
 	ADD_TEST(arbitration_timeout);
 	ADD_TEST(bus_release);
-	ADD_TEST(is_selected);
+	ADD_TEST(is_selected_current_master);
+	ADD_TEST(is_selected_current_slave);
+	ADD_TEST(is_selected_slave_timeout);
+	ADD_TEST(is_selected_blocking_slave);
 	ADD_TEST(data_transfer);
 }

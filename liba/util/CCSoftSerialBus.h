@@ -153,7 +153,7 @@ CCSoftSerialError CCSoftSerialBus_Write( struct CCSoftSerialBus* self, struct CC
  * @param device
  *	The device which is trying to read data off the bus.
  */
-CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void** data, COS_Timemsec blockTime );
+CCSoftSerialError CCSoftSerialBus_Read( struct CCSoftSerialBus* self, struct CCSoftSerialDev* device, void* data, COS_Timemsec blockTime );
 
 /**
  * @memberof CCSoftSerialBus

@@ -78,7 +78,7 @@ CCSoftSerialError CCSoftSerialDev_Write( struct CCSoftSerialDev* self,
 }
 
 CCSoftSerialError CCSoftSerialDev_Read( struct CCSoftSerialDev* self,
-					   void** data,
+					   void* data,
 					   COS_Timemsec blockTime )
 {
 	struct CCSoftSerialBus* bus;
