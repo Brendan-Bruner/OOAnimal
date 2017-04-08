@@ -432,10 +432,13 @@ CCSoftSerialError CCSoftSerialBus_Unselect( struct CCSoftSerialBus* self,
 	 */
 	if( CCSoftSerialDev_GetID(querying_device) == self->priv.masterID ) {
 		/* The querying device is indeed the current bus master.
-		 * release the bus and signal the idle bus condition.
+		 * release the bus and signal the idle bus condition. Clear
+		 * the queues.
 		 */
 		self->priv.slaveID = CCSOFTSERIAL_NO_ID;
 		self->priv.masterID = CCSOFTSERIAL_NO_ID;
+		CCThreadedQueue_Clear(self->priv.miso_channel);
+		CCThreadedQueue_Clear(self->priv.mosi_channel);
 		pthread_cond_broadcast(&self->priv.idle_cond);
 		err = CCSOFTSERIAL_OK;
 	}

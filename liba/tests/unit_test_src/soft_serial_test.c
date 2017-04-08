@@ -32,6 +32,7 @@
 #endif
 
 #define TEST_MSG_1 'a'
+#define TEST_MSG_2 'A'
 #define TEST_TENTH_SECOND_MS (1000/10) /* one tenth of a second in milli seconds. */
 #define TEST_TENTH_SECOND (1000*1000/10) /* one tenth of a second in micro seconds. */
 #define TEST_TOTAL_MASTERS (CCSOFTSERIAL_MAX_PENDING_MASTERS+2)
@@ -353,6 +354,7 @@ TEST(arbitration_timeout)
 TEST(bus_release)
 {
 	CCSoftSerialError err;
+	char msg;
 	
 	/* Release bus when not current bus master.
 	 */
@@ -364,6 +366,24 @@ TEST(bus_release)
 	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
 	err = CCSoftSerialDev_Unselect(&master[0]);
 	ASSERT(err == CCSOFTSERIAL_OK, "Could not release owned bus");
+
+	/* Releasing bus clears the communication channel for the
+	 * next bus master/slave pair.
+	 */
+	msg = TEST_MSG_1;
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	CCSoftSerialDev_Write(&master[0], &msg, COS_BLOCK_FOREVER);
+	err = CCSoftSerialDev_Unselect(&master[0]);
+	ASSERT(err == CCSOFTSERIAL_OK, "Could not release owned bus");
+
+	/* Reselect slave, then let slave read off bus. There should be no
+	 * msg.
+	 */
+	CCSoftSerialDev_Select(&master[0], TEST_SLAVE_ID, COS_BLOCK_FOREVER);
+	msg = TEST_MSG_2;
+	err = CCSoftSerialDev_Read(&slave, &msg, COS_NO_BLOCK);
+	ASSERT(err == CCSOFTSERIAL_ERR_TIMEOUT, "msg still in buffer");
+	ASSERT(msg != TEST_MSG_1, "Should not be able to read out msg");
 }
 
 TEST(is_selected_current_master)
