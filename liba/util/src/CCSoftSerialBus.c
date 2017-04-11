@@ -654,6 +654,8 @@ static void CDestructor( void* self_ )
 	CDestroy(self->priv.miso_channel);
 	CDestroy(self->priv.mosi_channel);
 	CDestroy(&self->priv.pending_masters);
+	pthread_cond_destroy(&self->priv.mosi_write_cond);
+	pthread_cond_destroy(&self->priv.miso_read_cond);
 	pthread_mutex_destroy(&self->priv.device_lock);
 	pthread_cond_destroy(&self->priv.select_cond);
 	pthread_cond_destroy(&self->priv.idle_cond);
