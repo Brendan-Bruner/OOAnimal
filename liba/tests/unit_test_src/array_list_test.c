@@ -55,6 +55,13 @@ TEST(add_at)
 	 */
 	err = CIList_AddAt(&list->cilist, &test_var, 0);
 	ASSERT(err == CILIST_OK, "Failure to do clean insert");
+
+	/* Make sure adding at the same index doesn't increase the size.
+	 */
+	++test_var;
+	err = CIList_AddAt(&list->cilist, &test_var, 0);
+	ASSERT(err == CILIST_OK, "Failure insert at same index");
+	ASSERT(CIList_Size(&list->cilist) == 1, "List is incorrect size");
 }
 
 TEST(get)
