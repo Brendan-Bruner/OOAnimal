@@ -124,7 +124,7 @@ CIQueueError CIQueue_Remove( struct CIQueue* self, void* element );
 /**
  * @memberof CIQueue
  * @details
- *	Peek at the element in the head of the queue by copy. This does
+ *	Peek at the element in the head of the queue by copy. This does not
  *	remove the head.
  * @param self
  *	The queue.
@@ -158,6 +158,9 @@ size_t CIQueue_Size( struct CIQueue* self );
  */	
 size_t CIQueue_MaxSize( struct CIQueue* self );
 
+/*
+ * TODO: clear method should allow user to enter a clean up function.
+ */
 /**
  * @memberof CIQueue
  * @details

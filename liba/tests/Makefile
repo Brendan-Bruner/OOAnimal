@@ -5,7 +5,7 @@ CFLAGS := -Wall -Wextra -pedantic -g
 # sources/includes/objects for static util lib
 LIB_SRC := $(shell echo ./*.c) $(shell echo ./**/*.c)
 LIB_INC := -I. -I../Class -I../util
-LIB_DEF := -DCIITERATOR_INCLUDED
+LIB_DEF := -DCIITERATOR_INCLUDED -D_GNU_SOURCE
 LIB_DIR := debug
 LIB_NAME := ctests
 LIB_OBJ := $(addprefix $(LIB_DIR)/,$(LIB_SRC:%.c=%.o))

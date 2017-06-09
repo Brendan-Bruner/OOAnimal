@@ -70,6 +70,15 @@ CITreeError CITree_Delete( struct CITree* self, void* element, size_t index )
 	return vtable->delete(self, element, index);
 }
 
+CITreeError CITree_DeleteElement( struct CITree* self, void* element )
+{
+	CAssertObject(self);
+	const struct CITree_VTable* vtable = CGetVTable(self);
+	CAssertVirtual(vtable);
+	CAssertVirtual(vtable->delete_element);
+	return vtable->delete_element(self, element);
+}
+
 size_t CITree_Size( struct CITree* self )
 {
 	CAssertObject(self);

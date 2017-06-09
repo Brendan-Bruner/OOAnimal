@@ -26,3 +26,9 @@ Several data structures have been written using CObject in /liba/util. Their doc
 ---
 
 In /liba/tests there is a unit test suite for all data structures in liba/util. Compile this into a static library by running ```make all``` in a command line. To run the test suite, you need to compile the code in /main by running ```make all``` then ```make run``` to execute it. All static libaries in /liba/Class, /liba/util, and /liba/tests must be compiled beforehand. 
+
+#Branches
+---
+
+Master contains the most up to date stable code.
+The branch ```threadsafequeue```, at this point in time, contains code for a posix thread safe queue. The code has only been tested on Ubuntu. However, it's not c99 compliant. 
