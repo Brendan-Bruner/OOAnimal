@@ -63,7 +63,7 @@ const struct ITClassA_VTable* ITClassA_VTable_Key( )
 	static struct ITClassA_VTable vtable;
 
 	/* Get a copy of super's vtable. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.CObject_VTable = *CObject_GetVTable( );
 
 	/* Implement interface methods. */
 	vtable.ITInterface1_VTable.ITInterface0_VTable.i0method0 = ITInterface0_ClassA_Method0;

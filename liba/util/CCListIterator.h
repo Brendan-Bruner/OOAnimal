@@ -75,10 +75,10 @@ struct CCListIterator
 {
 	/* Super class must always be first member */
 	/* of a C class struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	/* Implementing the CIIterator interface. */
-	struct CIIterator cIIterator;
+	struct CIIterator ciiterator;
 
 	struct CIList* list;
 	size_t index;
@@ -99,10 +99,10 @@ struct CCListIterator_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable  cobject;
 
 	/* Space for a copy of the implemented interface's virtual table */
-	struct CIIterator_VTable CIIterator_VTable;
+	struct CIIterator_VTable ciiterator_override;
 };
 
 /**
@@ -111,7 +111,7 @@ struct CCListIterator_VTable
  * @details
  *	Get vtable reference for CCListIterator class.	
  */
-const struct CCListIterator_VTable* CCListIterator_Get_Key( );
+const struct CCListIterator_VTable* CCListIterator_GetVTable( );
 
 
 /************************************************************************/

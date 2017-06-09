@@ -14,7 +14,7 @@ LIB_ITER_SRC := src/CIIterator.c src/CCListIterator.c
 # sources/includes/defines for static util lib
 LIB_SRC := $(shell echo src/*.c)
 LIB_INC := -I. -I../Class
-LIB_DEF :=
+LIB_DEF := -D_POSIX_C_SOURCE=199309L -D_GNU_SOURCE
 LIB_DIR := debug
 LIB_NAME := cutil
 

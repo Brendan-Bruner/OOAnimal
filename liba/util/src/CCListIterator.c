@@ -101,7 +101,7 @@ static void CIIterator_Next_Def( struct CIIterator* self_, void* element )
 	 * or, if not, check if there is a next element (which will cache
 	 * an index).
 	 */
-	if( self->is_next_valid || CIIterator_HasNext(&self->cIIterator) ) {
+	if( self->is_next_valid || CIIterator_HasNext(&self->ciiterator) ) {
 		/* Have a valid index into the next element, get that.
 		 */
 		CIList_Get(list, element, self->next_index);
@@ -186,7 +186,7 @@ static void CIIterator_Previous_Def( struct CIIterator* self_, void* element )
 	 * or, if not, check if there is a previous element (which will cache
 	 * an index).
 	 */
-	if( self->is_previous_valid || CIIterator_HasPrevious(&self->cIIterator) ) {
+	if( self->is_previous_valid || CIIterator_HasPrevious(&self->ciiterator) ) {
 		/* Have a valid index into the next element, get that.
 		 */
 		CIList_Get(list, element, self->previous_index);
@@ -242,22 +242,22 @@ static size_t CIIterator_Index_Def( struct CIIterator* self_ )
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCListIterator_VTable* CCListIterator_VTable_Key( )
+const struct CCListIterator_VTable* CCListIterator_GetVTable( )
 {
 	static struct CCListIterator_VTable vtable  =
 		{
 			/* Assign implemenation of interface CIIterator's methods. */
-			.CIIterator_VTable.hasNext = CIIterator_HasNext_Def,
-			.CIIterator_VTable.next = CIIterator_Next_Def,
-			.CIIterator_VTable.hasPrevious = CIIterator_HasPrevious_Def,
-			.CIIterator_VTable.previous = CIIterator_Previous_Def,
-			.CIIterator_VTable.set = CIIterator_Set_Def,
-			.CIIterator_VTable.remove = CIIterator_Remove_Def,
-			.CIIterator_VTable.index = CIIterator_Index_Def
+			.ciiterator_override.hasNext = CIIterator_HasNext_Def,
+			.ciiterator_override.next = CIIterator_Next_Def,
+			.ciiterator_override.hasPrevious = CIIterator_HasPrevious_Def,
+			.ciiterator_override.previous = CIIterator_Previous_Def,
+			.ciiterator_override.set = CIIterator_Set_Def,
+			.ciiterator_override.remove = CIIterator_Remove_Def,
+			.ciiterator_override.index = CIIterator_Index_Def
 		};
 
 	/* Super's vtable copy. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.cobject = *CObject_GetVTable( );
 
 	/* Return pointer to CCArrayList's vtable. */
 	return &vtable;
@@ -274,15 +274,15 @@ CError CCListIterator( struct CCListIterator* self, struct CIList* list )
 
 	/* First thing in constructor must be to call super's constructor. 
 	 */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. 
 	 */
-	CVTable(self, CCListIterator_VTable_Key( ));
+	CVTable(self, CCListIterator_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. 
 	 */
-	CInterface(self, &self->cIIterator, &CCListIterator_VTable_Key( )->CIIterator_VTable);
+	CInterface(self, &self->ciiterator, &CCListIterator_GetVTable( )->ciiterator_override);
 
 	/* Set up member data.
 	 */

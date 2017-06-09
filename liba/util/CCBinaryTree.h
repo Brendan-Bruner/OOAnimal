@@ -86,10 +86,10 @@ struct CCBinaryTree
 {
 	/* Super class must always be first member */
 	/* of a C class struct. */
-	struct CObject cObject;
+	struct CObject cobject;
 
 	/* Implementing the CITree interface. */
-	struct CITree cITree;
+	struct CITree citree;
 
 	/* Private data. */	
 	struct CCArrayList tree_backend;
@@ -112,15 +112,15 @@ struct CCBinaryTree_VTable
 {
 	/* Space for a copy of the super class' virtual table must  */
 	/* be the first member of a class virtual table declaration. */
-	struct CObject_VTable  CObject_VTable;
+	struct CObject_VTable  cobject_override;
 
 	/* Since we are overriding the destructor, we need to keep */
 	/* keep a reference to the super class' implementation of */
 	/* the destructor. */
-	const struct CObject_VTable* CObject_VTable_Ref;
+	const struct CObject_VTable* cobject;
 
 	/* Space for a copy of the implemented interface's virtual table */
-	struct CITree_VTable CITree_VTable;
+	struct CITree_VTable citree_override;
 };
 
 /**
@@ -129,7 +129,7 @@ struct CCBinaryTree_VTable
  * @details
  *	Get vtable reference for CCBinaryTree class.	
  */
-const struct CCBinaryTree_VTable* CCBinaryTree_Get_Key( );
+const struct CCBinaryTree_VTable* CCBinaryTree_GetVTable( );
 	
 
 /************************************************************************/
@@ -159,7 +159,7 @@ const struct CCBinaryTree_VTable* CCBinaryTree_Get_Key( );
  *	The inputs point to the location of two keys in memory. This method
  *	must be return:
  *		- -1 if key1 evaluates to be less than key2.
- *		- +1 if key2 evaluates to be greater than key2.
+ *		- +1 if key1 evaluates to be greater than key2.
  *		- 0 if key1 and key2 evalute to be equal.
  *	Keeping in mind, that keys which evaluate to be of lower value are moved closer
  *	to the root of the tree. An example implementation is given in the description

@@ -147,7 +147,7 @@ static void CDestructor( void* self_ )
 }
 
 /* Create vtable. */
-const struct CObject_VTable* CObject_VTable_Key( )
+const struct CObject_VTable* CObject_GetVTable( )
 {
 	static const struct CObject_VTable CObject_VTable =
 	{
@@ -163,7 +163,7 @@ struct CObject* CObject_Constructor( struct CObject* self )
 	C_ASSERT_OBJECT(self);
 
 	/* Map vtable. */
-	CVTable(self, CObject_VTable_Key( ));
+	CVTable(self, CObject_GetVTable( ));
 
 	/* Setup object data. */
 	self->C_CLASS.C_ROOT = self;

@@ -139,34 +139,34 @@ static void CDestructor( void* self_ )
 	}
 
 	/* Call super's destructor. */
-	((struct CCArrayQueue_VTable*) CGetVTable(self))->CObject_VTable_Ref->CDestructor(self);
+	((struct CCArrayQueue_VTable*) CGetVTable(self))->cobject->CDestructor(self);
 }
 	
 
 /************************************************************************/
 /* vtable key								*/
 /************************************************************************/
-const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( )
+const struct CCArrayQueue_VTable* CCArrayQueue_GetVTable( )
 {
 	static struct CCArrayQueue_VTable vtable  =
 		{
 			/* Assign implemenation of interface CIQueue's methods. */
-			.CIQueue_VTable.insert = CIQueue_Insert_Def,
-			.CIQueue_VTable.remove = CIQueue_Remove_Def,
-			.CIQueue_VTable.peek = CIQueue_Peek_Def,
-			.CIQueue_VTable.size = CIQueue_Size_Def,
-			.CIQueue_VTable.maxSize = CIQueue_MaxSize_Def,
-			.CIQueue_VTable.clear = CIQueue_Clear_Def
+			.ciqueue_override.insert = CIQueue_Insert_Def,
+			.ciqueue_override.remove = CIQueue_Remove_Def,
+			.ciqueue_override.peek = CIQueue_Peek_Def,
+			.ciqueue_override.size = CIQueue_Size_Def,
+			.ciqueue_override.maxSize = CIQueue_MaxSize_Def,
+			.ciqueue_override.clear = CIQueue_Clear_Def
 		};
 
 	/* Super's vtable copy. */
-	vtable.CObject_VTable = *CObject_VTable_Key( );
+	vtable.cobject_override = *CObject_GetVTable( );
 
 	/* Override destructor. */
-	vtable.CObject_VTable.CDestructor = CDestructor;
+	vtable.cobject_override.CDestructor = CDestructor;
 
 	/* Reference to super's vtable. */
-	vtable.CObject_VTable_Ref = CObject_VTable_Key( );
+	vtable.cobject = CObject_GetVTable( );
 
 	/* Return pointer to CCArrayQueue's vtable. */
 	return &vtable;
@@ -178,13 +178,13 @@ const struct CCArrayQueue_VTable* CCArrayQueue_VTable_Key( )
 CError CCArrayQueue( struct CCArrayQueue* self, size_t element_size, size_t queue_size )
 {
 	/* First thing in constructor must be to call super's constructor. */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. */
-	CVTable(self, CCArrayQueue_VTable_Key( ));
+	CVTable(self, CCArrayQueue_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. */
-	CInterface(self, &self->cIQueue, &CCArrayQueue_VTable_Key( )->CIQueue_VTable);
+	CInterface(self, &self->ciqueue, &CCArrayQueue_GetVTable( )->ciqueue_override);
 
 	/* Allocate space for the array. */
 	self->_.queueBase = CMalloc(queue_size * element_size);
@@ -214,13 +214,13 @@ CError CCArrayQueueStatic
 )
 {
 	/* First thing in constructor must be to call super's constructor. */
-	CObject(&self->cObject);
+	CObject(&self->cobject);
 
 	/* Second thing in constructor must be to map vtable. */
-	CVTable(self, CCArrayQueue_VTable_Key( ));
+	CVTable(self, CCArrayQueue_GetVTable( ));
 
 	/* Third thing in constructor must be calling interface's constructor. */
-	CInterface(self, &self->cIQueue, &CCArrayQueue_VTable_Key( )->CIQueue_VTable);
+	CInterface(self, &self->ciqueue, &CCArrayQueue_GetVTable( )->ciqueue_override);
 
 	/* Space for the array. */
 	self->_.queueBase = queue_memory;
