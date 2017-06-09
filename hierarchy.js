@@ -5,6 +5,8 @@ var hierarchy =
     [ "CCBinaryTree_VTable", "structCCBinaryTree__VTable.html", null ],
     [ "CClass", "structCClass.html", null ],
     [ "CCListIterator_VTable", "structCCListIterator__VTable.html", null ],
+    [ "CCThreadedQueue", "structCCThreadedQueue.html", null ],
+    [ "CCThreadedQueue_VTable", "structCCThreadedQueue__VTable.html", null ],
     [ "CIIterator", "structCIIterator.html", [
       [ "CCListIterator", "structCCListIterator.html", null ]
     ] ],

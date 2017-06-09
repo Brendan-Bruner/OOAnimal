@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structCObject.html" title="Base class. " alt="" coords="5,5,76,32"/>
+<area shape="rect" id="node1" href="$structCITree.html" title="Tree data structure interface. " alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node2" href="$structCCBinaryTree.html" title="Implements the CITree interface with a binary tree/heap. " alt="" coords="116,5,221,32"/>
 </map>

@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structCIList__VTable.html" title="CIList virtual table. " alt="" coords="5,5,111,32"/>
+<area shape="rect" id="node1" href="$structCIIterator.html" title="CIIterator" alt="" coords="5,5,83,32"/>
+<area shape="rect" id="node2" href="$structCCListIterator.html" title="CCListIterator" alt="" coords="131,5,235,32"/>
 </map>

@@ -124,14 +124,14 @@ $(document).ready(function(){initNavTree('structCCArrayList.html','');});
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="structCCArrayList__inherit__graph.png" border="0" usemap="#CCArrayList_inherit__map" alt="Inheritance graph"/></div>
 <map name="CCArrayList_inherit__map" id="CCArrayList_inherit__map">
-<area shape="rect" id="node2" href="structCIList.html" title="Interface for list data structures. " alt="" coords="38,5,145,97"/>
+<area shape="rect" id="node2" href="structCIList.html" title="Interface for list data structures. " alt="" coords="43,5,150,97"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ga555c53a4f341479dfce3044fbf6bebfb"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga555c53a4f341479dfce3044fbf6bebfb">CCArrayList_Get_Key</a> ()</td></tr>
-<tr class="separator:ga555c53a4f341479dfce3044fbf6bebfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3d9cf310e33351035a67402f9d19e8fb"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga3d9cf310e33351035a67402f9d19e8fb">CCArrayList_GetVTable</a> ()</td></tr>
+<tr class="separator:ga3d9cf310e33351035a67402f9d19e8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab588e841a9b2b0869a677b031e4a2671"><td class="memItemLeft" align="right" valign="top">CError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList.html#ab588e841a9b2b0869a677b031e4a2671">CCArrayList</a> (struct <a class="el" href="structCCArrayList.html">CCArrayList</a> *self, size_t element_size, size_t max_size)</td></tr>
 <tr class="separator:ab588e841a9b2b0869a677b031e4a2671"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94628bfbf5663a34d4bec758df595fa3"><td class="memItemLeft" align="right" valign="top">CError&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayList.html#a94628bfbf5663a34d4bec758df595fa3">CCArrayListStatic</a> (struct <a class="el" href="structCCArrayList.html">CCArrayList</a> *self, size_t element_size, size_t max_size, void *memory)</td></tr>
@@ -153,12 +153,12 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Data Fields</h2></td></tr>
-<tr class="memitem:afb0c69173021d810aa23a26a88c790d1"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afb0c69173021d810aa23a26a88c790d1"></a>
-struct <a class="el" href="structCObject.html">CObject</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cObject</b></td></tr>
-<tr class="separator:afb0c69173021d810aa23a26a88c790d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a53a3accc94fd5694afcf9f1a122c1148"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53a3accc94fd5694afcf9f1a122c1148"></a>
-struct <a class="el" href="structCIList.html">CIList</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cIList</b></td></tr>
-<tr class="separator:a53a3accc94fd5694afcf9f1a122c1148"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88f9de4187cc3259edfdd545355ad974"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88f9de4187cc3259edfdd545355ad974"></a>
+struct <a class="el" href="structCObject.html">CObject</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cobject</b></td></tr>
+<tr class="separator:a88f9de4187cc3259edfdd545355ad974"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec35f0527ce4d91fbbf931e6eeae8ead"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aec35f0527ce4d91fbbf931e6eeae8ead"></a>
+struct <a class="el" href="structCIList.html">CIList</a>&#160;</td><td class="memItemRight" valign="bottom"><b>cilist</b></td></tr>
+<tr class="separator:aec35f0527ce4d91fbbf931e6eeae8ead"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70d7ab25cb425ba487a79e9e9cb79637"><td class="memItemLeft" ><a class="anchor" id="a70d7ab25cb425ba487a79e9e9cb79637"></a>
 struct {</td></tr>
 <tr class="memitem:ab602a7cd18cebacaa83b11b0d69a9b92"><td class="memItemLeft" >
@@ -602,7 +602,7 @@ COBJ_ALLOC_FAIL: on failure to allocate memory for list. </dd></dl>
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structCCArrayList.html">CCArrayList</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

@@ -1,5 +1,6 @@
 var structCIQueue =
 [
+    [ "CCThreadedQueue_Size", "structCIQueue.html#aeefe8e8f7e2729a267746bdd73efed47", null ],
     [ "CIQueue_Clear", "structCIQueue.html#a5d1f5ebc27bb8e352e22c99564c363fa", null ],
     [ "CIQueue_Insert", "structCIQueue.html#a62e2bc30fba53d2e04796347936383df", null ],
     [ "CIQueue_MaxSize", "structCIQueue.html#add9b2561cd8858390fa3b3f86d982dcd", null ],

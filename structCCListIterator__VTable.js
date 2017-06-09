@@ -1,5 +1,5 @@
 var structCCListIterator__VTable =
 [
-    [ "CIIterator_VTable", "structCCListIterator__VTable.html#a5486ff0d2702d759769f3246aca75f0a", null ],
-    [ "CObject_VTable", "structCCListIterator__VTable.html#ab6044f6829e10deac53757ae910ffe8c", null ]
+    [ "ciiterator_override", "structCCListIterator__VTable.html#a9458f4d5dfdab6ce74277b43236db342", null ],
+    [ "cobject", "structCCListIterator__VTable.html#a9c4073478bf428e2927a1f77577ea255", null ]
 ];

@@ -9,6 +9,8 @@ var searchData=
   ['cclass',['CClass',['../structCClass.html',1,'']]],
   ['cclistiterator',['CCListIterator',['../structCCListIterator.html',1,'']]],
   ['cclistiterator_5fvtable',['CCListIterator_VTable',['../structCCListIterator__VTable.html',1,'']]],
+  ['ccthreadedqueue',['CCThreadedQueue',['../structCCThreadedQueue.html',1,'']]],
+  ['ccthreadedqueue_5fvtable',['CCThreadedQueue_VTable',['../structCCThreadedQueue__VTable.html',1,'']]],
   ['ciiterator',['CIIterator',['../structCIIterator.html',1,'']]],
   ['ciiterator_5fvtable',['CIIterator_VTable',['../structCIIterator__VTable.html',1,'']]],
   ['cilist',['CIList',['../structCIList.html',1,'']]],

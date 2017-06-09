@@ -9,6 +9,8 @@ var annotated_dup =
     [ "CClass", "structCClass.html", "structCClass" ],
     [ "CCListIterator", "structCCListIterator.html", "structCCListIterator" ],
     [ "CCListIterator_VTable", "structCCListIterator__VTable.html", "structCCListIterator__VTable" ],
+    [ "CCThreadedQueue", "structCCThreadedQueue.html", "structCCThreadedQueue" ],
+    [ "CCThreadedQueue_VTable", "structCCThreadedQueue__VTable.html", "structCCThreadedQueue__VTable" ],
     [ "CIIterator", "structCIIterator.html", "structCIIterator" ],
     [ "CIIterator_VTable", "structCIIterator__VTable.html", "structCIIterator__VTable" ],
     [ "CIList", "structCIList.html", "structCIList" ],

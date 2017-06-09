@@ -1,7 +1,7 @@
 var structCCArrayList =
 [
     [ "CCArrayList", "structCCArrayList.html#ab588e841a9b2b0869a677b031e4a2671", null ],
-    [ "CCArrayList_Get_Key", "group__VTable.html#ga555c53a4f341479dfce3044fbf6bebfb", null ],
+    [ "CCArrayList_GetVTable", "group__VTable.html#ga3d9cf310e33351035a67402f9d19e8fb", null ],
     [ "CCArrayListStatic", "structCCArrayList.html#a94628bfbf5663a34d4bec758df595fa3", null ],
     [ "CIList_Add", "structCCArrayList.html#a021c19a20c4061f06efa1e658c266638", null ],
     [ "CIList_AddAt", "structCCArrayList.html#ab4f1ab398ca8df8c42fd7ab55613cadf", null ],
@@ -12,8 +12,8 @@ var structCCArrayList =
     [ "CIList_Size", "structCCArrayList.html#a59e29f11bc29891b1c252e4aba262d0f", null ],
     [ "_", "structCCArrayList.html#a70d7ab25cb425ba487a79e9e9cb79637", null ],
     [ "add_index", "structCCArrayList.html#a95e25c227fbe985fb48d65ce052a2fa3", null ],
-    [ "cIList", "structCCArrayList.html#a53a3accc94fd5694afcf9f1a122c1148", null ],
-    [ "cObject", "structCCArrayList.html#afb0c69173021d810aa23a26a88c790d1", null ],
+    [ "cilist", "structCCArrayList.html#aec35f0527ce4d91fbbf931e6eeae8ead", null ],
+    [ "cobject", "structCCArrayList.html#a88f9de4187cc3259edfdd545355ad974", null ],
     [ "current_size", "structCCArrayList.html#a94fdd6b7a0e9dacd4c96e4a07ee0e1f2", null ],
     [ "element_size", "structCCArrayList.html#a7073d210c450ab17ff408b2d57078ff3", null ],
     [ "interface", "structCCArrayList.html#a28fc7ae9b4826d454aded73a5f4b8f29", null ],

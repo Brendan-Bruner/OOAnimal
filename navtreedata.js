@@ -27,7 +27,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CCArrayList_8h.html",
-"structCCListIterator.html#acbecf1c7b2fa0555d3a63e4098c4d89a"
+"structCCBinaryTree.html#aa8e2d7378cc33b5c34778edbfbc7ebe5"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

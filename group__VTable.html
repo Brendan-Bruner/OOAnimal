@@ -119,6 +119,9 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCListIterator__VTable.html">CCListIterator_VTable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual table for <a class="el" href="structCCListIterator.html">CCListIterator</a>.  <a href="structCCListIterator__VTable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCThreadedQueue__VTable.html">CCThreadedQueue_VTable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual table for struct <a class="el" href="structCCThreadedQueue.html" title="Thread safe wrapper for queues derived from the CIQueue interface. ">CCThreadedQueue</a>.  <a href="structCCThreadedQueue__VTable.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIIterator__VTable.html">CIIterator_VTable</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="structCIIterator.html">CIIterator</a> virtual table.  <a href="structCIIterator__VTable.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -137,26 +140,28 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:ga555c53a4f341479dfce3044fbf6bebfb"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga555c53a4f341479dfce3044fbf6bebfb">CCArrayList::CCArrayList_Get_Key</a> ()</td></tr>
-<tr class="separator:ga555c53a4f341479dfce3044fbf6bebfb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaa18f365631f69e5adaa85fee97b3e9d0"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayQueue__VTable.html">CCArrayQueue_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#gaa18f365631f69e5adaa85fee97b3e9d0">CCArrayQueue::CCArrayQueue_VTable_Key</a> ()</td></tr>
-<tr class="separator:gaa18f365631f69e5adaa85fee97b3e9d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gaaed838863a02131c93efd5e03687fcb2"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#gaaed838863a02131c93efd5e03687fcb2">CCBinaryTree::CCBinaryTree_Get_Key</a> ()</td></tr>
-<tr class="separator:gaaed838863a02131c93efd5e03687fcb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gadc7265ab1649dffe6c0a90567f8ea441"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCListIterator__VTable.html">CCListIterator_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#gadc7265ab1649dffe6c0a90567f8ea441">CCListIterator::CCListIterator_Get_Key</a> ()</td></tr>
-<tr class="separator:gadc7265ab1649dffe6c0a90567f8ea441"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:gab7fe4cd83d3362001d29bf540f311999"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCObject__VTable.html">CObject_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#gab7fe4cd83d3362001d29bf540f311999">CObject::CObject_VTable_Key</a> ()</td></tr>
-<tr class="separator:gab7fe4cd83d3362001d29bf540f311999"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3d9cf310e33351035a67402f9d19e8fb"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga3d9cf310e33351035a67402f9d19e8fb">CCArrayList::CCArrayList_GetVTable</a> ()</td></tr>
+<tr class="separator:ga3d9cf310e33351035a67402f9d19e8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga3968bf174c53b7b187c2ec18f32e9ad8"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCArrayQueue__VTable.html">CCArrayQueue_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga3968bf174c53b7b187c2ec18f32e9ad8">CCArrayQueue::CCArrayQueue_GetVTable</a> ()</td></tr>
+<tr class="separator:ga3968bf174c53b7b187c2ec18f32e9ad8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d75abcfe38be0d575d40fc76baccc0e"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga6d75abcfe38be0d575d40fc76baccc0e">CCBinaryTree::CCBinaryTree_GetVTable</a> ()</td></tr>
+<tr class="separator:ga6d75abcfe38be0d575d40fc76baccc0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga40dd50f5d08e30ad2c1ce7c46e37e672"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCListIterator__VTable.html">CCListIterator_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga40dd50f5d08e30ad2c1ce7c46e37e672">CCListIterator::CCListIterator_GetVTable</a> ()</td></tr>
+<tr class="separator:ga40dd50f5d08e30ad2c1ce7c46e37e672"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga0f6ef41cca02466cebc2f9ab82eb770e"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCCThreadedQueue__VTable.html">CCThreadedQueue_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga0f6ef41cca02466cebc2f9ab82eb770e">CCThreadedQueue::CCThreadedQueue_VTable_Key</a> ()</td></tr>
+<tr class="separator:ga0f6ef41cca02466cebc2f9ab82eb770e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga6d54a36b0b28f14ec1b7fbb610aba326"><td class="memItemLeft" align="right" valign="top">const struct <a class="el" href="structCObject__VTable.html">CObject_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__VTable.html#ga6d54a36b0b28f14ec1b7fbb610aba326">CObject::CObject_GetVTable</a> ()</td></tr>
+<tr class="separator:ga6d54a36b0b28f14ec1b7fbb610aba326"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>Virtual tables of all classes. </p>
 <h2 class="groupheader">Function Documentation</h2>
-<a class="anchor" id="ga555c53a4f341479dfce3044fbf6bebfb"></a>
+<a class="anchor" id="ga3d9cf310e33351035a67402f9d19e8fb"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> * CCArrayList_Get_Key </td>
+          <td class="memname">const struct <a class="el" href="structCCArrayList__VTable.html">CCArrayList_VTable</a> * CCArrayList_GetVTable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -167,12 +172,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gaa18f365631f69e5adaa85fee97b3e9d0"></a>
+<a class="anchor" id="ga3968bf174c53b7b187c2ec18f32e9ad8"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const struct <a class="el" href="structCCArrayQueue__VTable.html">CCArrayQueue_VTable</a> * CCArrayQueue_VTable_Key </td>
+          <td class="memname">const struct <a class="el" href="structCCArrayQueue__VTable.html">CCArrayQueue_VTable</a> * CCArrayQueue_GetVTable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -183,12 +188,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gaaed838863a02131c93efd5e03687fcb2"></a>
+<a class="anchor" id="ga6d75abcfe38be0d575d40fc76baccc0e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> * CCBinaryTree_Get_Key </td>
+          <td class="memname">const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> * CCBinaryTree_GetVTable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -199,12 +204,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gadc7265ab1649dffe6c0a90567f8ea441"></a>
+<a class="anchor" id="ga40dd50f5d08e30ad2c1ce7c46e37e672"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const struct <a class="el" href="structCCListIterator__VTable.html">CCListIterator_VTable</a> * CCListIterator_Get_Key </td>
+          <td class="memname">const struct <a class="el" href="structCCListIterator__VTable.html">CCListIterator_VTable</a> * CCListIterator_GetVTable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -215,12 +220,28 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="gab7fe4cd83d3362001d29bf540f311999"></a>
+<a class="anchor" id="ga0f6ef41cca02466cebc2f9ab82eb770e"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const struct <a class="el" href="structCObject__VTable.html">CObject_VTable</a> * CObject_VTable_Key </td>
+          <td class="memname">const struct <a class="el" href="structCCThreadedQueue__VTable.html">CCThreadedQueue_VTable</a> * CCThreadedQueue_VTable_Key </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get reference to the struct <a class="el" href="structCCThreadedQueue.html" title="Thread safe wrapper for queues derived from the CIQueue interface. ">CCThreadedQueue</a>'s vtable. </p>
+
+</div>
+</div>
+<a class="anchor" id="ga6d54a36b0b28f14ec1b7fbb610aba326"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const struct <a class="el" href="structCObject__VTable.html">CObject_VTable</a> * CObject_GetVTable </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -236,7 +257,7 @@ Functions</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

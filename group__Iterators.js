@@ -2,7 +2,7 @@ var group__Iterators =
 [
     [ "CCListIterator", "structCCListIterator.html", [
       [ "CCListIterator", "structCCListIterator.html#a883deb01f38205419702a039a030283a", null ],
-      [ "CCListIterator_Get_Key", "group__VTable.html#gadc7265ab1649dffe6c0a90567f8ea441", null ],
+      [ "CCListIterator_GetVTable", "group__VTable.html#ga40dd50f5d08e30ad2c1ce7c46e37e672", null ],
       [ "CIIterator_HasNext", "structCCListIterator.html#a321a9c244bd6f2888a4849c6f5da8c3d", null ],
       [ "CIIterator_HasPrevious", "structCCListIterator.html#a13345254910b82ea1fd08a5e8e330fd4", null ],
       [ "CIIterator_Index", "structCCListIterator.html#ada47c3cc16800889ec62dbef7b0a9633", null ],
@@ -10,8 +10,8 @@ var group__Iterators =
       [ "CIIterator_Previous", "structCCListIterator.html#a8cd4da3e5111e03be65e19c863dce357", null ],
       [ "CIIterator_Remove", "structCCListIterator.html#a1d35e43b4bb576623d1561fa58c3d29e", null ],
       [ "CIIterator_Set", "structCCListIterator.html#aec457c783de55698d1551a06410616b0", null ],
-      [ "cIIterator", "structCCListIterator.html#aa80a40588ebf0b6735316510b6ef2d04", null ],
-      [ "cObject", "structCCListIterator.html#ac9d8f93c1e6311d008c99a63631d9c1b", null ],
+      [ "ciiterator", "structCCListIterator.html#ab5d32940c36ae9e664d3ea377b81731b", null ],
+      [ "cobject", "structCCListIterator.html#aa7df7113712dcba8f1582f272ce5300c", null ],
       [ "index", "structCCListIterator.html#af93b18c5c43e768f7687d0af41210b15", null ],
       [ "interface", "structCCListIterator.html#ab10885b297bc3ce7f2f06e52f0543582", null ],
       [ "is_last_index_used_valid", "structCCListIterator.html#acbecf1c7b2fa0555d3a63e4098c4d89a", null ],

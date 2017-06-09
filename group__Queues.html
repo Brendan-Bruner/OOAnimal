@@ -110,12 +110,21 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCArrayQueue.html">CCArrayQueue</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Array implementation of <a class="el" href="structCIQueue.html" title="Queue data structure interface. ">CIQueue</a> interface.  <a href="structCCArrayQueue.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCCThreadedQueue.html">CCThreadedQueue</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Thread safe wrapper for queues derived from the <a class="el" href="structCIQueue.html" title="Queue data structure interface. ">CIQueue</a> interface.  <a href="structCCThreadedQueue.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIQueue.html">CIQueue</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queue data structure interface.  <a href="structCIQueue.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ga27d8b129364290c813b6d2cf01493604"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604">CCTQueueError</a> { <a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604a4c81ee64e54295c0fbf0f0027787140c">CCTQUEUE_OK</a> = 0, 
+<a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604acba5616715154b30fbeefec387f87a75">CCTQUEUE_ERR_OVERFLOW</a> = 1, 
+<a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604a1739555a3122ec79faf2c21a74c07c1d">CCTQUEUE_ERR_UNDERFLOW</a> = 2, 
+<a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604a854efefc1f6bd5d28b1610dd05cc3733">CCTQUEUE_ERR_TIMEOUT</a> = 3
+ }</td></tr>
+<tr class="separator:ga27d8b129364290c813b6d2cf01493604"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:gae7c23d2cb34fcdac3ffeaa292e4f5ffa"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffa">CIQueueError</a> { <a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffaa73aa8f0d124a34a16636f5f343405538">CIQUEUE_OK</a> = 0, 
 <a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffaa0ef5e0e34a709ef657d89d2003a99709">CIQUEUE_ERR_OVERFLOW</a> = 1, 
 <a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffaa5a28ceeba49bb954643f45f5b9bde97e">CIQUEUE_ERR_UNDERFLOW</a> = 2
@@ -125,6 +134,32 @@ Enumerations</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <p>All queue type data structures. </p>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a class="anchor" id="ga27d8b129364290c813b6d2cf01493604"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="group__Queues.html#ga27d8b129364290c813b6d2cf01493604">CCTQueueError</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a class="anchor" id="ga27d8b129364290c813b6d2cf01493604a4c81ee64e54295c0fbf0f0027787140c"></a>CCTQUEUE_OK&#160;</td><td class="fielddoc">
+<p>No error. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga27d8b129364290c813b6d2cf01493604acba5616715154b30fbeefec387f87a75"></a>CCTQUEUE_ERR_OVERFLOW&#160;</td><td class="fielddoc">
+<p>Queue is full, element not inserted. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga27d8b129364290c813b6d2cf01493604a1739555a3122ec79faf2c21a74c07c1d"></a>CCTQUEUE_ERR_UNDERFLOW&#160;</td><td class="fielddoc">
+<p>Queue is empty, nothing popped/peeked. </p>
+</td></tr>
+<tr><td class="fieldname"><a class="anchor" id="ga27d8b129364290c813b6d2cf01493604a854efefc1f6bd5d28b1610dd05cc3733"></a>CCTQUEUE_ERR_TIMEOUT&#160;</td><td class="fielddoc">
+<p>Timeout waiting for conditions to insert/pop from queue. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
 <a class="anchor" id="gae7c23d2cb34fcdac3ffeaa292e4f5ffa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -153,7 +188,7 @@ Enumerations</h2></td></tr>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

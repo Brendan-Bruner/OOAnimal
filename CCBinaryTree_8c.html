@@ -111,6 +111,7 @@ $(document).ready(function(){initNavTree('CCBinaryTree_8c.html','');});
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="CCBinaryTree_8h_source.html">CCBinaryTree.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="CCListIterator_8h_source.html">CCListIterator.h</a>&gt;</code><br />
 <code>#include &lt;string.h&gt;</code><br />
 </div><div class="textblock"><div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
   <img id="dynsection-0-trigger" src="closed.png" alt="+"/> Include dependency graph for CCBinaryTree.c:</div>
@@ -119,13 +120,14 @@ $(document).ready(function(){initNavTree('CCBinaryTree_8c.html','');});
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="CCBinaryTree_8c__incl.png" border="0" usemap="#liba_2util_2src_2CCBinaryTree_8c" alt=""/></div>
 <map name="liba_2util_2src_2CCBinaryTree_8c" id="liba_2util_2src_2CCBinaryTree_8c">
-<area shape="rect" id="node2" href="CCBinaryTree_8h.html" title="CCBinaryTree.h" alt="" coords="61,80,177,107"/>
+<area shape="rect" id="node2" href="CCBinaryTree_8h.html" title="CCBinaryTree.h" alt="" coords="75,80,191,107"/>
+<area shape="rect" id="node12" href="CCListIterator_8h.html" title="CCListIterator.h" alt="" coords="210,155,325,181"/>
 <area shape="rect" id="node3" href="CITree_8h.html" title="CITree.h" alt="" coords="5,304,79,331"/>
-<area shape="rect" id="node8" href="CCArrayList_8h.html" title="CCArrayList.h" alt="" coords="128,155,233,181"/>
-<area shape="rect" id="node4" href="Class_8h.html" title="Class.h" alt="" coords="93,379,159,405"/>
-<area shape="rect" id="node9" href="CIList_8h.html" title="CIList.h" alt="" coords="147,229,215,256"/>
-<area shape="rect" id="node11" href="CError_8h_source.html" title="CError.h" alt="" coords="239,229,309,256"/>
-<area shape="rect" id="node10" href="CIIterator_8h.html" title="CIIterator.h" alt="" coords="154,304,242,331"/>
+<area shape="rect" id="node8" href="CCArrayList_8h.html" title="CCArrayList.h" alt="" coords="80,155,185,181"/>
+<area shape="rect" id="node4" href="Class_8h.html" title="Class.h" alt="" coords="162,379,229,405"/>
+<area shape="rect" id="node9" href="CIList_8h.html" title="CIList.h" alt="" coords="91,229,159,256"/>
+<area shape="rect" id="node11" href="CError_8h_source.html" title="CError.h" alt="" coords="183,229,253,256"/>
+<area shape="rect" id="node10" href="CIIterator_8h.html" title="CIIterator.h" alt="" coords="205,304,293,331"/>
 </map>
 </div>
 </div><table class="memberdecls">
@@ -146,9 +148,9 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a995c1f1d53535646bd3c9fdf647cf928"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a995c1f1d53535646bd3c9fdf647cf928"></a>
-const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>CCBinaryTree_VTable_Key</b> ()</td></tr>
-<tr class="separator:a995c1f1d53535646bd3c9fdf647cf928"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3bba6ccc2d2f0297f6d21ac72f0e9e56"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3bba6ccc2d2f0297f6d21ac72f0e9e56"></a>
+const struct <a class="el" href="structCCBinaryTree__VTable.html">CCBinaryTree_VTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>CCBinaryTree_GetVTable</b> ()</td></tr>
+<tr class="separator:a3bba6ccc2d2f0297f6d21ac72f0e9e56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac49420aeeaf0a54a35319a27917e11c3"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac49420aeeaf0a54a35319a27917e11c3"></a>
 CError&#160;</td><td class="memItemRight" valign="bottom"><b>CCBinaryTree</b> (struct <a class="el" href="structCCBinaryTree.html">CCBinaryTree</a> *self, size_t element_size, size_t max_size, signed char(*compare)(const void *, const void *), size_t key_size)</td></tr>
 <tr class="separator:ac49420aeeaf0a54a35319a27917e11c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -159,7 +161,7 @@ CError&#160;</td><td class="memItemRight" valign="bottom"><b>CCBinaryTree</b> (s
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="dir_185a2777ab922bf84bc8b8b92f1484e7.html">liba</a></li><li class="navelem"><a class="el" href="dir_d5aa739a15075206fa21a50a6283b056.html">util</a></li><li class="navelem"><a class="el" href="dir_390bfba6d33393fc9e8830631b912e3a.html">src</a></li><li class="navelem"><a class="el" href="CCBinaryTree_8c.html">CCBinaryTree.c</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

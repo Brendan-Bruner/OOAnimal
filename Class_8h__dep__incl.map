@@ -1,12 +1,17 @@
 <map id="liba/Class/Class.h" name="liba/Class/Class.h">
-<area shape="rect" id="node2" href="$CIList_8h.html" title="liba/util/CIList.h" alt="" coords="49,155,163,181"/>
-<area shape="rect" id="node6" href="$CCArrayQueue_8h.html" title="liba/util/CCArrayQueue.h" alt="" coords="551,155,717,181"/>
-<area shape="rect" id="node7" href="$CIQueue_8h.html" title="liba/util/CIQueue.h" alt="" coords="569,80,699,107"/>
-<area shape="rect" id="node9" href="$CIIterator_8h.html" title="liba/util/CIIterator.h" alt="" coords="238,80,371,107"/>
-<area shape="rect" id="node3" href="$CCArrayList_8h.html" title="liba/util/CCArrayList.h" alt="" coords="371,229,521,256"/>
-<area shape="rect" id="node4" href="$CCListIterator_8c.html" title="liba/util/src/CCListIterator.c" alt="" coords="164,229,347,256"/>
-<area shape="rect" id="node5" href="$CIList_8c.html" title="liba/util/src/CIList.c" alt="" coords="5,229,140,256"/>
-<area shape="rect" id="node8" href="$CIQueue_8c.html" title="liba/util/src/CIQueue.c" alt="" coords="742,155,894,181"/>
-<area shape="rect" id="node10" href="$CCListIterator_8h.html" title="liba/util/CCListIterator.h" alt="" coords="366,155,526,181"/>
-<area shape="rect" id="node11" href="$CIIterator_8c.html" title="liba/util/src/CIIterator.c" alt="" coords="187,155,342,181"/>
+<area shape="rect" id="node2" href="$CIList_8h.html" title="liba/util/CIList.h" alt="" coords="163,155,276,181"/>
+<area shape="rect" id="node8" href="$CCArrayQueue_8h.html" title="liba/util/CCArrayQueue.h" alt="" coords="879,155,1045,181"/>
+<area shape="rect" id="node9" href="$CIQueue_8h.html" title="liba/util/CIQueue.h" alt="" coords="1003,80,1134,107"/>
+<area shape="rect" id="node10" href="$CCThreadedQueue_8h.html" title="liba/util/CCThreadedQueue.h" alt="" coords="1247,155,1437,181"/>
+<area shape="rect" id="node12" href="$CIIterator_8h.html" title="liba/util/CIIterator.h" alt="" coords="434,80,567,107"/>
+<area shape="rect" id="node15" href="$CITree_8h.html" title="liba/util/CITree.h" alt="" coords="725,80,844,107"/>
+<area shape="rect" id="node3" href="$CCArrayList_8h.html" title="liba/util/CCArrayList.h" alt="" coords="164,229,315,256"/>
+<area shape="rect" id="node6" href="$CCListIterator_8c.html" title="liba/util/src/CCListIterator.c" alt="" coords="339,229,521,256"/>
+<area shape="rect" id="node7" href="$CIList_8c.html" title="liba/util/src/CIList.c" alt="" coords="5,229,140,256"/>
+<area shape="rect" id="node4" href="$CCBinaryTree_8h.html" title="liba/util/CCBinaryTree.h" alt="" coords="597,304,759,331"/>
+<area shape="rect" id="node5" href="$CCBinaryTree_8c.html" title="liba/util/src/CCBinaryTree.c" alt="" coords="527,379,709,405"/>
+<area shape="rect" id="node11" href="$CIQueue_8c.html" title="liba/util/src/CIQueue.c" alt="" coords="1070,155,1222,181"/>
+<area shape="rect" id="node13" href="$CCListIterator_8h.html" title="liba/util/CCListIterator.h" alt="" coords="479,155,639,181"/>
+<area shape="rect" id="node14" href="$CIIterator_8c.html" title="liba/util/src/CIIterator.c" alt="" coords="301,155,455,181"/>
+<area shape="rect" id="node16" href="$CITree_8c.html" title="liba/util/src/CITree.c" alt="" coords="715,155,855,181"/>
 </map>

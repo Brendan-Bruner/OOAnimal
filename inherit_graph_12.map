@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structCObject__VTable.html" title="CObject&#39;s virtual table declaration. " alt="" coords="5,5,124,32"/>
+<area shape="rect" id="node1" href="$structCIQueue.html" title="Queue data structure interface. " alt="" coords="5,5,80,32"/>
+<area shape="rect" id="node2" href="$structCCArrayQueue.html" title="Array implementation of CIQueue interface. " alt="" coords="128,5,239,32"/>
 </map>

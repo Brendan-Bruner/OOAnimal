@@ -124,12 +124,14 @@ $(document).ready(function(){initNavTree('structCIQueue.html','');});
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="structCIQueue__inherit__graph.png" border="0" usemap="#CIQueue_inherit__map" alt="Inheritance graph"/></div>
 <map name="CIQueue_inherit__map" id="CIQueue_inherit__map">
-<area shape="rect" id="node2" href="structCCArrayQueue.html" title="Array implementation of CIQueue interface. " alt="" coords="5,145,215,252"/>
+<area shape="rect" id="node2" href="structCCArrayQueue.html" title="Array implementation of CIQueue interface. " alt="" coords="5,145,205,252"/>
 </map>
 </div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:aeefe8e8f7e2729a267746bdd73efed47"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIQueue.html#aeefe8e8f7e2729a267746bdd73efed47">CCThreadedQueue_Size</a> (struct <a class="el" href="structCCThreadedQueue.html">CCThreadedQueue</a> *self)</td></tr>
+<tr class="separator:aeefe8e8f7e2729a267746bdd73efed47"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a62e2bc30fba53d2e04796347936383df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffa">CIQueueError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIQueue.html#a62e2bc30fba53d2e04796347936383df">CIQueue_Insert</a> (struct <a class="el" href="structCIQueue.html">CIQueue</a> *self, const void *element)</td></tr>
 <tr class="separator:a62e2bc30fba53d2e04796347936383df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4f5242821969da834d5e53a295aadf80"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Queues.html#gae7c23d2cb34fcdac3ffeaa292e4f5ffa">CIQueueError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCIQueue.html#a4f5242821969da834d5e53a295aadf80">CIQueue_Remove</a> (struct <a class="el" href="structCIQueue.html">CIQueue</a> *self, void *element)</td></tr>
@@ -155,6 +157,29 @@ Implementing classes must implement the behaviour specified in the functions des
 This is a copy by value queue. That means a pointer to data is is given to the queues functions, and the data pointed to is then copied into the queue. <br />
 Implementing classes must provide a way to define the length of data copied in/out of the queue. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a class="anchor" id="aeefe8e8f7e2729a267746bdd73efed47"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t CCThreadedQueue_Size </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structCCThreadedQueue.html">CCThreadedQueue</a> *&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Get the number of elements currently in the queue. This is an unreliable method and should only be used for logging purposes. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The queue. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Number of elements currently in the queue. </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a5d1f5ebc27bb8e352e22c99564c363fa"></a>
 <div class="memitem">
 <div class="memproto">
@@ -257,7 +282,7 @@ Implementing classes must provide a way to define the length of data copied in/o
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Peek at the element in the head of the queue by copy. This does remove the head. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Peek at the element in the head of the queue by copy. This does not remove the head. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">self</td><td>The queue. </td></tr>
     <tr><td class="paramname">element</td><td>Data in the head of the queue will be copied to the location pointed to by this. </td></tr>
@@ -325,8 +350,9 @@ Implementing classes must provide a way to define the length of data copied in/o
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
+<hr/>The documentation for this struct was generated from the following files:<ul>
 <li>liba/util/<a class="el" href="CIQueue_8h_source.html">CIQueue.h</a></li>
+<li>liba/util/<a class="el" href="CCThreadedQueue_8h_source.html">CCThreadedQueue.h</a></li>
 </ul>
 </div><!-- contents -->
 </div><!-- doc-content -->
@@ -334,7 +360,7 @@ Implementing classes must provide a way to define the length of data copied in/o
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structCIQueue.html">CIQueue</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>

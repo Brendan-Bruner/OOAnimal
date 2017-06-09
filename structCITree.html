@@ -124,7 +124,7 @@ $(document).ready(function(){initNavTree('structCITree.html','');});
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
 <div class="center"><img src="structCITree__inherit__graph.png" border="0" usemap="#CITree_inherit__map" alt="Inheritance graph"/></div>
 <map name="CITree_inherit__map" id="CITree_inherit__map">
-<area shape="rect" id="node2" href="structCCBinaryTree.html" title="Implements the CITree interface with a binary tree/heap. " alt="" coords="5,145,188,252"/>
+<area shape="rect" id="node2" href="structCCBinaryTree.html" title="Implements the CITree interface with a binary tree/heap. " alt="" coords="5,145,200,252"/>
 </map>
 </div>
 <table class="memberdecls">
@@ -134,6 +134,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aa8e2d7378cc33b5c34778edbfbc7ebe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8da35d2195f969cb3f267eee7a7bab34"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Trees.html#ga4cd13d87b073bac2a1aaccec194564a3">CITreeError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCITree.html#a8da35d2195f969cb3f267eee7a7bab34">CITree_Pop</a> (struct <a class="el" href="structCITree.html">CITree</a> *self, void *element)</td></tr>
 <tr class="separator:a8da35d2195f969cb3f267eee7a7bab34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c718ae8b3266d80a17371d8d8e69dc2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Trees.html#ga4cd13d87b073bac2a1aaccec194564a3">CITreeError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCITree.html#a5c718ae8b3266d80a17371d8d8e69dc2">CITree_DeleteElement</a> (struct <a class="el" href="structCITree.html">CITree</a> *self, void *element)</td></tr>
+<tr class="separator:a5c718ae8b3266d80a17371d8d8e69dc2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15fa2b1c90523f7ca1ae41fb07794ecd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Trees.html#ga4cd13d87b073bac2a1aaccec194564a3">CITreeError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCITree.html#a15fa2b1c90523f7ca1ae41fb07794ecd">CITree_Peek</a> (struct <a class="el" href="structCITree.html">CITree</a> *self, void *element)</td></tr>
 <tr class="separator:a15fa2b1c90523f7ca1ae41fb07794ecd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4861442f70af07080ae5610aba843899"><td class="memItemLeft" align="right" valign="top"><a class="el" href="group__Trees.html#ga4cd13d87b073bac2a1aaccec194564a3">CITreeError</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structCITree.html#a4861442f70af07080ae5610aba843899">CITree_Get</a> (struct <a class="el" href="structCITree.html">CITree</a> *self, void *element, size_t index)</td></tr>
@@ -222,6 +224,44 @@ struct <a class="el" href="structCInterface.html">CInterface</a>&#160;</td><td c
 
 </div>
 </div>
+<a class="anchor" id="a5c718ae8b3266d80a17371d8d8e69dc2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="group__Trees.html#ga4cd13d87b073bac2a1aaccec194564a3">CITreeError</a> CITree_DeleteElement </td>
+          <td>(</td>
+          <td class="paramtype">struct <a class="el" href="structCITree.html">CITree</a> *&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Delete the node in the three who's element matches the input parameter element. This function has O(n) execution time. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">self</td><td>The tree. </td></tr>
+    <tr><td class="paramname">element</td><td>The data pointed to by this is the search critera. The function will search for a node whos element matches the data pointed to by this and remove it. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><ul>
+<li>CITREE_ERR_EMPTY: Nothing in the tree to delete or no matching element.</li>
+<li>CITREE_OK: Root of the tree successfully popped. </li>
+</ul>
+</dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a4861442f70af07080ae5610aba843899"></a>
 <div class="memitem">
 <div class="memproto">
@@ -251,7 +291,7 @@ struct <a class="el" href="structCInterface.html">CInterface</a>&#160;</td><td c
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Look at an arbitrary index in the tree. Indexing is done such that at any index i, left_child(i) = 2i and right_child(i) = 2i + 1. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Look at an arbitrary index in the tree. Indexing is done such that at any index i, left_child(i) = 2i + 1 and right_child(i) = 2i + 2. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">element</td><td>Pointer to location where data at the index will be copied to. </td></tr>
     <tr><td class="paramname">index</td><td>Location in the tree to copy data from </td></tr>
@@ -442,7 +482,7 @@ struct <a class="el" href="structCInterface.html">CInterface</a>&#160;</td><td c
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="structCITree.html">CITree</a></li>
-    <li class="footer">Generated on Thu Feb 2 2017 11:29:49 for CObject by
+    <li class="footer">Generated on Thu Jun 8 2017 21:39:17 for CObject by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.8.11 </li>
   </ul>
