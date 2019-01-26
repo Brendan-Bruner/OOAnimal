@@ -39,7 +39,7 @@ TEST(base_virtual)
 	ASSERT(VTClassA_Method3(&class) == VT_CLASSA_METHOD3, "Virtual method 3 failed");
 	ASSERT(VTClassA_Method4(&class) == VT_CLASSA_METHOD4, "Virtual method 4 failed");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST(override)
@@ -54,7 +54,7 @@ TEST(override)
 	ASSERT(VTClassA_Method3(&class.classA) == VT_CLASSB_METHOD3, "Virtual method 3 failed");
 	ASSERT(VTClassA_Method4(&class.classA) == VT_CLASSA_METHOD4 + VT_CLASSB_METHOD4, "Virtual method 4 failed");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST(deep_override)
@@ -69,7 +69,7 @@ TEST(deep_override)
 	ASSERT(VTClassA_Method3(&class.classB.classA) == VT_CLASSB_METHOD3 + VT_CLASSC_METHOD3, "Virtual method 3 failed");
 	ASSERT(VTClassA_Method4(&class.classB.classA) == VT_CLASSA_METHOD4 + VT_CLASSB_METHOD4 + VT_CLASSC_METHOD4, "Virtual method 4 failed");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST_SUITE(virtual_suite)

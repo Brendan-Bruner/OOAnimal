@@ -24,31 +24,31 @@
 /****************************************************************************/
 static int method0( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSA_METHOD0;
 }
 
 static int method1( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSA_METHOD1;
 }
 
 static int method2( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSA_METHOD2;
 }
 
 static int method3( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSA_METHOD3;
 }
 
 static int method4( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSA_METHOD4;
 }
 
@@ -58,7 +58,7 @@ const struct VTClassA_VTable* VTClassA_VTable_Key( )
 	static struct VTClassA_VTable vtable;
 
 	/* Get a copy of the super's vtable for this class. */
-	vtable.CObject_VTable = *CObject_GetVTable( );
+	vtable.CObject_VTable = *cobject_vtable( );
 
 	/* Link all of this class' virtual methods. */
 	vtable.method0 = method0;
@@ -73,13 +73,11 @@ const struct VTClassA_VTable* VTClassA_VTable_Key( )
 
 void newVTClassA( struct VTClassA* self )
 {
-	CAssertObject(self);
-
 	/* Call super's constructor. */
-	CObject(&self->cobject);
+	cobject_init(&self->cobject);
 
 	/* Map vtable. */
-	CVTable(self, VTClassA_VTable_Key( ));
+	cclass_set_cvtable(self, VTClassA_VTable_Key( ));
 }
 
 /****************************************************************************/
@@ -87,32 +85,32 @@ void newVTClassA( struct VTClassA* self )
 /****************************************************************************/
 static int classBMethod1( struct VTClassA* self )
 {
-	CAssertObject(self);
+	(void)self;
 	return VT_CLASSB_METHOD1;
 }
 
 static int classBMethod2( struct VTClassA* self_ )
 {
 	/* This is VTClassB's implementation, so cast object back to type VTClassB. */
-	struct VTClassB* self = CCast(self_);
+	struct VTClassB* self = ccast(self_);
 
 	/* Call super's (VTClassA)  implementation of this method. */
-	return VT_CLASSB_METHOD2 + ((struct VTClassB_VTable*) CGetVTable(self))->Supers_VTClassA_VTable->method2(&self->classA);
+	return VT_CLASSB_METHOD2 + ((struct VTClassB_VTable*) cclass_get_vtable(self))->Supers_VTClassA_VTable->method2(&self->classA);
 }
 
 static int classBMethod3( struct VTClassA* self )
 {
-	CAssertObject(self);
+        (void)self;
 	return VT_CLASSB_METHOD3;
 }
 
 static int classBMethod4( struct VTClassA* self_ )
 {
 	/* This is VTClassB's implementation, so cast object back to type VTClassB. */
-	struct VTClassB* self = CCast(self_);
+	struct VTClassB* self = ccast(self_);
 
 	/* Call super's (VTClassA) implementation of this method. */
-	return VT_CLASSB_METHOD4 + ((struct VTClassB_VTable*) CGetVTable(self))->Supers_VTClassA_VTable->method4(&self->classA);
+	return VT_CLASSB_METHOD4 + ((struct VTClassB_VTable*) cclass_get_vtable(self))->Supers_VTClassA_VTable->method4(&self->classA);
 }
 
 const struct VTClassB_VTable* VTClassB_VTable_Key( )
@@ -138,13 +136,11 @@ const struct VTClassB_VTable* VTClassB_VTable_Key( )
 
 void newVTClassB( struct VTClassB* self )
 {
-	CAssertObject(self);
-
 	/* Call super's constructor. */
 	newVTClassA(&self->classA);
 
 	/* Map vtable. */
-	CVTable(self, VTClassB_VTable_Key( ));
+	cclass_set_cvtable(self, VTClassB_VTable_Key( ));
 }
 
 /****************************************************************************/
@@ -153,19 +149,19 @@ void newVTClassB( struct VTClassB* self )
 static int classCMethod3( struct VTClassA* self_ )
 {
 	/* This is VTClassC's implementation, so cast object back to type VTClassC. */
-	struct VTClassC* self = CCast(self_);
+	struct VTClassC* self = ccast(self_);
 
 	/* Calls super's (VTClassB) implementation of this method. */
-	return VT_CLASSC_METHOD3 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method3((struct VTClassA*) self);
+	return VT_CLASSC_METHOD3 + ((struct VTClassC_VTable*) cclass_get_vtable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method3((struct VTClassA*) self);
 }
 
 static int classCMethod4( struct VTClassA* self_ )
 {
 	/* This is VTClassC's implementation, so cast object back to type VTClassC. */
-	struct VTClassC* self = CCast(self_);
+	struct VTClassC* self = ccast(self_);
 
 	/* Calls super's (VTClassB) implementation of this method. */
-	return VT_CLASSC_METHOD4 + ((struct VTClassC_VTable*) CGetVTable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method4((struct VTClassA*) self);
+	return VT_CLASSC_METHOD4 + ((struct VTClassC_VTable*) cclass_get_vtable(self))->Supers_VTClassB_VTable->VTClassA_VTable.method4((struct VTClassA*) self);
 }
 
 const struct VTClassC_VTable* VTClassC_VTable_Key( )
@@ -189,11 +185,9 @@ const struct VTClassC_VTable* VTClassC_VTable_Key( )
 
 void newVTClassC( struct VTClassC* self )
 {
-	CAssertObject(self);
-
 	/* Call super's constructor. */
 	newVTClassB(&self->classB);
 
 	/* Map vtable. */
-	CVTable(self, VTClassC_VTable_Key( ));
+	cclass_set_cvtable(self, VTClassC_VTable_Key( ));
 }

@@ -30,7 +30,7 @@
 #ifndef TESTS_TEST_CLASSES_H_
 #define TESTS_TEST_CLASSES_H_
 
-#include <Class.h>
+#include <cobject.h>
 
 #define DT_CLASS_A_VAL 0
 #define DT_CLASS_E_VAL -4
@@ -41,13 +41,13 @@
 struct DTClassA_VTable;
 struct DTClassA
 {
-	struct CObject cobject;
+	struct cobject_t cobject;
 
 	int* destructorTestVar;
 };
 struct DTClassA_VTable
 {
-	struct CObject_VTable CObject_VTable;
+	struct cobject_vtable_t CObject_VTable;
 };
 
 /****************************************************************************/

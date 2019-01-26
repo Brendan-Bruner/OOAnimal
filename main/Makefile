@@ -10,7 +10,7 @@ BUILDDIR := debug
 EXEC = main
 
 # Path to all header files used
-INCLUDES := -I../liba/Class -I../liba/tests -I../liba/util
+INCLUDES := -I../CObject -I../tests
 
 # Path to all source files used
 SOURCES := main.c
@@ -19,8 +19,8 @@ SOURCES := main.c
 OBJECTS := $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%.o))
 
 # All libraries
-STATIC_LIB_SRC := ../liba/Class ../liba/tests ../liba/util
-STATIC_LIB_NAME := ctests cutil cclass pthread
+STATIC_LIB_SRC := ../CObject ../tests
+STATIC_LIB_NAME := ctests cclass
 
 STATIC_LIBS := $(addprefix -l,$(STATIC_LIB_NAME));
 STATIC_LIB_BUILD := $(addsuffix /debug,$(addprefix -L,$(STATIC_LIB_SRC)))
@@ -33,18 +33,16 @@ $(BUILDDIR)/%.o : %.c
 	$(CC) $(CFLAGS) -c $(INCLUDES) $< -o $@
 
 BUILD_LIBS :
-	make -C ../liba/util/ all
-	make -C ../liba/tests/ all
-	make -C ../liba/Class all
+	make -C ../tests/ all
+	make -C ../CObject all
 
 MKDIR :
 	mkdir -p $(dir $(addprefix $(BUILDDIR)/,$(SOURCES:%.c=%)))
 
 clean :
 	rm -rf $(BUILDDIR)
-	make -C ../liba/util/ clean
-	make -C ../liba/tests/ clean
-	make -C ../liba/Class clean
+	make -C ../tests/ clean
+	make -C ../CObject clean
 
 
 run:

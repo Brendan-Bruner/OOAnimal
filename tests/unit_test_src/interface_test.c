@@ -36,7 +36,7 @@ TEST(implementing)
 	ASSERT(ITInterface2_Method0(&class.itInterface2) == IT_CLASSA_I2_METHOD0, "Failed to run I2 M0");
 	ASSERT(ITInterface2_Method1(&class.itInterface2) == IT_CLASSA_I2_METHOD1, "Failed to run I2 M1");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST(interface_inheritance)
@@ -49,7 +49,7 @@ TEST(interface_inheritance)
 	ASSERT(ITInterface0_Method0(&class.itInterface1.itInterface0) == IT_CLASSA_I0_METHOD0, "Failed to run I0 M0");
 	ASSERT(ITInterface0_Method1(&class.itInterface1.itInterface0) == IT_CLASSA_I0_METHOD1, "Failed to run I0 M1");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST(override)
@@ -64,7 +64,7 @@ TEST(override)
 	ASSERT(ITInterface0_Method0(&class.classA.itInterface1.itInterface0) == IT_CLASSA_I0_METHOD0 + IT_CLASSB_I0_METHOD0, "Failed to override I0 M0");
 	ASSERT(ITInterface0_Method1(&class.classA.itInterface1.itInterface0) == IT_CLASSB_I0_METHOD1, "Failed to relink I0 M1");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST(deep_override)
@@ -79,7 +79,7 @@ TEST(deep_override)
 	ASSERT(ITInterface0_Method0(&class.classB.classA.itInterface1.itInterface0) == IT_CLASSA_I0_METHOD0 + IT_CLASSB_I0_METHOD0 + IT_CLASSC_I0_METHOD0, "Failed to override I0 M0");
 	ASSERT(ITInterface0_Method1(&class.classB.classA.itInterface1.itInterface0) == IT_CLASSB_I0_METHOD1, "Failed to relink I0 M1");
 
-	CDestroy(&class);
+	cdestroy(&class);
 }
 
 TEST_SUITE(interface_suite)

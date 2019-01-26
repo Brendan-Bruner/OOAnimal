@@ -38,7 +38,7 @@
 #ifndef TESTS_TEST_CLASSES_VIRTUAL_TEST_CLASSES_H_
 #define TESTS_TEST_CLASSES_VIRTUAL_TEST_CLASSES_H_
 
-#include <Class.h>
+#include <cobject.h>
 
 #define VT_CLASSA_METHOD0 1
 #define VT_CLASSA_METHOD1 2
@@ -59,12 +59,12 @@
 /************************************************************************/
 struct VTClassA
 {
-	struct CObject cobject;
+	struct cobject_t cobject;
 };
 
 struct VTClassA_VTable
 {
-	struct CObject_VTable CObject_VTable;
+	struct cobject_vtable_t CObject_VTable;
 	
 	int (*method0)( struct VTClassA* );
 	int (*method1)( struct VTClassA* );
@@ -78,37 +78,27 @@ void newVTClassA( struct VTClassA* );
 
 static inline int VTClassA_Method0( struct VTClassA* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method0);
-	return ((struct VTClassA_VTable*) CGetVTable(self))->method0(self);
+	return ((struct VTClassA_VTable*) cclass_get_vtable(self))->method0(self);
 }
 
 static inline int VTClassA_Method1( struct VTClassA* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method1);
-	return ((struct VTClassA_VTable*) CGetVTable(self))->method1(self);
+	return ((struct VTClassA_VTable*) cclass_get_vtable(self))->method1(self);
 }
 
 static inline int VTClassA_Method2( struct VTClassA* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method2);
-	return ((struct VTClassA_VTable*) CGetVTable(self))->method2(self);
+	return ((struct VTClassA_VTable*) cclass_get_vtable(self))->method2(self);
 }
 
 static inline int VTClassA_Method3( struct VTClassA* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method3);
-	return ((struct VTClassA_VTable*) CGetVTable(self))->method3(self);
+	return ((struct VTClassA_VTable*) cclass_get_vtable(self))->method3(self);
 }
 
 static inline int VTClassA_Method4( struct VTClassA* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct VTClassA_VTable*) CGetVTable(self))->method4);
-	return ((struct VTClassA_VTable*) CGetVTable(self))->method4(self);
+	return ((struct VTClassA_VTable*) cclass_get_vtable(self))->method4(self);
 }
 
 

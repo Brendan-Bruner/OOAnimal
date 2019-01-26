@@ -52,10 +52,10 @@ TEST(free_hook)
 	newDTClassA(&classA, &temp);
 
 	freeUsed = FREE_UNUSED;
-	CFreeWith(&classA, testFree);
+	cmalloc(&classA, testFree);
 
 	/* Test calling the destructor calls the free method we set. */
-	CDestroy(&classA);
+	cdestroy(&classA);
 
 	ASSERT(freeUsed == FREE_USED, "Failed to call free( ) hook");
 }
@@ -69,10 +69,10 @@ TEST(inheritance_free_hook)
 	newDTClassB(&class, &temp);
 
 	freeUsed = FREE_UNUSED;
-	CFreeWith(&class, testFree);
+	cmalloc(&class, testFree);
 
 	/* Test calling the destructor calls the free method we set. */
-	CDestroy(&class);
+	cdestroy(&class);
 
 	ASSERT(freeUsed == FREE_USED, "Failed to call free( ) hook");
 }
@@ -86,14 +86,14 @@ TEST(override_destructor)
 	newDTClassC(&class, &temp);
 
 	freeUsed = FREE_UNUSED;
-	CFreeWith(&class, testFree);
+	cmalloc(&class, testFree);
 
 	/* Assert value of temp before destruction. */
 	ASSERT(temp == DT_CLASS_A_VAL, "Failed to init test var");
 
 	/* Test calling the destructor calls the free method we set */
 	/* and cascades the destructor. */
-	CDestroy(&class);
+	cdestroy(&class);
 
 	ASSERT(temp == DT_CLASS_A_VAL + 1, "Failed to cascade destructor - ie - override it");
 	ASSERT(freeUsed == FREE_USED, "Failed to call free( ) hook");
@@ -108,14 +108,14 @@ TEST(gap_override)
 	newDTClassD(&class, &temp);
 
 	freeUsed = FREE_UNUSED;
-	CFreeWith(&class, testFree);
+	cmalloc(&class, testFree);
 
 	/* Assert value of temp before destruction. */
 	ASSERT(temp == DT_CLASS_A_VAL, "Failed to init test var");
 
 	/* Test calling the destructor calls the free method we set */
 	/* and cascades the destructor. */
-	CDestroy(&class);
+	cdestroy(&class);
 
 	ASSERT(temp == DT_CLASS_A_VAL + 1, "Failed to cascade destructor - ie - override it");
 	ASSERT(freeUsed == FREE_USED, "Failed to call free( ) hook");
@@ -130,14 +130,14 @@ TEST(deep_override)
 	newDTClassE(&class, &temp);
 
 	freeUsed = FREE_UNUSED;
-	CFreeWith(&class, testFree);
+	cmalloc(&class, testFree);
 
 	/* Assert value of temp before destruction. */
 	ASSERT(temp == DT_CLASS_A_VAL, "Failed to init test var");
 
 	/* Test calling the destructor calls the free method we set */
 	/* and cascades the destructor in the correct order. */
-	CDestroy(&class);
+	cdestroy(&class);
 
 	ASSERT(temp == DT_CLASS_E_VAL+1, "Failed to cascade destructor in correct order - %d", temp);
 	ASSERT(freeUsed == FREE_USED, "Failed to call free( ) hook");

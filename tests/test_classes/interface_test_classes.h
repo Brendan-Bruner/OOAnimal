@@ -41,7 +41,8 @@
 #ifndef TESTS_TEST_CLASSES_INTERFACE_TEST_CLASSES_H_
 #define TESTS_TEST_CLASSES_INTERFACE_TEST_CLASSES_H_
 
-#include <Class.h>
+#include <cinterface.h>
+#include <cobject.h>
 
 #define IT_CLASSA_I0_METHOD0 1
 #define IT_CLASSA_I0_METHOD1 2
@@ -64,7 +65,7 @@
 struct ITInterface0
 {
 	/* Must be first member of an interface. */
-	struct CInterface interface;
+	struct cinterface_t interface;
 };
 
 struct ITInterface0_VTable
@@ -77,17 +78,13 @@ struct ITInterface0_VTable
 /* Wrapper for calling interface method. */
 static inline int ITInterface0_Method0( struct ITInterface0* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct ITInterface0_VTable*) CGetVTable(self))->i0method0);
-	return ((struct ITInterface0_VTable*) CGetVTable(self))->i0method0(self);
+	return ((struct ITInterface0_VTable*) cclass_get_vtable(self))->i0method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface0_Method1( struct ITInterface0* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct ITInterface0_VTable*) CGetVTable(self))->i0method1);
-	return ((struct ITInterface0_VTable*) CGetVTable(self))->i0method1(self);
+	return ((struct ITInterface0_VTable*) cclass_get_vtable(self))->i0method1(self);
 }
 
 
@@ -97,7 +94,7 @@ static inline int ITInterface0_Method1( struct ITInterface0* self )
 struct ITInterface1
 {
 	/* Must be first member of an interface. */
-	struct CInterface interface;
+	struct cinterface_t interface;
 
 	/* Inherit from interface0. */
 	struct ITInterface0 itInterface0;
@@ -116,9 +113,7 @@ struct ITInterface1_VTable
 /* Wrapper for calling interface method. */
 static inline int ITInterface1_Method0( struct ITInterface1* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct ITInterface1_VTable*) CGetVTable(self))->i1method0);
-	return ((struct ITInterface1_VTable*) CGetVTable(self))->i1method0(self);
+	return ((struct ITInterface1_VTable*) cclass_get_vtable(self))->i1method0(self);
 }
 
 
@@ -128,7 +123,7 @@ static inline int ITInterface1_Method0( struct ITInterface1* self )
 struct ITInterface2
 {
 	/* Must be first member of an interface. */
-	struct CInterface interface;
+	struct cinterface_t interface;
 };
 
 struct ITInterface2_VTable
@@ -141,17 +136,13 @@ struct ITInterface2_VTable
 /* Wrapper for calling interface method. */
 static inline int ITInterface2_Method0( struct ITInterface2* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct ITInterface2_VTable*) CGetVTable(self))->i2method0);
-	return ((struct ITInterface2_VTable*) CGetVTable(self))->i2method0(self);
+	return ((struct ITInterface2_VTable*) cclass_get_vtable(self))->i2method0(self);
 }
 
 /* Wrapper for calling interface method. */
 static inline int ITInterface2_Method1( struct ITInterface2* self )
 {
-	CAssertObject(self);
-	CAssertVirtual(((struct ITInterface2_VTable*) CGetVTable(self))->i2method1);
-	return ((struct ITInterface2_VTable*) CGetVTable(self))->i2method1(self);
+	return ((struct ITInterface2_VTable*) cclass_get_vtable(self))->i2method1(self);
 }
 
 
@@ -161,7 +152,7 @@ static inline int ITInterface2_Method1( struct ITInterface2* self )
 struct ITClassA
 {
 	/* Super class must be first member of the class declaration. */
-	struct CObject cobject;
+	struct cobject_t cobject;
 
 	/* Inherit from these interfaces */
 	struct ITInterface2 itInterface2;
@@ -172,7 +163,7 @@ struct ITClassA_VTable
 {
 	/* Space for a copy of the super classes vtable must */
 	/* be the first member of any classes vtable. */
-	struct CObject_VTable CObject_VTable;
+	struct cobject_vtable_t CObject_VTable;
 
 	/* The vtables of inherited interfaces must be included as copies in this classes vtable. */
 	/* However, unlike the super class' vtable, this vtables have no ordering requirement. */
