@@ -80,6 +80,18 @@ struct cinterface_t
  *	construct A::I. struct A's vtable, struct A_VT, will contain an instance of struct I's
  *	vtable, struct I_VT. This would be a pointer to A_VT::I_VT.
  */
-void cinterface_init( void* self, void* iface, const void* vtable );
+static inline void cinterface_init( void* self, void* iface, const void* vtable )
+{
+        /* iface is suppose to be an interface, therefore, we assume that
+         * the first variable in the structures definition is of type
+         * cclass_t
+         */
+        struct cclass_t* iface_class = iface;
+        
+	iface_class->croot = self;
+        cclass_set_cvtable(iface, vtable);
+}
+
+
 
 #endif /* INTERFACE_H_ */

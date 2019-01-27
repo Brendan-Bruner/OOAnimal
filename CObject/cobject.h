@@ -37,7 +37,7 @@
  */
 /* Method declaration of memory free method. 
  */
-typedef void (*cobject_free_f)( void* );
+typedef void (*cobject_free_ft)( void* );
 
 /**
  * @struct cobject_t
@@ -59,7 +59,7 @@ struct cobject_t
     /* Pointer to a memory free method used in the objects destructor. Will be NULL by default
      * and can be set by application code.
      */
-    cobject_free_f   cfree;
+    cobject_free_ft  cfree;
 };
 
 
@@ -88,6 +88,30 @@ struct cobject_vtable_t
 /**
  * @memberof cobject_t
  * @details
+ *	Set a memory free method to be called at the end of destruction.
+ * @param self
+ *	The object to have a memory free method set. When the destructor
+ *      gets called, it will do free_method( self )
+ * @param free_method
+ *	The method to call when destruction finishes. Has declaration void(*)( void* ).
+ */
+void cmalloc( void* self, cobject_free_ft free_method );
+
+/**
+ * @memberof cobject_t
+ * @details
+ *	Destructor. This is the destructor for all objects. Its polymorphic, meaning
+ *	A reference to any class instance / interface can be given and the entire object will
+ *	be destroyed. If a memory free method was set with cmalloc() that method will be
+ *      called at the end of destruction.
+ * @param self
+ *	The object to destroy
+ */
+void cdestroy( void* self );
+
+/**
+ * @memberof cobject_t
+ * @details
  *	Return a reference to class CObject's virtual table. There is only one
  *	virtual table per class, which is shared by every instance of that class.
  *	This pointer must not be written to, only read from, hence the const return
@@ -107,30 +131,6 @@ const struct cobject_vtable_t* cobject_vtable( );
  *	The instance of struct CObject to construct
  */
 void cobject_init( struct cobject_t* self );
-
-/**
- * @memberof cobject_t
- * @details
- *	Destructor. This is the destructor for all objects. Its polymorphic, meaning
- *	A reference to any class instance / interface can be given and the entire object will
- *	be destroyed. If a memory free method was set with cmalloc() that method will be
- *      called at the end of destruction.
- * @param self
- *	The object to destroy
- */
-void cdestroy( void* self );
-
-/**
- * @memberof cobject_t
- * @details
- *	Set a memory free method to be called at the end of destruction.
- * @param self
- *	The object to have a memory free method set. When the destructor
- *      gets called, it will do free_method( self )
- * @param free_method
- *	The method to call when destruction finishes. Has declaration void(*)( void* ).
- */
-void cmalloc( void* self, cobject_free_f free_method );
 
 
 #endif /* COBJECT_H_ */

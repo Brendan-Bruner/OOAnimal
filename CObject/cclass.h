@@ -76,37 +76,38 @@
  *	where ClassA inherits from CObject and implements Interface0 and Interface1.
  *	ClassB inherits from ClassA. A variable of type ClassB has the following memory layout:
  * @verbatim
-                      --------------------------------------------
-   ClassB pointer =   |                                    |  |  |
-    ClassA pointer =  |                                    |  |  |
-     CObject pointer: --->  | void* C_ROOT               | -  |  |
-                            | size_t C_VTABLE_OFFSET = 0 |    |  |
-         -------------------| const void* C_VTABLE       |    |  |                         
-         |                  | void (*free)( void* )      |    |  |
-         |     Interface0:  | void* C_ROOT               | ---   |
-         |                  | size_t C_VTABLE_OFFSET = 2 |       |
-         |     Interface1:  | void* C_ROOT               | -------
-         |                  | size_t C_VTABLE_OFFSET = 3 |
-         |         ClassA:  | int varA                   |
-         |         ClassB:  | int varB                   |
-         |
-         |
-         ----> vtable --> | void (*CDestructor)( void* )    |
-                          | void (*methodA)( ClassA* )      |
-                          | void (*method0)( Interface0* )  |
-                          | void (*method1)( Interface1* ) |
-                          | void (*methodB)( ClassB* )      |
+struct ClassB* classb;
+
+classb           = 
+(ClassA*) classb = 
+(cobject_t*) classb  
+  +-------------------------| const void*     cvtable    |<--+--+--+
+  |                         | void*           croot      |---+  |  |
+  |                         | cobject_free_ft cfree      |      |  |                         
+  |  +-------- Interface0 --| const void*     cvtable    |      |  |
+  |  |                      | void*           croot      | -----+  |
+  |  |  +----- Interface1 --| const void*     cvtable    |         |
+  |  |  |                   | void*           croot      | --------+
+  |  |  |          ClassA:  | int varA                   |
+  |  |  |          ClassB:  | int varB                   |
+  |  |  |
+  |  |  |
+  |  |  +---> Interface1 vtable --> | void method1( Interface1* ) |<--------+
+  |  |                                                                      |
+  |  +------> Interface0 vtable --> | void method0( Interface0* ) |<-----+  |
+  |                                                                      |  |
+  +----------> ClassB vtable -----> | cobject_t vtable                |  |  |
+                                    | Interface0 vtable               |--+  |
+                                    | Interface1 vtable               |-----+
+                                    | void (*methodA)( ClassA* )      |
+                                    | void (*methodB)( ClassB* )      |
 @endverbatim
- *	Given this mapping of pointers, the virtual table can always be found and the entire
- *	objects memory location known with a pointer to ClassB, ClassA, CObject, Interface0,
- *      and Interface1.
+ *	Given this mapping of pointers, the virtual table can always be found and the base
+ *	address of the objects memory location known.
  *      For example, with a reference to Interface0 (5'th row in layout above), the virtual
- *      table is found by using C_ROOT to find the top of the object's memory, then going to the
- *      third row to get a pointer to the virtual table. Then, the offset into the virtual table of
- *	Interface0's methods is found by using the C_VTABLE_OFFSET from the Interface0 reference.
- *	Note, the layout of the virtual table is different when function overriding is used. In this
- *	example, ClassA doesn't override any methods from CObject and ClassB doesn't override 
- *      any methods from ClassA and/or CObject.
+ *      table for Interface0 is found using the cvtable pointer. The virtual table of the entire
+ *      object is found using croot to get the base address, and from the base address using
+ *      cvtable.
  *
  *	The virtual tables leverage the 6.7.2.1.13 rule as well. Each class' table is declared
  *	such that the super class' virtual table is always the first member of the structure.
@@ -153,7 +154,11 @@ struct cclass_t
  * @return
  *	Pointer to casted object.
  */
-void* ccast( void const* reference );
+static inline void* ccast( void const* reference )
+{
+	return ((struct cclass_t*) reference)->croot;
+}
+
 
 /**
  * @memberof class_t
@@ -175,7 +180,11 @@ void* ccast( void const* reference );
  * @param vtable
  *	The pointer to the class' virtual table.
  */
-void cclass_set_cvtable( void* self, const void* vtable);
+static inline void cclass_set_cvtable( void* self, const void* vtable)
+{
+	((struct cclass_t*) self)->cvtable = vtable;
+}
+
 
 /**
  * @memberof cclass_t
@@ -208,7 +217,11 @@ void cclass_set_cvtable( void* self, const void* vtable);
  * @returns
  *	A pointer to the objects virtual table.
  */
-const void* cclass_get_vtable( void* self );
+static inline const void* cclass_get_vtable( void* self )
+{
+	return ((struct cclass_t*) self)->cvtable;
+}
+
 
 
 #endif /* CLASS_H_ */

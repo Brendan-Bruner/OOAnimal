@@ -30,6 +30,28 @@
 
 /*
  * ==========================================================================
+ * -------------------Static Function Declarations --------------------------
+ * ==========================================================================
+ */
+static void cobject_destructor( void* self_ );
+
+/*
+ * ==========================================================================
+ * -------------------Static Function Definitions ---------------------------
+ * ==========================================================================
+ */
+static void cobject_destructor( void* self_ )
+{
+	struct cobject_t* self;
+
+        self = ccast(self_);
+	if( self->cfree != NULL ) {
+		self->cfree(self);
+	}
+}
+
+/*
+ * ==========================================================================
  * ----------------------- Function Definitions- ----------------------------
  * ==========================================================================
  */
@@ -50,22 +72,12 @@ void cdestroy( void* self_ )
 	 vtable->cdestructor(self);
 }
 
-void cmalloc( void* self_, cobject_free_f free_method )
+void cmalloc( void* self_, cobject_free_ft free_method )
 {
         struct cobject_t* self;
 
         self = ccast(self_);
 	self->cfree = free_method;
-}
-
-static void cobject_destructor( void* self_ )
-{
-	struct cobject_t* self;
-
-        self = ccast(self_);
-	if( self->cfree != NULL ) {
-		self->cfree(self);
-	}
 }
 
 const struct cobject_vtable_t* cobject_vtable( )
